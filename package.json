@@ -1,0 +1,34 @@
+{
+  "name": "peony-admin",
+  "license": "NCSA",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf ./build",
+    "test": "bun test",
+    "compress": "find ./build -type f \\( -name '*.xml' -o -name '*.js' -o -name '*.js.map' \\) -exec gzip --keep --best {} \\;",
+    "copy:public": "mkdir -p build && cp -r ./public/* build/",
+    "build:dev": "bun build ./src/index.jsx --outdir ./build/_public/ --public-path /_public/ --splitting",
+    "build": "bun run clean && bun run copy:public && bun run build:dev && bun run compress",
+    "dev": "bun run clean && bun run copy:public && bun run build:dev --watch & pid1=$!; bun run ./dev-server.js & pid2=$!; trap \"kill $pid1 $pid2; exit 0\" SIGINT SIGTERM; wait"
+  },
+  "devDependencies": {
+    "standard": "^17.1.2"
+  },
+  "dependencies": {
+    "@dark-engine/animations": "^1.5.1",
+    "@dark-engine/core": "^1.5.1",
+    "@dark-engine/data": "^1.5.1",
+    "@dark-engine/platform-browser": "^1.5.1",
+    "@dark-engine/platform-server": "^1.5.1",
+    "@dark-engine/styled": "^1.5.1",
+    "@dark-engine/web-router": "^1.5.1",
+    "@wareme/event-emitter": "3.4.0",
+    "@wareme/raf-nexus": "^3.4.0",
+    "@wareme/translations": "^3.13.1",
+    "@wareme/use-in-view": "^3.3.0",
+    "@wareme/use-scrollbar-width": "^3.2.0",
+    "@wareme/utils": "^3.12.1",
+    "@wareme/smooth-scrolling": "^3.7.2"
+  }
+}
