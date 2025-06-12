@@ -11,7 +11,7 @@ const Dashboard = component(() => {
   return (
     <>
       <SetTitle title={t('title')} />
-      data.first_name
+      {data.first_name}
     </>
   )
 })

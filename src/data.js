@@ -1,15 +1,19 @@
-import { useApi, useQuery } from '@dark-engine/data'
+import { useApi, useQuery, useMutation } from '@dark-engine/data'
 
 import { keys } from './api'
 
 export const useUser = () => {
   const api = useApi()
-  return useQuery(keys.userGet, () => api.getUserData())
+  return useQuery(keys.getUser, () => api.getUserData())
 }
 
-export const useLoginAdmin = (email, password) => {
+export const useUserLoginMutation = (email, password) => {
   const api = useApi()
-  return useQuery(keys.adminAuth, () => api.loginAdmin(email, password))
+  return useMutation(keys.postAuth, () => api.loginUser(email, password), {
+    onSuccess: ({ cache, data }) => {
+      cache.write(keys.getUser, data, { id: data.id })
+    }
+  })
 }
 
 export const checkResponse = (response) => {

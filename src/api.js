@@ -2,8 +2,8 @@ import { config } from './config'
 import { checkResponse } from './data'
 
 export const keys = {
-  userGet: 'userGet',
-  adminLogin: 'adminAuth'
+  getUser: 'getUser',
+  postAuth: 'postAuth'
 }
 
 const getRequestUrl = (path) => {

@@ -4,9 +4,18 @@ import { useUser } from '../data'
 import Navigate from '../components/Navigate'
 import Theme from '../styles/Theme'
 import AppLayout from './AppLayout'
+import { SmoothScrollingProvider } from '@wareme/smooth-scrolling'
 
 const Root = component(({ slot }) => {
-  const { error } = useUser()
+  const { isFetching, error } = useUser()
+
+  if (isFetching) {
+    return (
+      <div>
+        loading...
+      </div>
+    )
+  }
 
   if (error) {
     return <Navigate to='/login' />
@@ -14,9 +23,11 @@ const Root = component(({ slot }) => {
 
   return (
     <Theme>
-      <AppLayout>
-        {slot}
-      </AppLayout>
+      <SmoothScrollingProvider>
+        <AppLayout>
+          {slot}
+        </AppLayout>
+      </SmoothScrollingProvider>
     </Theme>
   )
 })
