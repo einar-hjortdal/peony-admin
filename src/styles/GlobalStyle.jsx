@@ -3,13 +3,7 @@ import { createGlobalStyle } from '@dark-engine/styled'
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
-    background-color: ${props => props.theme.backgroundPrimary};
     -webkit-tap-highlight-color: transparent; /* Disable tap highlights */
-  }
-
-  ::selection{
-    background: ${props => props.theme.selection};
-    color: ${props => props.theme.backgroundPrimary};
   }
 
   #dark-root {
@@ -23,7 +17,6 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: sans-serif;
     text-rendering: optimizeLegibility;
-    color: ${props => props.theme.foregroundPrimary};
     line-height: 1.5;
   }
 
@@ -75,7 +68,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #dark-root {
-    height: 100vh;
+    min-height: 100vh;
   }
 `
 

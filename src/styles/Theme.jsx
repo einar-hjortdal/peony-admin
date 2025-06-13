@@ -27,15 +27,12 @@ const zIndex = {
 }
 
 const lightColors = {
-  backgroundPrimary: '#E9E1E1',
-  backgroundSecondary: '#F8F5F1',
-  backgroundTertiary: '#CFBAA0',
-  foregroundPrimary: '#202020',
-  foregroundSecondary: '#474747',
-  foregroundTertiary: '#858585',
-  accent: '#7A362A',
-  visited: '#827191',
-  selection: '#95400E'
+  asideBg: '#FFFFFF',
+  mainBg: '#F7F9FB'
+}
+
+const darkColors = {
+
 }
 
 const constants = {
@@ -46,7 +43,11 @@ const constants = {
 
 const light = {
   ...lightColors,
-  borderStyle: `solid 1px ${lightColors.foregroundPrimary}`,
+  ...constants
+}
+
+const dark = {
+  ...darkColors,
   ...constants
 }
 
@@ -59,7 +60,7 @@ export const useThemeToggle = () => {
 }
 
 const Theme = component(({ slot }) => {
-  const themes = { light }
+  const themes = { light, dark }
   const defaultTheme = themes.light
   const [selectedTheme, setSelectedTheme] = useState(defaultTheme)
   const toggleTheme = (name) => {

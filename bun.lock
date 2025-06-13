@@ -69,7 +69,7 @@
 
     "@wareme/raf-nexus": ["@wareme/raf-nexus@3.4.0", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1", "@dark-engine/platform-browser": "^1.5.1" } }, "sha512-1iSWl0G2mn2OId67N5+5aZIicUlNW8OO5upGoY7bNUJlibxXoQG/YRf9ac32dw3F9nGwxueIaaDTLk7G2Us/dA=="],
 
-    "@wareme/smooth-scrolling": ["@wareme/smooth-scrolling@3.7.2", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1", "@dark-engine/styled": "^1.5.1", "@wareme/event-emitter": "3.4.0", "@wareme/raf-nexus": "3.4.0", "@wareme/utils": "3.12.0" } }, "sha512-qllVSKLZztc6oUS6dPKtASBisa68iSnOk2p65zifB0pMcZSfyd7oLomyaAiZ459iz6uKrssLw4b+JCLqRLRb4Q=="],
+    "@wareme/smooth-scrolling": ["@wareme/smooth-scrolling@3.7.4", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1", "@dark-engine/styled": "^1.5.1", "@wareme/event-emitter": "3.4.0", "@wareme/raf-nexus": "3.4.0", "@wareme/utils": "3.12.0" } }, "sha512-lQ5brwlCBc7H8x0BX99yk2vNz824XjSE27PqFGd1+SZQzL9BbKFy7AkwhbkV9Q6RrG2d3BrAB/uBwlggcWwZUQ=="],
 
     "@wareme/translations": ["@wareme/translations@3.13.1", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1", "@wareme/event-emitter": "3.4.0" } }, "sha512-w2+zb9zuYCfmsgvNAhMKRfzvxqs8TfXlwt8Yt4rcaJ0MVdGFC4L0sF+oUDK3N+Rl4RcL83qZLEAGm8r/8ZpdUg=="],
 

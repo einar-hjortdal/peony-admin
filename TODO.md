@@ -18,6 +18,7 @@
 ## Optimizations
 
 - [ ] Responsiveness
+- [ ] Dark theme
 
 ## Problems
 

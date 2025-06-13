@@ -29,6 +29,6 @@
     "@wareme/use-in-view": "^3.3.0",
     "@wareme/use-scrollbar-width": "^3.2.0",
     "@wareme/utils": "^3.12.1",
-    "@wareme/smooth-scrolling": "^3.7.2"
+    "@wareme/smooth-scrolling": "^3.7.4"
   }
 }

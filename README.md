@@ -6,9 +6,9 @@ SPA build with [Dark](https://github.com/atellmer/dark/tree/master), simple depl
 
 ## Scripts
 
-- `test`: runs tests
-- `build`: builds the application for deployment
-- `dev`: builds the application (browser and server) and starts the server in development mode
+- `test`: runs tests.
+- `build`: builds the application for deployment.
+- `dev`: builds the application and starts the [dev server](dev-server.js).
 - `deploy.sh`: sets up a container.
 - `undeploy.sh`: stops and removes the container.
 
@@ -16,7 +16,7 @@ Note: before deploying
 - Edit URLs in [config.js](src/shared/config.js)
 - Verify [public](public/) contains the required files
 
-## Adding a language
+## Development
 
 To add a language follow these steps:
 

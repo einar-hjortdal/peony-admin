@@ -6,6 +6,7 @@ import { useTranslation } from '@wareme/translations'
 import { useUser } from '../data'
 import Navigate from '../components/Navigate'
 import Theme from '../styles/Theme'
+import Top from './Top'
 import Menu from './Menu'
 
 const Gate = component(({ slot }) => {
@@ -27,29 +28,43 @@ const Gate = component(({ slot }) => {
   return slot
 })
 
+const TopWrapper = styled.header`
+  position: fixed;
+  inset: 0 0 auto auto;
+  height: 120px;
+  width: calc(100% - 270px); // TODO put these vars in Theme to access them like colors
+  background-color: ${p => p.theme.mainBg};
+`
+
 const MenuWrapper = styled.aside`
-  position: absolute;
+  position: fixed;
   inset: 0 auto 0 0;
-  width: 20%;
+  width: 270px;
+  background-color: ${p => p.theme.asideBg};
 `
 
 const PageWrapper = styled.main`
-  margin: 0 0 0 auto;
-  width: 80%;
+  width: calc(100% - 270px);
+  padding: 120px 0 0 270px;
 `
 
 const Root = component(({ slot }) => {
   return (
     <Theme>
       <Gate>
-        <MenuWrapper>
-          <Menu />
-        </MenuWrapper>
-        <PageWrapper>
-          <SmoothScrollingProvider>
+        <SmoothScrollingProvider root>
+          <TopWrapper>
+            <Top />
+          </TopWrapper>
+
+          <MenuWrapper>
+            <Menu />
+          </MenuWrapper>
+
+          <PageWrapper>
             {slot}
-          </SmoothScrollingProvider>
-        </PageWrapper>
+          </PageWrapper>
+        </SmoothScrollingProvider>
       </Gate>
     </Theme>
   )
