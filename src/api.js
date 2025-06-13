@@ -1,5 +1,19 @@
 import { config } from './config'
-import { checkResponse } from './data'
+
+class PeonyError extends Error {
+  constructor (data) {
+    super(data.message)
+    this.details = data.details
+  }
+}
+
+const checkResponse = async (response) => {
+  const data = await response.json()
+  if (!response.ok) {
+    throw new PeonyError(data)
+  }
+  return data
+}
 
 export const keys = {
   getUser: 'getUser',
@@ -13,9 +27,7 @@ const getRequestUrl = (path) => {
 export const api = {
   getUserData: async () => {
     const response = await fetch(getRequestUrl('/admin/auth'), { credentials: 'include' })
-    checkResponse(response)
-    const data = await response.json()
-    return data
+    return checkResponse(response)
   },
 
   loginUser: async (email, password) => {
@@ -25,7 +37,6 @@ export const api = {
       body: JSON.stringify({ email, password }),
       credentials: 'include'
     })
-    checkResponse(response)
-    return response.json()
+    return checkResponse(response)
   }
 }

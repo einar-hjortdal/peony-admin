@@ -1,4 +1,4 @@
-import { component } from '@dark-engine/core'
+import { component, detectIsEmpty } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
 import Theme from '../styles/Theme'
@@ -6,6 +6,18 @@ import SetTitle from '../components/SetTitle'
 import { styled } from '@dark-engine/styled'
 import { useUserLoginMutation } from '../data'
 import Navigate from '../components/Navigate'
+
+const Error = styled.p`
+  text-align: center;
+`
+
+const DisplayError = component(({ error }) => {
+  if (detectIsEmpty(error)) {
+    return null
+  }
+
+  return <Error>{error}</Error>
+})
 
 const Wrapper = styled.div`
   position: absolute;
@@ -63,7 +75,7 @@ const Login = component(() => {
     event.preventDefault()
     const email = event.target.elements.email.value
     const password = event.target.elements.password.value
-    userLogin({ email, password })
+    userLogin(email, password)
   }
 
   if (data) {
@@ -103,7 +115,7 @@ const Login = component(() => {
             disabled={isFetching}
           >{t('continue')}
           </Button>
-          <div>{error}</div>
+          <DisplayError error={error} />
         </form>
       </Wrapper>
 
