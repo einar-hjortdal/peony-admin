@@ -6,8 +6,8 @@ import { useTranslation } from '@wareme/translations'
 import { useUser } from '../data'
 import Navigate from '../components/Navigate'
 import Theme from '../styles/Theme'
-import Top from './Top'
-import Menu from './Menu'
+import Header from './Header'
+import Aside from './Aside'
 
 const Gate = component(({ slot }) => {
   const { t } = useTranslation('root')
@@ -28,7 +28,7 @@ const Gate = component(({ slot }) => {
   return slot
 })
 
-const TopWrapper = styled.header`
+const HeaderWrapper = styled.header`
   position: fixed;
   inset: 0 0 auto auto;
   height: 120px;
@@ -36,14 +36,14 @@ const TopWrapper = styled.header`
   background-color: ${p => p.theme.mainBg};
 `
 
-const MenuWrapper = styled.aside`
+const AsideWrapper = styled.aside`
   position: fixed;
   inset: 0 auto 0 0;
   width: 270px;
   background-color: ${p => p.theme.asideBg};
 `
 
-const PageWrapper = styled.main`
+const MainWrapper = styled.main`
   width: calc(100% - 270px);
   padding: 120px 0 0 270px;
 `
@@ -53,17 +53,17 @@ const Root = component(({ slot }) => {
     <Theme>
       <Gate>
         <SmoothScrollingProvider root>
-          <TopWrapper>
-            <Top />
-          </TopWrapper>
+          <HeaderWrapper>
+            <Header />
+          </HeaderWrapper>
 
-          <MenuWrapper>
-            <Menu />
-          </MenuWrapper>
+          <AsideWrapper>
+            <Aside />
+          </AsideWrapper>
 
-          <PageWrapper>
+          <MainWrapper>
             {slot}
-          </PageWrapper>
+          </MainWrapper>
         </SmoothScrollingProvider>
       </Gate>
     </Theme>

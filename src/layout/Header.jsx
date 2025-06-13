@@ -1,7 +1,7 @@
 import { component } from '@dark-engine/core'
 
-const Top = component(() => {
+const Header = component(() => {
   return 'top'
 })
 
-export default Top
+export default Header

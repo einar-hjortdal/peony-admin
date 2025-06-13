@@ -10,7 +10,7 @@ import Navigate from '../components/Navigate'
 const Gate = component(({ slot }) => {
   const { data } = useUser()
   if (data) {
-    return <Navigate to='/dashboard' />
+    return <Navigate to='/orders' />
   }
   return slot
 })

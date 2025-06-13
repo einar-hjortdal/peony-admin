@@ -13,11 +13,15 @@ export const routes = [
     children: [
       {
         path: '',
-        redirectTo: 'dashboard'
+        redirectTo: 'orders'
       },
       {
-        path: 'dashboard',
-        component: lazy(() => import('./pages/Dashboard'))
+        path: 'orders',
+        component: lazy(() => import('./pages/Orders'))
+      },
+      {
+        path: 'products',
+        component: lazy(() => import('./pages/Products'))
       },
       {
         path: 'not-found',
