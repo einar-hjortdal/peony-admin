@@ -1,8 +1,8 @@
 # peony-admin
 
-Admin frontend for [peony](https://github.com/einar-hjortdal/peony)
+Admin frontend for [peony](https://github.com/einar-hjortdal/peony).
 
-- [Dark](https://github.com/atellmer/dark/tree/master)
+SPA build with [Dark](https://github.com/atellmer/dark/tree/master), simple deployment with [freeNGINX](https://freenginx.org/).
 
 ## Scripts
 
