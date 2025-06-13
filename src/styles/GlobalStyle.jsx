@@ -2,8 +2,6 @@ import { createGlobalStyle } from '@dark-engine/styled'
 
 const GlobalStyle = createGlobalStyle`
   body {
-    overflow-y: hidden;
-    min-height: 100%;
     margin: 0;
     background-color: ${props => props.theme.backgroundPrimary};
     -webkit-tap-highlight-color: transparent; /* Disable tap highlights */
@@ -74,6 +72,10 @@ const GlobalStyle = createGlobalStyle`
   embed,
   object {
     display: block;
+  }
+
+  #dark-root {
+    height: 100vh;
   }
 `
 

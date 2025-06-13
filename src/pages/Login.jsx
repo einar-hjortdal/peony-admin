@@ -4,8 +4,16 @@ import { useTranslation } from '@wareme/translations'
 import Theme from '../styles/Theme'
 import SetTitle from '../components/SetTitle'
 import { styled } from '@dark-engine/styled'
-import { useUserLoginMutation } from '../data'
+import { useUser, useUserLoginMutation } from '../data'
 import Navigate from '../components/Navigate'
+
+const Gate = component(({ slot }) => {
+  const { data } = useUser()
+  if (data) {
+    return <Navigate to='/dashboard' />
+  }
+  return slot
+})
 
 const Error = styled.p`
   text-align: center;
@@ -67,7 +75,7 @@ const Button = styled.button`
   cursor: pointer;
 `
 
-const Login = component(() => {
+const Page = component(() => {
   const { t } = useTranslation('login')
   const [userLogin, { isFetching, data, error }] = useUserLoginMutation()
 
@@ -83,9 +91,8 @@ const Login = component(() => {
   }
 
   return (
-    <Theme>
+    <>
       <SetTitle title={t('title')} />
-
       <Wrapper>
         <LogoContainer>
           {/* TODO SVG */}
@@ -118,8 +125,17 @@ const Login = component(() => {
           <DisplayError error={error} />
         </form>
       </Wrapper>
+    </>
+  )
+})
 
-    </Theme>
+const Login = component(() => {
+  return (
+    <Gate>
+      <Theme>
+        <Page />
+      </Theme>
+    </Gate>
   )
 })
 

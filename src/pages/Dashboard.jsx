@@ -8,10 +8,15 @@ const Dashboard = component(() => {
   const { t } = useTranslation('dashboard')
   const { data } = useUser()
 
+  const res = []
+  for (let i = 30; i > 0; i--) {
+    res.push(JSON.stringify(data))
+  }
+
   return (
     <>
       <SetTitle title={t('title')} />
-      {data.first_name}
+      {res}
     </>
   )
 })

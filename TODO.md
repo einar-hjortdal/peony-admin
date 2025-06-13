@@ -1,8 +1,23 @@
 # TODO
 
+## Features
+
+- [x] Log in
+- [ ] Log out
+- [ ] Manage store
+- [ ] Create/edit products
+- [ ] Create/edit variants
+- [ ] Create/edit categories
+- [ ] Create/edit prices
+- [ ] Create/edit price lists
+- [ ] Create/edit currencies
+- [ ] Create/edit taxes
+- [ ] Create/edit regions
+- [ ] Create/edit sales channels
+
 ## Optimizations
 
-
+- [ ] Responsiveness
 
 ## Problems
 
