@@ -48,6 +48,10 @@ const MainWrapper = styled.main`
   padding: 120px 0 0 270px;
 `
 
+const Container = styled.div`
+  padding: 0 8px 68px 8px;
+`
+
 const Root = component(({ slot }) => {
   return (
     <Theme>
@@ -62,7 +66,9 @@ const Root = component(({ slot }) => {
           </AsideWrapper>
 
           <MainWrapper>
-            {slot}
+            <Container>
+              {slot}
+            </Container>
           </MainWrapper>
         </SmoothScrollingProvider>
       </Gate>

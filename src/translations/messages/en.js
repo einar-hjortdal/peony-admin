@@ -5,7 +5,8 @@ const common = freeze({
 })
 
 export default freeze({
-  'dashboard.title': 'dashboard',
+  'orders.title': 'orders',
+  'products.title': 'products',
   'login.title': 'login to peony',
   'login.heading': 'login to peony',
   'login.continue': 'continue'
