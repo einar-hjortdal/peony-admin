@@ -37,14 +37,12 @@ const Table = styled.table``
 Card.Table = component(({ headings }) => {
   const h = []
   for (let i = 0, len = headings.length; i < len; i++) {
-    h.push(<tr key={headings[i]}>{headings[i]}</tr>)
+    h.push(<th key={headings[i]}>{headings[i]}</th>)
   }
 
   return (
     <Table>
-      <thead>
-        {h}
-      </thead>
+      <thead><tr>{h}</tr></thead>
       <tbody>
         <tr>
           tbr

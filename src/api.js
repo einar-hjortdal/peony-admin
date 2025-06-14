@@ -1,3 +1,4 @@
+import { detectIsEmpty, detectIsString } from '@dark-engine/core'
 import { config } from './config'
 
 class PeonyError extends Error {
@@ -15,13 +16,18 @@ const checkResponse = async (response) => {
   return data
 }
 
-export const keys = {
+export const dataKeys = {
   getUser: 'getUser',
-  postAuth: 'postAuth'
+  postAuth: 'postAuth',
+  getProducts: 'getProducts'
 }
 
-const getRequestUrl = (path) => {
-  return `${config.peonyUrl}${path}`
+// params must be a string that will be concatenated to path using the `?` separator
+const getRequestUrl = (path, params) => {
+  if (detectIsEmpty(params) || (detectIsString(params) && params === '')) {
+    return `${config.peonyUrl}${path}`
+  }
+  return `${config.peonyUrl}${path}?${params}`
 }
 
 export const api = {
@@ -38,5 +44,11 @@ export const api = {
       credentials: 'include'
     })
     return checkResponse(response)
+  },
+
+  getProducts: async (params) => {
+    const response = await fetch(getRequestUrl('/admin/products', params), {
+      credentials: 'include'
+    })
   }
 }
