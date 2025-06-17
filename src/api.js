@@ -19,7 +19,8 @@ const checkResponse = async (response) => {
 export const dataKeys = {
   getUser: 'getUser',
   postAuth: 'postAuth',
-  getProducts: 'getProducts'
+  getProducts: 'getProducts',
+  createProduct: 'createProduct'
 }
 
 // params must be a string that will be concatenated to path using the `?` separator
@@ -50,5 +51,16 @@ export const api = {
     const response = await fetch(getRequestUrl('/admin/products', params), {
       credentials: 'include'
     })
+    return checkResponse(response)
+  },
+
+  createProduct: async (data) => {
+    const response = await fetch(getRequestUrl('/admin/products'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include'
+    })
+    return checkResponse(response)
   }
 }

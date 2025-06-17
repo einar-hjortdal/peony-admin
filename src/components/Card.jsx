@@ -24,11 +24,28 @@ Card.HeaderFilter = component(() => {
   )
 })
 
-Card.HeaderAdd = component(() => {
+const ButtonWrapper = styled.div`
+  padding: 0.125rem 0.25rem;
+`
+
+const Button = styled.button`
+  background-color: ${p => p.theme.buttonBg};
+  color: ${p => p.theme.buttonFg};
+  border: none;
+  border-radius: .5rem;
+  font-weight: 500;
+  padding: .5rem 1rem;
+  cursor: pointer;
+  &:hover {
+    background-color: ${p => p.theme.buttonHoverBg};
+  }
+`
+
+Card.HeaderButton = component(({ slot, ...props }) => {
   return (
-    <div>
-      add
-    </div>
+    <ButtonWrapper>
+      <Button {...props}>{slot}</Button>
+    </ButtonWrapper>
   )
 })
 

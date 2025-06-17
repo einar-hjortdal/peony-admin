@@ -27,6 +27,9 @@ const Products = component(() => {
     fetch: 15
     // order: null
   })
+
+  // TODO show skeleton while fetching
+  // TODO show error message
   const { data, error, isFetching } = useProducts(params)
 
   const { t } = useTranslation('products')
@@ -45,7 +48,11 @@ const Products = component(() => {
       <Card.Header>
         <Card.HeaderTitle>{t('title')}</Card.HeaderTitle>
         <Card.HeaderFilter />
-        <Card.HeaderAdd />
+        <Card.HeaderButton
+          type='button'
+        >
+          {t('addProduct')}
+        </Card.HeaderButton>
       </Card.Header>
       <Card.Table
         headings={headings}

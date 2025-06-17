@@ -23,6 +23,7 @@
 ## Problems
 
 - [`@dark-engine/styled` has CSS order issues](https://github.com/atellmer/dark/issues/72)
+- [`@dark-engine/data` cannot delete all cached data associated with one key](https://github.com/atellmer/dark/issues/107)
 
 ## Dark notes
 

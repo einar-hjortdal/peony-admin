@@ -40,7 +40,14 @@ export const useUserLoginMutation = () => {
 export const useProducts = (params) => {
   const api = useApi()
   const p = getParams(params)
-  return useQuery(dataKeys.getProducts, () => api.getProducts(p), {
-    variables: p
+  return useQuery(dataKeys.getProducts, (p) => api.getProducts(p), {
+    variables: p,
+    extractId: (x) => x.p
   })
+}
+
+export const useCreateProductMutation = () => {
+  const api = useApi()
+  return useMutation(dataKeys.createProduct, (data) => api.createProduct(data))
+  // TODO onSuccess invalidate all dataKeys.getProducts from cache https://github.com/atellmer/dark/issues/107
 }

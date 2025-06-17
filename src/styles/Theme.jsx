@@ -28,7 +28,10 @@ const zIndex = {
 
 const lightColors = {
   asideBg: '#FFFFFF',
-  mainBg: '#F7F9FB'
+  mainBg: '#F7F9FB',
+  buttonBg: '#22C55E',
+  buttonFg: '#FFFFFF',
+  buttonHoverBg: '#20BB59'
 }
 
 const darkColors = {
