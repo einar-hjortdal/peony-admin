@@ -19,6 +19,7 @@ const checkResponse = async (response) => {
 export const dataKeys = {
   getUser: 'getUser',
   postAuth: 'postAuth',
+  getStore: 'getStore',
   getProducts: 'getProducts',
   createProduct: 'createProduct'
 }
@@ -42,6 +43,13 @@ export const api = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  getStore: async () => {
+    const response = await fetch(getRequestUrl('/admin/store'), {
       credentials: 'include'
     })
     return checkResponse(response)

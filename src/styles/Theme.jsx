@@ -29,9 +29,26 @@ const zIndex = {
 const lightColors = {
   asideBg: '#FFFFFF',
   mainBg: '#F7F9FB',
-  buttonBg: '#22C55E',
-  buttonFg: '#FFFFFF',
-  buttonHoverBg: '#20BB59'
+  cardBg: '#FFFFFF',
+  dialogHeaderBg: '#2B2D3B',
+  dialogHeaderFg: '#FFFFFF',
+  button: {
+    primary: {
+      fg: '#FFFFFF',
+      bg: '#22C55E',
+      hoverBg: '#20BB59'
+    },
+    secondary: {
+      fg: '#FFFFFF',
+      bg: '#95a0c5',
+      hoverBg: '#8e98bb'
+    },
+    danger: {
+      fg: '#FFFFFF',
+      bg: '#EF4D56',
+      hoverBg: '#E34952'
+    }
+  }
 }
 
 const darkColors = {

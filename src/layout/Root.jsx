@@ -44,6 +44,7 @@ const AsideWrapper = styled.aside`
 `
 
 const MainWrapper = styled.main`
+  background-color: ${p => p.theme.mainBg};
   width: calc(100% - 270px);
   padding: 120px 0 0 270px;
 `

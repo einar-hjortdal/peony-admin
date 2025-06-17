@@ -37,6 +37,11 @@ export const useUserLoginMutation = () => {
   })
 }
 
+export const useStore = () => {
+  const api = useApi()
+  return useQuery(dataKeys.getStore, () => api.getStore())
+}
+
 export const useProducts = (params) => {
   const api = useApi()
   const p = getParams(params)

@@ -2,6 +2,7 @@ import { component } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 
 const Card = styled.div`
+  background-color: ${p => p.theme.cardBg};
   box-shadow: 0 3px 16px rgba(142,134,171,.05);
 `
 
@@ -15,39 +16,6 @@ Card.HeaderTitle = styled.h1`
   font-weight: 500;
   line-height: 1.2;
 `
-
-Card.HeaderFilter = component(() => {
-  return (
-    <div>
-      filter
-    </div>
-  )
-})
-
-const ButtonWrapper = styled.div`
-  padding: 0.125rem 0.25rem;
-`
-
-const Button = styled.button`
-  background-color: ${p => p.theme.buttonBg};
-  color: ${p => p.theme.buttonFg};
-  border: none;
-  border-radius: .5rem;
-  font-weight: 500;
-  padding: .5rem 1rem;
-  cursor: pointer;
-  &:hover {
-    background-color: ${p => p.theme.buttonHoverBg};
-  }
-`
-
-Card.HeaderButton = component(({ slot, ...props }) => {
-  return (
-    <ButtonWrapper>
-      <Button {...props}>{slot}</Button>
-    </ButtonWrapper>
-  )
-})
 
 const Table = styled.table``
 
