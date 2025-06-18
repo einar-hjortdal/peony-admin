@@ -53,14 +53,22 @@ const NewProduct = component(({ modalRef }) => {
 
       {/* TODO show skeleton while waiting for storeData */}
       {/* TODO handle useStore error */}
-      <AccordionItem title={t('general')}>
+      <AccordionItem title={t('general')} defaultOpen>
         content
         {/* implicit locale_code matching store.default_locale_code: title, subtitle, description */}
         {/* handle */}
         {/* translations with language selection from languages in store_languages */}
         {/* discountable default true */}
       </AccordionItem>
-      {JSON.stringify(storeData)}
+
+      <AccordionItem title={t('organize')}>
+        {/* TODO tags */}
+        type, collection, categories, sales channels
+      </AccordionItem>
+
+      <AccordionItem title={t('media')}>
+        thumbnail, images
+      </AccordionItem>
 
       <Dialog.Footer>
         <Button

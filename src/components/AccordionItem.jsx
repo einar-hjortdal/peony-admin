@@ -1,21 +1,55 @@
-import { component } from '@dark-engine/core'
+import { component, detectIsEmpty, useState } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
+import { nisha } from '@wareme/utils'
 
-const Wrapper = styled.div``
+const Wrapper = styled.div`
+  max-width: 1300px;
+`
 
-const Title = styled.div``
+const TitleWrapper = styled.div`
+  
+`
+
+const Title = styled.span`
+  font-weight: 500;
+`
 
 const Header = styled.div``
 
-const AccordionItem = component(({ title, slot }) => {
+const Body = styled.div`
+  display: ${p => nisha(p.$isOpen, 'block', 'none')};
+`
+
+const getDefault = (providedValue, defaultValue) => {
+  if (detectIsEmpty(providedValue)) {
+    return defaultValue
+  }
+  return providedValue
+}
+
+const AccordionItem = component(({ title, defaultOpen, slot }) => {
+  const [isOpen, setIsOpen] = useState(getDefault(defaultOpen, false))
+  const handleClick = () => {
+    if (isOpen) {
+      return setIsOpen(false)
+    }
+    return setIsOpen(true)
+  }
+
   return (
     <Wrapper>
-      <Header>
-        <Title>{title}</Title>
+      <Header
+        role='button'
+        aria-expanded={isOpen}
+        onClick={handleClick}
+      >
+        <TitleWrapper>
+          <Title>{title}</Title>
+        </TitleWrapper>
       </Header>
-      <div>
+      <Body $isOpen={isOpen}>
         {slot}
-      </div>
+      </Body>
     </Wrapper>
   )
 })
