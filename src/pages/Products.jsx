@@ -39,11 +39,17 @@ const NewProduct = component(({ modalRef }) => {
     //    description string }]
   })
   const handleInput = (e) => {
-    if (e.target.type === 'checkbox') {
-      setProductData({
-        ...productData,
-        [e.target.name]: e.target.checked
-      })
+    const { type, name, checked, value } = e.target
+    if (type === 'checkbox') {
+      return setProductData({ ...productData, [name]: checked })
+    }
+
+    if (type === 'text') {
+      if (value === '') {
+        const { [name]: omitted, ...rest } = productData
+        return setProductData(rest)
+      }
+      return setProductData({ ...productData, [name]: value })
     }
   }
 
@@ -79,9 +85,14 @@ const NewProduct = component(({ modalRef }) => {
 
       <NewProductBody>
         <AccordionItem title={t('general')} defaultOpen>
-          content
           {/* implicit locale_code matching store.default_locale_code: title, subtitle, description */}
-          {/* handle */}
+          <Input>
+            <Input.Text
+              name='handle'
+              onInput={handleInput}
+            >{t('handle')}
+            </Input.Text>
+          </Input>
           <Input>
             <Input.Switch
               name='discountable'

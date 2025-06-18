@@ -11,10 +11,11 @@ const Input = styled.div`
 
 const Text = styled.input``
 
-Input.Text = component(({ ...props }) => {
+Input.Text = component(({ slot, ...props }) => {
   return (
     <Label>
-      <Text {...props} />
+      {slot}
+      <Text type='text' {...props} />
     </Label>
   )
 })

@@ -15,6 +15,7 @@ export default freeze({
   'products.addProduct': 'add',
   'newProduct.title': 'new product',
   'newProduct.general': 'general',
+  'newProduct.handle': 'handle',
   'newProduct.discountable': 'discountable',
   'newProduct.organize': 'organize',
   'newProduct.media': 'media',
