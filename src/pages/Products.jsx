@@ -1,19 +1,26 @@
 import { component, useState, useRef, detectIsNull } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
+import { styled } from '@dark-engine/styled'
 
 import Card from '../components/Card'
 import Dialog from '../components/Dialog'
 import Button from '../components/Button'
 import AccordionItem from '../components/AccordionItem'
-import { useProducts, useStore } from '../data'
+import Input from '../components/Input'
+import { useProducts, useCreateProductMutation, useStore } from '../data'
 
 // links: 'edit', 'publish/unpublish', 'duplicate', 'delete'
 
+const NewProductBody = styled.div`
+  max-width: 1300px;
+  margin: 0 auto;
+`
+
 const NewProduct = component(({ modalRef }) => {
   const { t } = useTranslation('newProduct')
-  const { data: storeData, error, isFetching } = useStore()
+  const { isFetching: storeIsFetching, data: storeData, error: storeError } = useStore()
 
-  const [data, setData] = useState({
+  const [productData, setProductData] = useState({
     // handle            ?string
     // is_giftcard       ?bool
     // status            ?string
@@ -31,12 +38,31 @@ const NewProduct = component(({ modalRef }) => {
     //    subtitle string
     //    description string }]
   })
+  const handleInput = (e) => {
+    if (e.target.type === 'checkbox') {
+      setProductData({
+        ...productData,
+        [e.target.name]: e.target.checked
+      })
+    }
+  }
+
+  const [createProduct, { isFetching, data, error }] = useCreateProductMutation()
+
   const handleCloseModal = () => {
     if (detectIsNull(modalRef)) {
       return
     }
-    setData({})
+    setProductData({})
     modalRef.current.close()
+  }
+
+  if (storeIsFetching) {
+    return null // TODO return skeleton
+  }
+
+  if (storeError) {
+    return null // TODO handle error
   }
 
   return (
@@ -51,24 +77,32 @@ const NewProduct = component(({ modalRef }) => {
         </Dialog.Close>
       </Dialog.Header>
 
-      {/* TODO show skeleton while waiting for storeData */}
-      {/* TODO handle useStore error */}
-      <AccordionItem title={t('general')} defaultOpen>
-        content
-        {/* implicit locale_code matching store.default_locale_code: title, subtitle, description */}
-        {/* handle */}
-        {/* translations with language selection from languages in store_languages */}
-        {/* discountable default true */}
-      </AccordionItem>
+      <NewProductBody>
+        <AccordionItem title={t('general')} defaultOpen>
+          content
+          {/* implicit locale_code matching store.default_locale_code: title, subtitle, description */}
+          {/* handle */}
+          <Input>
+            <Input.Switch
+              name='discountable'
+              checked={productData.discountable}
+              onChange={handleInput}
+            >{t('discountable')}
+            </Input.Switch>
+          </Input>
+        </AccordionItem>
 
-      <AccordionItem title={t('organize')}>
-        {/* TODO tags */}
-        type, collection, categories, sales channels
-      </AccordionItem>
+        {/* if store_languages has more than one language: display AccordionItem for translations */}
 
-      <AccordionItem title={t('media')}>
-        thumbnail, images
-      </AccordionItem>
+        <AccordionItem title={t('organize')}>
+          {/* TODO tags */}
+          type, collection, categories, sales channels
+        </AccordionItem>
+
+        <AccordionItem title={t('media')}>
+          thumbnail, images
+        </AccordionItem>
+      </NewProductBody>
 
       <Dialog.Footer>
         <Button

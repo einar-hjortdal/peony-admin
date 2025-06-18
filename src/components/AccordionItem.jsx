@@ -3,7 +3,7 @@ import { styled } from '@dark-engine/styled'
 import { nisha } from '@wareme/utils'
 
 const Wrapper = styled.div`
-  max-width: 1300px;
+  
 `
 
 const TitleWrapper = styled.div`

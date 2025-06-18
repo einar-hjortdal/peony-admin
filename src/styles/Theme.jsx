@@ -32,6 +32,7 @@ const lightColors = {
   cardBg: '#FFFFFF',
   dialogHeaderBg: '#2B2D3B',
   dialogHeaderFg: '#FFFFFF',
+  primary: '#22C55E',
   button: {
     primary: {
       fg: '#FFFFFF',
