@@ -1,4 +1,4 @@
-import { component, useState, useRef, detectIsNull } from '@dark-engine/core'
+import { component, useState, useRef, detectIsNull, keys, hasKeys } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 import { styled } from '@dark-engine/styled'
 
@@ -8,8 +8,7 @@ import Button from '../components/Button'
 import AccordionItem from '../components/AccordionItem'
 import Input from '../components/Input'
 import { useProducts, useCreateProductMutation, useStore } from '../data'
-
-// links: 'edit', 'publish/unpublish', 'duplicate', 'delete'
+import { detectIsEmptyString } from '@wareme/utils'
 
 const NewProductBody = styled.div`
   max-width: 1300px;
@@ -20,24 +19,9 @@ const NewProduct = component(({ modalRef }) => {
   const { t } = useTranslation('newProduct')
   const { isFetching: storeIsFetching, data: storeData, error: storeError } = useStore()
 
-  const [productData, setProductData] = useState({
-    // handle            ?string
-    // is_giftcard       ?bool
-    // status            ?string
-    // thumbnail         ?string
-    // collection_id     ?string
-    // type_id           ?string
-    discountable: true
-    // images            ?[]string
-    // tag_ids           ?[]string
-    // sales_channel_ids ?[]string
-    // category_ids      ?[]string
-    // translations      [{
-    //    locale_code string
-    //    title string
-    //    subtitle string
-    //    description string }]
-  })
+  const [productData, setProductData] = useState({ discountable: true })
+  const [productTranslations, setProductTranslations] = useState({})
+
   const handleInput = (e) => {
     const { type, name, checked, value } = e.target
     if (type === 'checkbox') {
@@ -45,7 +29,7 @@ const NewProduct = component(({ modalRef }) => {
     }
 
     if (type === 'text') {
-      if (value === '') {
+      if (detectIsEmptyString(value)) {
         const { [name]: omitted, ...rest } = productData
         return setProductData(rest)
       }
@@ -55,20 +39,42 @@ const NewProduct = component(({ modalRef }) => {
   }
 
   const handleTranslationInput = (e) => {
+    const { name, value } = e.target
     const { localeCode } = e.target.dataset
-    if (localeCode) {
-      // if productData.translations is defined, check
-      return console.log(localeCode)
+    const newTranslations = { ...productTranslations }
+    const newTranslation = { ...productTranslations[localeCode] }
+
+    if (detectIsEmptyString(value)) {
+      delete newTranslation[name]
+      if (hasKeys(newTranslation)) {
+        return setProductTranslations({ ...newTranslations, [localeCode]: { ...newTranslation } })
+      }
+
+      delete newTranslations[localeCode]
+      return setProductTranslations({ ...newTranslations })
     }
+
+    return setProductTranslations({
+      ...productTranslations,
+      [localeCode]: { ...productTranslations[localeCode], [name]: value }
+    })
   }
 
   const [createProduct, { isFetching, data, error }] = useCreateProductMutation()
 
   const handleSubmit = (e) => {
     const { status } = e.target.dataset
-    const data = { ...productData, status }
-    console.log(data)
-    // createProduct(data)
+    const translations = []
+    const localeCodes = keys(productTranslations)
+    for (let i = 0, len = localeCodes.length; i < len; i++) {
+      const localeCode = localeCodes[i]
+      translations.push({
+        localeCode,
+        ...productTranslations[localeCode]
+      })
+    }
+    const data = { ...productData, translations, status }
+    createProduct(data)
   }
 
   const handleCloseModal = () => {
@@ -100,8 +106,6 @@ const NewProduct = component(({ modalRef }) => {
     return null // TODO handle error
   }
 
-  console.log(productData)
-
   return (
     <Dialog ref={modalRef}>
       <Dialog.Header>
@@ -120,23 +124,23 @@ const NewProduct = component(({ modalRef }) => {
             <Input.Text
               name='title'
               data-locale-code={storeData.defaultLocaleCode}
-              onInput={handleInput}
+              onInput={handleTranslationInput}
             >{t('general.title')}
             </Input.Text>
           </Input>
           <Input>
             <Input.Text
               name='subtitle'
-              data-locale_code={storeData.defaultLocaleCode}
-              onInput={handleInput}
+              data-locale-code={storeData.defaultLocaleCode}
+              onInput={handleTranslationInput}
             >{t('general.subtitle')}
             </Input.Text>
           </Input>
           <Input>
             <Input.Text
               name='description'
-              data-locale_code={storeData.defaultLocaleCode}
-              onInput={handleInput}
+              data-locale-code={storeData.defaultLocaleCode}
+              onInput={handleTranslationInput}
             >{t('general.description')}
             </Input.Text>
           </Input>
@@ -190,6 +194,8 @@ const NewProduct = component(({ modalRef }) => {
     </Dialog>
   )
 })
+
+// TODO links: 'edit', 'publish/unpublish', 'duplicate', 'delete'
 
 const Products = component(() => {
   // TODO implement filters that are commented out
