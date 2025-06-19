@@ -49,11 +49,27 @@ const NewProduct = component(({ modalRef }) => {
         const { [name]: omitted, ...rest } = productData
         return setProductData(rest)
       }
+      // TODO slugify handle
       return setProductData({ ...productData, [name]: value })
     }
   }
 
+  const handleTranslationInput = (e) => {
+    const { localeCode } = e.target.dataset
+    if (localeCode) {
+      // if productData.translations is defined, check
+      return console.log(localeCode)
+    }
+  }
+
   const [createProduct, { isFetching, data, error }] = useCreateProductMutation()
+
+  const handleSubmit = (e) => {
+    const { status } = e.target.dataset
+    const data = { ...productData, status }
+    console.log(data)
+    // createProduct(data)
+  }
 
   const handleCloseModal = () => {
     if (detectIsNull(modalRef)) {
@@ -71,6 +87,21 @@ const NewProduct = component(({ modalRef }) => {
     return null // TODO handle error
   }
 
+  if (data) {
+    handleCloseModal()
+    return null
+  }
+
+  if (isFetching) {
+    return null // TODO disable everything
+  }
+
+  if (error) {
+    return null // TODO handle error
+  }
+
+  console.log(productData)
+
   return (
     <Dialog ref={modalRef}>
       <Dialog.Header>
@@ -85,12 +116,35 @@ const NewProduct = component(({ modalRef }) => {
 
       <NewProductBody>
         <AccordionItem title={t('general')} defaultOpen>
-          {/* implicit locale_code matching store.default_locale_code: title, subtitle, description */}
+          <Input>
+            <Input.Text
+              name='title'
+              data-locale-code={storeData.defaultLocaleCode}
+              onInput={handleInput}
+            >{t('general.title')}
+            </Input.Text>
+          </Input>
+          <Input>
+            <Input.Text
+              name='subtitle'
+              data-locale_code={storeData.defaultLocaleCode}
+              onInput={handleInput}
+            >{t('general.subtitle')}
+            </Input.Text>
+          </Input>
+          <Input>
+            <Input.Text
+              name='description'
+              data-locale_code={storeData.defaultLocaleCode}
+              onInput={handleInput}
+            >{t('general.description')}
+            </Input.Text>
+          </Input>
           <Input>
             <Input.Text
               name='handle'
               onInput={handleInput}
-            >{t('handle')}
+            >{t('general.handle')}
             </Input.Text>
           </Input>
           <Input>
@@ -98,7 +152,7 @@ const NewProduct = component(({ modalRef }) => {
               name='discountable'
               checked={productData.discountable}
               onChange={handleInput}
-            >{t('discountable')}
+            >{t('general.discountable')}
             </Input.Switch>
           </Input>
         </AccordionItem>
@@ -119,15 +173,17 @@ const NewProduct = component(({ modalRef }) => {
         <Button
           $variant='secondary'
           type='button'
+          data-status='draft'
           disabled={detectIsNull(modalRef)}
-        // onClick={}
+          onClick={handleSubmit}
         >{t('save')}
         </Button>
         <Button
           $variant='primary'
           type='button'
+          data-status='publish'
           disabled={detectIsNull(modalRef)}
-        // onClick={}
+          onClick={handleSubmit}
         >{t('publish')}
         </Button>
       </Dialog.Footer>
