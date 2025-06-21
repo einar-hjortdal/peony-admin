@@ -102,7 +102,7 @@ const NewProduct = component(({ modalRef }) => {
   }
 
   if (data) {
-    handleCloseModal()
+    handleCloseModal() // TODO this cannot stay here or will enter infinite calling on render
     return null
   }
 
