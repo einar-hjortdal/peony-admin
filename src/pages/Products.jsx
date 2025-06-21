@@ -1,14 +1,17 @@
-import { component, useState, useRef, detectIsNull, keys, hasKeys } from '@dark-engine/core'
+import { component, useState, useRef, detectIsNull, keys, hasKeys, detectIsEmpty } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 import { styled } from '@dark-engine/styled'
+import { detectIsEmptyString } from '@wareme/utils'
 
 import Card from '../components/Card'
 import Dialog from '../components/Dialog'
 import Button from '../components/Button'
 import AccordionItem from '../components/AccordionItem'
 import Input from '../components/Input'
+import Switch from '../components/Switch'
+import Table from '../components/Table'
 import { useProducts, useCreateProductMutation, useStore } from '../data'
-import { detectIsEmptyString } from '@wareme/utils'
+import { getDefaultTranslation, valueOrDefault } from '../translations'
 
 const NewProductBody = styled.div`
   max-width: 1300px;
@@ -63,6 +66,11 @@ const NewProduct = component(({ modalRef }) => {
   const [createProduct, { isFetching, data, error }] = useCreateProductMutation()
 
   const handleSubmit = (e) => {
+    e.preventDefault()
+    if (isFetching) {
+      return
+    }
+
     const { status } = e.target.dataset
     const translations = []
     const localeCodes = keys(productTranslations)
@@ -98,99 +106,93 @@ const NewProduct = component(({ modalRef }) => {
     return null
   }
 
-  if (isFetching) {
-    return null // TODO disable everything
-  }
-
   if (error) {
     return null // TODO handle error
   }
 
   return (
     <Dialog ref={modalRef}>
-      <Dialog.Header>
-        <Dialog.Title>{t('title')}</Dialog.Title>
-        <Dialog.Close
-          type='button'
-          disabled={detectIsNull(modalRef)}
-          onClick={handleCloseModal}
-        >x
-        </Dialog.Close>
-      </Dialog.Header>
+      <form>
+        <Dialog.Header>
+          <Dialog.Title>{t('title')}</Dialog.Title>
+          <Dialog.Close
+            type='button'
+            disabled={isFetching}
+            onClick={handleCloseModal}
+          >x
+          </Dialog.Close>
+        </Dialog.Header>
 
-      <NewProductBody>
-        <AccordionItem title={t('general')} defaultOpen>
-          <Input>
-            <Input.Text
-              name='title'
-              data-locale-code={storeData.defaultLocaleCode}
-              onInput={handleTranslationInput}
-            >{t('general.title')}
-            </Input.Text>
-          </Input>
-          <Input>
-            <Input.Text
-              name='subtitle'
-              data-locale-code={storeData.defaultLocaleCode}
-              onInput={handleTranslationInput}
-            >{t('general.subtitle')}
-            </Input.Text>
-          </Input>
-          <Input>
-            <Input.Text
-              name='description'
-              data-locale-code={storeData.defaultLocaleCode}
-              onInput={handleTranslationInput}
-            >{t('general.description')}
-            </Input.Text>
-          </Input>
-          <Input>
-            <Input.Text
-              name='handle'
-              onInput={handleInput}
-            >{t('general.handle')}
-            </Input.Text>
-          </Input>
-          <Input>
-            <Input.Switch
-              name='discountable'
-              checked={productData.discountable}
-              onChange={handleInput}
-            >{t('general.discountable')}
-            </Input.Switch>
-          </Input>
-        </AccordionItem>
+        <NewProductBody>
+          <AccordionItem title={t('general')} defaultOpen>
+            <fieldset disabled={isFetching}>
+              <Input
+                name='title'
+                data-locale-code={storeData.defaultLocaleCode}
+                onInput={handleTranslationInput}
+              >{t('general.title')}
+              </Input>
+              <Input
+                name='subtitle'
+                data-locale-code={storeData.defaultLocaleCode}
+                onInput={handleTranslationInput}
+              >{t('general.subtitle')}
+              </Input>
+              <Input
+                name='description'
+                data-locale-code={storeData.defaultLocaleCode}
+                onInput={handleTranslationInput}
+              >{t('general.description')}
+              </Input>
+              <Input
+                name='handle'
+                onInput={handleInput}
+              >{t('general.handle')}
+              </Input>
+              <Switch
+                name='discountable'
+                checked={productData.discountable}
+                onChange={handleInput}
+              >{t('general.discountable')}
+              </Switch>
+            </fieldset>
+          </AccordionItem>
 
-        {/* if store_languages has more than one language: display AccordionItem for translations */}
+          {/* if store_languages has more than one language: display AccordionItem for translations */}
 
-        <AccordionItem title={t('organize')}>
-          {/* TODO tags */}
-          type, collection, categories, sales channels
-        </AccordionItem>
+          <AccordionItem title={t('organize')}>
+            <fieldset disabled={isFetching}>
+              {/* TODO tags */}
+              type, collection, categories, sales channels
+            </fieldset>
+          </AccordionItem>
 
-        <AccordionItem title={t('media')}>
-          thumbnail, images
-        </AccordionItem>
-      </NewProductBody>
+          <AccordionItem title={t('media')}>
+            <fieldset disabled={isFetching}>
+              thumbnail, images
+            </fieldset>
+          </AccordionItem>
+        </NewProductBody>
 
-      <Dialog.Footer>
-        <Button
-          $variant='secondary'
-          type='button'
-          data-status='draft'
-          disabled={detectIsNull(modalRef)}
-          onClick={handleSubmit}
-        >{t('save')}
-        </Button>
-        <Button
-          $variant='primary'
-          type='button'
-          data-status='publish'
-          disabled={detectIsNull(modalRef)}
-          onClick={handleSubmit}
-        >{t('publish')}
-        </Button>
-      </Dialog.Footer>
+        <Dialog.Footer>
+          <Button
+            $variant='secondary'
+            type='submit'
+            data-status='draft'
+            disabled={isFetching}
+            onClick={handleSubmit}
+          >{t('save')}
+          </Button>
+          <Button
+            $variant='primary'
+            type='submit'
+            data-status='publish'
+            disabled={isFetching}
+            onClick={handleSubmit}
+          >{t('publish')}
+          </Button>
+        </Dialog.Footer>
+      </form>
     </Dialog>
   )
 })
@@ -219,6 +221,7 @@ const Products = component(() => {
     // order: null
   })
 
+  const { isFetching: storeIsFetching, data: storeData, error: storeError } = useStore()
   // TODO show skeleton while fetching
   // TODO show error message
   const { data, error, isFetching } = useProducts(params)
@@ -242,10 +245,38 @@ const Products = component(() => {
     t('inventory')
   ]
 
+  if (storeIsFetching) {
+    return null
+  }
+
+  const h = []
+  for (let i = 0, len = headings.length; i < len; i++) {
+    headings.push(<th key={headings[i]}>{headings[i]}</th>)
+  }
+
+  const rows = []
+  for (let i = 0, len = data.items.length; i < len; i++) {
+    const product = data.items[i]
+    const defaultTranslation = getDefaultTranslation(product.translations, storeData.defaultLocaleCode)
+    let title = product.id
+    if (!detectIsEmpty(defaultTranslation)) {
+      title = valueOrDefault(defaultTranslation.title, product.id)
+    }
+    rows.push(
+      <tr key={product.id}>
+        <td>{title}</td>
+        <td>'TODO collection'</td>
+        <td>{product.status}</td>
+        <td>'TODO availability'</td>
+        <td>'TODO inventory'</td>
+      </tr>)
+  }
+
   return (
     <>
       <Card>
         <Card.Header>
+          {/* TODO change to Table.Title */}
           <Card.HeaderTitle>{t('title')}</Card.HeaderTitle>
           {/* <Filter /> */}
           <Button
@@ -256,12 +287,13 @@ const Products = component(() => {
           >{t('addProduct')}
           </Button>
         </Card.Header>
-        <Card.Table
-          headings={headings}
-        >
-          table
-          <Card.TableFooter />
-        </Card.Table>
+        <table>
+          <thead>
+            <tr>{h}</tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </table>
+        {/* <Table.Footer /> */}
       </Card>
       <NewProduct modalRef={modalRef} />
     </>

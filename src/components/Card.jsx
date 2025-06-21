@@ -1,4 +1,3 @@
-import { component } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 
 const Card = styled.div`
@@ -16,41 +15,5 @@ Card.HeaderTitle = styled.h1`
   font-weight: 500;
   line-height: 1.2;
 `
-
-const Table = styled.table``
-
-Card.Table = component(({ headings }) => {
-  const h = []
-  for (let i = 0, len = headings.length; i < len; i++) {
-    h.push(<th key={headings[i]}>{headings[i]}</th>)
-  }
-
-  return (
-    <Table>
-      <thead><tr>{h}</tr></thead>
-      <tbody>
-        <tr>
-          tbr
-        </tr>
-      </tbody>
-    </Table>
-  )
-})
-
-Card.TableFooter = component(({ showing, total, previous, next }) => {
-  return (
-    <div>
-      <div>
-        showing x out of y
-      </div>
-      <nav>
-        <ul>
-          <li>prev</li>
-          <li>next</li>
-        </ul>
-      </nav>
-    </div>
-  )
-})
 
 export default Card
