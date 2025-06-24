@@ -50,16 +50,16 @@ export const useStore = () => {
 export const useProducts = (params) => {
   const api = useApi()
   const p = getParams(params)
-  return useQuery(dataKeys.getProducts, (p) => api.getProducts(p), {
-    variables: p,
+  return useQuery(dataKeys.getProducts, () => api.getProducts(p), {
+    variables: { p },
     extractId: (x) => x.p
   })
 }
 
 export const useProductById = (id) => {
   const api = useApi()
-  return useQuery(dataKeys.getProductById, (id) => api.getProductById(id), {
-    variables: id,
+  return useQuery(dataKeys.getProductById, () => api.getProductById(id), {
+    variables: { id },
     extractId: (x) => x.id
   })
 }
