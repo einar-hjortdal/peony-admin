@@ -28,6 +28,14 @@ export const routes = [
         component: lazy(() => import('./pages/Product'))
       },
       {
+        path: 'settings',
+        component: lazy(() => import('./pages/Settings'))
+      },
+      {
+        path: 'currencies',
+        component: lazy(() => import('./pages/Currencies'))
+      },
+      {
         path: 'not-found',
         component: lazy(() => import('./pages/NotFound'))
       },
