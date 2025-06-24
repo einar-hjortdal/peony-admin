@@ -1,4 +1,13 @@
-import { component, useState, useRef, detectIsNull, keys, hasKeys, detectIsEmpty } from '@dark-engine/core'
+import {
+  component,
+  useState,
+  useRef,
+  detectIsNull,
+  keys,
+  hasKeys,
+  detectIsEmpty,
+  useEffect
+} from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 import { styled } from '@dark-engine/styled'
 import { detectIsEmptyString } from '@wareme/utils'
@@ -10,8 +19,10 @@ import AccordionItem from '../components/AccordionItem'
 import Input from '../components/Input'
 import Switch from '../components/Switch'
 import Table from '../components/Table'
-import { useProducts, useCreateProductMutation, useStore } from '../data'
+import If from '../components/If'
+import { constants, useProducts, useCreateProductMutation, useStore } from '../data'
 import { getDefaultTranslation, valueOrDefault } from '../translations'
+import { Link } from '@dark-engine/web-router'
 
 const NewProductBody = styled.div`
   max-width: 1300px;
@@ -20,6 +31,7 @@ const NewProductBody = styled.div`
 
 const NewProduct = component(({ modalRef }) => {
   const { t } = useTranslation('newProduct')
+  const formRef = useRef(null)
   const { isFetching: storeIsFetching, data: storeData, error: storeError } = useStore()
 
   const [productData, setProductData] = useState({ discountable: true })
@@ -89,9 +101,18 @@ const NewProduct = component(({ modalRef }) => {
     if (detectIsNull(modalRef)) {
       return
     }
-    setProductData({})
+
+    formRef.current.reset()
+    setProductData({ discountable: true })
+    setProductTranslations({})
     modalRef.current.close()
   }
+
+  useEffect(() => {
+    if (data) {
+      handleCloseModal()
+    }
+  }, [data])
 
   if (storeIsFetching) {
     return null // TODO return skeleton
@@ -101,18 +122,13 @@ const NewProduct = component(({ modalRef }) => {
     return null // TODO handle error
   }
 
-  if (data) {
-    handleCloseModal() // TODO this cannot stay here or will enter infinite calling on render
-    return null
-  }
-
   if (error) {
     return null // TODO handle error
   }
 
   return (
     <Dialog ref={modalRef}>
-      <form>
+      <form ref={formRef}>
         <Dialog.Header>
           <Dialog.Title>{t('title')}</Dialog.Title>
           <Dialog.Close
@@ -158,17 +174,25 @@ const NewProduct = component(({ modalRef }) => {
             </fieldset>
           </AccordionItem>
 
-          {/* if store_languages has more than one language: display AccordionItem for translations */}
+          <If condition={storeData.locales.length > 1}>
+            <AccordionItem title={t('translations')}>
+              <fieldset disabled={isFetching}>
+                TODO title, subtitle, description for each language other than storeData.defaultLocaleCode
+              </fieldset>
+            </AccordionItem>
+          </If>
 
           <AccordionItem title={t('organize')}>
             <fieldset disabled={isFetching}>
               {/* TODO tags */}
+              {/* TODO create type */}
               type, collection, categories, sales channels
             </fieldset>
           </AccordionItem>
 
           <AccordionItem title={t('media')}>
             <fieldset disabled={isFetching}>
+              {/* TODO upload */}
               thumbnail, images
             </fieldset>
           </AccordionItem>
@@ -217,8 +241,8 @@ const Products = component(() => {
     // region_id: null,
     // currency_code: null,
     offset: null,
-    fetch: 15
-    // order: null
+    fetch: 15,
+    order: constants.orderDesc
   })
 
   const { isFetching: storeIsFetching, data: storeData, error: storeError } = useStore()
@@ -264,7 +288,7 @@ const Products = component(() => {
     }
     rows.push(
       <tr key={product.id}>
-        <td>{title}</td>
+        <td><Link to={`/product/${product.id}`}>{title}</Link></td>
         <td>'TODO collection'</td>
         <td>{product.status}</td>
         <td>'TODO availability'</td>

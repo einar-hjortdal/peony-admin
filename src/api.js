@@ -21,6 +21,7 @@ export const dataKeys = {
   postAuth: 'postAuth',
   getStore: 'getStore',
   getProducts: 'getProducts',
+  getProductById: 'getProductById',
   createProduct: 'createProduct'
 }
 
@@ -57,6 +58,13 @@ export const api = {
 
   getProducts: async (params) => {
     const response = await fetch(getRequestUrl('/admin/products', params), {
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  getProductById: async (id) => {
+    const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
       credentials: 'include'
     })
     return checkResponse(response)

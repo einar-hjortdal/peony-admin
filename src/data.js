@@ -3,6 +3,11 @@ import { useApi, useQuery, useMutation } from '@dark-engine/data'
 
 import { dataKeys } from './api'
 
+export const constants = {
+  orderAsc: 'ASC',
+  orderDesc: 'DESC'
+}
+
 // return a new object from the object p without any null/undefined values
 const cleanParams = (p) => {
   const res = {}
@@ -48,6 +53,14 @@ export const useProducts = (params) => {
   return useQuery(dataKeys.getProducts, (p) => api.getProducts(p), {
     variables: p,
     extractId: (x) => x.p
+  })
+}
+
+export const useProductById = (id) => {
+  const api = useApi()
+  return useQuery(dataKeys.getProductById, (id) => api.getProductById(id), {
+    variables: id,
+    extractId: (x) => x.id
   })
 }
 

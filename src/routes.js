@@ -24,6 +24,10 @@ export const routes = [
         component: lazy(() => import('./pages/Products'))
       },
       {
+        path: 'product/:id',
+        component: lazy(() => import('./pages/Product'))
+      },
+      {
         path: 'not-found',
         component: lazy(() => import('./pages/NotFound'))
       },

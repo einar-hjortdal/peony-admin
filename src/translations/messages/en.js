@@ -20,6 +20,7 @@ export default freeze({
   'newProduct.general.description': 'description',
   'newProduct.general.handle': 'handle',
   'newProduct.general.discountable': 'discountable',
+  'newProduct.translations': 'translations',
   'newProduct.organize': 'organize',
   'newProduct.media': 'media',
   'newProduct.publish': 'publish',
