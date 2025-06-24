@@ -20,7 +20,7 @@ import Input from '../components/Input'
 import Switch from '../components/Switch'
 import Table from '../components/Table'
 import If from '../components/If'
-import { constants, useProducts, useCreateProductMutation, useStore } from '../data'
+import { constants, useProducts, useCreateProductMutation, useStore, useUpdateProductMutation, useDeleteProductMutation } from '../data'
 import { getDefaultTranslation, valueOrDefault } from '../translations'
 import { Link } from '@dark-engine/web-router'
 
@@ -221,7 +221,60 @@ const NewProduct = component(({ modalRef }) => {
   )
 })
 
-// TODO links: 'edit', 'publish/unpublish', 'duplicate', 'delete'
+const Actions = component(({ product }) => {
+  const { id, status } = product
+  const { t } = useTranslation('products.actions')
+  const [updateProduct, {
+    data: updateProductData,
+    isFetching: updateProductIsFetching,
+    error: updateProductError
+  }] = useUpdateProductMutation(id)
+  const [deleteProduct, {
+    data: deleteProductData,
+    isFetching: deleteProductIsFetching,
+    error: deleteProductError
+  }] = useDeleteProductMutation(id)
+
+  const handleChangeStatus = (e) => {
+    const { newStatus } = e.target.dataset
+    updateProduct({ ...product, status: newStatus })
+  }
+
+  const handleDelete = () => {
+    deleteProduct()
+  }
+
+  return (
+    <div>
+      <ul>
+        <li><Link to={`/product/${id}`}>{t('edit')}</Link></li>
+        <If condition={status === constants.statusDraft}>
+          <li>
+            <button
+              type='button'
+              data-new-status={constants.statusPublished}
+              onClick={handleChangeStatus}
+            >{t('publish')}
+            </button>
+          </li>
+        </If>
+        <If condition={status === constants.statusPublished}>
+          <li>
+            <button
+              type='button'
+              data-new-status={constants.statusDraft}
+              onClick={handleChangeStatus}
+            >{t('unpublish')}
+            </button>
+          </li>
+        </If>
+        <li>
+          <button type='button' name='delete' onClick={handleDelete}>{t('delete')}</button>
+        </li>
+      </ul>
+    </div>
+  )
+})
 
 const Products = component(() => {
   // TODO implement filters that are commented out
@@ -293,6 +346,7 @@ const Products = component(() => {
         <td>{product.status}</td>
         <td>'TODO availability'</td>
         <td>'TODO inventory'</td>
+        <td><Actions product={product} /></td>
       </tr>)
   }
 

@@ -22,7 +22,9 @@ export const dataKeys = {
   getStore: 'getStore',
   getProducts: 'getProducts',
   getProductById: 'getProductById',
-  createProduct: 'createProduct'
+  createProduct: 'createProduct',
+  updateProduct: 'updateProduct',
+  deleteProduct: 'deleteProduct'
 }
 
 // params must be a string that will be concatenated to path using the `?` separator
@@ -75,6 +77,24 @@ export const api = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  updateProduct: async (id, data) => {
+    const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  deleteProduct: async (id) => {
+    const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
+      method: 'DELETE',
       credentials: 'include'
     })
     return checkResponse(response)

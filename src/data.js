@@ -5,7 +5,11 @@ import { dataKeys } from './api'
 
 export const constants = {
   orderAsc: 'ASC',
-  orderDesc: 'DESC'
+  orderDesc: 'DESC',
+  statusDraft: 'draft',
+  statusProposed: 'proposed',
+  statusPublished: 'published',
+  statusRejected: 'rejected'
 }
 
 // return a new object from the object p without any null/undefined values
@@ -68,4 +72,20 @@ export const useCreateProductMutation = () => {
   const api = useApi()
   return useMutation(dataKeys.createProduct, (data) => api.createProduct(data))
   // TODO onSuccess invalidate all dataKeys.getProducts from cache https://github.com/atellmer/dark/issues/107
+}
+
+export const useUpdateProductMutation = (id) => {
+  const api = useApi()
+  return useMutation(dataKeys.updateProduct, (data) => api.updateProduct(id, data), {
+    variables: { id },
+    extractId: (x) => x.id
+  })
+}
+
+export const useDeleteProductMutation = (id) => {
+  const api = useApi()
+  return useMutation(dataKeys.deleteProduct, () => api.deleteProduct(id), {
+    variables: { id },
+    extractId: (x) => x.id
+  })
 }
