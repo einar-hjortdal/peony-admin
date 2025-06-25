@@ -18,7 +18,8 @@ const checkResponse = async (response) => {
 
 export const dataKeys = {
   getUser: 'getUser',
-  postAuth: 'postAuth',
+  authPost: 'authPost',
+  authDelete: 'authDelete',
   getStore: 'getStore',
   getProducts: 'getProducts',
   getProductById: 'getProductById',
@@ -46,6 +47,14 @@ export const api = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  logoutUser: async () => {
+    const response = await fetch(getRequestUrl('/admin/auth'), {
+      method: 'DELETE',
       credentials: 'include'
     })
     return checkResponse(response)

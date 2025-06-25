@@ -39,9 +39,21 @@ export const useUser = () => {
 
 export const useUserLoginMutation = () => {
   const api = useApi()
-  return useMutation(dataKeys.postAuth, (email, password) => api.loginUser(email, password), {
+  return useMutation(dataKeys.authPost, (email, password) => api.loginUser(email, password), {
     onSuccess: ({ cache, data }) => {
       cache.write(dataKeys.getUser, data, { id: data.id })
+    }
+  })
+}
+
+export const useUserLogoutMutation = () => {
+  const api = useApi()
+  return useMutation(dataKeys.authDelete, () => api.logoutUser(), {
+    onSuccess: ({ cache }) => {
+      cache.invalidate(dataKeys.authPost)
+      cache.delete(dataKeys.authPost)
+      cache.invalidate(dataKeys.getUser)
+      cache.delete(dataKeys.getUser)
     }
   })
 }

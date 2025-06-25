@@ -87,7 +87,7 @@ const Page = component(() => {
   }
 
   if (data) {
-    return <Navigate to='/dashboard' />
+    return <Navigate to='/' />
   }
 
   return (

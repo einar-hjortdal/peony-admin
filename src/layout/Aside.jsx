@@ -1,6 +1,8 @@
 import { component } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 import { NavLink } from '@dark-engine/web-router'
+import { useUserLogoutMutation } from '../data'
+import Navigate from '../components/Navigate'
 
 const Nav = styled.nav`
   & ul {
@@ -11,13 +13,29 @@ const Nav = styled.nav`
 `
 
 const Aside = component(() => {
+  const [logout, { isFetching: logoutIsFetching, error: logoutError }] = useUserLogoutMutation()
+
+  const handleLogout = () => {
+    if (logoutIsFetching) {
+      return
+    }
+    logout()
+  }
+
+  // TODO if (logoutError)
+
   return (
     <>
       <div>
         user name
       </div>
       <div>
-        log out button
+        <button
+          type='button'
+          disabled={logoutIsFetching}
+          onClick={handleLogout}
+        >log out
+        </button>
       </div>
       <div>
         store title
