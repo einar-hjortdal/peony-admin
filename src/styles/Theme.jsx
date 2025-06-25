@@ -33,6 +33,7 @@ const lightColors = {
   dialogHeaderBg: '#2B2D3B',
   dialogHeaderFg: '#FFFFFF',
   primary: '#22C55E',
+  secondary: '#96A0B5',
   button: {
     primary: {
       fg: '#FFFFFF',

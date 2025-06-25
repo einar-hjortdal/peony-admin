@@ -35,5 +35,16 @@ export default freeze({
   'products.name': 'name',
   'products.status': 'status',
   'products.title': 'products',
-  'settings.title': 'settings'
+  'settings.currencies.title': 'currencies',
+  'settings.currencies.description': 'manage the currencies of your store',
+  'settings.regions.title': 'regions',
+  'settings.regions.description': 'manage the markets that you will operate within',
+  'settings.languages.title': 'languages',
+  'settings.languages.description': 'manage the translations of your content',
+  'settings.salesChannels.title': 'sales channels',
+  'settings.salesChannels.description': 'control which products are available in which channel',
+  'settings.taxes.title': 'taxes',
+  'settings.taxes.description': 'manage taxes across regions and products',
+  'settings.store.title': 'store',
+  'settings.store.description': 'manage the details of your store'
 })

@@ -3,19 +3,34 @@
 ## Features
 
 - [x] Log in
-- [ ] Log out
+- [x] Log out
 - [ ] Manage store
-- [ ] Create/edit products
-- [ ] Create/edit variants
-- [ ] Create/edit categories
-- [ ] Create/edit prices
-- [ ] Create/edit price lists
-- [ ] Create/edit currencies
-- [ ] Create/edit taxes
-- [ ] Create/edit regions
-- [ ] Create/edit sales channels
+- [ ] Add/edit currencies
+- [ ] Add/edit languages
+- [x] Products
+- [ ] Variants
+- [ ] Prices
+- [ ] Categories
+- [ ] Price lists
+- [ ] Regions
+- [ ] Sales channels
+- [ ] Taxes
 
-## Optimizations
+## Later releases
+
+- [ ] Users
+- [ ] User permissions
+- [ ] Variant images
+- [ ] Tags
+- [ ] Pages
+- [ ] Posts
+- [ ] User-defined data
+- [ ] Stores
+- [ ] Customer
+- [ ] Cart
+- [ ] Orders
+
+## Low priority
 
 - [ ] Responsiveness
 - [ ] Dark theme
@@ -24,8 +39,3 @@
 
 - [`@dark-engine/styled` has CSS order issues](https://github.com/atellmer/dark/issues/72)
 - [`@dark-engine/data` cannot delete all cached data associated with one key](https://github.com/atellmer/dark/issues/107)
-
-## Dark notes
-
-- Clicking a `<Link to='/nl/'>` redirects to `/nl`. To prevent unnecessary rerenders, provide paths 
-  without trailing slashes to Link components.

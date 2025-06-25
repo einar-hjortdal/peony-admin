@@ -50,7 +50,9 @@ const MainWrapper = styled.main`
 `
 
 const Container = styled.div`
-  padding: 0 8px 68px 8px;
+  max-width: 1300px;
+  margin: auto;
+  padding: 0 10px 70px;
 `
 
 const Root = component(({ slot }) => {
