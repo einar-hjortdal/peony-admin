@@ -101,3 +101,17 @@ export const useDeleteProductMutation = (id) => {
     extractId: (x) => x.id
   })
 }
+
+export const useCurrencies = () => {
+  const api = useApi()
+  return useQuery(dataKeys.currencyGet, () => api.currencyUpdate())
+}
+
+export const useUpdateCurrencyMutation = () => {
+  const api = useApi()
+  return useMutation(dataKeys.currencyUpdate, (code, data) => api.currencyUpdate(code, data), {
+    onSuccess: ({ cache }) => {
+      cache.invalidate(dataKeys.getStore)
+    }
+  })
+}

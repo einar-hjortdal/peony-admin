@@ -25,7 +25,9 @@ export const dataKeys = {
   getProductById: 'getProductById',
   createProduct: 'createProduct',
   updateProduct: 'updateProduct',
-  deleteProduct: 'deleteProduct'
+  deleteProduct: 'deleteProduct',
+  currencyGet: 'currencyGet',
+  currencyUpdate: 'currencyUpdate'
 }
 
 // params must be a string that will be concatenated to path using the `?` separator
@@ -104,6 +106,23 @@ export const api = {
   deleteProduct: async (id) => {
     const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
       method: 'DELETE',
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  currencyGet: async () => {
+    const response = await fetch(getRequestUrl('/admin/currencies'), {
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  currencyUpdate: async (code, data) => {
+    const response = await fetch(getRequestUrl(`/admin/currencies/${code}`), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
       credentials: 'include'
     })
     return checkResponse(response)
