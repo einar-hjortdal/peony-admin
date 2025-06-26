@@ -1,11 +1,12 @@
-import { component } from '@dark-engine/core'
+import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
+import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import Card from '../components/Card'
 import Switch from '../components/Switch'
-import { useStore, useUpdateCurrencyMutation } from '../data'
+import { useCurrencies, useStore, useUpdateCurrencyMutation } from '../data'
 import Button from '../components/Button'
-import { styled } from '@dark-engine/styled'
+import { currentPage, totalPages } from '../utils_data'
 
 const CurrenciesTable = styled.table`
   width: 100%;
@@ -46,6 +47,7 @@ const StoreCurrencies = component(() => {
     updateCurrency(code, { includesTax: newValue })
   }
 
+  // TODO when storeIsFetching || updateCurrencyIsFetching show skeleton
   if (storeData) {
     const rows = []
     for (let i = 0, len = storeData.currencies.length; i < len; i++) {
@@ -82,6 +84,29 @@ const StoreCurrencies = component(() => {
   }
 })
 
+const Modal = component(({ modalRef }) => {
+  const { t, translator } = useTranslation('currencies.edit')
+  const [params, setParams] = useState({})
+  const { data, isFetching, error } = useCurrencies()
+
+  if (data) {
+    const names = []
+    for (let i = 0, len = data.items.length; i < len; i++) {
+      const code = data.items[i].code.trim() // trim whitespaces because database reads char weird
+      const name = translator.formatName(code, { type: 'currency' })
+      names.push(<div>{name}</div>)
+    }
+    return (
+      <dialog ref={modalRef}>
+        {names}
+        count: {data.count}
+        current page: {currentPage(data.offset, data.fetch)}
+        total pages: {totalPages(data.count, data.fetch)}
+      </dialog>
+    )
+  }
+})
+
 const ColumnLarge = styled.div`
   padding: .75rem;
   box-sizing: border-box;
@@ -105,11 +130,20 @@ const CardTitle = styled.h2`
 
 const Currencies = component(() => {
   const { t } = useTranslation('currencies')
+
   const {
     data: storeData,
     isFetching: storeIsFetching,
     error: storeError
   } = useStore()
+
+  const modalRef = useRef(null)
+  const handleOpenModal = () => {
+    if (detectIsNull(modalRef)) {
+      return
+    }
+    modalRef.current.showModal()
+  }
 
   if (storeData) {
     return (
@@ -117,7 +151,7 @@ const Currencies = component(() => {
         <ColumnLarge>
           <Card>
             <CardTitle>{t('title')}</CardTitle>
-            <Button $variant='primary'>{t('edit')}</Button>
+            <Button $variant='primary' onClick={handleOpenModal}>{t('addCurrency')}</Button>
             <StoreCurrencies />
           </Card>
         </ColumnLarge>
@@ -126,6 +160,7 @@ const Currencies = component(() => {
             <div>default store currency: {storeData.defaultCurrencyCode}</div>
           </Card>
         </ColumnSmall>
+        <Modal modalRef={modalRef} />
       </>
     )
   }

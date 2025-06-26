@@ -104,7 +104,9 @@ export const useDeleteProductMutation = (id) => {
 
 export const useCurrencies = () => {
   const api = useApi()
-  return useQuery(dataKeys.currencyGet, () => api.currencyUpdate())
+  return useQuery(dataKeys.currencyGet, (params) => api.currencyGet(params), {
+    // onSuccess
+  })
 }
 
 export const useUpdateCurrencyMutation = () => {
