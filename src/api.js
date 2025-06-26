@@ -20,7 +20,8 @@ export const dataKeys = {
   getUser: 'getUser',
   authPost: 'authPost',
   authDelete: 'authDelete',
-  getStore: 'getStore',
+  storeGet: 'storeGet',
+  storeUpdate: 'storeUpdate',
   getProducts: 'getProducts',
   getProductById: 'getProductById',
   createProduct: 'createProduct',
@@ -62,8 +63,18 @@ export const api = {
     return checkResponse(response)
   },
 
-  getStore: async () => {
+  storeGet: async () => {
     const response = await fetch(getRequestUrl('/admin/store'), {
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  storeUpdate: async (data) => {
+    const response = await fetch(getRequestUrl('/admin/store'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
       credentials: 'include'
     })
     return checkResponse(response)

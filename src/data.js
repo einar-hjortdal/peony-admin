@@ -60,7 +60,16 @@ export const useUserLogoutMutation = () => {
 
 export const useStore = () => {
   const api = useApi()
-  return useQuery(dataKeys.getStore, () => api.getStore())
+  return useQuery(dataKeys.storeGet, () => api.storeGet())
+}
+
+export const useStoreUpdateMutation = () => {
+  const api = useApi()
+  return useMutation(dataKeys.storeUpdate, (data) => api.storeUpdate(data), {
+    onSuccess: ({ cache }) => {
+      cache.invalidate(dataKeys.storeGet)
+    }
+  })
 }
 
 export const useProducts = (params) => {
@@ -113,7 +122,7 @@ export const useUpdateCurrencyMutation = () => {
   const api = useApi()
   return useMutation(dataKeys.currencyUpdate, (code, data) => api.currencyUpdate(code, data), {
     onSuccess: ({ cache }) => {
-      cache.invalidate(dataKeys.getStore)
+      cache.invalidate(dataKeys.storeGet)
     }
   })
 }

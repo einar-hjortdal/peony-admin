@@ -4,8 +4,13 @@ import { useTranslation } from '@wareme/translations'
 
 import Card from '../components/Card'
 import Switch from '../components/Switch'
-import { useCurrencies, useStore, useUpdateCurrencyMutation } from '../data'
 import Button from '../components/Button'
+import {
+  useCurrencies,
+  useStore,
+  useStoreUpdateMutation,
+  useUpdateCurrencyMutation
+} from '../data'
 import { currentPage, totalPages } from '../utils_data'
 
 const CurrenciesTable = styled.table`
@@ -84,8 +89,45 @@ const StoreCurrencies = component(() => {
   }
 })
 
+const DefaultCurrency = component(() => {
+  const { t } = useTranslation('currencies.defaultCurrency')
+  const {
+    data: storeData,
+    isFetching: storeIsFetching,
+    error: storeError
+  } = useStore()
+  const [updateStore, {
+    data: updateStoreData,
+    isFetching: updateStoreIsFetching,
+    error: updateStoreError
+  }] = useStoreUpdateMutation()
+
+  const handleChange = (e) => {
+    const { value } = e.target
+    updateStore({ defaultCurrencyCode: value })
+  }
+
+  if (storeData) {
+    const { currencies, defaultCurrencyCode } = storeData
+    const options = []
+    for (let i = 0, len = currencies.length; i < len; i++) {
+      const { code } = currencies[i]
+      options.push(<option key={code}>{code}</option>)
+    }
+
+    return (
+      <div>
+        {t('defaultCurrency')}
+        <select value={defaultCurrencyCode} onChange={handleChange} disabled={updateStoreIsFetching}>
+          {options}
+        </select>
+      </div>
+    )
+  }
+})
+
 const Modal = component(({ modalRef }) => {
-  const { t, translator } = useTranslation('currencies.edit')
+  const { t, translator } = useTranslation('currencies.modal')
   const [params, setParams] = useState({})
   const { data, isFetching, error } = useCurrencies()
 
@@ -157,7 +199,7 @@ const Currencies = component(() => {
         </ColumnLarge>
         <ColumnSmall>
           <Card>
-            <div>default store currency: {storeData.defaultCurrencyCode}</div>
+            <DefaultCurrency />
           </Card>
         </ColumnSmall>
         <Modal modalRef={modalRef} />
