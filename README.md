@@ -2,7 +2,7 @@
 
 Admin frontend for [peony](https://github.com/einar-hjortdal/peony).
 
-SPA build with [Dark](https://github.com/atellmer/dark/tree/master), simple deployment with [freeNGINX](https://freenginx.org/).
+SPA powered by [Dark](https://github.com/atellmer/dark/tree/master), simple deployment with [freeNGINX](https://freenginx.org/).
 
 ## Scripts
 

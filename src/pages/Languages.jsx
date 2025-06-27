@@ -36,7 +36,7 @@ const StoreLocales = component(() => {
   if (storeData) {
     const rows = []
     for (let i = 0, len = storeData.locales.length; i < len; i++) {
-      const { code, id } = storeData.locales[i]
+      const { code } = storeData.locales[i]
       const translatedName = translator.formatName(code, { type: 'language' })
       rows.push(
         <tr>
