@@ -1,4 +1,4 @@
-import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
+import { component, detectIsNull, useEffect, useRef, useState } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
@@ -31,7 +31,7 @@ const SwitchLabel = styled.span`
 `
 
 const StoreCurrencies = component(() => {
-  const { t } = useTranslation('currencies.storeCurrencies')
+  const { t, translator } = useTranslation('currencies.storeCurrencies')
   const {
     data: storeData,
     isFetching: storeIsFetching,
@@ -59,7 +59,7 @@ const StoreCurrencies = component(() => {
       const { code, includesTax } = storeData.currencies[i]
       rows.push(
         <tr>
-          <td>{code}</td>
+          <td>{code} <span>{translator.formatName(code.trim(), { type: 'currency' })}</span></td>
           <td>
             <Switch
               data-code={code}
@@ -117,10 +117,20 @@ const DefaultCurrency = component(() => {
 
     return (
       <div>
-        {t('defaultCurrency')}
-        <select value={defaultCurrencyCode} onChange={handleChange} disabled={updateStoreIsFetching}>
-          {options}
-        </select>
+        <div>
+          {t('title')}
+        </div>
+        {t('description')}
+        <div>
+          <select
+            title={t('title')}
+            name={t('title')}
+            value={defaultCurrencyCode}
+            onChange={handleChange}
+            disabled={updateStoreIsFetching}
+          >{options}
+          </select>
+        </div>
       </div>
     )
   }
@@ -128,22 +138,75 @@ const DefaultCurrency = component(() => {
 
 const Modal = component(({ modalRef }) => {
   const { t, translator } = useTranslation('currencies.modal')
-  const [params, setParams] = useState({})
-  const { data, isFetching, error } = useCurrencies()
+  const [params, setParams] = useState([])
+  const {
+    data: storeData,
+    isFetching: storeIsFetching,
+    error: storeError
+  } = useStore()
+  const {
+    data: currenciesData,
+    isFetching: currenciesIsFetching,
+    error: currenciesError
+  } = useCurrencies()
+  const [updateStore, {
+    data: updateStoreData,
+    isFetching: updateStoreIsFetching,
+    error: updateStoreError
+  }] = useStoreUpdateMutation()
 
-  if (data) {
+  useEffect(() => {
+    if (!storeData) {
+      return
+    }
+
+    const { currencies } = storeData
+    const newState = []
+    for (let i = 0, len = currencies.length; i < len; i++) {
+      const currency = currencies[i]
+      newState.push(currency.code)
+    }
+    setParams(newState)
+    console.log('useEffect ran')
+  }, [storeData])
+
+  const handleClick = (e) => {
+    if (updateStoreIsFetching) {
+      return
+    }
+
+    updateStore(storeData.id, { currencies: params })
+  }
+
+  // Note: do not allow removing default currency.
+  if (storeData && currenciesData) {
     const names = []
-    for (let i = 0, len = data.items.length; i < len; i++) {
-      const code = data.items[i].code.trim() // trim whitespaces because database reads char weird
+    for (let i = 0, len = currenciesData.items.length; i < len; i++) {
+      const code = currenciesData.items[i].code.trim() // trim whitespaces because database reads char weird
       const name = translator.formatName(code, { type: 'currency' })
-      names.push(<div>{name}</div>)
+      let selected = false
+      for (let k = 0, len = params.length; k < len; k++) {
+        if (params[k] === code) {
+          selected = true
+          break
+        }
+      }
+      names.push(<div $selected={selected}>{name}</div>)
     }
     return (
       <dialog ref={modalRef}>
-        {names}
-        count: {data.count}
-        current page: {currentPage(data.offset, data.fetch)}
-        total pages: {totalPages(data.count, data.fetch)}
+        <div>
+          <div>{names}</div>
+          <button
+            type='button'
+            onClick={handleClick}
+            disabled={updateStoreIsFetching}
+          >{t('apply')}
+          </button>
+          <div>count: {currenciesData.count}</div>
+          current page: {currentPage(currenciesData.offset, currenciesData.fetch)}
+          total pages: {totalPages(currenciesData.count, currenciesData.fetch)}
+        </div>
       </dialog>
     )
   }
@@ -154,7 +217,7 @@ const ColumnLarge = styled.div`
   box-sizing: border-box;
   vertical-align: top;
   display: inline-block;
-  width: 80%;
+  width: 60%;
 `
 
 const ColumnSmall = styled.div`
@@ -162,7 +225,7 @@ const ColumnSmall = styled.div`
   box-sizing: border-box;
   vertical-align: top;
   display: inline-block;
-  width: 20%;
+  width: 40%;
 `
 
 const CardTitle = styled.h2`
@@ -193,6 +256,7 @@ const Currencies = component(() => {
         <ColumnLarge>
           <Card>
             <CardTitle>{t('title')}</CardTitle>
+            <div><span>{t('description')}</span></div>
             <Button $variant='primary' onClick={handleOpenModal}>{t('addCurrency')}</Button>
             <StoreCurrencies />
           </Card>

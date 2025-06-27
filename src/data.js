@@ -65,7 +65,7 @@ export const useStore = () => {
 
 export const useStoreUpdateMutation = () => {
   const api = useApi()
-  return useMutation(dataKeys.storeUpdate, (data) => api.storeUpdate(data), {
+  return useMutation(dataKeys.storeUpdate, (id, data) => api.storeUpdate(id, data), {
     onSuccess: ({ cache }) => {
       cache.invalidate(dataKeys.storeGet)
     }
