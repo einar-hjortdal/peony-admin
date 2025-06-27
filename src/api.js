@@ -70,8 +70,8 @@ export const api = {
     return checkResponse(response)
   },
 
-  storeUpdate: async (data) => {
-    const response = await fetch(getRequestUrl('/admin/store'), {
+  storeUpdate: async (id, data) => {
+    const response = await fetch(getRequestUrl(`/admin/store/${id}`), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),

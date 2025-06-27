@@ -179,6 +179,11 @@ const Modal = component(({ modalRef }) => {
   }
 
   // Note: do not allow removing default currency.
+  // TODO make a table with currency names
+  // currencies should be able to be selected
+  // selected currencies are stored in `params`
+  // storeData.defaultCurrencyCode cannot be unselected
+  // pagination
   if (storeData && currenciesData) {
     const names = []
     for (let i = 0, len = currenciesData.items.length; i < len; i++) {
