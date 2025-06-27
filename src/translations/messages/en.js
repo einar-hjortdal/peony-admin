@@ -10,7 +10,7 @@ export default freeze({
   'login.title': 'login to peony',
   'currencies.title': 'currencies',
   'currencies.description': 'all currencies accepted by your store',
-  'currencies.addCurrency': 'add currencies',
+  'currencies.edit': 'edit currencies',
   'currencies.storeCurrencies.currency': 'currency',
   'currencies.storeCurrencies.includesTax': 'tax incl. prices',
   'currencies.defaultCurrency.title': 'default store currency',

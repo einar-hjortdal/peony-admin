@@ -155,11 +155,17 @@ const DefaultCurrency = component(() => {
   }
 })
 
-const Currency = component(({ code, translatedName, value, handleChange }) => {
+const Currency = component(({ code, defaultCurrencyCode, translatedName, value, handleChange }) => {
   return (
     <div>
       {translatedName}
-      <input type='checkbox' value={value} data-currency-code={code} onChange={handleChange} />
+      <input
+        type='checkbox'
+        value={value}
+        data-currency-code={code}
+        onChange={handleChange}
+        disabled={code === defaultCurrencyCode}
+      />
     </div>
   )
 })
@@ -245,8 +251,6 @@ const Modal = component(({ modalRef }) => {
     updateStore(storeData.id, { currencies: params })
   }
 
-  // Note: do not allow removing default currency.
-  // storeData.defaultCurrencyCode should not be able to be unselected
   if (storeData && currenciesData) {
     const currencies = []
     for (let i = 0, len = currenciesData.items.length; i < len; i++) {
@@ -257,6 +261,7 @@ const Modal = component(({ modalRef }) => {
         <Currency
           key={code}
           code={code}
+          defaultCurrencyCode={storeData.defaultCurrencyCode}
           translatedName={translatedName}
           value={selected}
           handleChange={handleChange}
