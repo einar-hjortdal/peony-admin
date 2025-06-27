@@ -28,7 +28,8 @@ export const dataKeys = {
   updateProduct: 'updateProduct',
   deleteProduct: 'deleteProduct',
   currencyGet: 'currencyGet',
-  currencyUpdate: 'currencyUpdate'
+  currencyUpdate: 'currencyUpdate',
+  localesGet: 'localesGet'
 }
 
 // params must be a string that will be concatenated to path using the `?` separator
@@ -134,6 +135,13 @@ export const api = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  localesGet: async (params) => {
+    const response = await fetch(getRequestUrl('/admin/locales', params), {
       credentials: 'include'
     })
     return checkResponse(response)

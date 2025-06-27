@@ -117,7 +117,15 @@ export const useCurrencies = (params) => {
   return useQuery(dataKeys.currencyGet, () => api.currencyGet(p), {
     variables: { p },
     extractId: (x) => x.p
-    // onSuccess
+  })
+}
+
+export const useLocales = (params) => {
+  const api = useApi()
+  const p = getParams(params)
+  return useQuery(dataKeys.localesGet, () => api.localesGet(p), {
+    variables: { p },
+    extractId: (x) => x.p
   })
 }
 
