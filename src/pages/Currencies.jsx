@@ -57,9 +57,14 @@ const StoreCurrencies = component(() => {
     const rows = []
     for (let i = 0, len = storeData.currencies.length; i < len; i++) {
       const { code, includesTax } = storeData.currencies[i]
+      // trim whitespaces because database reads char weird
+      const translatedName = translator.formatName(code.trim(), { type: 'currency' })
       rows.push(
         <tr>
-          <td>{code} <span>{translator.formatName(code.trim(), { type: 'currency' })}</span></td>
+          <td>
+            {code}
+            <span>{translatedName}</span>
+          </td>
           <td>
             <Switch
               data-code={code}
@@ -136,6 +141,15 @@ const DefaultCurrency = component(() => {
   }
 })
 
+const Currency = component(({ code, translatedName, value, handleChange }) => {
+  return (
+    <div>
+      {translatedName}
+      <input type='checkbox' value={value} data-currency-code={code} onChange={handleChange} />
+    </div>
+  )
+})
+
 const Modal = component(({ modalRef }) => {
   const { t, translator } = useTranslation('currencies.modal')
   const [params, setParams] = useState([])
@@ -170,11 +184,29 @@ const Modal = component(({ modalRef }) => {
     console.log('useEffect ran')
   }, [storeData])
 
-  const handleClick = (e) => {
+  const handleClose = () => {
+    if (!modalRef) {
+      return
+    }
+    modalRef.current.close()
+  }
+
+  const handleChange = (e) => {
+    const { currencyCode } = e.target.dataset
+    const newState = [...params]
+    const idx = newState.indexOf(currencyCode)
+    if (idx !== -1) {
+      newState.splice(idx, 1)
+    } else {
+      newState.push(currencyCode)
+    }
+    return setParams(newState)
+  }
+
+  const handleSubmit = () => {
     if (updateStoreIsFetching) {
       return
     }
-
     updateStore(storeData.id, { currencies: params })
   }
 
@@ -187,24 +219,30 @@ const Modal = component(({ modalRef }) => {
   if (storeData && currenciesData) {
     const names = []
     for (let i = 0, len = currenciesData.items.length; i < len; i++) {
-      const code = currenciesData.items[i].code.trim() // trim whitespaces because database reads char weird
-      const name = translator.formatName(code, { type: 'currency' })
-      let selected = false
-      for (let k = 0, len = params.length; k < len; k++) {
-        if (params[k] === code) {
-          selected = true
-          break
-        }
-      }
-      names.push(<div $selected={selected}>{name}</div>)
+      const code = currenciesData.items[i].code
+      const translatedName = translator.formatName(code.trim(), { type: 'currency' })
+      const selected = params.includes(code)
+      console.log(params, code)
+      names.push(
+        <Currency
+          key={code}
+          code={code}
+          translatedName={translatedName}
+          value={selected}
+          handleChange={handleChange}
+        />)
     }
+
     return (
       <dialog ref={modalRef}>
+        <div>
+          <button onClick={handleClose}>x</button>
+        </div>
         <div>
           <div>{names}</div>
           <button
             type='button'
-            onClick={handleClick}
+            onClick={handleSubmit}
             disabled={updateStoreIsFetching}
           >{t('apply')}
           </button>
