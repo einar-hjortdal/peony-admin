@@ -122,8 +122,8 @@ export const api = {
     return checkResponse(response)
   },
 
-  currencyGet: async () => {
-    const response = await fetch(getRequestUrl('/admin/currencies'), {
+  currencyGet: async (params) => {
+    const response = await fetch(getRequestUrl('/admin/currencies', params), {
       credentials: 'include'
     })
     return checkResponse(response)

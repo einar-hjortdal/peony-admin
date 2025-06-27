@@ -166,6 +166,7 @@ const Currency = component(({ code, translatedName, value, handleChange }) => {
 
 const Modal = component(({ modalRef }) => {
   const { t, translator } = useTranslation('currencies.modal')
+  const [offset, setOffset] = useState(0)
   const [params, setParams] = useState([])
   const {
     data: storeData,
@@ -176,7 +177,7 @@ const Modal = component(({ modalRef }) => {
     data: currenciesData,
     isFetching: currenciesIsFetching,
     error: currenciesError
-  } = useCurrencies()
+  } = useCurrencies({ offset })
   const [updateStore, {
     data: updateStoreData,
     isFetching: updateStoreIsFetching,
@@ -204,6 +205,27 @@ const Modal = component(({ modalRef }) => {
     modalRef.current.close()
   }
 
+  const handlePagination = (e) => {
+    if (currenciesIsFetching) {
+      return
+    }
+
+    const { name } = e.target
+    if (name === 'next') {
+      const newOffset = offset + 15
+      if (newOffset >= currenciesData.count) {
+        return
+      }
+      return setOffset(newOffset)
+    }
+
+    const newOffset = offset - 15
+    if (newOffset < 0) {
+      return
+    }
+    return setOffset(newOffset)
+  }
+
   const handleChange = (e) => {
     const { currencyCode } = e.target.dataset
     const newState = [...params]
@@ -225,14 +247,13 @@ const Modal = component(({ modalRef }) => {
 
   // Note: do not allow removing default currency.
   // storeData.defaultCurrencyCode should not be able to be unselected
-  // pagination
   if (storeData && currenciesData) {
-    const names = []
+    const currencies = []
     for (let i = 0, len = currenciesData.items.length; i < len; i++) {
       const code = currenciesData.items[i].code
       const translatedName = translator.formatName(code.trim(), { type: 'currency' })
       const selected = params.includes(code)
-      names.push(
+      currencies.push(
         <Currency
           key={code}
           code={code}
@@ -248,7 +269,7 @@ const Modal = component(({ modalRef }) => {
           <button onClick={handleClose}>x</button>
         </div>
         <div>
-          <div>{names}</div>
+          <div>{currencies}</div>
           <button
             type='button'
             onClick={handleSubmit}
@@ -256,7 +277,22 @@ const Modal = component(({ modalRef }) => {
           >{t('apply')}
           </button>
           <div>count: {currenciesData.count}</div>
+
           current page: {currentPage(currenciesData.offset, currenciesData.fetch)}
+          <button
+            type='button'
+            name='previous'
+            onClick={handlePagination}
+            disabled={currenciesIsFetching}
+          >previous
+          </button>
+          <button
+            type='button'
+            name='next'
+            onClick={handlePagination}
+            disabled={currenciesIsFetching}
+          >next
+          </button>
           total pages: {totalPages(currenciesData.count, currenciesData.fetch)}
         </div>
       </dialog>
@@ -308,8 +344,10 @@ const Currencies = component(() => {
         <ColumnLarge>
           <Card>
             <CardTitle>{t('title')}</CardTitle>
-            <div><span>{t('description')}</span></div>
-            <Button $variant='primary' onClick={handleOpenModal}>{t('addCurrency')}</Button>
+            <div>
+              <span>{t('description')}</span>
+            </div>
+            <Button $variant='primary' onClick={handleOpenModal}>{t('edit')}</Button>
             <StoreCurrencies />
           </Card>
         </ColumnLarge>

@@ -111,9 +111,12 @@ export const useDeleteProductMutation = (id) => {
   })
 }
 
-export const useCurrencies = () => {
+export const useCurrencies = (params) => {
   const api = useApi()
-  return useQuery(dataKeys.currencyGet, (params) => api.currencyGet(params), {
+  const p = getParams(params)
+  return useQuery(dataKeys.currencyGet, () => api.currencyGet(p), {
+    variables: { p },
+    extractId: (x) => x.p
     // onSuccess
   })
 }
