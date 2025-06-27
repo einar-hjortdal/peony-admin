@@ -94,6 +94,11 @@ const StoreCurrencies = component(() => {
   }
 })
 
+const DefaultCurrencySelect = styled.select`
+  display: block;
+  width: 100%;
+`
+
 const DefaultCurrency = component(() => {
   const { t } = useTranslation('currencies.defaultCurrency')
   const {
@@ -108,8 +113,11 @@ const DefaultCurrency = component(() => {
   }] = useStoreUpdateMutation()
 
   const handleChange = (e) => {
+    if (updateStoreIsFetching) {
+      return
+    }
     const { value } = e.target
-    updateStore({ defaultCurrencyCode: value })
+    updateStore(storeData.id, { defaultCurrencyCode: value })
   }
 
   if (storeData) {
@@ -117,7 +125,14 @@ const DefaultCurrency = component(() => {
     const options = []
     for (let i = 0, len = currencies.length; i < len; i++) {
       const { code } = currencies[i]
-      options.push(<option key={code}>{code}</option>)
+      options.push(
+        <option
+          key={code}
+          value={code}
+          selected={defaultCurrencyCode === code}
+        >{code}
+        </option>
+      )
     }
 
     return (
@@ -125,17 +140,16 @@ const DefaultCurrency = component(() => {
         <div>
           {t('title')}
         </div>
-        {t('description')}
-        <div>
-          <select
+        <label>
+          {t('description')}
+          <DefaultCurrencySelect
             title={t('title')}
             name={t('title')}
-            value={defaultCurrencyCode}
             onChange={handleChange}
             disabled={updateStoreIsFetching}
           >{options}
-          </select>
-        </div>
+          </DefaultCurrencySelect>
+        </label>
       </div>
     )
   }
@@ -181,7 +195,6 @@ const Modal = component(({ modalRef }) => {
       newState.push(currency.code)
     }
     setParams(newState)
-    console.log('useEffect ran')
   }, [storeData])
 
   const handleClose = () => {
@@ -211,10 +224,7 @@ const Modal = component(({ modalRef }) => {
   }
 
   // Note: do not allow removing default currency.
-  // TODO make a table with currency names
-  // currencies should be able to be selected
-  // selected currencies are stored in `params`
-  // storeData.defaultCurrencyCode cannot be unselected
+  // storeData.defaultCurrencyCode should not be able to be unselected
   // pagination
   if (storeData && currenciesData) {
     const names = []
@@ -222,7 +232,6 @@ const Modal = component(({ modalRef }) => {
       const code = currenciesData.items[i].code
       const translatedName = translator.formatName(code.trim(), { type: 'currency' })
       const selected = params.includes(code)
-      console.log(params, code)
       names.push(
         <Currency
           key={code}
