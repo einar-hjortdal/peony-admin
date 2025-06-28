@@ -20,7 +20,14 @@ import Input from '../components/Input'
 import Switch from '../components/Switch'
 import Table from '../components/Table'
 import If from '../components/If'
-import { constants, useProducts, useCreateProductMutation, useStore, useUpdateProductMutation, useDeleteProductMutation } from '../data'
+import {
+  constants,
+  useProducts,
+  useCreateProductMutation,
+  useStore,
+  useUpdateProductMutation,
+  useDeleteProductMutation
+} from '../data'
 import { getDefaultTranslation, valueOrDefault } from '../translations'
 import { Link } from '@dark-engine/web-router'
 
@@ -28,6 +35,54 @@ const NewProductBody = styled.div`
   max-width: 1300px;
   margin: 0 auto;
 `
+
+const Translation = component(({ localeId, localeCode, onInput, disabled }) => {
+  const { t, translator } = useTranslation('newProduct')
+  return (
+    <fieldset disabled={disabled}>
+      <legend>{translator.formatName(localeCode, { type: 'language' })}</legend>
+      <Input
+        name='title'
+        data-locale-id={localeId}
+        onInput={onInput}
+      >{t('general.title')}
+      </Input>
+      <Input
+        name='subtitle'
+        data-locale-id={localeId}
+        onInput={onInput}
+      >{t('general.subtitle')}
+      </Input>
+      <Input
+        name='description'
+        data-locale-id={localeId}
+        onInput={onInput}
+      >{t('general.description')}
+      </Input>
+    </fieldset>
+  )
+})
+
+const Translations = component(({ locales, defaultLocaleId, onInput, disabled }) => {
+  const translations = []
+  for (let i = 0, len = locales.length; i < len; i++) {
+    const { id, code } = locales[i]
+    if (id === defaultLocaleId) {
+      continue
+    }
+
+    translations.push(
+      <Translation
+        key={id}
+        localeId={id}
+        localeCode={code}
+        onInput={onInput}
+        disabled={disabled}
+      />
+    )
+  }
+  return translations
+})
 
 const NewProduct = component(({ modalRef }) => {
   const { t } = useTranslation('newProduct')
@@ -177,9 +232,12 @@ const NewProduct = component(({ modalRef }) => {
 
           <If condition={storeData.locales.length > 1}>
             <AccordionItem title={t('translations')}>
-              <fieldset disabled={isFetching}>
-                TODO title, subtitle, description for each language other than storeData.defaultLocaleId
-              </fieldset>
+              <Translations
+                locales={storeData.locales}
+                defaultLocaleId={storeData.defaultLocaleId}
+                onInput={handleTranslationInput}
+                disabled={isFetching}
+              />
             </AccordionItem>
           </If>
 
