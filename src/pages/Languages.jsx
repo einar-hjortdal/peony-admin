@@ -204,8 +204,6 @@ const Modal = component(({ modalRef }) => {
 
   const handleChange = (e) => {
     const { localeId } = e.target.dataset
-    console.log(e.target.value)
-    console.log(e.target.dataset)
     const newState = [...params]
     const idx = newState.indexOf(localeId)
     if (idx !== -1) {

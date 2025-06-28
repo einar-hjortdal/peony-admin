@@ -55,23 +55,23 @@ const NewProduct = component(({ modalRef }) => {
 
   const handleTranslationInput = (e) => {
     const { name, value } = e.target
-    const { localeCode } = e.target.dataset
+    const { localeId } = e.target.dataset
     const newTranslations = { ...productTranslations }
-    const newTranslation = { ...productTranslations[localeCode] }
+    const newTranslation = { ...productTranslations[localeId] }
 
     if (detectIsEmptyString(value)) {
       delete newTranslation[name]
       if (hasKeys(newTranslation)) {
-        return setProductTranslations({ ...newTranslations, [localeCode]: { ...newTranslation } })
+        return setProductTranslations({ ...newTranslations, [localeId]: { ...newTranslation } })
       }
 
-      delete newTranslations[localeCode]
+      delete newTranslations[localeId]
       return setProductTranslations({ ...newTranslations })
     }
 
     return setProductTranslations({
       ...productTranslations,
-      [localeCode]: { ...productTranslations[localeCode], [name]: value }
+      [localeId]: { ...productTranslations[localeId], [name]: value }
     })
   }
 
@@ -85,15 +85,16 @@ const NewProduct = component(({ modalRef }) => {
 
     const { status } = e.target.dataset
     const translations = []
-    const localeCodes = keys(productTranslations)
-    for (let i = 0, len = localeCodes.length; i < len; i++) {
-      const localeCode = localeCodes[i]
+    const localeIds = keys(productTranslations)
+    for (let i = 0, len = localeIds.length; i < len; i++) {
+      const localeId = localeIds[i]
       translations.push({
-        localeCode,
-        ...productTranslations[localeCode]
+        localeId,
+        ...productTranslations[localeId]
       })
     }
     const data = { ...productData, translations, status }
+    console.log(data)
     createProduct(data)
   }
 
@@ -144,19 +145,19 @@ const NewProduct = component(({ modalRef }) => {
             <fieldset disabled={isFetching}>
               <Input
                 name='title'
-                data-locale-code={storeData.defaultLocaleCode}
+                data-locale-id={storeData.defaultLocaleId}
                 onInput={handleTranslationInput}
               >{t('general.title')}
               </Input>
               <Input
                 name='subtitle'
-                data-locale-code={storeData.defaultLocaleCode}
+                data-locale-id={storeData.defaultLocaleId}
                 onInput={handleTranslationInput}
               >{t('general.subtitle')}
               </Input>
               <Input
                 name='description'
-                data-locale-code={storeData.defaultLocaleCode}
+                data-locale-id={storeData.defaultLocaleId}
                 onInput={handleTranslationInput}
               >{t('general.description')}
               </Input>
@@ -177,7 +178,7 @@ const NewProduct = component(({ modalRef }) => {
           <If condition={storeData.locales.length > 1}>
             <AccordionItem title={t('translations')}>
               <fieldset disabled={isFetching}>
-                TODO title, subtitle, description for each language other than storeData.defaultLocaleCode
+                TODO title, subtitle, description for each language other than storeData.defaultLocaleId
               </fieldset>
             </AccordionItem>
           </If>
@@ -334,7 +335,7 @@ const Products = component(() => {
   const rows = []
   for (let i = 0, len = data.items.length; i < len; i++) {
     const product = data.items[i]
-    const defaultTranslation = getDefaultTranslation(product.translations, storeData.defaultLocaleCode)
+    const defaultTranslation = getDefaultTranslation(product.translations, storeData.defaultLocaleId)
     let title = product.id
     if (!detectIsEmpty(defaultTranslation)) {
       title = valueOrDefault(defaultTranslation.title, product.id)
