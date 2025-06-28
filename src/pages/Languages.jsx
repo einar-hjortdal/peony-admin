@@ -25,7 +25,7 @@ const LocalesTable = styled.table`
 `
 
 const StoreLocales = component(() => {
-  const { t, translator } = useTranslation('languages.storeLanguages')
+  const { t, translator } = useTranslation('locales.storeLocales')
   const {
     data: storeData,
     isFetching: storeIsFetching,
@@ -87,19 +87,19 @@ const DefaultLocale = component(() => {
       return
     }
     const { value } = e.target
-    updateStore(storeData.id, { defaultLocaleCode: value })
+    updateStore(storeData.id, { defaultLocaleId: value })
   }
 
   if (storeData) {
-    const { locales, defaultLocaleCode } = storeData
+    const { locales, defaultLocaleId } = storeData
     const options = []
     for (let i = 0, len = locales.length; i < len; i++) {
-      const { code } = locales[i]
+      const { id, code } = locales[i]
       options.push(
         <option
-          key={code}
-          value={code}
-          selected={defaultLocaleCode === code}
+          key={id}
+          value={id}
+          selected={defaultLocaleId === id}
         >{code}
         </option>
       )
@@ -125,16 +125,16 @@ const DefaultLocale = component(() => {
   }
 })
 
-const Locale = component(({ code, defaultLocaleCode, translatedName, value, handleChange }) => {
+const Locale = component(({ id, defaultLocaleId, translatedName, selected, handleChange }) => {
   return (
     <div>
       {translatedName}
       <input
         type='checkbox'
-        value={value}
-        data-locale-code={code}
+        selected={selected}
+        data-locale-id={id}
         onChange={handleChange}
-        disabled={code === defaultLocaleCode}
+        disabled={id === defaultLocaleId}
       />
     </div>
   )
@@ -169,7 +169,7 @@ const Modal = component(({ modalRef }) => {
     const newState = []
     for (let i = 0, len = locales.length; i < len; i++) {
       const locale = locales[i]
-      newState.push(locale.code)
+      newState.push(locale.id)
     }
     setParams(newState)
   }, [storeData])
@@ -203,13 +203,13 @@ const Modal = component(({ modalRef }) => {
   }
 
   const handleChange = (e) => {
-    const { localeCode } = e.target.dataset
+    const { localeId } = e.target.dataset
     const newState = [...params]
-    const idx = newState.indexOf(localeCode)
+    const idx = newState.indexOf(localeId)
     if (idx !== -1) {
       newState.splice(idx, 1)
     } else {
-      newState.push(localeCode)
+      newState.push(localeId)
     }
     return setParams(newState)
   }
@@ -224,16 +224,16 @@ const Modal = component(({ modalRef }) => {
   if (storeData && localesData) {
     const locales = []
     for (let i = 0, len = localesData.items.length; i < len; i++) {
-      const code = localesData.items[i].code
+      const { id, code } = localesData.items[i]
       const translatedName = translator.formatName(code.trim(), { type: 'language' })
       const selected = params.includes(code)
       locales.push(
         <Locale
-          key={code}
-          code={code}
-          defaultLocaleCode={storeData.defaultLocaleCode}
+          key={id}
+          id={id}
+          defaultLocaleId={storeData.defaultLocaleId}
           translatedName={translatedName}
-          value={selected}
+          selected={selected}
           handleChange={handleChange}
         />)
     }
@@ -297,7 +297,7 @@ const CardTitle = styled.h2`
 `
 
 const Languages = component(() => {
-  const { t } = useTranslation('languages')
+  const { t } = useTranslation('locales')
 
   const {
     data: storeData,
