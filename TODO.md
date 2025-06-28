@@ -5,8 +5,8 @@
 - [x] Log in
 - [x] Log out
 - [ ] Manage store
-- [ ] Add/edit currencies
-- [ ] Add/edit languages
+- [x] Add/edit currencies
+- [x] Add/edit languages
 - [x] Products
 - [ ] Variants
 - [ ] Prices
@@ -32,6 +32,8 @@
 
 ## Low priority
 
+- [ ] Acceptable design
+- [ ] Refactor
 - [ ] Responsiveness
 - [ ] Dark theme
 
