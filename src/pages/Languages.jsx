@@ -125,13 +125,13 @@ const DefaultLocale = component(() => {
   }
 })
 
-const Locale = component(({ id, defaultLocaleId, translatedName, selected, handleChange }) => {
+const Locale = component(({ id, defaultLocaleId, translatedName, value, handleChange }) => {
   return (
     <div>
       {translatedName}
       <input
         type='checkbox'
-        selected={selected}
+        value={value}
         data-locale-id={id}
         onChange={handleChange}
         disabled={id === defaultLocaleId}
@@ -204,6 +204,8 @@ const Modal = component(({ modalRef }) => {
 
   const handleChange = (e) => {
     const { localeId } = e.target.dataset
+    console.log(e.target.value)
+    console.log(e.target.dataset)
     const newState = [...params]
     const idx = newState.indexOf(localeId)
     if (idx !== -1) {
@@ -226,14 +228,14 @@ const Modal = component(({ modalRef }) => {
     for (let i = 0, len = localesData.items.length; i < len; i++) {
       const { id, code } = localesData.items[i]
       const translatedName = translator.formatName(code.trim(), { type: 'language' })
-      const selected = params.includes(code)
+      const value = params.includes(id)
       locales.push(
         <Locale
           key={id}
           id={id}
           defaultLocaleId={storeData.defaultLocaleId}
           translatedName={translatedName}
-          selected={selected}
+          value={value}
           handleChange={handleChange}
         />)
     }
