@@ -1,4 +1,4 @@
-import { keys, detectIsEmpty } from '@dark-engine/core'
+import { keys, detectIsEmpty, useMemo, detectIsUndefined } from '@dark-engine/core'
 import { useApi, useQuery, useMutation } from '@dark-engine/data'
 
 import { dataKeys } from './api'
@@ -60,7 +60,23 @@ export const useUserLogoutMutation = () => {
 
 export const useStore = () => {
   const api = useApi()
-  return useQuery(dataKeys.storeGet, () => api.storeGet())
+  const { refetch, data, isFetching, error } = useQuery(dataKeys.storeGet, () => api.storeGet())
+
+  const localeMap = useMemo(() => {
+    const res = []
+    if (detectIsUndefined(data)) {
+      return res
+    }
+
+    const { locales } = data
+    for (let i = 0, len = locales.length; i < len; i++) {
+      const { id, code } = locales[i]
+      res[id] = code
+    }
+    return res
+  }, data)
+
+  return { refetch, data, isFetching, error, localeMap }
 }
 
 export const useStoreUpdateMutation = () => {
@@ -83,10 +99,30 @@ export const useProducts = (params) => {
 
 export const useProductById = (id) => {
   const api = useApi()
-  return useQuery(dataKeys.getProductById, () => api.getProductById(id), {
+  const { refetch, data, isFetching, error } = useQuery(dataKeys.getProductById, () => api.getProductById(id), {
     variables: { id },
     extractId: (x) => x.id
   })
+
+  const translationsMap = useMemo(() => {
+    const res = {}
+    if (detectIsUndefined(data)) {
+      return res
+    }
+
+    const { translations } = data
+    if (detectIsUndefined(translations)) {
+      return res
+    }
+
+    for (let i = 0, len = translations.length; i < len; i++) {
+      const { localeId } = translations[i]
+      res[localeId] = translations[i]
+    }
+    return res
+  }, data)
+
+  return { refetch, data, isFetching, error, translationsMap }
 }
 
 export const useCreateProductMutation = () => {
@@ -109,6 +145,16 @@ export const useDeleteProductMutation = (id) => {
     variables: { id },
     extractId: (x) => x.id
   })
+}
+
+export const useCreateProductOptionMutation = (productId) => {
+  const api = useApi()
+  return useMutation(dataKeys.productOptionCreate, (data) => api.productOptionCreate(data, productId))
+}
+
+export const useUpdateProductOptionMutation = (id) => {
+  const api = useApi()
+  return useMutation(dataKeys.productOptionUpdate, (data) => api.productOptionCreate(data, id))
 }
 
 export const useCurrencies = (params) => {

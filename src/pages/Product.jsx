@@ -1,24 +1,38 @@
-import { component, detectIsUndefined, useMemo } from '@dark-engine/core'
+import {
+  component,
+  detectIsNull,
+  detectIsUndefined,
+  useMemo,
+  useRef,
+  useState
+} from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import { useStore, useProductById } from '../data'
+import { useStore, useProductById, useCreateProductOptionMutation } from '../data'
 import Card from '../components/Card'
-import { valueOrDefault } from '../translations'
+import Input from '../components/Input'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
-  const { t } = useTranslation('product.translationGroup')
+  const { t, translator } = useTranslation('product.translationGroup')
+  const formatLine = (v) => {
+    if (detectIsUndefined(v)) {
+      return '-'
+    }
+    return v
+  }
+
   return (
     <div>
-      {t('locale')}: {locale}
+      {t('locale')}: {locale} <span>{translator.formatName(locale, { type: 'language' })}</span>
       <div>
-        {t('title')}: {title}
+        {t('title')}: {formatLine(title)}
       </div>
       <div>
-        {t('subtitle')}: {subtitle}
+        {t('subtitle')}: {formatLine(subtitle)}
       </div>
       <div>
-        {t('description')}: {description}
+        {t('description')}: {formatLine(description)}
       </div>
     </div>
   )
@@ -26,32 +40,9 @@ const TranslationGroup = component(({ locale, title, subtitle, description }) =>
 
 const Translations = component(({ productId }) => {
   const { t } = useTranslation('product.translation')
-  const { data, isFetching, error } = useProductById(productId)
-  const { data: storeData, isFetching: storeIsFetching, error: storeError } = useStore()
+  const { data, translationsMap } = useProductById(productId)
+  const { data: storeData, isFetching: storeIsFetching, error: storeError, localeMap } = useStore()
   const { defaultLocaleId, locales } = storeData
-  const { translations } = data
-
-  const localeMap = useMemo(() => {
-    const res = []
-    for (let i = 0, len = locales.length; i < len; i++) {
-      const { id, code } = locales[i]
-      res[id] = code
-    }
-    return res
-  }, storeData)
-
-  const translationsMap = useMemo(() => {
-    const res = {}
-    if (detectIsUndefined(translations)) {
-      return res
-    }
-
-    for (let i = 0, len = translations.length; i < len; i++) {
-      const { localeId } = translations[i]
-      res[localeId] = translations[i]
-    }
-    return res
-  }, data)
 
   const defaultTranslation = translationsMap[defaultLocaleId]
   const res = []
@@ -78,14 +69,125 @@ const Translations = component(({ productId }) => {
     res.push(
       <TranslationGroup
         locale={localeMap[id]}
-        title={valueOrDefault(translation.title, '-')}
-        subtitle={valueOrDefault(translation.subtitle, '-')}
-        description={valueOrDefault(translation.description, '-')}
+        title={translation.title}
+        subtitle={translation.subtitle}
+        description={translation.description}
       />
     )
   }
 
   return res
+})
+
+const EditableOption = component(({ data }) => {
+  if (detectIsUndefined(data)) {
+    return (
+      <div>
+        <label>
+          title
+          <input type='text' placeholder='color' />
+        </label>
+      </div>
+    )
+  }
+})
+
+const EditableOptions = component(({ productId }) => {
+  const { t } = useTranslation('product.editableOptions')
+  const { data, isFetching, error } = useProductById(productId)
+  const { data: storeData, isFetching: storeIsFetching, error: storeError, localeMap } = useStore()
+  const [createOption, {
+    data: createOptionData,
+    isFetching: createOptionIsFetching,
+    error: createOptionError
+  }] = useCreateProductOptionMutation(productId)
+  // show the list of options that already exist
+  // require one title in defaultLocaleId for each option
+  // allow modification of options title (translations)
+  // delete option button
+  // always show create option input (or show on click?)
+
+  const { options } = data
+  if (detectIsUndefined(options)) {
+    const handleCreateOption = (e) => {
+      e.preventDefault()
+      console.log(e.target.elements.title.value)
+    }
+    return (
+      <div>
+        <form onSubmit={handleCreateOption}>
+          <label>
+            {t('createOption')}
+            <input
+              type='text'
+              name='title'
+              placeholder={t('placeholder')}
+              required
+            />
+          </label>
+          <button
+            type='submit'
+            disabled={createOptionIsFetching}
+          >create
+          </button>
+        </form>
+      </div>
+    )
+  }
+
+  const editableOptions = []
+  for (let i = 0, len = options.length; i < len; i++) {
+    editableOptions.push(<EditableOption data={options[i]} />)
+  }
+  return (<>{editableOptions}</>)
+})
+
+const EditOptions = component(({ productId }) => {
+  const { t } = useTranslation('product.editOptions')
+  const modalRef = useRef(null)
+  const handleOpenModal = () => {
+    if (detectIsNull(modalRef.current)) {
+      return
+    }
+    modalRef.current.showModal()
+  }
+
+  const handleCloseModal = () => {
+    if (detectIsNull(modalRef.current)) {
+      return
+    }
+    modalRef.current.close()
+  }
+
+  return (
+    <>
+      <button type='button' onClick={handleOpenModal}>{t('edit')}</button>
+      <dialog ref={modalRef}>
+        <div>
+          <button type='button' onClick={handleCloseModal}>x</button>
+        </div>
+        <div>
+          <EditableOptions productId={productId} />
+        </div>
+      </dialog>
+    </>
+  )
+})
+
+const Options = component(({ productId, slot }) => {
+  const { t } = useTranslation('product.options')
+  const { data, isFetching, error } = useProductById(productId)
+
+  if (data) {
+    const options = { data }
+    // TODO list options
+    return (
+      <div>
+        {t('options')}
+        {slot}
+      </div>
+    )
+  }
 })
 
 const Product = component(() => {
@@ -105,7 +207,7 @@ const Product = component(() => {
           <div>
             {t('details')}
             <Translations productId={productId} />
-            <div>
+            {/* <div>
               {t('type')}
             </div>
             <div>
@@ -113,9 +215,9 @@ const Product = component(() => {
             </div>
             <div>
               {t('category')}
-            </div>
+            </div> */}
             <div>
-              {t('discountable')}
+              {t('discountable')}: {String(data.discountable)}
             </div>
             <div>
               {t('salesChannels')}
@@ -131,9 +233,9 @@ const Product = component(() => {
         <Card>
           <div>
             {t('variants')}
-            <div>
-              TODO component
-            </div>
+            <Options productId={productId}>
+              <EditOptions productId={productId} />
+            </Options>
           </div>
         </Card>
       </>

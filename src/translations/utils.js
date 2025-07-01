@@ -64,9 +64,9 @@ export const dynamicMessagesLoading = async (translatorInstance, newLanguage) =>
   changeLanguage(newLanguage, messages)
 }
 
-export const getDefaultTranslation = (translations, defaultLocaleCode) => {
+export const getDefaultTranslation = (translations, defaultLocaleId) => {
   for (let i = 0, len = translations.length; i < len; i++) {
-    if (translations[i].localeCode === defaultLocaleCode) {
+    if (translations[i].localeId === defaultLocaleId) {
       return translations[i]
     }
   }
