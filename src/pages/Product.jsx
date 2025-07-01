@@ -2,7 +2,7 @@ import {
   component,
   detectIsNull,
   detectIsUndefined,
-  useMemo,
+  useEffect,
   useRef,
   useState
 } from '@dark-engine/core'
@@ -11,7 +11,6 @@ import { useTranslation } from '@wareme/translations'
 
 import { useStore, useProductById, useCreateProductOptionMutation } from '../data'
 import Card from '../components/Card'
-import Input from '../components/Input'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -40,15 +39,15 @@ const TranslationGroup = component(({ locale, title, subtitle, description }) =>
 
 const Translations = component(({ productId }) => {
   const { t } = useTranslation('product.translation')
-  const { data, translationsMap } = useProductById(productId)
-  const { data: storeData, isFetching: storeIsFetching, error: storeError, localeMap } = useStore()
+  const { data, translationsObject } = useProductById(productId)
+  const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
   const { defaultLocaleId, locales } = storeData
 
-  const defaultTranslation = translationsMap[defaultLocaleId]
+  const defaultTranslation = translationsObject[defaultLocaleId]
   const res = []
   res.push(
     <TranslationGroup
-      locale={localeMap[defaultLocaleId]}
+      locale={localesObject[defaultLocaleId]}
       title={defaultTranslation.title}
       subtitle={defaultTranslation.subtitle}
       description={defaultTranslation.description}
@@ -61,14 +60,14 @@ const Translations = component(({ productId }) => {
       continue
     }
 
-    const translation = translationsMap[id]
+    const translation = translationsObject[id]
     if (detectIsUndefined(translation)) {
       continue
     }
 
     res.push(
       <TranslationGroup
-        locale={localeMap[id]}
+        locale={localesObject[id]}
         title={translation.title}
         subtitle={translation.subtitle}
         description={translation.description}
@@ -77,6 +76,15 @@ const Translations = component(({ productId }) => {
   }
 
   return res
+})
+
+const CreateOption = component(() => {
+  return (
+    <label>
+      title
+      <input type='text' placeholder='color' />
+    </label>
+  )
 })
 
 const EditableOption = component(({ data }) => {
@@ -95,51 +103,55 @@ const EditableOption = component(({ data }) => {
 const EditableOptions = component(({ productId }) => {
   const { t } = useTranslation('product.editableOptions')
   const { data, isFetching, error } = useProductById(productId)
-  const { data: storeData, isFetching: storeIsFetching, error: storeError, localeMap } = useStore()
+  const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
   const [createOption, {
     data: createOptionData,
     isFetching: createOptionIsFetching,
     error: createOptionError
   }] = useCreateProductOptionMutation(productId)
+
+  const [options, setOptions] = useState({})
+  useEffect(() => {
+    const newOptions = data.options // this is an array
+    if (detectIsUndefined(newOptions)) {
+      return setOptions({})
+    }
+    return setOptions(newOptions) // TODO make an object with ids as keys, maybe in the useProductById hook
+  }, [data])
+
+  // options have ids
+
   // show the list of options that already exist
   // require one title in defaultLocaleId for each option
   // allow modification of options title (translations)
   // delete option button
   // always show create option input (or show on click?)
 
-  const { options } = data
-  if (detectIsUndefined(options)) {
-    const handleCreateOption = (e) => {
-      e.preventDefault()
-      console.log(e.target.elements.title.value)
-    }
-    return (
-      <div>
-        <form onSubmit={handleCreateOption}>
-          <label>
-            {t('createOption')}
-            <input
-              type='text'
-              name='title'
-              placeholder={t('placeholder')}
-              required
-            />
-          </label>
-          <button
-            type='submit'
-            disabled={createOptionIsFetching}
-          >create
-          </button>
-        </form>
-      </div>
-    )
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(e.target.elements.title.value)
   }
 
-  const editableOptions = []
-  for (let i = 0, len = options.length; i < len; i++) {
-    editableOptions.push(<EditableOption data={options[i]} />)
-  }
-  return (<>{editableOptions}</>)
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label>
+          {t('createOption')}
+          <input
+            type='text'
+            name='title'
+            placeholder={t('placeholder')}
+            required
+          />
+        </label>
+        <button
+          type='submit'
+          disabled={createOptionIsFetching}
+        >create
+        </button>
+      </form>
+    </div>
+  )
 })
 
 const EditOptions = component(({ productId }) => {

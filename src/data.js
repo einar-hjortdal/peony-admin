@@ -62,7 +62,7 @@ export const useStore = () => {
   const api = useApi()
   const { refetch, data, isFetching, error } = useQuery(dataKeys.storeGet, () => api.storeGet())
 
-  const localeMap = useMemo(() => {
+  const localesObject = useMemo(() => {
     const res = []
     if (detectIsUndefined(data)) {
       return res
@@ -76,7 +76,7 @@ export const useStore = () => {
     return res
   }, data)
 
-  return { refetch, data, isFetching, error, localeMap }
+  return { refetch, data, isFetching, error, localesObject }
 }
 
 export const useStoreUpdateMutation = () => {
@@ -104,7 +104,7 @@ export const useProductById = (id) => {
     extractId: (x) => x.id
   })
 
-  const translationsMap = useMemo(() => {
+  const translationsObject = useMemo(() => {
     const res = {}
     if (detectIsUndefined(data)) {
       return res
@@ -122,7 +122,7 @@ export const useProductById = (id) => {
     return res
   }, data)
 
-  return { refetch, data, isFetching, error, translationsMap }
+  return { refetch, data, isFetching, error, translationsObject }
 }
 
 export const useCreateProductMutation = () => {

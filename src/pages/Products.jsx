@@ -154,7 +154,7 @@ const NewProduct = component(({ modalRef }) => {
   }
 
   const handleCloseModal = () => {
-    if (detectIsNull(modalRef)) {
+    if (detectIsNull(modalRef.current)) {
       return
     }
 
@@ -364,7 +364,7 @@ const Products = component(() => {
 
   const modalRef = useRef(null)
   const handleOpenModal = () => {
-    if (detectIsNull(modalRef)) {
+    if (detectIsNull(modalRef.current)) {
       return
     }
     modalRef.current.showModal()
