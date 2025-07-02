@@ -27,9 +27,6 @@ export const dataKeys = {
   createProduct: 'createProduct',
   updateProduct: 'updateProduct',
   deleteProduct: 'deleteProduct',
-  productOptionCreate: 'productOptionCreate',
-  productOptionUpdate: 'productOptionUpdate',
-  productOptionDelete: 'productOptionDelete',
   productVariantCreate: 'productVariantCreate',
   productVariantUpdate: 'productVariantUpdate',
   productVariantDelete: 'productVariantDelete',
@@ -123,34 +120,6 @@ export const api = {
 
   deleteProduct: async (id) => {
     const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
-      method: 'DELETE',
-      credentials: 'include'
-    })
-    return checkResponse(response)
-  },
-
-  productOptionCreate: async (productId, data) => {
-    const response = await fetch(getRequestUrl(`/admin/products/${productId}/options`), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-      credentials: 'include'
-    })
-    return checkResponse(response)
-  },
-
-  productOptionUpdate: async (id, data) => {
-    const response = await fetch(getRequestUrl(`/admin/options/${id}`), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-      credentials: 'include'
-    })
-    return checkResponse(response)
-  },
-
-  productOptionDelete: async (id) => {
-    const response = await fetch(getRequestUrl(`/admin/options/${id}`), {
       method: 'DELETE',
       credentials: 'include'
     })

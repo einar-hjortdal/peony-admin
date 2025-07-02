@@ -60,7 +60,7 @@ export default freeze({
   'product.options.options': 'options',
   'product.editOptions.edit': 'edit',
   'product.editableOptions.placeholder': 'color',
-  'product.editableOptions.createOption': 'create option',
+  'product.editableOptions.addOption': 'add option',
   'settings.currencies.title': 'currencies',
   'settings.currencies.description': 'manage the currencies of your store',
   'settings.regions.title': 'regions',

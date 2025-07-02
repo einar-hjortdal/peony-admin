@@ -147,16 +147,6 @@ export const useDeleteProductMutation = (id) => {
   })
 }
 
-export const useCreateProductOptionMutation = (productId) => {
-  const api = useApi()
-  return useMutation(dataKeys.productOptionCreate, (data) => api.productOptionCreate(data, productId))
-}
-
-export const useUpdateProductOptionMutation = (id) => {
-  const api = useApi()
-  return useMutation(dataKeys.productOptionUpdate, (data) => api.productOptionCreate(data, id))
-}
-
 export const useCurrencies = (params) => {
   const api = useApi()
   const p = getParams(params)
