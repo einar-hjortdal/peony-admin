@@ -83,6 +83,13 @@ const Translations = component(({ productId }) => {
 
 const EditableOption = component(({ index, option, handleInput, handleDeleteOption }) => {
   const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
+  const { defaultLocaleId } = storeData
+  const { translations } = option
+  const defaultTranslation = translations[defaultLocaleId]
+  let defaultTranslationTitle
+  if (defaultTranslation) {
+    defaultTranslationTitle = defaultTranslation.title
+  }
 
   return (
     <fieldset>
@@ -91,9 +98,10 @@ const EditableOption = component(({ index, option, handleInput, handleDeleteOpti
         <input
           type='text'
           placeholder='color'
-          data-locale-id={storeData.defaultLocaleId}
+          data-locale-id={defaultLocaleId}
           data-index={index}
           onInput={handleInput}
+          value={defaultTranslationTitle}
           required
         />
       </label>
@@ -121,15 +129,15 @@ const EditableOptions = component(({ productId }) => {
 
     const newOptions = []
     for (let i = 0, len = data.options.length; i < len; i++) {
-      const option = data.options[i]
+      const { id, translations } = data.options[i]
       const translationsObject = {}
-      for (let j = 0, len = option.translations.length; j < len; j++) {
-        const translation = option.translations[j]
-        translationsObject[translation.localeId] = { ...translation }
+      for (let j = 0, len = translations.length; j < len; j++) {
+        const { localeId, title } = translations[j]
+        translationsObject[localeId] = { title }
       }
-      newOptions.push({ ...option, translationsObject })
+      newOptions.push({ id, translations: translationsObject })
     }
-    return setOptions([...data.options])
+    return setOptions([...newOptions])
   }, [data])
 
   const handleInput = (e) => {
@@ -137,18 +145,18 @@ const EditableOptions = component(({ productId }) => {
     const { value } = e.target
     const newOptions = [...options]
     const newOption = { ...newOptions[index] }
-    let newTranslationsObject = {}
-    if (detectIsObject(newOption.translationsObject)) {
-      newTranslationsObject = { ...newOption.translationsObject }
+    let newTranslations = {}
+    if (detectIsObject(newOption.newTranslations)) {
+      newTranslations = { ...newOption.newTranslations }
     }
 
-    if (detectIsObject(newTranslationsObject[localeId])) {
-      newTranslationsObject[localeId].title = value
+    if (detectIsObject(newTranslations[localeId])) {
+      newTranslations[localeId].title = value
     } else {
-      newTranslationsObject[localeId] = { title: value }
+      newTranslations[localeId] = { title: value }
     }
 
-    newOption.translationsObject = newTranslationsObject
+    newOption.translations = newTranslations
     newOptions[index] = newOption
     return setOptions(newOptions)
   }
@@ -158,15 +166,15 @@ const EditableOptions = component(({ productId }) => {
     const updatedOptions = []
     for (let i = 0, len = options.length; i < len; i++) {
       const option = {}
-      const { id, translationsObject } = options[i]
+      const { id, translations } = options[i]
       if (detectIsString(id)) {
         option.id = id
       }
       option.translations = []
-      const localeIds = keys(translationsObject)
+      const localeIds = keys(translations)
       for (let k = 0, len = localeIds.length; k < len; k++) {
         const localeId = localeIds[k]
-        const { title } = translationsObject[localeId]
+        const { title } = translations[localeId]
         option.translations.push({ localeId, title })
       }
       updatedOptions.push(option)
