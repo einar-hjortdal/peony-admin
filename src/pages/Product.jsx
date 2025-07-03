@@ -15,7 +15,7 @@ import {
 import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import { useStore, useProductById, useUpdateProductMutation } from '../data'
+import { useStore, useProductById, useUpdateProductMutation, useCreateVariantMutation } from '../data'
 import Card from '../components/Card'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
@@ -303,6 +303,94 @@ const Options = component(({ productId, slot }) => {
   }
 })
 
+const AddVariant = component(({ productId }) => {
+  const [variantData, setVariantData] = useState({})
+  const [createVariant, {
+    data: createVariantData,
+    isFetching: createVariantIsFetching,
+    error: createVariantError
+  }] = useCreateVariantMutation(productId)
+  const modalRef = useRef(null)
+  const handleOpenModal = () => {
+    if (detectIsNull(modalRef)) {
+      return
+    }
+    modalRef.current.showModal()
+  }
+
+  const handleCloseModal = () => {
+    if (detectIsNull(modalRef)) {
+      return
+    }
+    modalRef.current.close()
+  }
+
+  const handleCreate = () => {
+    createVariant(variantData)
+  }
+
+  return (
+    <>
+      <button type='button' onClick={handleOpenModal}>add</button>
+      <dialog ref={modalRef}>
+        <button type='button' onClick={handleCloseModal}>x</button>
+        <form>
+          <button
+            type='button'
+            onClick={handleCreate}
+            disabled={createVariantIsFetching}
+          >create
+          </button>
+        </form>
+      </dialog>
+    </>
+  )
+})
+
+const VariantRow = component(({ id, title, sku, ean }) => {
+  return (
+    <tr>
+      <td>{title}</td>
+      <td>{sku}</td>
+      <td>{ean}</td>
+      <td>
+        <button type='button'>...</button>
+        {/* TODO dialog */}
+      </td>
+    </tr>
+  )
+})
+
+const Variants = component(({ productId }) => {
+  const { data, isFetching, error } = useProductById(productId)
+
+  const { variants } = data
+  const rows = []
+  if (detectIsArray(variants)) {
+    for (let i = 0, len = variants.length; i < len; i++) {
+      const { id, title, sku, ean } = variants[i]
+      rows.push(<VariantRow id={id} title={title} sku={sku} ean={ean} />)
+    }
+  }
+
+  return (
+    <div>
+      <AddVariant productId={productId} />
+      <table>
+        <thead>
+          <th>title</th>
+          <th>sku</th>
+          <th>ean</th>
+          <th>actions</th>
+        </thead>
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+    </div>
+  )
+})
+
 const Product = component(() => {
   const { t, translator } = useTranslation('product')
   const params = useParams()
@@ -346,9 +434,14 @@ const Product = component(() => {
         <Card>
           <div>
             {t('variants')}
+          </div>
+          <div>
             <Options productId={productId}>
               <EditOptions productId={productId} />
             </Options>
+          </div>
+          <div>
+            <Variants productId={productId} />
           </div>
         </Card>
       </>

@@ -147,6 +147,22 @@ export const useDeleteProductMutation = (id) => {
   })
 }
 
+export const useCreateVariantMutation = (id) => {
+  const api = useApi()
+  return useMutation(dataKeys.variantCreate, (data) => api.variantCreate(id, data), {
+    variables: { id },
+    extractId: (x) => x.id
+  })
+}
+
+export const useUpdateVariantMutation = (id) => {
+  const api = useApi()
+  return useMutation(dataKeys.variantUpdate, (data) => api.variantUpdate(id, data), {
+    variables: { id },
+    extractId: (x) => x.id
+  })
+}
+
 export const useCurrencies = (params) => {
   const api = useApi()
   const p = getParams(params)

@@ -27,9 +27,9 @@ export const dataKeys = {
   createProduct: 'createProduct',
   updateProduct: 'updateProduct',
   deleteProduct: 'deleteProduct',
-  productVariantCreate: 'productVariantCreate',
-  productVariantUpdate: 'productVariantUpdate',
-  productVariantDelete: 'productVariantDelete',
+  variantCreate: 'productVariantCreate',
+  variantUpdate: 'productVariantUpdate',
+  variantDelete: 'productVariantDelete',
   currencyGet: 'currencyGet',
   currencyUpdate: 'currencyUpdate',
   localesGet: 'localesGet'
@@ -120,6 +120,34 @@ export const api = {
 
   deleteProduct: async (id) => {
     const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
+      method: 'DELETE',
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  variantCreate: async (id, data) => {
+    const response = await fetch(getRequestUrl(`/admin/products/${id}/variants`), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  variantUpdate: async (id, data) => {
+    const response = await fetch(getRequestUrl(`/admin/variants/${id}`), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  variantDelete: async (id) => {
+    const response = await fetch(getRequestUrl(`/admin/variants/${id}`), {
       method: 'DELETE',
       credentials: 'include'
     })
