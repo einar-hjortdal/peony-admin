@@ -1,11 +1,14 @@
 import {
   component,
+  detectIsArray,
+  detectIsEmpty,
   detectIsNull,
   detectIsObject,
   detectIsString,
   detectIsUndefined,
   keys,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from '@dark-engine/core'
@@ -85,6 +88,7 @@ const EditableOption = component(({ index, option, handleInput, handleDeleteOpti
   const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
   const { defaultLocaleId } = storeData
   const { translations } = option
+
   const defaultTranslation = translations[defaultLocaleId]
   let defaultTranslationTitle
   if (defaultTranslation) {
@@ -93,8 +97,9 @@ const EditableOption = component(({ index, option, handleInput, handleDeleteOpti
 
   return (
     <fieldset>
+      <legend>title</legend>
       <label>
-        title
+        TODO label with default locale.code
         <input
           type='text'
           placeholder='color'
@@ -105,8 +110,8 @@ const EditableOption = component(({ index, option, handleInput, handleDeleteOpti
           required
         />
       </label>
+      {/* TODO handle other translations */}
       <button type='button' data-index={index} onClick={handleDeleteOption}>delete</button>
-      {/* TODO handle other languages */}
     </fieldset>
   )
 })
@@ -213,13 +218,10 @@ const EditableOptions = component(({ productId }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} disabled={updateProductIsFetching}>
         {editableOptions}
         <button type='button' onClick={handleAddOption}>{t('addOption')}</button>
-        <button
-          type='submit'
-        >save changes
-        </button>
+        <button type='submit'>save changes</button>
       </form>
     </div>
   )
@@ -260,13 +262,41 @@ const EditOptions = component(({ productId }) => {
 const Options = component(({ productId, slot }) => {
   const { t } = useTranslation('product.options')
   const { data, isFetching, error } = useProductById(productId)
+  const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
 
-  if (data) {
-    const options = { data }
-    // TODO list options
+  const optionElements = useMemo(() => {
+    if (detectIsEmpty(data) || detectIsEmpty(storeData)) {
+      return false
+    }
+
+    const { defaultLocaleId } = storeData
+    const { options } = data
+    if (detectIsArray(options)) {
+      const res = []
+      for (let i = 0, len = options.length; i < len; i++) {
+        const { translations } = options[i]
+        for (let k = 0, tlen = translations.length; k < tlen; k++) {
+          const translation = translations[k]
+          if (translation.localeId === defaultLocaleId) {
+            const { title } = translation
+            res.push(<div>{title}</div>)
+            // TODO display translations
+            // TODO display values
+            // TODO display value translations
+          }
+        }
+      }
+      return res
+    }
+
+    return false
+  }, [data, storeData])
+
+  if (data && storeData) {
     return (
       <div>
         {t('options')}
+        <div>{optionElements}</div>
         {slot}
       </div>
     )

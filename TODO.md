@@ -8,8 +8,10 @@
 - [x] Add/edit currencies
 - [x] Add/edit languages
 - [x] Products
+- [ ] Options
 - [ ] Variants
 - [ ] Prices
+- [ ] Product types
 - [ ] Categories
 - [ ] Price lists
 - [ ] Regions
