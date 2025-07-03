@@ -64,7 +64,7 @@ export const useStore = () => {
 
   const localesObject = useMemo(() => {
     const res = []
-    if (detectIsUndefined(data)) {
+    if (detectIsEmpty(data)) {
       return res
     }
 
@@ -106,7 +106,7 @@ export const useProductById = (id) => {
 
   const translationsObject = useMemo(() => {
     const res = {}
-    if (detectIsUndefined(data)) {
+    if (detectIsEmpty(data)) {
       return res
     }
 

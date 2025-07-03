@@ -1,6 +1,8 @@
 import {
   component,
   detectIsNull,
+  detectIsObject,
+  detectIsString,
   detectIsUndefined,
   keys,
   useEffect,
@@ -81,15 +83,6 @@ const Translations = component(({ productId }) => {
 
 const EditableOption = component(({ index, option, handleInput, handleDeleteOption }) => {
   const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
-  const [translations, setTranslations] = useState({})
-  useEffect(() => {
-    const newTranslations = {}
-    for (let i = 0, len = option.translations.length; i < len; i++) {
-      const translation = option.translations[i]
-      newTranslations[translation.localeId] = translation
-    }
-    setTranslations(newTranslations)
-  }, [option])
 
   return (
     <fieldset>
@@ -100,7 +93,7 @@ const EditableOption = component(({ index, option, handleInput, handleDeleteOpti
           placeholder='color'
           data-locale-id={storeData.defaultLocaleId}
           data-index={index}
-          onInput={(e) => handleInput(e, translations)}
+          onInput={handleInput}
           required
         />
       </label>
@@ -125,34 +118,61 @@ const EditableOptions = component(({ productId }) => {
     if (detectIsUndefined(data.options)) {
       return setOptions([])
     }
+
+    const newOptions = []
+    for (let i = 0, len = data.options.length; i < len; i++) {
+      const option = data.options[i]
+      const translationsObject = {}
+      for (let j = 0, len = option.translations.length; j < len; j++) {
+        const translation = option.translations[j]
+        translationsObject[translation.localeId] = { ...translation }
+      }
+      newOptions.push({ ...option, translationsObject })
+    }
     return setOptions([...data.options])
   }, [data])
 
-  const handleInput = (e, translations) => {
-    // TODO converting translations from array to map and back at every input is dumb
-    // make conversion persist until submission instead
-    const { value } = e.target
+  const handleInput = (e) => {
     const { index, localeId } = e.target.dataset
-    const editedOption = options[index]
-    const newTranslations = { ...translations }
-    newTranslations[localeId].title = value
-    const translationsKeys = keys(newTranslations)
-    const newTranslationsArray = []
-    for (let i = 0, len = translationsKeys.length; i < len; i++) {
-      const k = translationsKeys[i]
-      newTranslationsArray.push(translations[k])
+    const { value } = e.target
+    const newOptions = [...options]
+    const newOption = { ...newOptions[index] }
+    let newTranslationsObject = {}
+    if (detectIsObject(newOption.translationsObject)) {
+      newTranslationsObject = { ...newOption.translationsObject }
     }
-    editedOption.translations = newTranslationsArray
-    setOptions([
-      ...options.slice(0, index),
-      editedOption,
-      ...options.slice(index + 1)
-    ])
+
+    if (detectIsObject(newTranslationsObject[localeId])) {
+      newTranslationsObject[localeId].title = value
+    } else {
+      newTranslationsObject[localeId] = { title: value }
+    }
+
+    newOption.translationsObject = newTranslationsObject
+    newOptions[index] = newOption
+    return setOptions(newOptions)
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(options)
+    const updatedOptions = []
+    for (let i = 0, len = options.length; i < len; i++) {
+      const option = {}
+      const { id, translationsObject } = options[i]
+      if (detectIsString(id)) {
+        option.id = id
+      }
+      option.translations = []
+      const localeIds = keys(translationsObject)
+      for (let k = 0, len = localeIds.length; k < len; k++) {
+        const localeId = localeIds[k]
+        const { title } = translationsObject[localeId]
+        option.translations.push({ localeId, title })
+      }
+      updatedOptions.push(option)
+    }
+    const data = { options: updatedOptions }
+    updateProduct(data)
   }
 
   const handleAddOption = (e) => {
