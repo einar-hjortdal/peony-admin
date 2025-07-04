@@ -18,14 +18,15 @@ import { useTranslation } from '@wareme/translations'
 import { useStore, useProductById, useUpdateProductMutation, useCreateVariantMutation } from '../data'
 import Card from '../components/Card'
 
+const formatLine = (v) => {
+  if (detectIsUndefined(v)) {
+    return '-'
+  }
+  return v
+}
+
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
-  const formatLine = (v) => {
-    if (detectIsUndefined(v)) {
-      return '-'
-    }
-    return v
-  }
 
   return (
     <div>
@@ -350,9 +351,9 @@ const AddVariant = component(({ productId }) => {
 const VariantRow = component(({ id, title, sku, ean }) => {
   return (
     <tr>
-      <td>{title}</td>
-      <td>{sku}</td>
-      <td>{ean}</td>
+      <td>{formatLine(title)}</td>
+      <td>{formatLine(sku)}</td>
+      <td>{formatLine(ean)}</td>
       <td>
         <button type='button'>...</button>
         {/* TODO dialog */}
@@ -369,7 +370,7 @@ const Variants = component(({ productId }) => {
   if (detectIsArray(variants)) {
     for (let i = 0, len = variants.length; i < len; i++) {
       const { id, title, sku, ean } = variants[i]
-      rows.push(<VariantRow id={id} title={title} sku={sku} ean={ean} />)
+      rows.push(<VariantRow key={id} id={id} title={title} sku={sku} ean={ean} />)
     }
   }
 
