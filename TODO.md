@@ -35,6 +35,7 @@
 ## Low priority
 
 - [ ] Acceptable design
+- [ ] Validate inputs
 - [ ] Refactor
 - [ ] Responsiveness
 - [ ] Dark theme
