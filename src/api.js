@@ -32,6 +32,10 @@ export const dataKeys = {
   variantDelete: 'productVariantDelete',
   currencyGet: 'currencyGet',
   currencyUpdate: 'currencyUpdate',
+  regionsGet: 'regionsGet',
+  regionsCreate: 'regionsCreate',
+  regionGetById: 'regionGetById',
+  regionUpdate: 'regionUpdate',
   localesGet: 'localesGet'
 }
 
@@ -166,6 +170,13 @@ export const api = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  regionsGet: async (params) => {
+    const response = await fetch(getRequestUrl('/admin/regions', params), {
       credentials: 'include'
     })
     return checkResponse(response)

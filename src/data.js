@@ -1,4 +1,4 @@
-import { keys, detectIsEmpty, useMemo, detectIsUndefined } from '@dark-engine/core'
+import { keys, detectIsEmpty, useMemo, detectIsUndefined, detectIsObject } from '@dark-engine/core'
 import { useApi, useQuery, useMutation } from '@dark-engine/data'
 
 import { dataKeys } from './api'
@@ -27,9 +27,12 @@ const cleanParams = (p) => {
 }
 
 const getParams = (params) => {
-  const p = new URLSearchParams(cleanParams(params))
-  p.sort()
-  return p.toString()
+  if (detectIsObject(params)) {
+    const p = new URLSearchParams(cleanParams(params))
+    p.sort()
+    return p.toString()
+  }
+  return ''
 }
 
 export const useUser = () => {
@@ -167,6 +170,15 @@ export const useCurrencies = (params) => {
   const api = useApi()
   const p = getParams(params)
   return useQuery(dataKeys.currencyGet, () => api.currencyGet(p), {
+    variables: { p },
+    extractId: (x) => x.p
+  })
+}
+
+export const useRegions = (params) => {
+  const api = useApi()
+  const p = getParams(params)
+  return useQuery(dataKeys.regionsGet, () => api.regionsGet(p), {
     variables: { p },
     extractId: (x) => x.p
   })

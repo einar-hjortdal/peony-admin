@@ -18,13 +18,34 @@ import {
   useStore,
   useProductById,
   useUpdateProductMutation,
-  useCreateVariantMutation
+  useCreateVariantMutation,
+  useRegions
 } from '../../data'
 import Card from '../../components/Card'
 import If from '../../components/If'
 import { formatLine } from './utils'
 
-const EditPrices = component(() => {
+const EditPrices = component(({ productId }) => {
+  const {
+    data: productData,
+    isFetching: productIsFetching,
+    error: productError
+  } = useProductById(productId)
+
+  const {
+    data: storeData,
+    isFetching: storeIsFetching,
+    error: storeError
+  } = useStore()
+
+  const {
+    data: regionsData,
+    isFetching: regionsIsFetching,
+    error: regionsError
+  } = useRegions()
+
+  // need store for currencies array
+  // need regions for region prices
   const modalRef = useRef(null)
   const handleOpenModal = () => {
     if (detectIsNull(modalRef)) {
@@ -40,17 +61,40 @@ const EditPrices = component(() => {
     modalRef.current.close()
   }
 
-  return (
-    <>
-      <button type='button' onClick={handleOpenModal}>edit prices</button>
-      <dialog ref={modalRef}>
-        <button type='button' onClick={handleCloseModal}>x</button>
-        <div>
-          bro
-        </div>
-      </dialog>
-    </>
-  )
+  // save button should save and then close on success
+  // discard should just reset table state
+  // x should ask for confirmation if state changed
+
+  // toggle visibility of columns using a settings button
+  // table first row under headings should show product name and be grayed out
+  // one column for each region
+  // one column for each currency
+  // if region or currency has tax-inclusive prices, display tax-inclusive pricing in heading
+
+  if (productData && storeData && regionsData) {
+    console.log(regionsData)
+    return (
+      <>
+        <button type='button' onClick={handleOpenModal}>edit prices</button>
+        <dialog ref={modalRef}>
+          <button type='button' onClick={handleCloseModal}>x</button>
+          <div>
+            <button type='button'>save</button>
+            <button type='button'>discard changes</button>
+            <table>
+              <thead>
+                <th>product</th>
+                <th>price in currency</th>
+                <th>price in currency (region name)</th>
+              </thead>
+            </table>
+          </div>
+        </dialog>
+      </>
+    )
+  }
+
+  return false
 })
 
 export default EditPrices
