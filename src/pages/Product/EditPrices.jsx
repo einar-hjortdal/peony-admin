@@ -44,8 +44,6 @@ const EditPrices = component(({ productId }) => {
     error: regionsError
   } = useRegions()
 
-  // need store for currencies array
-  // need regions for region prices
   const modalRef = useRef(null)
   const handleOpenModal = () => {
     if (detectIsNull(modalRef)) {
@@ -70,9 +68,26 @@ const EditPrices = component(({ productId }) => {
   // one column for each region
   // one column for each currency
   // if region or currency has tax-inclusive prices, display tax-inclusive pricing in heading
-
   if (productData && storeData && regionsData) {
-    console.log(regionsData)
+    const { currencies } = storeData
+    const { items: regions } = regionsData
+    // need headings of currencies
+    // also need headings of regions
+    // should make it easy to add cells to the right column somehow
+
+    const { variants } = productData
+    const rows = []
+    for (let i = 0, len = variants.length; i < len; i++) {
+      const variant = variants[i]
+      rows.push(
+        <tr>
+          <td>{formatLine(variant.title)}</td>
+          <td>a</td>
+          <td>b</td>
+        </tr>
+      )
+    }
+
     return (
       <>
         <button type='button' onClick={handleOpenModal}>edit prices</button>
@@ -83,10 +98,13 @@ const EditPrices = component(({ productId }) => {
             <button type='button'>discard changes</button>
             <table>
               <thead>
-                <th>product</th>
+                <th>variant title</th>
                 <th>price in currency</th>
                 <th>price in currency (region name)</th>
               </thead>
+              <tbody>
+                {rows}
+              </tbody>
             </table>
           </div>
         </dialog>

@@ -390,9 +390,10 @@ const Products = component(() => {
     headings.push(<th key={headings[i]}>{headings[i]}</th>)
   }
 
+  const { items: products } = data
   const rows = []
-  for (let i = 0, len = data.items.length; i < len; i++) {
-    const product = data.items[i]
+  for (let i = 0, len = products.length; i < len; i++) {
+    const product = products[i]
     const defaultTranslation = getDefaultTranslation(product.translations, storeData.defaultLocaleId)
     let title = product.id
     if (!detectIsEmpty(defaultTranslation)) {

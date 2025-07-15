@@ -252,12 +252,13 @@ const Modal = component(({ modalRef }) => {
   }
 
   if (storeData && currenciesData) {
-    const currencies = []
-    for (let i = 0, len = currenciesData.items.length; i < len; i++) {
-      const code = currenciesData.items[i].code
+    const { items: currencies } = currenciesData
+    const currenciesList = []
+    for (let i = 0, len = currencies.length; i < len; i++) {
+      const code = currencies[i].code
       const translatedName = translator.formatName(code.trim(), { type: 'currency' })
       const selected = params.includes(code)
-      currencies.push(
+      currenciesList.push(
         <Currency
           key={code}
           code={code}
@@ -274,7 +275,7 @@ const Modal = component(({ modalRef }) => {
           <button onClick={handleClose}>x</button>
         </div>
         <div>
-          <div>{currencies}</div>
+          <div>{currenciesList}</div>
           <button
             type='button'
             onClick={handleSubmit}

@@ -222,12 +222,13 @@ const Modal = component(({ modalRef }) => {
   }
 
   if (storeData && localesData) {
-    const locales = []
-    for (let i = 0, len = localesData.items.length; i < len; i++) {
-      const { id, code } = localesData.items[i]
+    const { items: locales } = localesData
+    const localesList = []
+    for (let i = 0, len = locales.length; i < len; i++) {
+      const { id, code } = locales[i]
       const translatedName = translator.formatName(code.trim(), { type: 'language' })
       const value = params.includes(id)
-      locales.push(
+      localesList.push(
         <Locale
           key={id}
           id={id}
@@ -244,7 +245,7 @@ const Modal = component(({ modalRef }) => {
           <button onClick={handleClose}>x</button>
         </div>
         <div>
-          <div>{locales}</div>
+          <div>{localesList}</div>
           <button
             type='button'
             onClick={handleSubmit}
