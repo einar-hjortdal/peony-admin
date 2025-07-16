@@ -11,15 +11,13 @@
 - [x] Options
 - [x] Variants
 - [ ] Prices
-- [ ] Product types
-- [ ] Categories
-- [ ] Price lists
 - [ ] Regions
-- [ ] Sales channels
-- [ ] Taxes
 
 ## Later releases
 
+Note: not sorted.
+
+- [ ] Stores
 - [ ] Users
 - [ ] User permissions
 - [ ] Variant images
@@ -27,18 +25,23 @@
 - [ ] Pages
 - [ ] Posts
 - [ ] User-defined data
-- [ ] Stores
 - [ ] Customer
 - [ ] Cart
 - [ ] Orders
+- [ ] Prices: minQuantity, maxQuantity
+- [ ] Price lists
+- [ ] Sales channels
+- [ ] Taxes
+- [ ] Product types
+- [ ] Categories
 
 ## Low priority
 
 - [ ] Acceptable design
+- [ ] Dark theme
+- [ ] Responsiveness
 - [ ] Validate inputs
 - [ ] Refactor
-- [ ] Responsiveness
-- [ ] Dark theme
 
 ## Problems
 

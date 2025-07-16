@@ -93,16 +93,29 @@ const EditPrices = component(({ productId }) => {
       }
       for (let k = 0, len = moneyAmounts.length; k < len; k++) {
         const moneyAmount = moneyAmounts[k]
-        const { regionId } = moneyAmount
+        const { id, amount, currencyCode, regionId } = moneyAmount
+        // TODO minQuantity maxQuantity
         if (detectIsUndefined(regionId)) {
-          m[variant.id][moneyAmount.currencyCode] = moneyAmount
+          m[variant.id][moneyAmount.currencyCode] = {
+            currencyCode,
+            id,
+            amount
+          }
         } else {
-          m[variant.id][regionId] = moneyAmount
+          m[variant.id][regionId] = {
+            regionId,
+            id,
+            amount
+          }
         }
       }
     }
     return m
   }, [productData])
+
+  const handleInput = () => {
+
+  }
 
   const modalRef = useRef(null)
   const formRef = useRef(null)
