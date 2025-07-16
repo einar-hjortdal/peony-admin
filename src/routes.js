@@ -40,6 +40,10 @@ export const routes = [
         component: lazy(() => import('./pages/Languages'))
       },
       {
+        path: 'regions',
+        component: lazy(() => import('./pages/Regions'))
+      },
+      {
         path: 'not-found',
         component: lazy(() => import('./pages/NotFound'))
       },

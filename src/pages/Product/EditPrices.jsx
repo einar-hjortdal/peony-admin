@@ -1,5 +1,6 @@
 import {
   component,
+  createContext,
   detectIsArray,
   detectIsEmpty,
   detectIsNull,
@@ -22,11 +23,15 @@ import {
   useProductById,
   useUpdateProductMutation,
   useCreateVariantMutation,
-  useRegions
+  useRegions,
+  useUpdateVariantMutation
 } from '../../data'
 import Card from '../../components/Card'
 import If from '../../components/If'
 import { formatLine } from './utils'
+
+// handles simple pricing: no quantity-based prices.
+// complex pricing needs a less "convenient" layout, it should be an alternative not a replacement.
 
 const TableCell = memo(component(({ value, onChange }) => {
   const handleValueChange = useCallback((v) => {
@@ -65,19 +70,17 @@ const EditPrices = component(({ productId }) => {
     error: regionsError
   } = useRegions()
 
-  const [updateProduct, {
-    data: updateProductData,
-    isFetching: updateProductIsFetching,
-    error: updateProductError
-  }] = useUpdateProductMutation(productId)
+  const [updateVariant, {
+    data: updateVariantData,
+    isFetching: updateVariantIsFetching,
+    error: updateVariantError
+  }] = useUpdateVariantMutation(/* error here */) // need variant id, this means each line must be independent.
 
-  const columns = useMemo(() => {
-    if (storeData && regionsData) {
-      // ???
-    }
-  }, [storeData, regionsData])
-
-  const existingPricesMap = useMemo(() => {
+  // build a map that contains objects with variant id keys
+  // each object should have keys of either currencyCode or regionId and the data required for the submission.
+  // TODO problem to solve:
+  const [prices, setPrices] = useState({})
+  useEffect(() => {
     const m = {}
     const { variants } = productData
     if (detectIsUndefined(variants)) {
@@ -93,28 +96,47 @@ const EditPrices = component(({ productId }) => {
       }
       for (let k = 0, len = moneyAmounts.length; k < len; k++) {
         const moneyAmount = moneyAmounts[k]
-        const { id, amount, currencyCode, regionId } = moneyAmount
-        // TODO minQuantity maxQuantity
+        const { id, amount, currencyCode, regionId, minQuantity, maxQuantity } = moneyAmount
         if (detectIsUndefined(regionId)) {
           m[variant.id][moneyAmount.currencyCode] = {
             currencyCode,
             id,
-            amount
+            amount,
+            minQuantity, // if defined, must be in repsonse object or price will be deleted
+            maxQuantity // if defined, must be in repsonse object or price will be deleted
           }
         } else {
           m[variant.id][regionId] = {
             regionId,
             id,
-            amount
+            amount,
+            minQuantity, // if defined, must be in repsonse object or price will be deleted
+            maxQuantity // if defined, must be in repsonse object or price will be deleted
           }
         }
       }
     }
-    return m
+    setPrices(m)
   }, [productData])
 
-  const handleInput = () => {
-
+  const handleInput = (variantId, amount, currencyCode, regionId) => {
+    if (detectIsEmpty(regionId)) {
+      return setPrices(prev => ({
+        ...prev,
+        [variantId]: {
+          currencyCode,
+          amount
+        }
+      }))
+    } else {
+      return setPrices(prev => ({
+        ...prev,
+        [variantId]: {
+          regionId,
+          amount
+        }
+      }))
+    }
   }
 
   const modalRef = useRef(null)
@@ -134,6 +156,7 @@ const EditPrices = component(({ productId }) => {
   }
 
   const handleSave = () => {
+    // TODO transform prices map
     console.log('TODO save')
     // updateProduct()
     // return handleCloseModal()
@@ -176,13 +199,13 @@ const EditPrices = component(({ productId }) => {
               <button
                 type='button'
                 onClick={handleSave}
-                disabled={productIsFetching || updateProductIsFetching}
+                disabled={productIsFetching || updateVariantIsFetching}
               >save
               </button>
               <button
                 type='button'
                 onClick={handleDiscard}
-                disabled={productIsFetching || updateProductIsFetching}
+                disabled={productIsFetching || updateVariantIsFetching}
               >discard changes
               </button>
             </div>

@@ -5,25 +5,20 @@
 - [x] Log in
 - [x] Log out
 - [ ] Manage store
+- [ ] Add/edit regions
 - [x] Add/edit currencies
 - [x] Add/edit languages
 - [x] Products
 - [x] Options
 - [x] Variants
 - [ ] Prices
-- [ ] Regions
 
 ## Later releases
 
 Note: not sorted.
 
 - [ ] Stores
-- [ ] Users
-- [ ] User permissions
 - [ ] Variant images
-- [ ] Tags
-- [ ] Pages
-- [ ] Posts
 - [ ] User-defined data
 - [ ] Customer
 - [ ] Cart
@@ -31,9 +26,15 @@ Note: not sorted.
 - [ ] Prices: minQuantity, maxQuantity
 - [ ] Price lists
 - [ ] Sales channels
+- [ ] Stock locations
 - [ ] Taxes
 - [ ] Product types
-- [ ] Categories
+- [ ] Product categories
+- [ ] Users
+- [ ] Tags
+- [ ] Pages
+- [ ] Posts
+- [ ] Notifications
 
 ## Low priority
 
