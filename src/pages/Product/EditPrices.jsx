@@ -7,12 +7,15 @@ import {
   detectIsString,
   detectIsUndefined,
   keys,
+  memo,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
   useState
 } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
+import { CurrencyInput } from '@wareme/currency-input'
 
 import {
   useStore,
@@ -25,11 +28,29 @@ import Card from '../../components/Card'
 import If from '../../components/If'
 import { formatLine } from './utils'
 
+const TableCell = memo(component(({ value, onChange }) => {
+  const handleValueChange = useCallback((v) => {
+    console.log(v)
+  }, [onChange])
+
+  return (
+    <CurrencyInput
+      placeholder='-'
+      value={value}
+      onValueChange={handleValueChange}
+      allowNegativeValue={false}
+    />
+  )
+}))
+
 const EditPrices = component(({ productId }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const { t } = useTranslation('editPrices')
   const {
     data: productData,
     isFetching: productIsFetching,
-    error: productError
+    error: productError,
+    translationsObject: productTranslationsObject
   } = useProductById(productId)
 
   const {
@@ -44,7 +65,47 @@ const EditPrices = component(({ productId }) => {
     error: regionsError
   } = useRegions()
 
+  const [updateProduct, {
+    data: updateProductData,
+    isFetching: updateProductIsFetching,
+    error: updateProductError
+  }] = useUpdateProductMutation(productId)
+
+  const columns = useMemo(() => {
+    if (storeData && regionsData) {
+      // ???
+    }
+  }, [storeData, regionsData])
+
+  const existingPricesMap = useMemo(() => {
+    const m = {}
+    const { variants } = productData
+    if (detectIsUndefined(variants)) {
+      return m
+    }
+
+    for (let i = 0, len = variants.length; i < len; i++) {
+      const variant = variants[i]
+      m[variant.id] = {}
+      const { moneyAmounts } = variant
+      if (detectIsUndefined(moneyAmounts)) {
+        continue
+      }
+      for (let k = 0, len = moneyAmounts.length; k < len; k++) {
+        const moneyAmount = moneyAmounts[k]
+        const { regionId } = moneyAmount
+        if (detectIsUndefined(regionId)) {
+          m[variant.id][moneyAmount.currencyCode] = moneyAmount
+        } else {
+          m[variant.id][regionId] = moneyAmount
+        }
+      }
+    }
+    return m
+  }, [productData])
+
   const modalRef = useRef(null)
+  const formRef = useRef(null)
   const handleOpenModal = () => {
     if (detectIsNull(modalRef)) {
       return
@@ -59,31 +120,33 @@ const EditPrices = component(({ productId }) => {
     modalRef.current.close()
   }
 
-  // save button should save and then close on success
-  // discard should just reset table state
-  // x should ask for confirmation if state changed
+  const handleSave = () => {
+    console.log('TODO save')
+    // updateProduct()
+    // return handleCloseModal()
+  }
 
-  // toggle visibility of columns using a settings button
-  // table first row under headings should show product name and be grayed out
-  // one column for each region
-  // one column for each currency
-  // if region or currency has tax-inclusive prices, display tax-inclusive pricing in heading
+  const handleDiscard = (event) => {
+    // TODO ask for confirmation before proceeding
+    // TODO reset state
+    formRef.current.reset()
+    console.log('TODO discard')
+  }
+
   if (productData && storeData && regionsData) {
     const { currencies } = storeData
     const { items: regions } = regionsData
-    // need headings of currencies
-    // also need headings of regions
-    // should make it easy to add cells to the right column somehow
-
     const { variants } = productData
+
     const rows = []
     for (let i = 0, len = variants.length; i < len; i++) {
       const variant = variants[i]
+      const ins = [] // TableCell for each currency and region available. Store state
+
       rows.push(
         <tr>
           <td>{formatLine(variant.title)}</td>
-          <td>a</td>
-          <td>b</td>
+          {ins}
         </tr>
       )
     }
@@ -92,20 +155,51 @@ const EditPrices = component(({ productId }) => {
       <>
         <button type='button' onClick={handleOpenModal}>edit prices</button>
         <dialog ref={modalRef}>
+          {/* TODO x should ask for confirmation if state changed */}
           <button type='button' onClick={handleCloseModal}>x</button>
           <div>
-            <button type='button'>save</button>
-            <button type='button'>discard changes</button>
-            <table>
-              <thead>
-                <th>variant title</th>
-                <th>price in currency</th>
-                <th>price in currency (region name)</th>
-              </thead>
-              <tbody>
-                {rows}
-              </tbody>
-            </table>
+            <div>
+              {/* TODO save button should save and then close on success */}
+              <button
+                type='button'
+                onClick={handleSave}
+                disabled={productIsFetching || updateProductIsFetching}
+              >save
+              </button>
+              <button
+                type='button'
+                onClick={handleDiscard}
+                disabled={productIsFetching || updateProductIsFetching}
+              >discard changes
+              </button>
+            </div>
+            <div>
+              <button type='button'>...</button>
+              {/* TODO toggle columns */}
+              <If condition={isOpen}>
+                <div>
+                  <ul>
+                    <li>columns to toggle</li>
+                  </ul>
+                </div>
+              </If>
+              <form ref={formRef}>
+                <table>
+                  <caption>{productTranslationsObject[storeData.defaultLocaleId].title}</caption>
+                  <thead>
+                    <th>variant</th>
+                    {/* TODO columns to toggle start (for currency in currencies, for region in regions) */}
+                    {/* TODO if region or currency has tax-inclusive prices, display tax-inclusive pricing in heading */}
+                    <th>price in currency</th>
+                    <th>price in currency (region name)</th>
+                    {/* TODO columns to toggle end */}
+                  </thead>
+                  <tbody>
+                    {rows}
+                  </tbody>
+                </table>
+              </form>
+            </div>
           </div>
         </dialog>
       </>
