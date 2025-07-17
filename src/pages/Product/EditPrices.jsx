@@ -67,7 +67,7 @@ const EditPrices = component(({ productId }) => {
     data: updateVariantsData,
     isFetching: updateVariantsIsFetching,
     error: updateVarianstError
-  }] = useUpdateVariantsMutation(productData.id)
+  }] = useUpdateVariantsMutation(productId)
 
   // build a map that contains objects with variant id keys
   // each object should have keys of either currencyCode or regionId and the data required for the submission.
@@ -149,20 +149,23 @@ const EditPrices = component(({ productId }) => {
   }
 
   const handleSave = () => {
-    // TODO transform prices map
+    const variants = {}
     const variantIds = keys(prices)
-    const variants = []
     for (let i = 0, len = variantIds.length; i < len; i++) {
       const variantId = variantIds[i]
-      const variantData = prices[variantId]
-      variantData.id = variantId
-      variants.push(variantData)
+      const variantPrices = prices[variantId]
+      const ids = keys(variantPrices)
+      const variantMoneyAmounts = []
+      for (let k = 0, len = ids.length; k < len; k++) {
+        const id = ids[k]
+        const moneyAmount = variantPrices[id]
+        variantMoneyAmounts.push(moneyAmount)
+      }
+      variants[variantId] = { moneyAmounts: variantMoneyAmounts }
     }
     console.log(variants)
-    // updateVariantData(id, data)
-    console.log('TODO save')
-    // updateProduct()
-    // return handleCloseModal()
+    // updateVariantsData(variants)
+    return handleCloseModal()
   }
 
   const handleDiscard = (event) => {

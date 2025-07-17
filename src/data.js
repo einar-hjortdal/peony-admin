@@ -167,7 +167,7 @@ export const useUpdateVariantMutation = (productId) => {
   })
 }
 
-// expects a map of variant_id to ProductVariantRequest objects
+// expects an object with variant_id keys and ProductVariantRequest values
 export const useUpdateVariantsMutation = (productId) => {
   const api = useApi()
   return useMutation(dataKeys.variantUpdate, (a) => {
