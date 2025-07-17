@@ -61,6 +61,8 @@ export default freeze({
   'product.editOptions.edit': 'edit options',
   'product.editableOptions.placeholder': 'color',
   'product.editableOptions.addOption': 'add option',
+  'product.editPrices.tableHeader.includesTax': 'includes tax',
+  'product.editPrices.tableHead.variant': 'variant',
   'settings.currencies.title': 'currencies',
   'settings.currencies.description': 'manage the currencies of your store',
   'settings.regions.title': 'regions',

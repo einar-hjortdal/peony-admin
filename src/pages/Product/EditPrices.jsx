@@ -10,8 +10,10 @@ import {
   useRef,
   useState
 } from '@dark-engine/core'
+import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 import { CurrencyInput } from '@wareme/currency-input'
+import { nisha } from '@wareme/utils'
 
 import {
   useStore,
@@ -26,21 +28,52 @@ import If from '../../components/If'
 // handles simple pricing: no quantity-based prices.
 // complex pricing needs a less "convenient" layout, it should be an alternative not a replacement.
 
-const TableHeaders = component(() => {
-  const {
-    data: storeData,
-    isFetching: storeIsFetching,
-    error: storeError
-  } = useStore()
+const TableHeaderName = styled.span`
+  display: inline-block;
+`
 
-  const {
-    data: regionsData,
-    isFetching: regionsIsFetching,
-    error: regionsError
-  } = useRegions()
+const TableHeaderIncludesTax = styled.span`
+  display: inline-block;
+  visibility: ${p => nisha(p.$includesTax, 'visible', 'hidden')};
+`
 
-  const { currencies } = storeData
-  const { regions } = regionsData.items
+const TableHeader = component(({ name, includesTax }) => {
+  const { t } = useTranslation('product.editPrices.tableHeader')
+  return (
+    <th>
+      <TableHeaderName>
+        {name}
+      </TableHeaderName>
+      <TableHeaderIncludesTax $includesTax={includesTax}>
+        {t('includesTax')}
+      </TableHeaderIncludesTax>
+    </th>
+  )
+})
+
+const TableHead = component(({ currencyColumns, regionColumns }) => {
+  const { t } = useTranslation('product.editPrices.tableHead')
+  const cc = []
+  for (let i = 0, len = currencyColumns.length; i < len; i++) {
+    const currency = currencyColumns[i]
+    const { code, includesTax } = currency
+    cc.push(<TableHeader key={code} name={code} includesTax={includesTax} />)
+  }
+
+  const rc = []
+  for (let i = 0, len = regionColumns.length; i < len; i++) {
+    const region = regionColumns[i]
+    const { id, name, includesTax } = region
+    rc.push(<TableHead key={id} name={name} includesTax={includesTax} />)
+  }
+
+  return (
+    <thead>
+      <th>{t('variant')}</th>
+      {cc}
+      {rc}
+    </thead>
+  )
 })
 
 const TableCell = memo(component(({ value, onChange }) => {
@@ -58,9 +91,50 @@ const TableCell = memo(component(({ value, onChange }) => {
   )
 }))
 
+const TableBody = ({ variants, prices, currencyColumns, regionColumns, handleInput }) => {
+  if (detectIsUndefined(prices)) {
+    return false
+  }
+
+  console.log('prices: ', prices)
+
+  const rows = []
+  for (let i = 0, len = variants.length; i < len; i++) {
+    const variant = variants[i]
+    const variantPrices = prices[variant.id] // may be undef
+    const cc = []
+    for (let k = 0, len = currencyColumns.length; k < len; k++) {
+      const currency = currencyColumns[i]
+      const currencyPrice = variantPrices[currency] // may be undef
+      cc.push(<TableCell key={`${variant.id}-${currency.code}`} />)
+    }
+
+    const rc = []
+    for (let k = 0, len = regionColumns.length; k < len; k++) {
+      const region = regionColumns[i]
+      const regionPrice = variantPrices[region.id] // may be undef
+      rc.push(<TableCell key={`${variant.id}-${region.id}`} />)
+    }
+
+    rows.push(
+      <tr>
+        <td>{formatLine(variant.title)}</td>
+        {cc}
+        {rc}
+      </tr>
+    )
+  }
+
+  return (
+    <tbody>
+      rows
+    </tbody>
+  )
+}
+
 const EditPrices = component(({ productId }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const { t } = useTranslation('editPrices')
+  const { t } = useTranslation('product.editPrices')
   const {
     data: productData,
     isFetching: productIsFetching,
@@ -226,23 +300,7 @@ const EditPrices = component(({ productId }) => {
   }
 
   if (productData && storeData && regionsData) {
-    const { currencies } = storeData
-    const { items: regions } = regionsData
     const { variants } = productData
-
-    const rows = []
-    for (let i = 0, len = variants.length; i < len; i++) {
-      const variant = variants[i]
-      const ins = [] // TableCell for each currency and region available. Store state
-
-      rows.push(
-        <tr>
-          <td>{formatLine(variant.title)}</td>
-          {ins}
-        </tr>
-      )
-    }
-
     return (
       <>
         <button type='button' onClick={handleOpenModal}>edit prices</button>
@@ -278,17 +336,14 @@ const EditPrices = component(({ productId }) => {
               <form ref={formRef}>
                 <table>
                   <caption>{productTranslationsObject[storeData.defaultLocaleId].title}</caption>
-                  <thead>
-                    <th>variant</th>
-                    {/* TODO columns to toggle start (for currency in currencies, for region in regions) */}
-                    {/* TODO if region or currency has tax-inclusive prices, display tax-inclusive pricing in heading */}
-                    <th>price in currency</th>
-                    <th>price in currency (region name)</th>
-                    {/* TODO columns to toggle end */}
-                  </thead>
-                  <tbody>
-                    {rows}
-                  </tbody>
+                  <TableHead currencyColumns={currencyColumns} regionColumns={regionColumns} />
+                  <TableBody
+                    variants={variants}
+                    prices={prices}
+                    currencyColumns={currencyColumns}
+                    regionColumns={regionColumns}
+                    handleInput={handleInput}
+                  />
                 </table>
               </form>
             </div>
