@@ -27,7 +27,9 @@ import { formatLine } from './utils'
 import If from '../../components/If'
 
 // handles simple pricing: no quantity-based prices.
-// complex pricing needs a less "convenient" layout, it should be an alternative not a replacement.
+// quantity-based prices pricing needs a less "convenient" layout.
+// such layout should offered as an alternative to the more simple layout (most people likely won't
+// need it).
 
 const TableHeaderName = styled.span`
   display: inline-block;
@@ -79,7 +81,6 @@ const TableHead = component(({ currencyColumns, regionColumns }) => {
 
 // TODO debug CurrencyInput not respecting value
 const TableCell = component(({ value, handler }) => {
-  console.log(value)
   const handleOnValueChange = (v) => {
     return handler(v)
   }
@@ -213,8 +214,7 @@ const EditPrices = component(({ productId }) => {
 
   // build a map that contains objects with variant id keys
   // each object should have keys of either currencyCode or regionId and the data required for the submission.
-  const [prices, setPrices] = useState({})
-  useEffect(() => {
+  const getInitialState = () => {
     const m = {}
     const { variants } = productData
     if (detectIsUndefined(variants)) {
@@ -250,7 +250,12 @@ const EditPrices = component(({ productId }) => {
         }
       }
     }
-    setPrices(m)
+    return m
+  }
+
+  const [prices, setPrices] = useState({})
+  useEffect(() => {
+    setPrices(getInitialState())
   }, [productData])
 
   const handleInput = (variantId, amount, currencyCode, regionId) => {
@@ -280,7 +285,6 @@ const EditPrices = component(({ productId }) => {
   }
 
   const modalRef = useRef(null)
-  const formRef = useRef(null)
   const handleOpenModal = () => {
     if (detectIsNull(modalRef)) {
       return
@@ -318,9 +322,7 @@ const EditPrices = component(({ productId }) => {
 
   const handleDiscard = (event) => {
     // TODO ask for confirmation before proceeding
-    // TODO reset state
-    formRef.current.reset()
-    console.log('TODO discard')
+    setPrices(getInitialState())
   }
 
   if (productData && storeData && regionsData) {
@@ -357,19 +359,17 @@ const EditPrices = component(({ productId }) => {
                   </ul>
                 </div>
               </If>
-              <form ref={formRef}>
-                <table>
-                  <caption>{productTranslationsObject[storeData.defaultLocaleId].title}</caption>
-                  <TableHead currencyColumns={currencyColumns} regionColumns={regionColumns} />
-                  <TableBody
-                    variants={variants}
-                    prices={prices}
-                    currencyColumns={currencyColumns}
-                    regionColumns={regionColumns}
-                    handleInput={handleInput}
-                  />
-                </table>
-              </form>
+              <table>
+                <caption>{productTranslationsObject[storeData.defaultLocaleId].title}</caption>
+                <TableHead currencyColumns={currencyColumns} regionColumns={regionColumns} />
+                <TableBody
+                  variants={variants}
+                  prices={prices}
+                  currencyColumns={currencyColumns}
+                  regionColumns={regionColumns}
+                  handleInput={handleInput}
+                />
+              </table>
             </div>
           </div>
         </dialog>
