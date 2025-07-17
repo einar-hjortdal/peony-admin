@@ -2,6 +2,7 @@ import {
   component,
   detectIsEmpty,
   detectIsNull,
+  detectIsObject,
   detectIsUndefined,
   keys,
   memo,
@@ -76,10 +77,10 @@ const TableHead = component(({ currencyColumns, regionColumns }) => {
   )
 })
 
-const TableCell = memo(component(({ value, onChange }) => {
-  const handleValueChange = useCallback((v) => {
-    console.log(v)
-  }, [onChange])
+const TableCell = component(({ value, handler }) => {
+  const handleValueChange = (v) => {
+    return handler(v)
+  }
 
   return (
     <CurrencyInput
@@ -89,35 +90,59 @@ const TableCell = memo(component(({ value, onChange }) => {
       allowNegativeValue={false}
     />
   )
-}))
+})
 
 const TableBody = ({ variants, prices, currencyColumns, regionColumns, handleInput }) => {
   if (detectIsUndefined(prices)) {
     return false
   }
 
-  console.log('prices: ', prices)
-
   const rows = []
   for (let i = 0, len = variants.length; i < len; i++) {
     const variant = variants[i]
-    const variantPrices = prices[variant.id] // may be undef
+    const variantPrices = prices[variant.id]
     const cc = []
     for (let k = 0, len = currencyColumns.length; k < len; k++) {
-      const currency = currencyColumns[i]
-      const currencyPrice = variantPrices[currency] // may be undef
-      cc.push(<TableCell key={`${variant.id}-${currency.code}`} />)
+      const currency = currencyColumns[k]
+      let value
+      if (detectIsObject(variantPrices)) {
+        const currencyPrice = variantPrices[currency.code]
+        console.log('currencyPrice:', currencyPrice)
+        if (detectIsObject(currencyPrice)) {
+          console.log(currencyPrice.amount)
+          value = currencyPrice.amount
+        }
+      }
+      cc.push(
+        <TableCell
+          key={`${variant.id}-${currency.code}`}
+          value={value}
+          handler={(amount) => handleInput(variant.id, amount, currency.code)}
+        />
+      )
     }
 
     const rc = []
     for (let k = 0, len = regionColumns.length; k < len; k++) {
-      const region = regionColumns[i]
-      const regionPrice = variantPrices[region.id] // may be undef
-      rc.push(<TableCell key={`${variant.id}-${region.id}`} />)
+      const region = regionColumns[k]
+      let value
+      if (detectIsObject(variantPrices)) {
+        const regionPrice = variantPrices[region.id] // may be undef
+        if (detectIsObject(regionPrice)) {
+          value = regionPrice.amount
+        }
+      }
+      rc.push(
+        <TableCell
+          key={`${variant.id}-${region.id}`}
+          value={value}
+          handler={(amount) => handleInput(variant.id, amount, region.currencyCode, region.id)}
+        />
+      )
     }
 
     rows.push(
-      <tr>
+      <tr key={variant.id}>
         <td>{formatLine(variant.title)}</td>
         {cc}
         {rc}
@@ -127,7 +152,7 @@ const TableBody = ({ variants, prices, currencyColumns, regionColumns, handleInp
 
   return (
     <tbody>
-      rows
+      {rows}
     </tbody>
   )
 }
