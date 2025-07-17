@@ -23,10 +23,10 @@ export const dataKeys = {
   storeGet: 'storeGet',
   storeUpdate: 'storeUpdate',
   getProducts: 'getProducts',
-  getProductById: 'getProductById',
-  createProduct: 'createProduct',
-  updateProduct: 'updateProduct',
-  deleteProduct: 'deleteProduct',
+  productGetById: 'productGetById',
+  productCreate: 'productCreate',
+  productUpdate: 'productUpdate',
+  productDelete: 'productDelete',
   variantCreate: 'productVariantCreate',
   variantUpdate: 'productVariantUpdate',
   variantDelete: 'productVariantDelete',
@@ -95,14 +95,14 @@ export const api = {
     return checkResponse(response)
   },
 
-  getProductById: async (id) => {
+  productGetById: async (id) => {
     const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
       credentials: 'include'
     })
     return checkResponse(response)
   },
 
-  createProduct: async (data) => {
+  productCreate: async (data) => {
     const response = await fetch(getRequestUrl('/admin/products'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -112,7 +112,7 @@ export const api = {
     return checkResponse(response)
   },
 
-  updateProduct: async (id, data) => {
+  productUpdate: async (id, data) => {
     const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -122,7 +122,7 @@ export const api = {
     return checkResponse(response)
   },
 
-  deleteProduct: async (id) => {
+  productDelete: async (id) => {
     const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
       method: 'DELETE',
       credentials: 'include'

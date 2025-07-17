@@ -1,17 +1,12 @@
 import {
   component,
-  createContext,
-  detectIsArray,
   detectIsEmpty,
   detectIsNull,
-  detectIsObject,
-  detectIsString,
   detectIsUndefined,
   keys,
   memo,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState
 } from '@dark-engine/core'
@@ -21,14 +16,12 @@ import { CurrencyInput } from '@wareme/currency-input'
 import {
   useStore,
   useProductById,
-  useUpdateProductMutation,
-  useCreateVariantMutation,
+  // useUpdateProductMutation,
   useRegions,
-  useUpdateVariantMutation
+  useUpdateVariantsMutation
 } from '../../data'
-import Card from '../../components/Card'
-import If from '../../components/If'
 import { formatLine } from './utils'
+import If from '../../components/If'
 
 // handles simple pricing: no quantity-based prices.
 // complex pricing needs a less "convenient" layout, it should be an alternative not a replacement.
@@ -70,11 +63,11 @@ const EditPrices = component(({ productId }) => {
     error: regionsError
   } = useRegions()
 
-  const [updateVariant, {
-    data: updateVariantData,
-    isFetching: updateVariantIsFetching,
-    error: updateVariantError
-  }] = useUpdateVariantMutation(/* error here */) // need variant id, this means each line must be independent.
+  const [updateVariants, {
+    data: updateVariantsData,
+    isFetching: updateVariantsIsFetching,
+    error: updateVarianstError
+  }] = useUpdateVariantsMutation(productData.id)
 
   // build a map that contains objects with variant id keys
   // each object should have keys of either currencyCode or regionId and the data required for the submission.
@@ -157,6 +150,16 @@ const EditPrices = component(({ productId }) => {
 
   const handleSave = () => {
     // TODO transform prices map
+    const variantIds = keys(prices)
+    const variants = []
+    for (let i = 0, len = variantIds.length; i < len; i++) {
+      const variantId = variantIds[i]
+      const variantData = prices[variantId]
+      variantData.id = variantId
+      variants.push(variantData)
+    }
+    console.log(variants)
+    // updateVariantData(id, data)
     console.log('TODO save')
     // updateProduct()
     // return handleCloseModal()
@@ -199,13 +202,13 @@ const EditPrices = component(({ productId }) => {
               <button
                 type='button'
                 onClick={handleSave}
-                disabled={productIsFetching || updateVariantIsFetching}
+                disabled={productIsFetching || updateVariantsIsFetching}
               >save
               </button>
               <button
                 type='button'
                 onClick={handleDiscard}
-                disabled={productIsFetching || updateVariantIsFetching}
+                disabled={productIsFetching || updateVariantsIsFetching}
               >discard changes
               </button>
             </div>
