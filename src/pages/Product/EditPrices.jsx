@@ -95,16 +95,16 @@ const EditPrices = component(({ productId }) => {
             currencyCode,
             id,
             amount,
-            minQuantity, // if defined, must be in repsonse object or price will be deleted
-            maxQuantity // if defined, must be in repsonse object or price will be deleted
+            minQuantity, // if defined, must be in repsonse object or it will change
+            maxQuantity // if defined, must be in repsonse object or it will change
           }
         } else {
           m[variant.id][regionId] = {
             regionId,
             id,
             amount,
-            minQuantity, // if defined, must be in repsonse object or price will be deleted
-            maxQuantity // if defined, must be in repsonse object or price will be deleted
+            minQuantity, // if defined, must be in repsonse object or it will change
+            maxQuantity // if defined, must be in repsonse object or it will change
           }
         }
       }
@@ -117,16 +117,22 @@ const EditPrices = component(({ productId }) => {
       return setPrices(prev => ({
         ...prev,
         [variantId]: {
-          currencyCode,
-          amount
+          ...prev[variantId],
+          [currencyCode]: {
+            currencyCode,
+            amount
+          }
         }
       }))
     } else {
       return setPrices(prev => ({
         ...prev,
         [variantId]: {
-          regionId,
-          amount
+          ...prev[variantId],
+          regionId: {
+            regionId,
+            amount
+          }
         }
       }))
     }
@@ -163,6 +169,7 @@ const EditPrices = component(({ productId }) => {
       }
       variants[variantId] = { moneyAmounts: variantMoneyAmounts }
     }
+    // TODO compare with productData.variants and only submit variants that changed
     console.log(variants)
     // updateVariantsData(variants)
     return handleCloseModal()
