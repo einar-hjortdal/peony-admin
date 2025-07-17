@@ -26,6 +26,23 @@ import If from '../../components/If'
 // handles simple pricing: no quantity-based prices.
 // complex pricing needs a less "convenient" layout, it should be an alternative not a replacement.
 
+const TableHeaders = component(() => {
+  const {
+    data: storeData,
+    isFetching: storeIsFetching,
+    error: storeError
+  } = useStore()
+
+  const {
+    data: regionsData,
+    isFetching: regionsIsFetching,
+    error: regionsError
+  } = useRegions()
+
+  const { currencies } = storeData
+  const { regions } = regionsData.items
+})
+
 const TableCell = memo(component(({ value, onChange }) => {
   const handleValueChange = useCallback((v) => {
     console.log(v)
@@ -69,9 +86,35 @@ const EditPrices = component(({ productId }) => {
     error: updateVarianstError
   }] = useUpdateVariantsMutation(productId)
 
+  // TODO create state variables from storeData.currencies and regionsData.items
+  const [currencyColumns, setCurrencyColumns] = useState([])
+  const [regionColumns, setRegionColumns] = useState([])
+  useEffect(() => {
+    if (detectIsEmpty(storeData) || detectIsEmpty(regionsData)) {
+      return
+    }
+
+    const { currencies } = storeData
+    const regions = regionsData.items
+
+    const newCurrencyColumns = [...currencies].sort((a, b) => {
+      if (a.code < b.code) return -1
+      if (a.code > b.code) return 1
+      return 0
+    })
+
+    const newRegionColumns = [...regions].sort((a, b) => {
+      if (a.name < b.name) return -1
+      if (a.name > b.name) return 1
+      return 0
+    })
+
+    setCurrencyColumns(newCurrencyColumns)
+    setRegionColumns(newRegionColumns)
+  }, [storeData, regionsData])
+
   // build a map that contains objects with variant id keys
   // each object should have keys of either currencyCode or regionId and the data required for the submission.
-  // TODO problem to solve:
   const [prices, setPrices] = useState({})
   useEffect(() => {
     const m = {}
