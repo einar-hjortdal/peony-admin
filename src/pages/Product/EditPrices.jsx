@@ -77,16 +77,17 @@ const TableHead = component(({ currencyColumns, regionColumns }) => {
   )
 })
 
+// TODO debug CurrencyInput not respecting value
 const TableCell = component(({ value, handler }) => {
-  const handleValueChange = (v) => {
+  console.log(value)
+  const handleOnValueChange = (v) => {
     return handler(v)
   }
 
   return (
     <CurrencyInput
-      placeholder='-'
       value={value}
-      onValueChange={handleValueChange}
+      onValueChange={handleOnValueChange}
       allowNegativeValue={false}
     />
   )
@@ -107,9 +108,7 @@ const TableBody = ({ variants, prices, currencyColumns, regionColumns, handleInp
       let value
       if (detectIsObject(variantPrices)) {
         const currencyPrice = variantPrices[currency.code]
-        console.log('currencyPrice:', currencyPrice)
         if (detectIsObject(currencyPrice)) {
-          console.log(currencyPrice.amount)
           value = currencyPrice.amount
         }
       }

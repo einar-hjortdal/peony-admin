@@ -23,7 +23,7 @@
     "@dark-engine/platform-server": "^1.5.1",
     "@dark-engine/styled": "^1.5.1",
     "@dark-engine/web-router": "^1.5.1",
-    "@wareme/currency-input": "^3.2.1",
+    "@wareme/currency-input": "^3.2.2",
     "@wareme/event-emitter": "3.4.0",
     "@wareme/raf-nexus": "^3.4.0",
     "@wareme/smooth-scrolling": "^3.7.4",
