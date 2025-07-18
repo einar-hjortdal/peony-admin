@@ -80,23 +80,46 @@ const TableHead = component(({ currencyColumns, regionColumns }) => {
 })
 
 // https://github.com/atellmer/dark/issues/108
-const TableCell = component(({ value, handler }) => {
-  // TODO backend provides integer, must be turned to float with appropriate decimal number
-  // TODO add prefix
-  // TODO backend expects integer, not string, not float
-  // check out https://github.com/medusajs/medusa/blob/7b1debfe12fc096f7b4e20f13bdeb925c96085c1/packages/admin/dashboard/src/routes/locations/common/components/shipping-option-price-cell/shipping-option-price-cell.tsx#L4
-  const handleOnValueChange = (v, a, b) => {
-    console.log('v: ', v)
-    console.log('a: ', a)
-    console.log('b: ', b)
-    return handler(v)
+const TableCell = component(({ decimalDigits, value, handler }) => {
+  const getDecimals = () => {
+    if (detectIsUndefined(decimalDigits)) {
+      return 0
+    }
+    return decimalDigits
   }
 
+  const getValue = () => {
+    if (detectIsUndefined(value)) {
+      return
+    }
+
+    if (detectIsUndefined(decimalDigits) || decimalDigits === 0) {
+      return value
+    }
+
+    // TODO avoid floating point aithmetics: this also breaks the decimalScale prop
+    return String(Number(value) / (Math.pow(10, decimalDigits)))
+  }
+
+  const handleOnValueChange = (value) => {
+    if (detectIsUndefined(value)) {
+      return
+    }
+
+    if (detectIsUndefined(decimalDigits) || decimalDigits === 0) {
+      return handler(value)
+    }
+
+    // TODO avoid floating point aithmetics
+    return handler(Number(value) * Math.pow(10, decimalDigits))
+  }
+
+  // TODO add prefix
   return (
     <CurrencyInput
-      value={value}
-      decimalScale={2}
-      decimalsLimit={2}
+      value={getValue()}
+      decimalScale={getDecimals()}
+      decimalsLimit={getDecimals()}
       onValueChange={handleOnValueChange}
       allowNegativeValue={false}
     />
@@ -125,6 +148,7 @@ const TableBody = ({ variants, moneyAmounts, currencyColumns, regionColumns, han
       cc.push(
         <TableCell
           key={`${variant.id}-${currency.code}`}
+          decimalDigits={currency.decimalDigits}
           value={value}
           handler={(amount) => handleInput(variant.id, amount, currency.code)}
         />
@@ -388,6 +412,10 @@ const EditPrices = component(({ productId }) => {
 
   if (productData && storeData && regionsData) {
     const { variants } = productData
+    if (detectIsUndefined(variants)) {
+      return false
+    }
+
     return (
       <>
         <button type='button' onClick={handleOpenModal}>edit prices</button>
