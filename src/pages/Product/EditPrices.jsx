@@ -113,7 +113,6 @@ const TableCell = component(({ decimalDigits, value, handler }) => {
     return handler(Number(value) * Math.pow(10, decimalDigits))
   }
 
-  // TODO add prefix
   return (
     <CurrencyInput
       value={getValue()}
