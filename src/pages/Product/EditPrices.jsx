@@ -80,6 +80,7 @@ const TableHead = component(({ currencyColumns, regionColumns }) => {
 })
 
 // https://github.com/atellmer/dark/issues/108
+// TODO ideally avoid floating point airthmetic
 const TableCell = component(({ decimalDigits, value, handler }) => {
   const getDecimals = () => {
     if (detectIsUndefined(decimalDigits)) {
@@ -97,8 +98,7 @@ const TableCell = component(({ decimalDigits, value, handler }) => {
       return value
     }
 
-    // TODO avoid floating point aithmetics: this also breaks the decimalScale prop
-    return String(Number(value) / (Math.pow(10, decimalDigits)))
+    return value / (Math.pow(10, decimalDigits))
   }
 
   const handleOnValueChange = (value) => {
@@ -110,7 +110,6 @@ const TableCell = component(({ decimalDigits, value, handler }) => {
       return handler(value)
     }
 
-    // TODO avoid floating point aithmetics
     return handler(Number(value) * Math.pow(10, decimalDigits))
   }
 
@@ -160,7 +159,7 @@ const TableBody = ({ variants, moneyAmounts, currencyColumns, regionColumns, han
       const region = regionColumns[k]
       let value
       if (detectIsObject(variantPrices)) {
-        const regionPrice = variantPrices[region.id] // may be undef
+        const regionPrice = variantPrices[region.id]
         if (detectIsObject(regionPrice)) {
           value = regionPrice.amount
         }
