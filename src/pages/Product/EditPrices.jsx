@@ -79,7 +79,7 @@ const TableHead = component(({ currencyColumns, regionColumns }) => {
   )
 })
 
-// TODO debug CurrencyInput not respecting value
+// https://github.com/atellmer/dark/issues/108
 const TableCell = component(({ value, handler }) => {
   const handleOnValueChange = (v) => {
     return handler(v)
@@ -94,15 +94,15 @@ const TableCell = component(({ value, handler }) => {
   )
 })
 
-const TableBody = ({ variants, prices, currencyColumns, regionColumns, handleInput }) => {
-  if (detectIsUndefined(prices)) {
+const TableBody = ({ variants, moneyAmounts, currencyColumns, regionColumns, handleInput }) => {
+  if (detectIsUndefined(moneyAmounts)) {
     return false
   }
 
   const rows = []
   for (let i = 0, len = variants.length; i < len; i++) {
     const variant = variants[i]
-    const variantPrices = prices[variant.id]
+    const variantPrices = moneyAmounts[variant.id]
     const cc = []
     for (let k = 0, len = currencyColumns.length; k < len; k++) {
       const currency = currencyColumns[k]
@@ -214,7 +214,7 @@ const EditPrices = component(({ productId }) => {
 
   // build a map that contains objects with variant id keys
   // each object should have keys of either currencyCode or regionId and the data required for the submission.
-  const getInitialState = () => {
+  const getInitialData = () => {
     const m = {}
     const { variants } = productData
     if (detectIsUndefined(variants)) {
@@ -224,12 +224,12 @@ const EditPrices = component(({ productId }) => {
     for (let i = 0, len = variants.length; i < len; i++) {
       const variant = variants[i]
       m[variant.id] = {}
-      const { moneyAmounts } = variant
-      if (detectIsUndefined(moneyAmounts)) {
+      const ma = variant.moneyAmounts
+      if (detectIsUndefined(ma)) {
         continue
       }
-      for (let k = 0, len = moneyAmounts.length; k < len; k++) {
-        const moneyAmount = moneyAmounts[k]
+      for (let k = 0, len = ma.length; k < len; k++) {
+        const moneyAmount = ma[k]
         const { id, amount, currencyCode, regionId, minQuantity, maxQuantity } = moneyAmount
         if (detectIsUndefined(regionId)) {
           m[variant.id][moneyAmount.currencyCode] = {
@@ -253,14 +253,14 @@ const EditPrices = component(({ productId }) => {
     return m
   }
 
-  const [prices, setPrices] = useState({})
+  const [moneyAmounts, setMoneyAmounts] = useState({})
   useEffect(() => {
-    setPrices(getInitialState())
+    setMoneyAmounts(getInitialData())
   }, [productData])
 
   const handleInput = (variantId, amount, currencyCode, regionId) => {
     if (detectIsEmpty(regionId)) {
-      return setPrices(prev => ({
+      return setMoneyAmounts(prev => ({
         ...prev,
         [variantId]: {
           ...prev[variantId],
@@ -271,7 +271,7 @@ const EditPrices = component(({ productId }) => {
         }
       }))
     } else {
-      return setPrices(prev => ({
+      return setMoneyAmounts(prev => ({
         ...prev,
         [variantId]: {
           ...prev[variantId],
@@ -296,15 +296,67 @@ const EditPrices = component(({ productId }) => {
     if (detectIsNull(modalRef)) {
       return
     }
+    setMoneyAmounts(getInitialData())
     modalRef.current.close()
   }
 
-  const handleSave = () => {
-    const variants = {}
-    const variantIds = keys(prices)
+  const handleSave = async () => {
+    // detect changes
+    const variantsChanged = []
+    const initialData = getInitialData()
+    const variantIds = keys(moneyAmounts)
     for (let i = 0, len = variantIds.length; i < len; i++) {
       const variantId = variantIds[i]
-      const variantPrices = prices[variantId]
+      const initialMoneyAmounts = initialData[variantId]
+      const currentMoneyAmounts = moneyAmounts[variantId]
+
+      const initialMoneyAmountKeys = keys(initialMoneyAmounts)
+      for (let k = 0, len = initialMoneyAmountKeys.length; k < len; k++) {
+        const currentKey = initialMoneyAmountKeys[k]
+        const currentMoneyAmount = currentMoneyAmounts[currentKey]
+        // variant changed if moneyAmount was removed
+        if (detectIsUndefined(currentMoneyAmount)) {
+          variantsChanged.push(variantId)
+          break
+        }
+      }
+      if (variantsChanged[variantsChanged.length - 1] === variantId) {
+        continue
+      }
+
+      const currentMoneyAmountsKeys = keys(currentMoneyAmounts)
+      for (let k = 0, len = currentMoneyAmountsKeys.length; k < len; k++) {
+        const currentKey = currentMoneyAmountsKeys[k]
+        const initialMoneyAmount = initialMoneyAmounts[currentKey]
+        // variant changed if moneyAmount is new
+        if (detectIsUndefined(initialMoneyAmount)) {
+          variantsChanged.push(variantId)
+          break
+        }
+
+        const currentMoneyAmount = currentMoneyAmounts[currentKey]
+        const initialAmount = initialMoneyAmount.amount
+        const currentAmount = currentMoneyAmount.amount
+        if (initialAmount !== currentAmount) {
+          variantsChanged.push(variantId)
+          break
+        }
+      }
+      if (variantsChanged[variantsChanged.length - 1] === variantId) {
+        continue
+      }
+    }
+
+    // early exit
+    if (variantsChanged.length === 0) {
+      return
+    }
+
+    // build updateVariantsData parameter using changed variants
+    const variantsMoneyAmounts = {}
+    for (let i = 0, len = variantsChanged.length; i < len; i++) {
+      const variantId = variantsChanged[i]
+      const variantPrices = moneyAmounts[variantId]
       const ids = keys(variantPrices)
       const variantMoneyAmounts = []
       for (let k = 0, len = ids.length; k < len; k++) {
@@ -312,17 +364,16 @@ const EditPrices = component(({ productId }) => {
         const moneyAmount = variantPrices[id]
         variantMoneyAmounts.push(moneyAmount)
       }
-      variants[variantId] = { moneyAmounts: variantMoneyAmounts }
+      variantsMoneyAmounts[variantId] = { moneyAmounts: variantMoneyAmounts }
     }
-    // TODO compare with productData.variants and only submit variants that changed
-    console.log(variants)
-    // updateVariantsData(variants)
+
+    await updateVariantsData(variantsMoneyAmounts)
     return handleCloseModal()
   }
 
   const handleDiscard = (event) => {
     // TODO ask for confirmation before proceeding
-    setPrices(getInitialState())
+    setMoneyAmounts(getInitialData())
   }
 
   if (productData && storeData && regionsData) {
@@ -364,7 +415,7 @@ const EditPrices = component(({ productId }) => {
                 <TableHead currencyColumns={currencyColumns} regionColumns={regionColumns} />
                 <TableBody
                   variants={variants}
-                  prices={prices}
+                  moneyAmounts={moneyAmounts}
                   currencyColumns={currencyColumns}
                   regionColumns={regionColumns}
                   handleInput={handleInput}
