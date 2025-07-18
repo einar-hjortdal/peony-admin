@@ -81,13 +81,22 @@ const TableHead = component(({ currencyColumns, regionColumns }) => {
 
 // https://github.com/atellmer/dark/issues/108
 const TableCell = component(({ value, handler }) => {
-  const handleOnValueChange = (v) => {
+  // TODO backend provides integer, must be turned to float with appropriate decimal number
+  // TODO add prefix
+  // TODO backend expects integer, not string, not float
+  // check out https://github.com/medusajs/medusa/blob/7b1debfe12fc096f7b4e20f13bdeb925c96085c1/packages/admin/dashboard/src/routes/locations/common/components/shipping-option-price-cell/shipping-option-price-cell.tsx#L4
+  const handleOnValueChange = (v, a, b) => {
+    console.log('v: ', v)
+    console.log('a: ', a)
+    console.log('b: ', b)
     return handler(v)
   }
 
   return (
     <CurrencyInput
       value={value}
+      decimalScale={2}
+      decimalsLimit={2}
       onValueChange={handleOnValueChange}
       allowNegativeValue={false}
     />
@@ -352,7 +361,7 @@ const EditPrices = component(({ productId }) => {
       return
     }
 
-    // build updateVariantsData parameter using changed variants
+    // build updateVariants parameter using changed variants
     const variantsMoneyAmounts = {}
     for (let i = 0, len = variantsChanged.length; i < len; i++) {
       const variantId = variantsChanged[i]
@@ -367,7 +376,8 @@ const EditPrices = component(({ productId }) => {
       variantsMoneyAmounts[variantId] = { moneyAmounts: variantMoneyAmounts }
     }
 
-    await updateVariantsData(variantsMoneyAmounts)
+    console.log(variantsMoneyAmounts)
+    // await updateVariants(variantsMoneyAmounts)
     return handleCloseModal()
   }
 
