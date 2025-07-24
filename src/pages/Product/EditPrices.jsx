@@ -398,8 +398,7 @@ const EditPrices = component(({ productId }) => {
       variantsMoneyAmounts[variantId] = { moneyAmounts: variantMoneyAmounts }
     }
 
-    console.log(variantsMoneyAmounts)
-    // await updateVariants(variantsMoneyAmounts)
+    await updateVariants(variantsMoneyAmounts)
     return handleCloseModal()
   }
 

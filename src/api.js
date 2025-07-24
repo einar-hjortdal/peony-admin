@@ -36,7 +36,8 @@ export const dataKeys = {
   regionsCreate: 'regionsCreate',
   regionGetById: 'regionGetById',
   regionUpdate: 'regionUpdate',
-  localesGet: 'localesGet'
+  localesGet: 'localesGet',
+  uploadsUpload: 'uploadsUpload'
 }
 
 // params must be a string that will be concatenated to path using the `?` separator
@@ -185,6 +186,15 @@ export const api = {
   localesGet: async (params) => {
     const response = await fetch(getRequestUrl('/admin/locales', params), {
       credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  uploadsUpload: async (data, params) => {
+    const response = await fetch(getRequestUrl('/admin/uploads', params), {
+      method: 'POST',
+      credentials: 'include',
+      body: data
     })
     return checkResponse(response)
   }

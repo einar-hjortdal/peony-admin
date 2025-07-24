@@ -229,3 +229,8 @@ export const useUpdateCurrencyMutation = () => {
     }
   })
 }
+
+export const useUploadsUploadMutation = () => {
+  const api = useApi()
+  return useMutation(dataKeys.uploadsUpload, (data, params) => api.uploadsUpload(data, params))
+}

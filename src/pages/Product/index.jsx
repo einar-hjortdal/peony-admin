@@ -6,6 +6,7 @@ import { useStore, useProductById } from '../../data'
 import Card from '../../components/Card'
 import { formatLine } from './utils'
 import Variants from './Variants'
+import Images from './Images'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -26,11 +27,10 @@ const TranslationGroup = component(({ locale, title, subtitle, description }) =>
   )
 })
 
-const Translations = component(({ productId }) => {
-  const { t } = useTranslation('product.translation')
-  const { data, translationsObject } = useProductById(productId)
+const TranslationDefault = component(({ productId }) => {
+  const { translationsObject } = useProductById(productId)
   const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
-  const { defaultLocaleId, locales } = storeData
+  const { defaultLocaleId } = storeData
 
   const defaultTranslation = translationsObject[defaultLocaleId]
   const res = []
@@ -42,7 +42,15 @@ const Translations = component(({ productId }) => {
       description={defaultTranslation.description}
     />
   )
+  return res
+})
 
+const Translations = component(({ productId }) => {
+  const { translationsObject } = useProductById(productId)
+  const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
+  const { defaultLocaleId, locales } = storeData
+
+  const res = []
   for (let i = 0, len = locales.length; i < len; i++) {
     const { id } = locales[i]
     if (defaultLocaleId === id) {
@@ -67,6 +75,19 @@ const Translations = component(({ productId }) => {
   return res
 })
 
+const Thumbnail = component(({ productId }) => {
+  const { data } = useProductById(productId)
+
+  if (data) {
+    const thumbnail = data.thumbnail
+    return (
+      <div>
+        <img src={thumbnail} />
+      </div>
+    )
+  }
+})
+
 const Product = component(() => {
   const { t, translator } = useTranslation('product')
   const params = useParams()
@@ -83,7 +104,7 @@ const Product = component(() => {
         <Card>
           <div>
             {t('details')}
-            <Translations productId={productId} />
+            <TranslationDefault productId={productId} />
             {/* <div>
               {t('type')}
             </div>
@@ -95,16 +116,24 @@ const Product = component(() => {
             </div> */}
             <div>
               {t('discountable')}: {String(data.discountable)}
+              {/* TODO */}
             </div>
             <div>
               {t('salesChannels')}
+              {/* TODO */}
             </div>
           </div>
           <div>
             {t('translations')}
-            <div>
-              TODO component
-            </div>
+            <Translations productId={productId} />
+          </div>
+          <div>
+            {t('thumbnail')}
+            <Thumbnail productId={productId} />
+          </div>
+          <div>
+            {t('images')}
+            <Images productId={productId} />
           </div>
         </Card>
         <Variants productId={productId} />
