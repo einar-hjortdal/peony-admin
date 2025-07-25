@@ -230,7 +230,38 @@ export const useUpdateCurrencyMutation = () => {
   })
 }
 
-export const useUploadsUploadMutation = () => {
+export const useUploadProductImageMutation = (productId) => {
   const api = useApi()
-  return useMutation(dataKeys.uploadsUpload, (data, params) => api.uploadsUpload(data, params))
+  const [updateProduct, {
+    isFetching: updateProductIsFetching,
+    error: updateProductError
+  }] = useUpdateProductMutation(productId)
+
+  const [uploadImages, {
+    isFetching: uploadImagesIsFetching,
+    error: uploadImagesError
+  }] = useMutation(dataKeys.uploadsUpload, (data, params) => api.uploadsUpload(data, params), {
+    onSuccess: ({ cache, data }) => {
+      const images = []
+      for (let i = 0, len = data.uploads.length; i < len; i++) {
+        images.push(data.uploads(i).url)
+      }
+      updateProduct({ images })
+      cache.invalidate(dataKeys.productGetById, { id: productId })
+    },
+    onError: () => {
+      // delete files that may have been uploaded if needed
+    }
+  })
+
+  return {
+    uploadProductImages: uploadImages,
+    isFetching: updateProductIsFetching || uploadImagesIsFetching,
+    error: updateProductError || uploadImagesError
+  }
+}
+
+export const useDeleteProductImageMutation = () => {
+  const api = useApi()
+  return useMutation(dataKeys.uploadsDelete, (data, params) => api.uploadsDelete(data, params))
 }

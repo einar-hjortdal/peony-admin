@@ -37,7 +37,8 @@ export const dataKeys = {
   regionGetById: 'regionGetById',
   regionUpdate: 'regionUpdate',
   localesGet: 'localesGet',
-  uploadsUpload: 'uploadsUpload'
+  uploadsUpload: 'uploadsUpload',
+  uploadsDelete: 'uploadsDelete'
 }
 
 // params must be a string that will be concatenated to path using the `?` separator
@@ -195,6 +196,14 @@ export const api = {
       method: 'POST',
       credentials: 'include',
       body: data
+    })
+    return checkResponse(response)
+  },
+
+  uploadsDelete: async (id) => {
+    const response = await fetch(getRequestUrl(`/admin/uploads/${id}`), {
+      method: 'DELETE',
+      credentials: 'include'
     })
     return checkResponse(response)
   }

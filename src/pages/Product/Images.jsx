@@ -6,7 +6,7 @@ import {
   detectIsNull
 } from '@dark-engine/core'
 
-import { useProductById, useUploadsUploadMutation } from '../../data'
+import { useProductById, useUploadProductImageMutation } from '../../data'
 
 const ExistingImages = component(({ images }) => {
   if (detectIsUndefined(images)) {
@@ -24,8 +24,13 @@ const ExistingImages = component(({ images }) => {
 const Images = component(({ productId }) => {
   const { data } = useProductById(productId)
   const modalRef = useRef(null)
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [uploadImage, { data: uploadImageData, error: uploadImageError }] = useUploadsUploadMutation()
+  const inputRef = useRef(null)
+  const [selectedFiles, setSelectedFiles] = useState([])
+  const {
+    uploadProductImages,
+    isFetching: uploadProductImagesIsFetching,
+    error: uploadProductImagesError
+  } = useUploadProductImageMutation(productId)
 
   // Prevent file chooser from opening twice
   const handleLabelClick = (e) => {
@@ -33,7 +38,12 @@ const Images = component(({ productId }) => {
   }
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files)
+    const filesArray = []
+    const fileList = e.target.files
+    for (let i = 0, len = fileList.length; i < len; i++) {
+      filesArray.push(fileList[i])
+    }
+    setSelectedFiles(filesArray)
   }
 
   const handleOpenModal = () => {
@@ -44,26 +54,27 @@ const Images = component(({ productId }) => {
   }
 
   const handleCloseModal = () => {
-    setSelectedFile(null)
+    // prevent input from showing previously selected file data
+    // TODO hide native input and show selected previews
+    if (inputRef.current) {
+      inputRef.current.value = ''
+    }
+    setSelectedFiles([])
     modalRef.current.close()
+  }
+
+  const isSubmitDisabled = () => {
+    return uploadProductImagesIsFetching || (selectedFiles.length === 0)
   }
 
   const handleSubmit = async () => {
     const formData = new FormData()
-    const file = selectedFile[0]
-    formData.append('files', file)
-
-    await uploadImage(formData, file.name)
-    if (uploadImageData) {
-      // once the upload is complete, create relation with product
-
+    for (let i = 0, len = selectedFiles.length; i < len; i++) {
+      formData.append('files', selectedFiles[i])
     }
 
-    if (uploadImageError) {
-      // if upload fails, delete successfully uploaded image from server
-
-    }
-
+    await uploadProductImages(formData)
+    // maybe keep modal open on error?
     handleCloseModal()
   }
 
@@ -75,8 +86,19 @@ const Images = component(({ productId }) => {
         <dialog ref={modalRef}>
           <label onClick={handleLabelClick}>
             select image
-            <input type='file' onChange={handleFileChange} />
+            <input
+              ref={inputRef}
+              type='file'
+              multiple
+              onChange={handleFileChange}
+            />
           </label>
+          <button
+            type='button'
+            onClick={handleSubmit}
+            disabled={isSubmitDisabled()}
+          >upload
+          </button>
         </dialog>
         <ExistingImages images={images} />
       </div>
