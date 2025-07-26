@@ -261,7 +261,37 @@ export const useUploadProductImageMutation = (productId) => {
   }
 }
 
-export const useDeleteProductImageMutation = () => {
+export const useDeleteProductImageMutation = (productId) => {
   const api = useApi()
-  return useMutation(dataKeys.uploadsDelete, (data, params) => api.uploadsDelete(data, params))
+  const { data: productData } = useProductById(productId)
+
+  const [updateProduct, {
+    isFetching: updateProductIsFetching,
+    error: updateProductError
+  }] = useUpdateProductMutation(productId)
+
+  const [deleteImage, {
+    isFetching: deleteImageIsFetching,
+    error: deleteImageError
+  }] = useMutation(dataKeys.uploadsDelete, (id) => api.uploadsDelete(id), {
+    onSuccess: ({ cache, data }) => {
+      const { id } = data
+      const images = []
+      for (let i = 0, len = productData.images.length; i < len; i++) {
+        const { id: currentImageId, url: currentImageUrl } = productData.images[i]
+        if (currentImageId === id) {
+          continue
+        }
+        images.push(currentImageUrl)
+      }
+      updateProduct({ images })
+      cache.invalidate(dataKeys.productGetById, { id: productId })
+    }
+  })
+
+  return {
+    deleteProductImage: deleteImage,
+    isFetching: updateProductIsFetching || deleteImageIsFetching,
+    error: updateProductError || deleteImageError
+  }
 }
