@@ -2,7 +2,7 @@ import { component, detectIsEmpty, useEffect, useState } from '@dark-engine/core
 import { useTranslation } from '@wareme/translations'
 
 import SetTitle from '../../components/SetTitle'
-import { useStore, useStoreUpdateMutation } from '../../data'
+import { useSalesChannels, useStore, useStoreUpdateMutation } from '../../data'
 import Languages from './Languages'
 import Currencies from './Currencies'
 
@@ -11,8 +11,15 @@ const Store = component(() => {
   const {
     data: storeData,
     isFetching: storeIsFetching,
-    error: storeError
+    error: storeError,
+    localesObject
   } = useStore()
+
+  const {
+    data: salesChannelsData,
+    isFetching: salesChannelsIsFetching,
+    error: salesChannelsError
+  } = useSalesChannels()
 
   const [updateStore, {
     data: updateStoreData,
@@ -43,7 +50,26 @@ const Store = component(() => {
     updateStore(storeData.store.id, { name: storeName })
   }
 
-  if (storeData) {
+  if (storeData && salesChannelsData) {
+    const {
+      defaultLocaleId,
+      defaultCurrencyCode,
+      defaultStockLocationId,
+      defaultSalesChannelId
+    } = storeData.store
+
+    const defaultLocaleCode = localesObject[defaultLocaleId]
+
+    const { salesChannels } = salesChannelsData
+    const salesChannelsMap = {}
+    for (let i = 0, len = salesChannels.length; i < len; i++) {
+      const salesChannel = salesChannels[i]
+      const { id } = salesChannel
+      salesChannelsMap[id] = salesChannel
+    }
+    const defaultSalesChannel = salesChannelsMap[defaultSalesChannelId]
+    const defaultSalesChannelName = defaultSalesChannel.name
+
     return (
       <>
         <SetTitle title={t('title')} />
@@ -55,6 +81,22 @@ const Store = component(() => {
               <input type='text' name='name' value={storeName} onInput={handleInput} />
             </label>
             <button type='button' onClick={handleSave} disabled={isDisabled()}>{t('save')}</button>
+          </div>
+          <div>
+            <span>{t('defaultCurrency')}</span>
+            <span>{defaultCurrencyCode}</span>
+          </div>
+          <div>
+            <span>{t('defaultLocale')}</span>
+            <span>{defaultLocaleCode}</span>
+          </div>
+          <div>
+            <span>{t('defaultStockLocation')}</span>
+            <span>{defaultStockLocationId}</span>
+          </div>
+          <div>
+            <span>{t('defaultSalesChannel')}</span>
+            <span>{defaultSalesChannelName}</span>
           </div>
           <Languages />
           <Currencies />

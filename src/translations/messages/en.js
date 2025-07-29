@@ -79,5 +79,9 @@ export default freeze({
   'settings.taxes.title': 'taxes',
   'store.title': 'store',
   'store.name': 'name',
-  'store.save': 'save'
+  'store.save': 'save',
+  'store.defaultCurrency': 'default currency',
+  'store.defaultLocale': 'default language',
+  'store.defaultStockLocation': 'default stock location',
+  'store.defaultSalesChannel': 'default sales channel'
 })

@@ -36,6 +36,7 @@ export const dataKeys = {
   regionsCreate: 'regionsCreate',
   regionGetById: 'regionGetById',
   regionUpdate: 'regionUpdate',
+  salesChannelsGet: 'salesChannelsGet',
   localesGet: 'localesGet',
   uploadsUpload: 'uploadsUpload',
   uploadsDelete: 'uploadsDelete'
@@ -179,6 +180,13 @@ export const api = {
 
   regionsGet: async (params) => {
     const response = await fetch(getRequestUrl('/admin/regions', params), {
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  salesChannelsGet: async (params) => {
+    const response = await fetch(getRequestUrl('/admin/sales-channels', params), {
       credentials: 'include'
     })
     return checkResponse(response)

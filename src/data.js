@@ -212,6 +212,15 @@ export const useRegions = (params) => {
   })
 }
 
+export const useSalesChannels = (params) => {
+  const api = useApi()
+  const p = getParams(params)
+  return useQuery(dataKeys.salesChannelsGet, () => api.salesChannelsGet(p), {
+    variables: { p },
+    extractId: (x) => x.p
+  })
+}
+
 export const useLocales = (params) => {
   const api = useApi()
   const p = getParams(params)

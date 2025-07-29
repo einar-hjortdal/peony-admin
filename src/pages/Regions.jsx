@@ -9,7 +9,9 @@ const Regions = component(() => {
   return (
     <>
       <SetTitle title={t('title')} />
-      regions
+      <div>
+        TODO list regions, each row opens modal to update region: currency, tax...
+      </div>
     </>
   )
 })
