@@ -4,7 +4,7 @@
 
 - [x] Log in
 - [x] Log out
-- [ ] Manage store
+- [x] Manage store
 - [ ] Add/edit regions
 - [x] Add/edit currencies
 - [x] Add/edit languages

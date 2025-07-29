@@ -30,7 +30,7 @@ const TranslationGroup = component(({ locale, title, subtitle, description }) =>
 const TranslationDefault = component(({ productId }) => {
   const { translationsObject } = useProductById(productId)
   const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
-  const { defaultLocaleId } = storeData
+  const { defaultLocaleId } = storeData.store
 
   const defaultTranslation = translationsObject[defaultLocaleId]
   const res = []
@@ -48,7 +48,7 @@ const TranslationDefault = component(({ productId }) => {
 const Translations = component(({ productId }) => {
   const { translationsObject } = useProductById(productId)
   const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
-  const { defaultLocaleId, locales } = storeData
+  const { defaultLocaleId, locales } = storeData.store
 
   const res = []
   for (let i = 0, len = locales.length; i < len; i++) {

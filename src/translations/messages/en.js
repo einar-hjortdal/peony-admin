@@ -78,5 +78,6 @@ export default freeze({
   'settings.taxes.description': 'manage taxes across regions and products',
   'settings.taxes.title': 'taxes',
   'store.title': 'store',
-  'store.name': 'name'
+  'store.name': 'name',
+  'store.save': 'save'
 })

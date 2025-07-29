@@ -54,7 +54,7 @@ const Store = component(() => {
               {t('name')}
               <input type='text' name='name' value={storeName} onInput={handleInput} />
             </label>
-            <button type='button' onClick={handleSave} disabled={isDisabled()}>save</button>
+            <button type='button' onClick={handleSave} disabled={isDisabled()}>{t('save')}</button>
           </div>
           <Languages />
           <Currencies />
