@@ -48,11 +48,6 @@ const Settings = component(() => {
         title={t('regions.title')}
         description={t('regions.description')}
       />
-      <SettingCard
-        to='/sales-channels'
-        title={t('salesChannels.title')}
-        description={t('salesChannels.description')}
-      />
       {/* <SettingCard
         to='/taxes'
         title={t('taxes.title')}

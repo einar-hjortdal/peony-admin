@@ -5,6 +5,7 @@ import SetTitle from '../../components/SetTitle'
 import { useSalesChannels, useStore, useStoreUpdateMutation } from '../../data'
 import Languages from './Languages'
 import Currencies from './Currencies'
+import SalesChannels from './SalesChannels'
 
 const Store = component(() => {
   const { t } = useTranslation('store')
@@ -94,6 +95,7 @@ const Store = component(() => {
           </div>
           <Languages />
           <Currencies />
+          <SalesChannels />
         </div>
       </>
     )

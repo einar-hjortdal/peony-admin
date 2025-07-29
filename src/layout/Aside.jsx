@@ -2,7 +2,6 @@ import { component } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 import { NavLink } from '@dark-engine/web-router'
 import { useUserLogoutMutation } from '../data'
-import Navigate from '../components/Navigate'
 
 const Nav = styled.nav`
   & ul {
@@ -36,12 +35,6 @@ const Aside = component(() => {
           onClick={handleLogout}
         >log out
         </button>
-      </div>
-      <div>
-        store title
-      </div>
-      <div>
-        store name
       </div>
 
       <Nav>
