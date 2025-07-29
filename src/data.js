@@ -215,10 +215,26 @@ export const useRegions = (params) => {
 export const useSalesChannels = (params) => {
   const api = useApi()
   const p = getParams(params)
-  return useQuery(dataKeys.salesChannelsGet, () => api.salesChannelsGet(p), {
+  const { refetch, data, isFetching, error } = useQuery(dataKeys.salesChannelsGet, () => api.salesChannelsGet(p), {
     variables: { p },
     extractId: (x) => x.p
   })
+
+  const salesChannelsObject = useMemo(() => {
+    if (detectIsEmpty(data)) {
+      return
+    }
+    const { salesChannels } = data
+    const res = {}
+    for (let i = 0, len = salesChannels.length; i < len; i++) {
+      const salesChannel = salesChannels[i]
+      const { id } = salesChannel
+      res[id] = salesChannel
+    }
+    return res
+  })
+
+  return { refetch, data, isFetching, error, salesChannelsObject }
 }
 
 export const useLocales = (params) => {

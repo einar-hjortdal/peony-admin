@@ -18,7 +18,8 @@ const Store = component(() => {
   const {
     data: salesChannelsData,
     isFetching: salesChannelsIsFetching,
-    error: salesChannelsError
+    error: salesChannelsError,
+    salesChannelsObject
   } = useSalesChannels()
 
   const [updateStore, {
@@ -60,14 +61,7 @@ const Store = component(() => {
 
     const defaultLocaleCode = localesObject[defaultLocaleId]
 
-    const { salesChannels } = salesChannelsData
-    const salesChannelsMap = {}
-    for (let i = 0, len = salesChannels.length; i < len; i++) {
-      const salesChannel = salesChannels[i]
-      const { id } = salesChannel
-      salesChannelsMap[id] = salesChannel
-    }
-    const defaultSalesChannel = salesChannelsMap[defaultSalesChannelId]
+    const defaultSalesChannel = salesChannelsObject[defaultSalesChannelId]
     const defaultSalesChannelName = defaultSalesChannel.name
 
     return (
