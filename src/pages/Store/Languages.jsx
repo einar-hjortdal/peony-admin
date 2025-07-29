@@ -2,14 +2,14 @@ import { component, detectIsNull, useEffect, useRef, useState } from '@dark-engi
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import Card from '../components/Card'
-import Button from '../components/Button'
+import Card from '../../components/Card'
+import Button from '../../components/Button'
 import {
   useLocales,
   useStore,
   useStoreUpdateMutation
-} from '../data'
-import { currentPage, totalPages } from '../utils_data'
+} from '../../data'
+import { currentPage, totalPages } from '../../utils_data'
 
 const LocalesTable = styled.table`
   width: 100%;
@@ -34,9 +34,10 @@ const StoreLocales = component(() => {
 
   // TODO when storeIsFetching show skeleton
   if (storeData) {
+    const { locales } = storeData.store
     const rows = []
-    for (let i = 0, len = storeData.locales.length; i < len; i++) {
-      const { code } = storeData.locales[i]
+    for (let i = 0, len = locales.length; i < len; i++) {
+      const { code } = locales[i]
       const translatedName = translator.formatName(code, { type: 'language' })
       rows.push(
         <tr>
@@ -87,11 +88,11 @@ const DefaultLocale = component(() => {
       return
     }
     const { value } = e.target
-    updateStore(storeData.id, { defaultLocaleId: value })
+    updateStore(storeData.store.id, { defaultLocaleId: value })
   }
 
   if (storeData) {
-    const { locales, defaultLocaleId } = storeData
+    const { locales, defaultLocaleId } = storeData.store
     const options = []
     for (let i = 0, len = locales.length; i < len; i++) {
       const { id, code } = locales[i]
@@ -165,7 +166,7 @@ const Modal = component(({ modalRef }) => {
       return
     }
 
-    const { locales } = storeData
+    const { locales } = storeData.store
     const newState = []
     for (let i = 0, len = locales.length; i < len; i++) {
       const locale = locales[i]
@@ -218,11 +219,11 @@ const Modal = component(({ modalRef }) => {
     if (updateStoreIsFetching) {
       return
     }
-    updateStore(storeData.id, { locales: params })
+    updateStore(storeData.store.id, { locale_ids: params })
   }
 
   if (storeData && localesData) {
-    const { items: locales } = localesData
+    const { locales } = localesData
     const localesList = []
     for (let i = 0, len = locales.length; i < len; i++) {
       const { id, code } = locales[i]
@@ -232,7 +233,7 @@ const Modal = component(({ modalRef }) => {
         <Locale
           key={id}
           id={id}
-          defaultLocaleId={storeData.defaultLocaleId}
+          defaultLocaleId={storeData.store.defaultLocaleId}
           translatedName={translatedName}
           value={value}
           handleChange={handleChange}
@@ -299,13 +300,6 @@ const CardTitle = styled.h2`
 
 const Languages = component(() => {
   const { t } = useTranslation('locales')
-
-  const {
-    data: storeData,
-    isFetching: storeIsFetching,
-    error: storeError
-  } = useStore()
-
   const modalRef = useRef(null)
   const handleOpenModal = () => {
     if (detectIsNull(modalRef)) {
@@ -314,28 +308,26 @@ const Languages = component(() => {
     modalRef.current.showModal()
   }
 
-  if (storeData) {
-    return (
-      <>
-        <ColumnLarge>
-          <Card>
-            <CardTitle>{t('title')}</CardTitle>
-            <div>
-              <span>{t('description')}</span>
-            </div>
-            <Button $variant='primary' onClick={handleOpenModal}>{t('edit')}</Button>
-            <StoreLocales />
-          </Card>
-        </ColumnLarge>
-        <ColumnSmall>
-          <Card>
-            <DefaultLocale />
-          </Card>
-        </ColumnSmall>
-        <Modal modalRef={modalRef} />
-      </>
-    )
-  }
+  return (
+    <>
+      <ColumnLarge>
+        <Card>
+          <CardTitle>{t('title')}</CardTitle>
+          <div>
+            <span>{t('description')}</span>
+          </div>
+          <Button $variant='primary' onClick={handleOpenModal}>{t('edit')}</Button>
+          <StoreLocales />
+        </Card>
+      </ColumnLarge>
+      <ColumnSmall>
+        <Card>
+          <DefaultLocale />
+        </Card>
+      </ColumnSmall>
+      <Modal modalRef={modalRef} />
+    </>
+  )
 })
 
 export default Languages

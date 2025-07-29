@@ -71,7 +71,7 @@ export const useStore = () => {
       return res
     }
 
-    const { locales } = data
+    const { locales } = data.store
     for (let i = 0, len = locales.length; i < len; i++) {
       const { id, code } = locales[i]
       res[id] = code

@@ -32,16 +32,12 @@ export const routes = [
         component: lazy(() => import('./pages/Settings'))
       },
       {
-        path: 'currencies',
-        component: lazy(() => import('./pages/Currencies'))
-      },
-      {
-        path: 'languages',
-        component: lazy(() => import('./pages/Languages'))
-      },
-      {
         path: 'regions',
         component: lazy(() => import('./pages/Regions'))
+      },
+      {
+        path: 'store',
+        component: lazy(() => import('./pages/Store'))
       },
       {
         path: 'not-found',

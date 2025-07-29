@@ -200,19 +200,19 @@ const NewProduct = component(({ modalRef }) => {
             <fieldset disabled={isFetching}>
               <Input
                 name='title'
-                data-locale-id={storeData.defaultLocaleId}
+                data-locale-id={storeData.store.defaultLocaleId}
                 onInput={handleTranslationInput}
               >{t('general.title')}
               </Input>
               <Input
                 name='subtitle'
-                data-locale-id={storeData.defaultLocaleId}
+                data-locale-id={storeData.store.defaultLocaleId}
                 onInput={handleTranslationInput}
               >{t('general.subtitle')}
               </Input>
               <Input
                 name='description'
-                data-locale-id={storeData.defaultLocaleId}
+                data-locale-id={storeData.store.defaultLocaleId}
                 onInput={handleTranslationInput}
               >{t('general.description')}
               </Input>
@@ -230,11 +230,11 @@ const NewProduct = component(({ modalRef }) => {
             </fieldset>
           </AccordionItem>
 
-          <If condition={storeData.locales.length > 1}>
+          <If condition={storeData.store.locales.length > 1}>
             <AccordionItem title={t('translations')}>
               <Translations
-                locales={storeData.locales}
-                defaultLocaleId={storeData.defaultLocaleId}
+                locales={storeData.store.locales}
+                defaultLocaleId={storeData.store.defaultLocaleId}
                 onInput={handleTranslationInput}
                 disabled={isFetching}
               />
@@ -394,7 +394,7 @@ const Products = component(() => {
   const rows = []
   for (let i = 0, len = products.length; i < len; i++) {
     const product = products[i]
-    const defaultTranslation = getDefaultTranslation(product.translations, storeData.defaultLocaleId)
+    const defaultTranslation = getDefaultTranslation(product.translations, storeData.store.defaultLocaleId)
     let title = product.id
     if (!detectIsEmpty(defaultTranslation)) {
       title = valueOrDefault(defaultTranslation.title, product.id)

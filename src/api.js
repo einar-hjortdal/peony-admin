@@ -191,11 +191,11 @@ export const api = {
     return checkResponse(response)
   },
 
-  uploadsUpload: async (data, params) => {
+  uploadsUpload: async (formData, params) => {
     const response = await fetch(getRequestUrl('/admin/uploads', params), {
       method: 'POST',
       credentials: 'include',
-      body: data
+      body: formData
     })
     return checkResponse(response)
   },

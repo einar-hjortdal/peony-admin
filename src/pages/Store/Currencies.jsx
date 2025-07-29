@@ -2,16 +2,16 @@ import { component, detectIsNull, useEffect, useRef, useState } from '@dark-engi
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import Card from '../components/Card'
-import Switch from '../components/Switch'
-import Button from '../components/Button'
+import Card from '../../components/Card'
+import Switch from '../../components/Switch'
+import Button from '../../components/Button'
 import {
   useCurrencies,
   useStore,
   useStoreUpdateMutation,
   useUpdateCurrencyMutation
-} from '../data'
-import { currentPage, totalPages } from '../utils_data'
+} from '../../data'
+import { currentPage, totalPages } from '../../utils_data'
 
 const CurrenciesTable = styled.table`
   width: 100%;
@@ -54,9 +54,10 @@ const StoreCurrencies = component(() => {
 
   // TODO when storeIsFetching || updateCurrencyIsFetching show skeleton
   if (storeData) {
+    const { currencies } = storeData.store
     const rows = []
-    for (let i = 0, len = storeData.currencies.length; i < len; i++) {
-      const { code, includesTax } = storeData.currencies[i]
+    for (let i = 0, len = currencies.length; i < len; i++) {
+      const { code, includesTax } = currencies[i]
       // trim whitespaces because database reads char weird
       const translatedName = translator.formatName(code.trim(), { type: 'currency' })
       rows.push(
@@ -117,11 +118,11 @@ const DefaultCurrency = component(() => {
       return
     }
     const { value } = e.target
-    updateStore(storeData.id, { defaultCurrencyCode: value })
+    updateStore(storeData.store.id, { defaultCurrencyCode: value })
   }
 
   if (storeData) {
-    const { currencies, defaultCurrencyCode } = storeData
+    const { currencies, defaultCurrencyCode } = storeData.store
     const options = []
     for (let i = 0, len = currencies.length; i < len; i++) {
       const { code } = currencies[i]
@@ -195,7 +196,7 @@ const Modal = component(({ modalRef }) => {
       return
     }
 
-    const { currencies } = storeData
+    const { currencies } = storeData.store
     const newState = []
     for (let i = 0, len = currencies.length; i < len; i++) {
       const currency = currencies[i]
@@ -248,11 +249,11 @@ const Modal = component(({ modalRef }) => {
     if (updateStoreIsFetching) {
       return
     }
-    updateStore(storeData.id, { currencies: params })
+    updateStore(storeData.id, { currency_codes: params })
   }
 
   if (storeData && currenciesData) {
-    const { items: currencies } = currenciesData
+    const { currencies } = currenciesData
     const currenciesList = []
     for (let i = 0, len = currencies.length; i < len; i++) {
       const code = currencies[i].code
@@ -330,12 +331,6 @@ const CardTitle = styled.h2`
 const Currencies = component(() => {
   const { t } = useTranslation('currencies')
 
-  const {
-    data: storeData,
-    isFetching: storeIsFetching,
-    error: storeError
-  } = useStore()
-
   const modalRef = useRef(null)
   const handleOpenModal = () => {
     if (detectIsNull(modalRef)) {
@@ -344,28 +339,26 @@ const Currencies = component(() => {
     modalRef.current.showModal()
   }
 
-  if (storeData) {
-    return (
-      <>
-        <ColumnLarge>
-          <Card>
-            <CardTitle>{t('title')}</CardTitle>
-            <div>
-              <span>{t('description')}</span>
-            </div>
-            <Button $variant='primary' onClick={handleOpenModal}>{t('edit')}</Button>
-            <StoreCurrencies />
-          </Card>
-        </ColumnLarge>
-        <ColumnSmall>
-          <Card>
-            <DefaultCurrency />
-          </Card>
-        </ColumnSmall>
-        <Modal modalRef={modalRef} />
-      </>
-    )
-  }
+  return (
+    <>
+      <ColumnLarge>
+        <Card>
+          <CardTitle>{t('title')}</CardTitle>
+          <div>
+            <span>{t('description')}</span>
+          </div>
+          <Button $variant='primary' onClick={handleOpenModal}>{t('edit')}</Button>
+          <StoreCurrencies />
+        </Card>
+      </ColumnLarge>
+      <ColumnSmall>
+        <Card>
+          <DefaultCurrency />
+        </Card>
+      </ColumnSmall>
+      <Modal modalRef={modalRef} />
+    </>
+  )
 })
 
 export default Currencies

@@ -224,7 +224,7 @@ const EditPrices = component(({ productId }) => {
       return
     }
 
-    const { currencies } = storeData
+    const { currencies } = storeData.store
     const regions = regionsData.items
 
     const newCurrencyColumns = [...currencies].sort((a, b) => {
@@ -446,7 +446,7 @@ const EditPrices = component(({ productId }) => {
                 </div>
               </If>
               <table>
-                <caption>{productTranslationsObject[storeData.defaultLocaleId].title}</caption>
+                <caption>{productTranslationsObject[storeData.store.defaultLocaleId].title}</caption>
                 <TableHead currencyColumns={currencyColumns} regionColumns={regionColumns} />
                 <TableBody
                   variants={variants}

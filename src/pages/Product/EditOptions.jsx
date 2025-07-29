@@ -19,7 +19,7 @@ import {
 
 const EditableOption = component(({ index, option, handleInput, handleDeleteOption }) => {
   const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
-  const { defaultLocaleId } = storeData
+  const { defaultLocaleId } = storeData.store
   const { translations } = option
 
   const defaultTranslation = translations[defaultLocaleId]
