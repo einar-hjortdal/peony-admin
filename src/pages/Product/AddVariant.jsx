@@ -1,14 +1,6 @@
 import {
   component,
-  detectIsArray,
-  detectIsEmpty,
   detectIsNull,
-  detectIsObject,
-  detectIsString,
-  detectIsUndefined,
-  keys,
-  useEffect,
-  useMemo,
   useRef,
   useState
 } from '@dark-engine/core'
@@ -18,11 +10,35 @@ import {
   useStore,
   useProductById,
   useUpdateProductMutation,
-  useCreateVariantMutation
+  useCreateVariantMutation,
+  useCountries
 } from '../../data'
-import Card from '../../components/Card'
-import If from '../../components/If'
-import { formatLine } from './utils'
+
+const InputOriginCountry = component(({ label, value, onChangeHandler }) => {
+  const { data } = useCountries()
+
+  if (data) {
+    const { countries } = data
+    const options = []
+    options.push(<option value='' disabled hidden />)
+    for (let i = 0, len = countries.length; i < len; i++) {
+      const country = countries[i]
+      const { code } = country
+      options.push(<option key={code} value={code}>{code}</option>)
+    }
+
+    return (
+      <label>
+        {label}
+        <select name='originCountry' value={value} onChange={onChangeHandler}>
+          {options}
+        </select>
+      </label>
+    )
+  }
+
+  return false
+})
 
 const AddVariant = component(({ productId }) => {
   const { t } = useTranslation('product.addVariant')
@@ -59,6 +75,7 @@ const AddVariant = component(({ productId }) => {
     const { name, value } = event.target
     const data = { ...variantData }
     data[name] = value
+    console.log(name, value)
     setVariantData(data)
   }
 
@@ -184,13 +201,18 @@ const AddVariant = component(({ productId }) => {
               {t('inputMaterial')}
               <input
                 type='text'
-                maxLength={63}
+                maxLength={191}
                 name='material'
                 onInput={handleInput}
                 value={variantData.material}
                 placeholder={t('inputMaterialPlaceholder')}
               />
             </label>
+            <InputOriginCountry
+              label={t('inputOriginCountry')}
+              value={variantData.originCountry}
+              onChangeHandler={handleInput}
+            />
           </div>
 
           <div>

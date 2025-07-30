@@ -30,6 +30,7 @@ export const dataKeys = {
   variantCreate: 'productVariantCreate',
   variantUpdate: 'productVariantUpdate',
   variantDelete: 'productVariantDelete',
+  countriesGet: 'countriesGet',
   currencyGet: 'currencyGet',
   currencyUpdate: 'currencyUpdate',
   regionsGet: 'regionsGet',
@@ -156,6 +157,13 @@ export const api = {
   variantDelete: async (id) => {
     const response = await fetch(getRequestUrl(`/admin/variants/${id}`), {
       method: 'DELETE',
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  countriesGet: async (params) => {
+    const response = await fetch(getRequestUrl('/admin/countries', params), {
       credentials: 'include'
     })
     return checkResponse(response)

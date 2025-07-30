@@ -10,7 +10,7 @@
 - [x] Products
 - [x] Options
 - [x] Variants
-- [ ] Prices
+- [x] Prices
 
 ## Later releases
 

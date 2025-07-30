@@ -194,6 +194,15 @@ export const useUpdateVariantsMutation = (productId) => {
   })
 }
 
+export const useCountries = (params) => {
+  const api = useApi()
+  const p = getParams(params)
+  return useQuery(dataKeys.countriesGet, () => api.countriesGet(p), {
+    variables: { p },
+    extractId: (x) => x.p
+  })
+}
+
 export const useCurrencies = (params) => {
   const api = useApi()
   const p = getParams(params)
