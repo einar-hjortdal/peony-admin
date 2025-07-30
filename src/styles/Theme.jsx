@@ -1,4 +1,11 @@
-import { component, useState, createContext, detectIsEmpty, useContext, detectIsNull } from '@dark-engine/core'
+import {
+  component,
+  useState,
+  createContext,
+  detectIsEmpty,
+  useContext,
+  detectIsNull
+} from '@dark-engine/core'
 import { ThemeProvider } from '@dark-engine/styled'
 import { invariant } from '@wareme/utils'
 
@@ -73,32 +80,36 @@ const dark = {
   ...constants
 }
 
-const ThemeToggleContext = createContext(null)
+const ThemeSwitcherContext = createContext(null)
 
-export const useThemeToggle = () => {
-  const context = useContext(ThemeToggleContext)
-  invariant(!detectIsNull(context), '`useThemeToggle` must be used inside a child of `ThemeToggleContext`')
-  return { themeToggle: context }
+export const useThemeSwitcher = () => {
+  const context = useContext(ThemeSwitcherContext)
+  invariant(!detectIsNull(context), '`useThemeToggle` must be used inside a child of `ThemeSwitcherContext`')
+  return context
 }
 
 const Theme = component(({ slot }) => {
   const themes = { light, dark }
   const defaultTheme = themes.light
   const [selectedTheme, setSelectedTheme] = useState(defaultTheme)
-  const toggleTheme = (name) => {
+
+  const switchTheme = (name) => {
     if (detectIsEmpty(themes[name])) {
+      console.error(`Invalid theme name: ${name}, setting default.`)
       return setSelectedTheme(defaultTheme)
     }
     setSelectedTheme(themes[name])
   }
 
+  const value = { switchTheme }
+
   return (
-    <ThemeToggleContext value={toggleTheme}>
+    <ThemeSwitcherContext value={value}>
       <ThemeProvider theme={selectedTheme}>
         <GlobalStyle />
         {slot}
       </ThemeProvider>
-    </ThemeToggleContext>
+    </ThemeSwitcherContext>
   )
 })
 
