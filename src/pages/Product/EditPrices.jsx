@@ -225,7 +225,7 @@ const EditPrices = component(({ productId }) => {
     }
 
     const { currencies } = storeData.store
-    const regions = regionsData.items
+    const regions = regionsData.regions
 
     const newCurrencyColumns = [...currencies].sort((a, b) => {
       if (a.code < b.code) return -1

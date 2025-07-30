@@ -65,6 +65,8 @@ export default freeze({
   'products.name': 'name',
   'products.status': 'status',
   'products.title': 'products',
+  'regions.heading': 'regions',
+  'regions.title': 'regions',
   'settings.currencies.description': 'manage the currencies of your store',
   'settings.currencies.title': 'currencies',
   'settings.languages.description': 'manage the translations of your content',
@@ -77,11 +79,11 @@ export default freeze({
   'settings.store.title': 'store',
   'settings.taxes.description': 'manage taxes across regions and products',
   'settings.taxes.title': 'taxes',
-  'store.title': 'store',
-  'store.name': 'name',
-  'store.save': 'save',
   'store.defaultCurrency': 'default currency',
   'store.defaultLocale': 'default language',
+  'store.defaultSalesChannel': 'default sales channel',
   'store.defaultStockLocation': 'default stock location',
-  'store.defaultSalesChannel': 'default sales channel'
+  'store.name': 'name',
+  'store.save': 'save',
+  'store.title': 'store'
 })
