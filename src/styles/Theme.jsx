@@ -1,11 +1,4 @@
-import {
-  component,
-  useState,
-  createContext,
-  detectIsEmpty,
-  useContext,
-  detectIsNull
-} from '@dark-engine/core'
+import { component, useState, createContext, useContext, detectIsNull } from '@dark-engine/core'
 import { ThemeProvider } from '@dark-engine/styled'
 import { invariant } from '@wareme/utils'
 
@@ -70,12 +63,15 @@ const constants = {
   ...zIndex
 }
 
-const light = {
+const themeNameLight = 'light'
+const themeNameDark = 'dark'
+
+const themeLight = {
   ...lightColors,
   ...constants
 }
 
-const dark = {
+const themeDark = {
   ...darkColors,
   ...constants
 }
@@ -89,23 +85,24 @@ export const useThemeSwitcher = () => {
 }
 
 const Theme = component(({ slot }) => {
-  const themes = { light, dark }
-  const defaultTheme = themes.light
-  const [selectedTheme, setSelectedTheme] = useState(defaultTheme)
+  const themesAvailable = {
+    [themeNameLight]: themeLight,
+    [themeNameDark]: themeDark
+  }
+  const [selectedThemeName, setSelectedThemeName] = useState(themeNameLight)
 
-  const switchTheme = (name) => {
-    if (detectIsEmpty(themes[name])) {
-      console.error(`Invalid theme name: ${name}, setting default.`)
-      return setSelectedTheme(defaultTheme)
+  const switchTheme = () => {
+    if (selectedThemeName === themeNameLight) {
+      return setSelectedThemeName(themeNameDark)
     }
-    setSelectedTheme(themes[name])
+    return setSelectedThemeName(themeNameLight)
   }
 
-  const value = { switchTheme }
+  const value = { selectedThemeName, switchTheme }
 
   return (
     <ThemeSwitcherContext value={value}>
-      <ThemeProvider theme={selectedTheme}>
+      <ThemeProvider theme={themesAvailable[selectedThemeName]}>
         <GlobalStyle />
         {slot}
       </ThemeProvider>

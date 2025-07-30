@@ -5,7 +5,6 @@
 - [x] Log in
 - [x] Log out
 - [x] Manage store
-- [ ] Add/edit regions
 - [x] Add/edit currencies
 - [x] Add/edit languages
 - [x] Products
@@ -15,10 +14,8 @@
 
 ## Later releases
 
-Note: not sorted.
-
-- [ ] Stores
-- [ ] Variant images
+- [ ] Taxes
+- [ ] Regions
 - [ ] User-defined data
 - [ ] Customer
 - [ ] Cart
@@ -27,7 +24,6 @@ Note: not sorted.
 - [ ] Price lists
 - [ ] Sales channels
 - [ ] Stock locations
-- [ ] Taxes
 - [ ] Product types
 - [ ] Product categories
 - [ ] Users
@@ -35,6 +31,8 @@ Note: not sorted.
 - [ ] Pages
 - [ ] Posts
 - [ ] Notifications
+- [ ] Variant images
+- [ ] Stores
 
 ## Low priority
 
