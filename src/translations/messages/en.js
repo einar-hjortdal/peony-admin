@@ -63,6 +63,7 @@ export default freeze({
   'product.addVariant.inputHeightPlaceholder': '99',
   'product.addVariant.inputWidth': 'Width',
   'product.addVariant.inputWidthPlaceholder': '99',
+  'product.addVariant.inputOriginCountry': 'country of origin',
   'product.details': 'details',
   'product.discountable': 'discountable',
   'product.editableOptions.addOption': 'add option',

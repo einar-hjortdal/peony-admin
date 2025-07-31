@@ -15,7 +15,8 @@ import {
 } from '../../data'
 
 const InputOriginCountry = component(({ label, value, onChangeHandler }) => {
-  const { data } = useCountries()
+  const { data } = useCountries({ fetch: 250 })
+  const { translator } = useTranslation()
 
   if (data) {
     const { countries } = data
@@ -24,7 +25,11 @@ const InputOriginCountry = component(({ label, value, onChangeHandler }) => {
     for (let i = 0, len = countries.length; i < len; i++) {
       const country = countries[i]
       const { code } = country
-      options.push(<option key={code} value={code}>{code}</option>)
+      options.push(
+        <option key={code} value={code}>
+          {code} ({translator.formatName(code.trim(), { type: 'region' })})
+        </option>
+      )
     }
 
     return (
