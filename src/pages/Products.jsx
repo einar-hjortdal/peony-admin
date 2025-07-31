@@ -390,7 +390,7 @@ const Products = component(() => {
     headings.push(<th key={headings[i]}>{headings[i]}</th>)
   }
 
-  const { items: products } = data
+  const { products } = data
   const rows = []
   for (let i = 0, len = products.length; i < len; i++) {
     const product = products[i]
