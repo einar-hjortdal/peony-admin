@@ -150,10 +150,10 @@ export const useDeleteProductMutation = (id) => {
   })
 }
 
-export const useCreateVariantMutation = (id) => {
+export const useCreateVariantMutation = (productId) => {
   const api = useApi()
-  return useMutation(dataKeys.variantCreate, (data) => api.variantCreate(id, data), {
-    variables: { id },
+  return useMutation(dataKeys.variantCreate, (data) => api.variantCreate(productId, data), {
+    variables: { productId },
     extractId: (x) => x.id
   })
 }

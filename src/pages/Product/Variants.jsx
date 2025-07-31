@@ -22,9 +22,10 @@ import {
 import Card from '../../components/Card'
 import If from '../../components/If'
 import { formatLine } from './utils'
-import AddVariant from './AddVariant'
+import AddVariant from './VariantAdd'
 import EditPrices from './EditPrices'
 import EditOptions from './EditOptions'
+import VariantEdit from './VariantEdit'
 
 const Options = component(({ productId, slot }) => {
   const { t } = useTranslation('product.options')
@@ -69,11 +70,11 @@ const Options = component(({ productId, slot }) => {
   }
 })
 
-const VariantRowActions = component(({ id }) => {
+const VariantRowActions = component(({ productId, variant }) => {
   return (
     <div>
       <ul>
-        <li><button>edit variant</button></li>
+        <li><VariantEdit productId={productId} variant={variant} /></li>
         <li><button>manage inventory</button></li>
         <li><button>duplicate variant</button></li>
         <li><button>delete variant</button></li>
@@ -82,7 +83,8 @@ const VariantRowActions = component(({ id }) => {
   )
 })
 
-const VariantRow = component(({ id, title, sku, ean }) => {
+const VariantRow = component(({ productId, variant }) => {
+  const { title, sku, ean } = variant
   const [isOpen, setIsOpen] = useState(false)
   const handleOpen = () => {
     setIsOpen(true)
@@ -97,7 +99,7 @@ const VariantRow = component(({ id, title, sku, ean }) => {
         <button type='button' onClick={handleOpen}>
           ...
           <If condition={isOpen}>
-            <VariantRowActions />
+            <VariantRowActions productId={productId} variant={variant} />
           </If>
         </button>
         {/* TODO dialog */}
@@ -120,8 +122,8 @@ const VariantsTable = component(({ productId }) => {
     const rows = []
     if (detectIsArray(variants)) {
       for (let i = 0, len = variants.length; i < len; i++) {
-        const { id, title, sku, ean } = variants[i]
-        rows.push(<VariantRow key={id} id={id} title={title} sku={sku} ean={ean} />)
+        const variant = variants[i]
+        rows.push(<VariantRow key={variant.id} productId={productId} variant={variant} />)
       }
     }
 

@@ -37,6 +37,7 @@
 ## Low priority
 
 - [ ] Acceptable design
+- [ ] Suspense
 - [ ] Dark theme
 - [ ] Responsiveness
 - [ ] Validate inputs
