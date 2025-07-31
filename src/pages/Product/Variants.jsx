@@ -17,7 +17,8 @@ import { useTranslation } from '@wareme/translations'
 import {
   useStore,
   useProductById,
-  useUpdateProductMutation
+  useUpdateProductMutation,
+  useDeleteVariantMutation
 } from '../../data'
 import Card from '../../components/Card'
 import If from '../../components/If'
@@ -71,13 +72,20 @@ const Options = component(({ productId, slot }) => {
 })
 
 const VariantRowActions = component(({ productId, variant }) => {
+  const [deleteVariant, { data, isFetching, error }] = useDeleteVariantMutation(productId)
+
+  const handleDelete = () => {
+    const { id } = variant
+    deleteVariant(id)
+  }
+
   return (
     <div>
       <ul>
         <li><VariantEdit productId={productId} variant={variant} /></li>
         <li><button>manage inventory</button></li>
         <li><button>duplicate variant</button></li>
-        <li><button>delete variant</button></li>
+        <li><button onClick={handleDelete} disabled={isFetching}>delete variant</button></li>
       </ul>
     </div>
   )

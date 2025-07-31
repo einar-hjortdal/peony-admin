@@ -24,7 +24,12 @@ const InputOriginCountry = component(({ label, value, onChangeHandler }) => {
     return (
       <label>
         {label}
-        <select name='originCountry' value={value} onChange={onChangeHandler}>
+        <select
+          name='originCountry'
+          autoComplete='off'
+          value={value}
+          onChange={onChangeHandler}
+        >
           {options}
         </select>
       </label>
@@ -76,6 +81,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           <input
             type='text'
             maxLength={63}
+            autoComplete='off'
             name='sku'
             onInput={handleInput}
             value={variantData.sku}
@@ -89,6 +95,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           <input
             type='text'
             maxLength={13}
+            autoComplete='off'
             name='ean'
             onInput={handleInput}
             value={variantData.ean}
@@ -102,6 +109,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           <input
             type='text'
             maxLength={12}
+            autoComplete='off'
             name='upc'
             onInput={handleInput}
             value={variantData.upc}
@@ -115,6 +123,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           <input
             type='text'
             maxLength={63}
+            autoComplete='off'
             name='barcode'
             onInput={handleInput}
             value={variantData.barcode}
@@ -128,6 +137,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           <input
             type='text'
             maxLength={63}
+            autoComplete='off'
             name='hsCode'
             onInput={handleInput}
             value={variantData.hsCode}
@@ -141,6 +151,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           <input
             type='number'
             step={1}
+            autoComplete='off'
             name='variantRank'
             onInput={handleInput}
             value={variantData.variantRank}
@@ -154,6 +165,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           <input
             type='text'
             maxLength={63}
+            autoComplete='off'
             name='midCode'
             onInput={handleInput}
             value={variantData.midCode}
@@ -186,6 +198,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           <input
             type='number'
             step={1}
+            autoComplete='off'
             name='weight'
             onInput={handleInput}
             value={variantData.weight}
@@ -197,6 +210,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           <input
             type='number'
             step={1}
+            autoComplete='off'
             name='length'
             onInput={handleInput}
             value={variantData.length}
@@ -208,6 +222,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           <input
             type='number'
             step={1}
+            autoComplete='off'
             name='height'
             onInput={handleInput}
             value={variantData.height}
@@ -219,6 +234,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           <input
             type='number'
             step={1}
+            autoComplete='off'
             name='width'
             onInput={handleInput}
             value={variantData.width}

@@ -12,18 +12,34 @@ import VariantInputs from './VariantInputs'
 
 const VariantEdit = component(({ productId, variant }) => {
   const { t } = useTranslation('product.variantEdit')
-  const [newVariantData, setNewVariantData] = useState(variant)
+  const [newVariantData, setNewVariantData] = useState({})
+
+  // get starting state: exclude properties like id and createdAt from variant
+  useEffect(() => {
+    setNewVariantData({
+      title: variant.title,
+      sku: variant.sku,
+      ean: variant.ean,
+      upc: variant.upc,
+      barcode: variant.barcode,
+      hsCode: variant.hsCode,
+      variantRank: variant.variantRank,
+      midCode: variant.midCode,
+      material: variant.material,
+      weight: variant.weight,
+      length: variant.length,
+      height: variant.height,
+      width: variant.width,
+      originCountry: variant.originCountry
+    })
+  }, [variant])
+  console.log(newVariantData)
+
   const [updateVariant, {
     data: updateVariantData,
     isFetching: updateVariantIsFetching,
     error: updateVariantError
   }] = useUpdateVariantMutation(productId)
-
-  useEffect(() => {
-    if (updateVariantData) {
-      handleCloseModal()
-    }
-  })
 
   const modalRef = useRef(null)
 
@@ -44,6 +60,8 @@ const VariantEdit = component(({ productId, variant }) => {
   const handleUpdate = async () => {
     const { id } = variant
     await updateVariant(id, newVariantData)
+    // TODO handle error if error, close if success
+    handleCloseModal()
   }
 
   return (

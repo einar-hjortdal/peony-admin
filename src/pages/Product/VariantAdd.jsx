@@ -17,7 +17,9 @@ const VariantAdd = component(({ productId }) => {
     isFetching: createVariantIsFetching,
     error: createVariantError
   }] = useCreateVariantMutation(productId)
+
   const modalRef = useRef(null)
+
   const handleOpenModal = () => {
     if (detectIsNull(modalRef)) {
       return
@@ -32,8 +34,10 @@ const VariantAdd = component(({ productId }) => {
     modalRef.current.close()
   }
 
-  const handleCreate = () => {
-    createVariant(variantData)
+  const handleCreate = async () => {
+    await createVariant(variantData)
+    // TODO handle error if error, close if success
+    handleCloseModal()
   }
 
   return (
