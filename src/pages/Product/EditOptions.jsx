@@ -65,13 +65,14 @@ const EditableOptions = component(({ productId }) => {
 
   const [options, setOptions] = useState([])
   useEffect(() => {
-    if (detectIsUndefined(data.options)) {
+    if (detectIsUndefined(data.product.options)) {
       return setOptions([])
     }
 
+    const { product } = data
     const newOptions = []
-    for (let i = 0, len = data.options.length; i < len; i++) {
-      const { id, translations } = data.options[i]
+    for (let i = 0, len = product.options.length; i < len; i++) {
+      const { id, translations } = product.options[i]
       const translationsObject = {}
       for (let j = 0, len = translations.length; j < len; j++) {
         const { localeId, title } = translations[j]
@@ -121,8 +122,8 @@ const EditableOptions = component(({ productId }) => {
       }
       updatedOptions.push(option)
     }
-    const data = { options: updatedOptions }
-    updateProduct(data)
+    const newData = { options: updatedOptions }
+    updateProduct(newData)
   }
 
   const handleAddOption = (e) => {

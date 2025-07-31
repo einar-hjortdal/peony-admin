@@ -113,7 +113,7 @@ export const useProductById = (id) => {
       return res
     }
 
-    const { translations } = data
+    const { translations } = data.product
     if (detectIsUndefined(translations)) {
       return res
     }

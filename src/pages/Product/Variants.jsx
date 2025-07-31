@@ -39,7 +39,7 @@ const Options = component(({ productId, slot }) => {
     }
 
     const { defaultLocaleId } = storeData
-    const { options } = data
+    const { options } = data.product
     if (detectIsArray(options)) {
       const res = []
       for (let i = 0, len = options.length; i < len; i++) {
@@ -126,7 +126,7 @@ const VariantsTable = component(({ productId }) => {
   }
 
   if (data) {
-    const { variants } = data
+    const { variants } = data.product
     const rows = []
     if (detectIsArray(variants)) {
       for (let i = 0, len = variants.length; i < len; i++) {

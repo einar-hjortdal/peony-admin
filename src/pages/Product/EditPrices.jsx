@@ -247,7 +247,7 @@ const EditPrices = component(({ productId }) => {
   // each object should have keys of either currencyCode or regionId and the data required for the submission.
   const getInitialData = () => {
     const m = {}
-    const { variants } = productData
+    const { variants } = productData.product
     if (detectIsUndefined(variants)) {
       return m
     }
@@ -408,7 +408,7 @@ const EditPrices = component(({ productId }) => {
   }
 
   if (productData && storeData && regionsData) {
-    const { variants } = productData
+    const { variants } = productData.product
     if (detectIsUndefined(variants)) {
       return false
     }

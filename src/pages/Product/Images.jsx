@@ -79,7 +79,7 @@ const Images = component(({ productId }) => {
   }
 
   if (data) {
-    const { images } = data
+    const { images } = data.product
     return (
       <div>
         <button type='button' onClick={handleOpenModal}>add image</button>
