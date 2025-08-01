@@ -150,11 +150,48 @@ export const useDeleteProductMutation = (id) => {
   })
 }
 
+export const useProductOptionCreateMutation = (productId) => {
+  const api = useApi()
+  return useMutation(
+    dataKeys.productOptionCreate,
+    (data) => api.productOptionCreate(productId, data),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      }
+    })
+}
+
+export const useProductOptionUpdateMutation = (productId) => {
+  const api = useApi()
+  return useMutation(
+    dataKeys.productOptionUpdate,
+    (optionId, data) => api.productOptionUpdate(productId, optionId, data),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      }
+    })
+}
+
+export const useProductOptionDeleteMutation = (productId) => {
+  const api = useApi()
+  return useMutation(
+    dataKeys.productOptionDelete,
+    (optionId) => api.productOptionDelete(productId, optionId),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      }
+    })
+}
+
 export const useCreateVariantMutation = (productId) => {
   const api = useApi()
   return useMutation(dataKeys.variantCreate, (data) => api.variantCreate(productId, data), {
-    variables: { productId },
-    extractId: (x) => x.id
+    onSuccess: ({ cache }) => {
+      cache.invalidate(dataKeys.productGetById, { id: productId })
+    }
   })
 }
 

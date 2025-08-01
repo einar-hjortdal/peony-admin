@@ -27,6 +27,9 @@ export const dataKeys = {
   productCreate: 'productCreate',
   productUpdate: 'productUpdate',
   productDelete: 'productDelete',
+  productOptionCreate: 'productOptionCreate',
+  productOptionUpdate: 'productOptionUpdate',
+  productOptionDelete: 'productOptionDelete',
   variantCreate: 'productVariantCreate',
   variantUpdate: 'productVariantUpdate',
   variantDelete: 'productVariantDelete',
@@ -128,6 +131,32 @@ export const api = {
 
   productDelete: async (id) => {
     const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
+      method: 'DELETE',
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  productOptionCreate: async (productId, data) => {
+    const response = await fetch(getRequestUrl(`/admin/products/${productId}/options}`), {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify(data)
+    })
+    return checkResponse(response)
+  },
+
+  productOptionUpdate: async (productId, optionId, data) => {
+    const response = await fetch(getRequestUrl(`/admin/products/${productId}/options/${optionId}`), {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify(data)
+    })
+    return checkResponse(response)
+  },
+
+  productOptionDelete: async (productId, optionId) => {
+    const response = await fetch(getRequestUrl(`/admin/products/${productId}/options/${optionId}`), {
       method: 'DELETE',
       credentials: 'include'
     })

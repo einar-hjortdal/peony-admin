@@ -14,13 +14,14 @@ import { useTranslation } from '@wareme/translations'
 import {
   useStore,
   useProductById,
-  useUpdateProductMutation
+  useUpdateProductMutation,
+  useProductOptionDeleteMutation
 } from '../../data'
 
-const EditableOption = component(({ index, option, handleInput, handleDeleteOption }) => {
+const EditableOption = component(({ handleDeleteOption, index, option, handleInput }) => {
+  const { id, translations } = option
   const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
   const { defaultLocaleId } = storeData.store
-  const { translations } = option
 
   const defaultTranslation = translations[defaultLocaleId]
   let defaultTranslationTitle
@@ -49,6 +50,7 @@ const EditableOption = component(({ index, option, handleInput, handleDeleteOpti
   )
 })
 
+// store all changes in state, on submit evaluate difference with product.options and act
 const EditableOptions = component(({ productId }) => {
   const { t } = useTranslation('product.editableOptions')
   const { data, isFetching, error } = useProductById(productId)
@@ -57,11 +59,6 @@ const EditableOptions = component(({ productId }) => {
     isFetching: storeIsFetching,
     error: storeError, localesObject
   } = useStore()
-  const [updateProduct, {
-    data: updateProductData,
-    isFetching: updateProductIsFetching,
-    error: updateProductError
-  }] = useUpdateProductMutation(productId)
 
   const [options, setOptions] = useState([])
   useEffect(() => {
@@ -123,7 +120,7 @@ const EditableOptions = component(({ productId }) => {
       updatedOptions.push(option)
     }
     const newData = { options: updatedOptions }
-    updateProduct(newData)
+    console.log(newData)
   }
 
   const handleAddOption = (e) => {
@@ -145,10 +142,10 @@ const EditableOptions = component(({ productId }) => {
     const option = options[i]
     editableOptions.push(
       <EditableOption
+        handleDeleteOption={handleDeleteOption}
         key={i}
         index={i}
         handleInput={handleInput}
-        handleDeleteOption={handleDeleteOption}
         option={option}
       />
     )
@@ -156,7 +153,7 @@ const EditableOptions = component(({ productId }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} disabled={updateProductIsFetching}>
+      <form onSubmit={handleSubmit} disabled={false}>
         {editableOptions}
         <button type='button' onClick={handleAddOption}>{t('addOption')}</button>
         <button type='submit'>save changes</button>

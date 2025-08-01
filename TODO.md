@@ -8,14 +8,17 @@
 - [x] Add/edit currencies
 - [x] Add/edit languages
 - [x] Products
-- [x] Options
 - [x] Variants
 - [x] Prices
+
+## Currently working on
+
+- [ ] Options
+- [ ] Regions
 
 ## Later releases
 
 - [ ] Taxes
-- [ ] Regions
 - [ ] User-defined data
 - [ ] Customer
 - [ ] Cart
