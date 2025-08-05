@@ -138,7 +138,7 @@ export const api = {
   },
 
   productOptionCreate: async (productId, data) => {
-    const response = await fetch(getRequestUrl(`/admin/products/${productId}/options}`), {
+    const response = await fetch(getRequestUrl(`/admin/products/${productId}/options`), {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify(data)

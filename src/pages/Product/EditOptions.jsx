@@ -1,5 +1,6 @@
 import {
   component,
+  detectIsArray,
   detectIsNull,
   detectIsObject,
   detectIsString,
@@ -15,151 +16,246 @@ import {
   useStore,
   useProductById,
   useUpdateProductMutation,
-  useProductOptionDeleteMutation
+  useProductOptionDeleteMutation,
+  useProductOptionCreateMutation,
+  useProductOptionUpdateMutation
 } from '../../data'
+import If from '../../components/If'
 
-const EditableOption = component(({ handleDeleteOption, index, option, handleInput }) => {
-  const { id, translations } = option
-  const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
-  const { defaultLocaleId } = storeData.store
-
-  const defaultTranslation = translations[defaultLocaleId]
-  let defaultTranslationTitle
-  if (defaultTranslation) {
-    defaultTranslationTitle = defaultTranslation.title
+const OptionTranslation = component(({ locale, onInput, value, handleDelete }) => {
+  const { t, translator } = useTranslation('product.editOptions.optionTranslation')
+  const handleLabelClick = (e) => {
+    e.preventDefault()
   }
 
   return (
-    <fieldset>
-      <legend>title</legend>
-      <label>
-        TODO label with default locale.code
+    <label onClick={handleLabelClick}>
+      {translator.formatName(locale.code, { type: 'region' })}
+      <input
+        type='text'
+        placeholder='color'
+        data-locale-id={locale.id}
+        onInput={onInput}
+        value={value}
+      />
+      <button type='button' onClick={handleDelete}>{t('delete')}</button>
+    </label>
+  )
+})
+
+const NewOption = component(({ productId }) => {
+  const { t } = useTranslation('product.newOption')
+  const { data: storeData, isFetching: storeIsFetching, error: storeError } = useStore()
+  const { defaultLocaleId, locales } = storeData.store
+  const [optionTitleTranslations, setOptionTitleTranslations] = useState({ [defaultLocaleId]: '' })
+  const [createOption, { error: createOptionError }] = useProductOptionCreateMutation(productId)
+
+  const handleInput = (e) => {
+    const localeId = e.target.dataset.localeId
+    setOptionTitleTranslations((prevState) => {
+      const newState = { ...prevState }
+      newState[localeId] = e.target.value
+      return newState
+    })
+  }
+
+  const handleDeleteTranslation = (e) => {
+    const localeId = e.target.dataset.localeId
+    setOptionTitleTranslations((prevState) => {
+      const newState = { ...prevState }
+      delete newState[localeId]
+      return newState
+    })
+  }
+
+  const handleCreate = () => {
+    const translations = []
+    const localeIds = keys(optionTitleTranslations)
+    for (let i = 0, len = localeIds.length; i < len; i++) {
+      const localeId = localeIds[i]
+      const title = optionTitleTranslations[localeId]
+      translations.push({ localeId, title })
+    }
+    createOption({ translations })
+  }
+
+  const titleTranslations = []
+  for (let i = 0, len = locales.length; i < len; i++) {
+    const locale = locales[i]
+    if (locale.id === defaultLocaleId) {
+      continue
+    }
+
+    titleTranslations.push(
+      <OptionTranslation
+        locale={locale}
+        onInput={handleInput}
+        value={optionTitleTranslations[locale.id]}
+        delete={handleDeleteTranslation}
+      />
+    )
+  }
+
+  if (storeData) {
+    return (
+      <fieldset>
+        <legend>{t('title')}</legend>
         <input
           type='text'
           placeholder='color'
           data-locale-id={defaultLocaleId}
-          data-index={index}
           onInput={handleInput}
-          value={defaultTranslationTitle}
+          value={optionTitleTranslations.defaultLocaleId}
           required
         />
-      </label>
-      {/* TODO handle other translations */}
-      <button type='button' data-index={index} onClick={handleDeleteOption}>delete</button>
-    </fieldset>
-  )
+        <button type='button' onClick={handleCreate}>{t('create')}</button>
+        <If condition={titleTranslations.length > 0}>
+          <fieldset>
+            <legend>{t('translations')}</legend>
+            {titleTranslations}
+          </fieldset>
+        </If>
+      </fieldset>
+    )
+  }
+
+  return false
 })
 
-// store all changes in state, on submit evaluate difference with product.options and act
-const EditableOptions = component(({ productId }) => {
-  const { t } = useTranslation('product.editableOptions')
-  const { data, isFetching, error } = useProductById(productId)
-  const {
-    data: storeData,
-    isFetching: storeIsFetching,
-    error: storeError, localesObject
-  } = useStore()
+const EditableOption = component(({ productId, option }) => {
+  const { t } = useTranslation('product.editableOption')
+  const { id, translations } = option
+  const { data: storeData, isFetching: storeIsFetching, error: storeError } = useStore()
+  const { defaultLocaleId, locales } = storeData.store
+  const [optionTitleTranslations, setOptionTitleTranslations] = useState({ [defaultLocaleId]: '' })
+  const [updateOption, { error: updateOptionError }] = useProductOptionUpdateMutation(productId)
+  const [deleteOption, { error: deleteOptionError }] = useProductOptionDeleteMutation(productId)
 
-  const [options, setOptions] = useState([])
   useEffect(() => {
-    if (detectIsUndefined(data.product.options)) {
-      return setOptions([])
+    const initialState = {}
+    for (let i = 0, len = translations.length; i < len; i++) {
+      const translation = translations[i]
+      const { localeId, title } = translation
+      initialState[localeId] = title
     }
-
-    const { product } = data
-    const newOptions = []
-    for (let i = 0, len = product.options.length; i < len; i++) {
-      const { id, translations } = product.options[i]
-      const translationsObject = {}
-      for (let j = 0, len = translations.length; j < len; j++) {
-        const { localeId, title } = translations[j]
-        translationsObject[localeId] = { title }
-      }
-      newOptions.push({ id, translations: translationsObject })
-    }
-    return setOptions([...newOptions])
-  }, [data])
+    setOptionTitleTranslations(initialState)
+  }, [option])
 
   const handleInput = (e) => {
-    const { index, localeId } = e.target.dataset
-    const { value } = e.target
-    const newOptions = [...options]
-    const newOption = { ...newOptions[index] }
-    let newTranslations = {}
-    if (detectIsObject(newOption.newTranslations)) {
-      newTranslations = { ...newOption.newTranslations }
+    const localeId = e.target.dataset.localeId
+    setOptionTitleTranslations((prevState) => {
+      const newState = { ...prevState }
+      newState[localeId] = e.target.value
+      return newState
+    })
+  }
+
+  const handleUpdate = () => {
+    const translations = []
+    const localeIds = keys(optionTitleTranslations)
+    for (let i = 0, len = localeIds.length; i < len; i++) {
+      const localeId = localeIds[i]
+      const title = optionTitleTranslations[localeId]
+      translations.push({ localeId, title })
+    }
+    updateOption({ translations })
+  }
+
+  const handleDeleteTranslation = (e) => {
+    const localeId = e.target.dataset.localeId
+    setOptionTitleTranslations((prevState) => {
+      const newState = { ...prevState }
+      delete newState[localeId]
+      return newState
+    })
+  }
+
+  const handleDeleteOption = () => {
+    console.log(id)
+    deleteOption(id)
+  }
+
+  const titleTranslations = []
+  for (let i = 0, len = locales.length; i < len; i++) {
+    const locale = locales[i]
+    if (locale.id === defaultLocaleId) {
+      continue
     }
 
-    if (detectIsObject(newTranslations[localeId])) {
-      newTranslations[localeId].title = value
-    } else {
-      newTranslations[localeId] = { title: value }
-    }
-
-    newOption.translations = newTranslations
-    newOptions[index] = newOption
-    return setOptions(newOptions)
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const updatedOptions = []
-    for (let i = 0, len = options.length; i < len; i++) {
-      const option = {}
-      const { id, translations } = options[i]
-      if (detectIsString(id)) {
-        option.id = id
-      }
-      option.translations = []
-      const localeIds = keys(translations)
-      for (let k = 0, len = localeIds.length; k < len; k++) {
-        const localeId = localeIds[k]
-        const { title } = translations[localeId]
-        option.translations.push({ localeId, title })
-      }
-      updatedOptions.push(option)
-    }
-    const newData = { options: updatedOptions }
-    console.log(newData)
-  }
-
-  const handleAddOption = (e) => {
-    return setOptions([...options, {
-      translations: [{ localeId: storeData.defaultLocaleId }]
-    }])
-  }
-
-  const handleDeleteOption = (e) => {
-    const { index } = e.target.dataset
-    return setOptions([
-      ...options.slice(0, index),
-      ...options.slice(index + 1)
-    ])
-  }
-
-  const editableOptions = []
-  for (let i = 0, len = options.length; i < len; i++) {
-    const option = options[i]
-    editableOptions.push(
-      <EditableOption
-        handleDeleteOption={handleDeleteOption}
-        key={i}
-        index={i}
-        handleInput={handleInput}
-        option={option}
+    titleTranslations.push(
+      <OptionTranslation
+        locale={locale}
+        onInput={handleInput}
+        value={optionTitleTranslations[locale.id]}
+        delete={handleDeleteTranslation}
       />
     )
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} disabled={false}>
-        {editableOptions}
-        <button type='button' onClick={handleAddOption}>{t('addOption')}</button>
-        <button type='submit'>save changes</button>
-      </form>
-    </div>
+    <fieldset>
+      <legend>{t('title')}</legend>
+      <input
+        type='text'
+        placeholder='color'
+        data-locale-id={defaultLocaleId}
+        onInput={handleInput}
+        onBlur={handleUpdate}
+        value={optionTitleTranslations.defaultLocaleId}
+        required
+      />
+      <If condition={titleTranslations.length > 0}>
+        <fieldset>
+          <legend>{t('translations')}</legend>
+          {titleTranslations}
+        </fieldset>
+      </If>
+      <button type='button' onClick={handleDeleteOption}>{t('delete')}</button>
+    </fieldset>
   )
+})
+
+// Apply each change independently: each change happens in its own transaction.
+// Applying all changes at once could result in some changes failing and some succeeding.
+// This partial-success would result in poor UX.
+const ProductOptions = component(({ productId }) => {
+  const { t } = useTranslation('product.productOptions')
+  const { data: productData } = useProductById(productId)
+
+  const [showNewOption, setShowNewOption] = useState(false)
+  const handleShowNewOption = () => {
+    if (showNewOption) {
+      return setShowNewOption(false)
+    }
+    return setShowNewOption(true)
+  }
+
+  if (productData) {
+    const { options } = productData.product
+    const editableOptions = []
+    if (detectIsArray(options)) {
+      for (let i = 0, len = options.length; i < len; i++) {
+        const option = options[i]
+        editableOptions.push(<EditableOption key={option.id} option={option} productId={productId} />
+        )
+      }
+    }
+
+    return (
+      <div>
+        {editableOptions}
+        <If condition={!showNewOption}>
+          <button type='button' onClick={handleShowNewOption}>{t('addOption')}</button>
+        </If>
+        <If condition={showNewOption}>
+          <NewOption productId={productId} />
+          <button type='button' onClick={handleShowNewOption}>{t('removeOption')}</button>
+        </If>
+      </div>
+    )
+  }
+
+  return false
 })
 
 const EditOptions = component(({ productId }) => {
@@ -185,7 +281,7 @@ const EditOptions = component(({ productId }) => {
       <dialog ref={modalRef}>
         <button type='button' onClick={handleCloseModal}>x</button>
         <div>
-          <EditableOptions productId={productId} />
+          <ProductOptions productId={productId} />
         </div>
       </dialog>
     </>
