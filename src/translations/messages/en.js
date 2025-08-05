@@ -70,7 +70,7 @@ export default freeze({
   'product.details': 'details',
   'product.discountable': 'discountable',
   'product.productOptions.addOption': 'add new option',
-  'product.productOptions.removeOption': 'delete option',
+  'product.productOptions.removeOption': 'remove option',
   'product.newOption.title': 'title',
   'product.editOptions.edit': 'edit options',
   'product.editableOption.delete': 'delete option',

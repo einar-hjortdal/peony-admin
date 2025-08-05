@@ -105,7 +105,7 @@ const NewOption = component(({ productId }) => {
           placeholder='color'
           data-locale-id={defaultLocaleId}
           onInput={handleInput}
-          value={optionTitleTranslations.defaultLocaleId}
+          value={optionTitleTranslations[defaultLocaleId]}
           required
         />
         <button type='button' onClick={handleCreate}>{t('create')}</button>
@@ -171,7 +171,6 @@ const EditableOption = component(({ productId, option }) => {
   }
 
   const handleDeleteOption = () => {
-    console.log(id)
     deleteOption(id)
   }
 
@@ -197,11 +196,11 @@ const EditableOption = component(({ productId, option }) => {
       <legend>{t('title')}</legend>
       <input
         type='text'
-        placeholder='color'
+        placeholder={optionTitleTranslations[defaultLocaleId]}
         data-locale-id={defaultLocaleId}
         onInput={handleInput}
         onBlur={handleUpdate}
-        value={optionTitleTranslations.defaultLocaleId}
+        value={optionTitleTranslations[defaultLocaleId]}
         required
       />
       <If condition={titleTranslations.length > 0}>
