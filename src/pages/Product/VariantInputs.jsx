@@ -1,7 +1,153 @@
-import { component } from '@dark-engine/core'
+import { component, detectIsEmpty, detectIsUndefined, keys, useEffect, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import { useCountries } from '../../data'
+import { useCountries, useProductById, useStore } from '../../data'
+
+const OptionValues = component(({ productId, variantData, setVariantData }) => {
+  const { t } = useTranslation('product.variantInputs.optionValues')
+  const { data: storeData, error: storeError } = useStore()
+  const { data: productData, error: productError } = useProductById(productId)
+  const [optionValuesData, setOptionValuesData] = useState({})
+
+  useEffect(() => {
+    if (detectIsEmpty(storeData) || detectIsEmpty(productData)) {
+      return
+    }
+
+    const { options } = productData.product
+    const { optionValues } = variantData
+    if (detectIsUndefined(options)) {
+      return
+    }
+
+    // handle new variant
+    if (detectIsUndefined(optionValues)) {
+      const newOptionValuesData = {}
+      for (let i = 0, len = options.length; i < len; i++) {
+        const option = options[i]
+        const { id } = option
+        newOptionValuesData[id] = {}
+      }
+      return setOptionValuesData(newOptionValuesData)
+    }
+
+    // handle edit variant
+    const newOptionValuesData = {}
+    for (let i = 0, len = optionValues.length; i < len; i++) {
+      const optionValue = optionValues[i]
+      const { optionId, translations } = optionValue
+      newOptionValuesData[optionId] = translations
+    }
+  }, [storeData, productData])
+
+  if (productData) {
+    const { options } = productData.product
+
+    // no inputs if no options
+    if (detectIsUndefined(options)) {
+      return false
+    }
+
+    const getValue = (id, localeId) => {
+      const optionValues = optionValuesData[id]
+      if (detectIsUndefined(optionValues)) {
+        return ''
+      }
+
+      const optionValue = optionValues[localeId]
+      if (detectIsUndefined(optionValue)) {
+        return ''
+      }
+      return optionValue
+    }
+
+    const handleLabelClick = (e) => {
+      e.preventDefault()
+    }
+
+    const handleInput = (e) => {
+      const { name, value } = e.target
+      const { localeId } = e.target.dataset
+      setOptionValuesData((prevState) => {
+        const newOptionValue = { [localeId]: value }
+        const newOptionValuesData = { ...prevState, [name]: newOptionValue }
+        return newOptionValuesData
+      })
+    }
+
+    // TODO fix missed blur events when user submits with enter or clicks immediately on submit button
+    const handleBlur = () => {
+      setVariantData((prevState) => {
+        const newOptionValues = []
+        const optionIds = keys(optionValuesData)
+        for (let i = 0, len = optionIds.length; i < len; i++) {
+          const optionId = optionIds[i]
+          const translations = optionValuesData[optionId]
+          const localeIds = keys(translations)
+          if (localeIds.length === 0) {
+            continue
+          }
+
+          const newTranslations = []
+          for (let j = 0, len = localeIds.length; j < len; j++) {
+            const localeId = localeIds[j]
+            const translation = translations[localeId]
+            newTranslations.push({ localeId, name: translation })
+          }
+          newOptionValues.push({ optionId, translations: newTranslations })
+        }
+
+        return { ...prevState, optionValues: newOptionValues }
+      })
+    }
+
+    const { defaultLocaleId } = storeData.store
+    const getOptionTitle = (translations) => {
+      for (let i = 0, len = translations.length; i < len; i++) {
+        const translation = translations[i]
+        const { localeId, title } = translation
+        if (localeId === defaultLocaleId) {
+          return title
+        }
+      }
+    }
+
+    const inputs = []
+    for (let i = 0, len = options.length; i < len; i++) {
+      const option = options[i]
+      const { id, translations } = option
+      inputs.push(
+        <label key={id} onClick={handleLabelClick}>
+          {getOptionTitle(translations)}
+          <input
+            type='text'
+            maxLength={63}
+            name={id}
+            data-locale-id={defaultLocaleId}
+            onInput={handleInput}
+            onBlur={handleBlur}
+            value={getValue(id)}
+            placeholder={t('placeholder')}
+            required
+          />
+          <fieldset>
+            <legend>{t('translations')}</legend>
+            {/* TODO */}
+          </fieldset>
+        </label>
+      )
+    }
+
+    return (
+      <fieldset>
+        <legend>{t('options')}</legend>
+        {inputs}
+      </fieldset>
+    )
+  }
+
+  return false
+})
 
 const InputOriginCountry = component(({ label, value, onChangeHandler }) => {
   const { data } = useCountries({ fetch: 250 })
@@ -44,9 +190,8 @@ const InputOriginCountry = component(({ label, value, onChangeHandler }) => {
 // manage_inventory   ?bool   @[json: 'manageInventory']
 // origin_country     ?string @[json: 'originCountry']
 // money_amounts      ?[]MoneyAmountRequest @[json: 'moneyAmounts']
-// options            ?[]ProductOptionValueRequest
 
-const VariantInputs = component(({ variantData, setVariantData }) => {
+const VariantInputs = component(({ productId, variantData, setVariantData }) => {
   const { t } = useTranslation('product.variantInputs')
 
   const handleLabelClick = (event) => {
@@ -62,7 +207,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
 
   return (
     <div>
-      <div>
+      <fieldset>
         <label onClick={handleLabelClick}>
           {t('title')}
           <input
@@ -74,78 +219,15 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
             placeholder={t('titlePlaceholder')}
           />
         </label>
-      </div>
-      <div>
-        <label onClick={handleLabelClick}>
-          {t('sku')}
-          <input
-            type='text'
-            maxLength={63}
-            autoComplete='off'
-            name='sku'
-            onInput={handleInput}
-            value={variantData.sku}
-            placeholder={t('skuPlaceholder')}
-          />
-        </label>
-      </div>
-      <div>
-        <label onClick={handleLabelClick}>
-          {t('ean')}
-          <input
-            type='text'
-            maxLength={13}
-            autoComplete='off'
-            name='ean'
-            onInput={handleInput}
-            value={variantData.ean}
-            placeholder={t('eanPlaceholder')}
-          />
-        </label>
-      </div>
-      <div>
-        <label onClick={handleLabelClick}>
-          {t('upc')}
-          <input
-            type='text'
-            maxLength={12}
-            autoComplete='off'
-            name='upc'
-            onInput={handleInput}
-            value={variantData.upc}
-            placeholder={t('upcPlaceholder')}
-          />
-        </label>
-      </div>
-      <div>
-        <label onClick={handleLabelClick}>
-          {t('barcode')}
-          <input
-            type='text'
-            maxLength={63}
-            autoComplete='off'
-            name='barcode'
-            onInput={handleInput}
-            value={variantData.barcode}
-            placeholder={t('barcodePlaceholder')}
-          />
-        </label>
-      </div>
-      <div>
-        <label onClick={handleLabelClick}>
-          {t('hsCode')}
-          <input
-            type='text'
-            maxLength={63}
-            autoComplete='off'
-            name='hsCode'
-            onInput={handleInput}
-            value={variantData.hsCode}
-            placeholder={t('hsCodePlaceholder')}
-          />
-        </label>
-      </div>
-      <div>
+      </fieldset>
+
+      <OptionValues
+        productId={productId}
+        variantData={variantData}
+        setVariantData={setVariantData}
+      />
+
+      <fieldset>
         <label onClick={handleLabelClick}>
           {t('variantRank')}
           <input
@@ -158,8 +240,72 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
             placeholder={t('variantRankPlaceholder')}
           />
         </label>
-      </div>
-      <div>
+      </fieldset>
+
+      <fieldset>
+        <label onClick={handleLabelClick}>
+          {t('sku')}
+          <input
+            type='text'
+            maxLength={63}
+            autoComplete='off'
+            name='sku'
+            onInput={handleInput}
+            value={variantData.sku}
+            placeholder={t('skuPlaceholder')}
+          />
+        </label>
+        <label onClick={handleLabelClick}>
+          {t('ean')}
+          <input
+            type='text'
+            maxLength={13}
+            autoComplete='off'
+            name='ean'
+            onInput={handleInput}
+            value={variantData.ean}
+            placeholder={t('eanPlaceholder')}
+          />
+        </label>
+        <label onClick={handleLabelClick}>
+          {t('upc')}
+          <input
+            type='text'
+            maxLength={12}
+            autoComplete='off'
+            name='upc'
+            onInput={handleInput}
+            value={variantData.upc}
+            placeholder={t('upcPlaceholder')}
+          />
+        </label>
+        <label onClick={handleLabelClick}>
+          {t('barcode')}
+          <input
+            type='text'
+            maxLength={63}
+            autoComplete='off'
+            name='barcode'
+            onInput={handleInput}
+            value={variantData.barcode}
+            placeholder={t('barcodePlaceholder')}
+          />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label onClick={handleLabelClick}>
+          {t('hsCode')}
+          <input
+            type='text'
+            maxLength={63}
+            autoComplete='off'
+            name='hsCode'
+            onInput={handleInput}
+            value={variantData.hsCode}
+            placeholder={t('hsCodePlaceholder')}
+          />
+        </label>
         <label onClick={handleLabelClick}>
           {t('midCode')}
           <input
@@ -172,8 +318,6 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
             placeholder={t('midCodePlaceholder')}
           />
         </label>
-      </div>
-      <div>
         <label onClick={handleLabelClick}>
           {t('material')}
           <input
@@ -190,9 +334,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
           value={variantData.originCountry}
           onChangeHandler={handleInput}
         />
-      </div>
 
-      <div>
         <label onClick={handleLabelClick}>
           {t('weight')}
           <input
@@ -241,7 +383,7 @@ const VariantInputs = component(({ variantData, setVariantData }) => {
             placeholder={t('widthPlaceholder')}
           />
         </label>
-      </div>
+      </fieldset>
     </div>
   )
 })

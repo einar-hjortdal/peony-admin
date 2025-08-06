@@ -33,7 +33,6 @@ const VariantEdit = component(({ productId, variant }) => {
       originCountry: variant.originCountry
     })
   }, [variant])
-  console.log(newVariantData)
 
   const [updateVariant, {
     data: updateVariantData,

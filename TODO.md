@@ -10,10 +10,10 @@
 - [x] Products
 - [x] Variants
 - [x] Prices
+- [x] Options
 
 ## Currently working on
 
-- [ ] Options
 - [ ] Regions
 
 ## Later releases

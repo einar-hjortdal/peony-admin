@@ -15,7 +15,6 @@ import { useTranslation } from '@wareme/translations'
 import {
   useStore,
   useProductById,
-  useUpdateProductMutation,
   useProductOptionDeleteMutation,
   useProductOptionCreateMutation,
   useProductOptionUpdateMutation

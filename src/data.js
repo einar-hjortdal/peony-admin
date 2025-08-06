@@ -77,7 +77,7 @@ export const useStore = () => {
       res[id] = code
     }
     return res
-  }, data)
+  }, [data])
 
   return { refetch, data, isFetching, error, localesObject }
 }
@@ -123,7 +123,7 @@ export const useProductById = (id) => {
       res[localeId] = translations[i]
     }
     return res
-  }, data)
+  }, [data])
 
   return { refetch, data, isFetching, error, translationsObject }
 }
@@ -287,7 +287,7 @@ export const useSalesChannels = (params) => {
       res[id] = salesChannel
     }
     return res
-  })
+  }, [data])
 
   return { refetch, data, isFetching, error, salesChannelsObject }
 }

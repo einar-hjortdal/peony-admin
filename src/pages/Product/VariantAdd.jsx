@@ -1,6 +1,7 @@
 import {
   component,
   detectIsNull,
+  detectIsUndefined,
   useRef,
   useState
 } from '@dark-engine/core'
@@ -45,7 +46,11 @@ const VariantAdd = component(({ productId }) => {
       <button type='button' onClick={handleOpenModal}>add variant</button>
       <dialog ref={modalRef}>
         <button type='button' onClick={handleCloseModal}>x</button>
-        <VariantInputs variantData={variantData} setVariantData={setVariantData} />
+        <VariantInputs
+          productId={productId}
+          variantData={variantData}
+          setVariantData={setVariantData}
+        />
         <div>
           <button
             type='button'
