@@ -35,10 +35,10 @@ const Options = component(({ productId, slot }) => {
 
   const optionElements = useMemo(() => {
     if (detectIsEmpty(data) || detectIsEmpty(storeData)) {
-      return false
+      return []
     }
 
-    const { defaultLocaleId } = storeData
+    const { defaultLocaleId } = storeData.store
     const { options } = data.product
     if (detectIsArray(options)) {
       const res = []
@@ -46,19 +46,18 @@ const Options = component(({ productId, slot }) => {
         const { translations } = options[i]
         for (let k = 0, tlen = translations.length; k < tlen; k++) {
           const translation = translations[k]
-          if (translation.localeId === defaultLocaleId) {
-            const { title } = translation
-            res.push(<div>{title}</div>)
-            // TODO display translations
-            // TODO display values
-            // TODO display value translations
+          const { localeId, title } = translation
+          if (localeId === defaultLocaleId) {
+            res.push(<span>{title}</span>)
+            // TODO display translations on hover
+            // TODO display values with translations on click
           }
         }
       }
       return res
     }
 
-    return false
+    return []
   }, [data, storeData])
 
   if (data && storeData) {
