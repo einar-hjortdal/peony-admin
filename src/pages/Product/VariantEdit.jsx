@@ -68,7 +68,11 @@ const VariantEdit = component(({ productId, variant }) => {
       <button type='button' onClick={handleOpenModal}>{t('button')}</button>
       <dialog ref={modalRef}>
         <button type='button' onClick={handleCloseModal}>x</button>
-        <VariantInputs variantData={newVariantData} setVariantData={setNewVariantData} />
+        <VariantInputs
+          productId={productId}
+          variantData={newVariantData}
+          setVariantData={setNewVariantData}
+        />
         <div>
           <button
             type='button'
