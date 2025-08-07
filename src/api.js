@@ -56,7 +56,9 @@ const getRequestUrl = (path, params) => {
 
 export const api = {
   getUserData: async () => {
-    const response = await fetch(getRequestUrl('/admin/auth'), { credentials: 'include' })
+    const response = await fetch(getRequestUrl('/admin/auth'), {
+      credentials: 'include'
+    })
     return checkResponse(response)
   },
 
@@ -138,48 +140,63 @@ export const api = {
   },
 
   productOptionCreate: async (productId, data) => {
-    const response = await fetch(getRequestUrl(`/admin/products/${productId}/options`), {
-      method: 'POST',
-      credentials: 'include',
-      body: JSON.stringify(data)
-    })
+    const response = await fetch(
+      getRequestUrl(`/admin/products/${productId}/options`),
+      {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(data)
+      }
+    )
     return checkResponse(response)
   },
 
   productOptionUpdate: async (productId, optionId, data) => {
-    const response = await fetch(getRequestUrl(`/admin/products/${productId}/options/${optionId}`), {
-      method: 'POST',
-      credentials: 'include',
-      body: JSON.stringify(data)
-    })
+    const response = await fetch(
+      getRequestUrl(`/admin/products/${productId}/options/${optionId}`),
+      {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(data)
+      }
+    )
     return checkResponse(response)
   },
 
   productOptionDelete: async (productId, optionId) => {
-    const response = await fetch(getRequestUrl(`/admin/products/${productId}/options/${optionId}`), {
-      method: 'DELETE',
-      credentials: 'include'
-    })
+    const response = await fetch(
+      getRequestUrl(`/admin/products/${productId}/options/${optionId}`),
+      {
+        method: 'DELETE',
+        credentials: 'include'
+      }
+    )
     return checkResponse(response)
   },
 
   variantCreate: async (id, data) => {
-    const response = await fetch(getRequestUrl(`/admin/products/${id}/variants`), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-      credentials: 'include'
-    })
+    const response = await fetch(
+      getRequestUrl(`/admin/products/${id}/variants`),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        credentials: 'include'
+      }
+    )
     return checkResponse(response)
   },
 
-  variantUpdate: async (id, data) => {
-    const response = await fetch(getRequestUrl(`/admin/variants/${id}`), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-      credentials: 'include'
-    })
+  variantUpdate: async (productId, variantId, data) => {
+    const response = await fetch(
+      getRequestUrl(`/admin/products/${productId}/variants/${variantId}`),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        credentials: 'include'
+      }
+    )
     return checkResponse(response)
   },
 
@@ -223,9 +240,12 @@ export const api = {
   },
 
   salesChannelsGet: async (params) => {
-    const response = await fetch(getRequestUrl('/admin/sales-channels', params), {
-      credentials: 'include'
-    })
+    const response = await fetch(
+      getRequestUrl('/admin/sales-channels', params),
+      {
+        credentials: 'include'
+      }
+    )
     return checkResponse(response)
   },
 

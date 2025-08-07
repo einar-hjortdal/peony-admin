@@ -38,7 +38,8 @@ const OptionValues = component(({ productId, variantData, setVariantData }) => {
       const { optionId, translations } = optionValue
       newOptionValuesData[optionId] = translations
     }
-  }, [storeData, productData])
+    return setOptionValuesData(newOptionValuesData)
+  }, [storeData, productData, variantData])
 
   if (productData) {
     const { options } = productData.product
@@ -54,11 +55,13 @@ const OptionValues = component(({ productId, variantData, setVariantData }) => {
         return ''
       }
 
-      const optionValue = optionValues[localeId]
-      if (detectIsUndefined(optionValue)) {
-        return ''
+      for (let i = 0, len = optionValues.length; i < len; i++) {
+        const optionValue = optionValues[i]
+        if (optionValue.localeId === localeId) {
+          return optionValue.name
+        }
       }
-      return optionValue
+      return ''
     }
 
     const handleLabelClick = (e) => {
@@ -126,7 +129,7 @@ const OptionValues = component(({ productId, variantData, setVariantData }) => {
             data-locale-id={defaultLocaleId}
             onInput={handleInput}
             onBlur={handleBlur}
-            value={getValue(id)}
+            value={getValue(id, defaultLocaleId)}
             placeholder={t('placeholder')}
             required
           />

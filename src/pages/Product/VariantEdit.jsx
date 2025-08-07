@@ -7,7 +7,7 @@ import {
 } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import { useUpdateVariantMutation } from '../../data'
+import { useVariantUpdateMutation } from '../../data'
 import VariantInputs from './VariantInputs'
 
 const VariantEdit = component(({ productId, variant }) => {
@@ -30,15 +30,15 @@ const VariantEdit = component(({ productId, variant }) => {
       length: variant.length,
       height: variant.height,
       width: variant.width,
-      originCountry: variant.originCountry
+      originCountry: variant.originCountry,
+      optionValues: variant.optionValues
     })
   }, [variant])
 
-  const [updateVariant, {
-    data: updateVariantData,
-    isFetching: updateVariantIsFetching,
-    error: updateVariantError
-  }] = useUpdateVariantMutation(productId)
+  const [
+    updateVariant,
+    { isFetching: updateVariantIsFetching, error: updateVariantError }
+  ] = useVariantUpdateMutation(productId)
 
   const modalRef = useRef(null)
 
@@ -58,6 +58,7 @@ const VariantEdit = component(({ productId, variant }) => {
 
   const handleUpdate = async () => {
     const { id } = variant
+    // TODO only include changes: variantRank and optionValues may be the same
     await updateVariant(id, newVariantData)
     // TODO handle error if error, close if success
     handleCloseModal()

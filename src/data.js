@@ -1,4 +1,10 @@
-import { keys, detectIsEmpty, useMemo, detectIsUndefined, detectIsObject } from '@dark-engine/core'
+import {
+  keys,
+  detectIsEmpty,
+  useMemo,
+  detectIsUndefined,
+  detectIsObject
+} from '@dark-engine/core'
 import { useApi, useQuery, useMutation } from '@dark-engine/data'
 
 import { dataKeys } from './api'
@@ -42,11 +48,15 @@ export const useUser = () => {
 
 export const useUserLoginMutation = () => {
   const api = useApi()
-  return useMutation(dataKeys.authPost, (email, password) => api.loginUser(email, password), {
-    onSuccess: ({ cache, data }) => {
-      cache.write(dataKeys.getUser, data, { id: data.id })
+  return useMutation(
+    dataKeys.authPost,
+    (email, password) => api.loginUser(email, password),
+    {
+      onSuccess: ({ cache, data }) => {
+        cache.write(dataKeys.getUser, data, { id: data.id })
+      }
     }
-  })
+  )
 }
 
 export const useUserLogoutMutation = () => {
@@ -63,7 +73,9 @@ export const useUserLogoutMutation = () => {
 
 export const useStore = () => {
   const api = useApi()
-  const { refetch, data, isFetching, error } = useQuery(dataKeys.storeGet, () => api.storeGet())
+  const { refetch, data, isFetching, error } = useQuery(dataKeys.storeGet, () =>
+    api.storeGet()
+  )
 
   const localesObject = useMemo(() => {
     const res = []
@@ -84,11 +96,15 @@ export const useStore = () => {
 
 export const useStoreUpdateMutation = () => {
   const api = useApi()
-  return useMutation(dataKeys.storeUpdate, (id, data) => api.storeUpdate(id, data), {
-    onSuccess: ({ cache }) => {
-      cache.invalidate(dataKeys.storeGet)
+  return useMutation(
+    dataKeys.storeUpdate,
+    (id, data) => api.storeUpdate(id, data),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.storeGet)
+      }
     }
-  })
+  )
 }
 
 export const useProducts = (params) => {
@@ -102,10 +118,14 @@ export const useProducts = (params) => {
 
 export const useProductById = (id) => {
   const api = useApi()
-  const { refetch, data, isFetching, error } = useQuery(dataKeys.productGetById, () => api.productGetById(id), {
-    variables: { id },
-    extractId: (x) => x.id
-  })
+  const { refetch, data, isFetching, error } = useQuery(
+    dataKeys.productGetById,
+    () => api.productGetById(id),
+    {
+      variables: { id },
+      extractId: (x) => x.id
+    }
+  )
 
   const translationsObject = useMemo(() => {
     const res = {}
@@ -136,10 +156,14 @@ export const useCreateProductMutation = () => {
 
 export const useUpdateProductMutation = (id) => {
   const api = useApi()
-  return useMutation(dataKeys.productUpdate, (data) => api.productUpdate(id, data), {
-    variables: { id },
-    extractId: (x) => x.id
-  })
+  return useMutation(
+    dataKeys.productUpdate,
+    (data) => api.productUpdate(id, data),
+    {
+      variables: { id },
+      extractId: (x) => x.id
+    }
+  )
 }
 
 export const useDeleteProductMutation = (id) => {
@@ -159,7 +183,8 @@ export const useProductOptionCreateMutation = (productId) => {
       onSuccess: ({ cache }) => {
         cache.invalidate(dataKeys.productGetById, { id: productId })
       }
-    })
+    }
+  )
 }
 
 export const useProductOptionUpdateMutation = (productId) => {
@@ -171,7 +196,8 @@ export const useProductOptionUpdateMutation = (productId) => {
       onSuccess: ({ cache }) => {
         cache.invalidate(dataKeys.productGetById, { id: productId })
       }
-    })
+    }
+  )
 }
 
 export const useProductOptionDeleteMutation = (productId) => {
@@ -183,25 +209,34 @@ export const useProductOptionDeleteMutation = (productId) => {
       onSuccess: ({ cache }) => {
         cache.invalidate(dataKeys.productGetById, { id: productId })
       }
-    })
+    }
+  )
 }
 
-export const useCreateVariantMutation = (productId) => {
+export const useVariantCreateMutation = (productId) => {
   const api = useApi()
-  return useMutation(dataKeys.variantCreate, (data) => api.variantCreate(productId, data), {
-    onSuccess: ({ cache }) => {
-      cache.invalidate(dataKeys.productGetById, { id: productId })
+  return useMutation(
+    dataKeys.variantCreate,
+    (data) => api.variantCreate(productId, data),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      }
     }
-  })
+  )
 }
 
-export const useUpdateVariantMutation = (productId) => {
+export const useVariantUpdateMutation = (productId) => {
   const api = useApi()
-  return useMutation(dataKeys.variantUpdate, (id, data) => api.variantUpdate(id, data), {
-    onSuccess: ({ cache }) => {
-      cache.invalidate(dataKeys.productGetById, { id: productId })
+  return useMutation(
+    dataKeys.variantUpdate,
+    (variantId, data) => api.variantUpdate(productId, variantId, data),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      }
     }
-  })
+  )
 }
 
 export const useDeleteVariantMutation = (productId) => {
@@ -216,28 +251,32 @@ export const useDeleteVariantMutation = (productId) => {
 // expects an object with variant_id keys and ProductVariantRequest values
 export const useUpdateVariantsMutation = (productId) => {
   const api = useApi()
-  return useMutation(dataKeys.variantUpdate, (a) => {
-    const promises = []
-    const ids = keys(a)
-    for (let i = 0, len = ids.length; i < len; i++) {
-      const id = ids[i]
-      const productVariantRequest = a[id]
-      promises.push(api.variantUpdate(id, productVariantRequest))
-    }
-    return Promise.all(promises)
-  }, {
-    onSuccess: ({ cache }) => {
-      cache.invalidate(dataKeys.productGetById, { id: productId })
+  return useMutation(
+    dataKeys.variantUpdate,
+    (variantsMoneyAmounts) => {
+      const promises = []
+      const variantIds = keys(variantsMoneyAmounts)
+      for (let i = 0, len = variantIds.length; i < len; i++) {
+        const variantId = variantIds[i]
+        const productVariantRequest = variantsMoneyAmounts[variantId]
+        promises.push(api.variantUpdate(productId, variantId, productVariantRequest))
+      }
+      return Promise.all(promises)
     },
-    onError: ({ cache }) => {
-      // TODO
-      // peony may succeed with one variant update but fail with another.
-      // Invalidating product data helps the user see what was updated and what wasn't.
-      // To prevent partial updates, implement variants updates in the product endpoint.
-      // This way all variant updates would be inside the same transaction.
-      cache.invalidate(dataKeys.productGetById, { id: productId })
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      },
+      onError: ({ cache }) => {
+        // TODO
+        // peony may succeed with one variant update but fail with another.
+        // Invalidating product data helps the user see what was updated and what wasn't.
+        // To prevent partial updates, implement variants updates in the product endpoint.
+        // This way all variant updates would be inside the same transaction.
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      }
     }
-  })
+  )
 }
 
 export const useCountries = (params) => {
@@ -270,10 +309,14 @@ export const useRegions = (params) => {
 export const useSalesChannels = (params) => {
   const api = useApi()
   const p = getParams(params)
-  const { refetch, data, isFetching, error } = useQuery(dataKeys.salesChannelsGet, () => api.salesChannelsGet(p), {
-    variables: { p },
-    extractId: (x) => x.p
-  })
+  const { refetch, data, isFetching, error } = useQuery(
+    dataKeys.salesChannelsGet,
+    () => api.salesChannelsGet(p),
+    {
+      variables: { p },
+      extractId: (x) => x.p
+    }
+  )
 
   const salesChannelsObject = useMemo(() => {
     if (detectIsEmpty(data)) {
@@ -303,36 +346,44 @@ export const useLocales = (params) => {
 
 export const useUpdateCurrencyMutation = () => {
   const api = useApi()
-  return useMutation(dataKeys.currencyUpdate, (code, data) => api.currencyUpdate(code, data), {
-    onSuccess: ({ cache }) => {
-      cache.invalidate(dataKeys.storeGet)
+  return useMutation(
+    dataKeys.currencyUpdate,
+    (code, data) => api.currencyUpdate(code, data),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.storeGet)
+      }
     }
-  })
+  )
 }
 
 export const useUploadProductImageMutation = (productId) => {
   const api = useApi()
-  const [updateProduct, {
-    isFetching: updateProductIsFetching,
-    error: updateProductError
-  }] = useUpdateProductMutation(productId)
+  const [
+    updateProduct,
+    { isFetching: updateProductIsFetching, error: updateProductError }
+  ] = useUpdateProductMutation(productId)
 
-  const [uploadImages, {
-    isFetching: uploadImagesIsFetching,
-    error: uploadImagesError
-  }] = useMutation(dataKeys.uploadsUpload, (data, params) => api.uploadsUpload(data, params), {
-    onSuccess: ({ cache, data }) => {
-      const images = []
-      for (let i = 0, len = data.uploads.length; i < len; i++) {
-        images.push(data.uploads(i).url)
+  const [
+    uploadImages,
+    { isFetching: uploadImagesIsFetching, error: uploadImagesError }
+  ] = useMutation(
+    dataKeys.uploadsUpload,
+    (data, params) => api.uploadsUpload(data, params),
+    {
+      onSuccess: ({ cache, data }) => {
+        const images = []
+        for (let i = 0, len = data.uploads.length; i < len; i++) {
+          images.push(data.uploads(i).url)
+        }
+        updateProduct({ images })
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      },
+      onError: () => {
+        // delete files that may have been uploaded if needed
       }
-      updateProduct({ images })
-      cache.invalidate(dataKeys.productGetById, { id: productId })
-    },
-    onError: () => {
-      // delete files that may have been uploaded if needed
     }
-  })
+  )
 
   return {
     uploadProductImages: uploadImages,
@@ -345,20 +396,21 @@ export const useDeleteProductImageMutation = (productId) => {
   const api = useApi()
   const { data: productData } = useProductById(productId)
 
-  const [updateProduct, {
-    isFetching: updateProductIsFetching,
-    error: updateProductError
-  }] = useUpdateProductMutation(productId)
+  const [
+    updateProduct,
+    { isFetching: updateProductIsFetching, error: updateProductError }
+  ] = useUpdateProductMutation(productId)
 
-  const [deleteImage, {
-    isFetching: deleteImageIsFetching,
-    error: deleteImageError
-  }] = useMutation(dataKeys.uploadsDelete, (id) => api.uploadsDelete(id), {
+  const [
+    deleteImage,
+    { isFetching: deleteImageIsFetching, error: deleteImageError }
+  ] = useMutation(dataKeys.uploadsDelete, (id) => api.uploadsDelete(id), {
     onSuccess: ({ cache, data }) => {
       const { id } = data
       const images = []
       for (let i = 0, len = productData.images.length; i < len; i++) {
-        const { id: currentImageId, url: currentImageUrl } = productData.images[i]
+        const { id: currentImageId, url: currentImageUrl } =
+          productData.images[i]
         if (currentImageId === id) {
           continue
         }

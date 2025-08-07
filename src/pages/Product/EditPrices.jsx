@@ -5,8 +5,6 @@ import {
   detectIsObject,
   detectIsUndefined,
   keys,
-  memo,
-  useCallback,
   useEffect,
   useRef,
   useState
@@ -80,7 +78,6 @@ const TableHead = component(({ currencyColumns, regionColumns }) => {
 })
 
 // https://github.com/atellmer/dark/issues/108
-// TODO ideally avoid floating point airthmetic
 const TableCell = component(({ decimalDigits, value, handler }) => {
   const getDecimals = () => {
     if (detectIsUndefined(decimalDigits)) {
