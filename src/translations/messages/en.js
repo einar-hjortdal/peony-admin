@@ -107,6 +107,8 @@ export default freeze({
   'products.title': 'products',
   'regions.heading': 'regions',
   'regions.title': 'regions',
+  'regions.addRegion.add': 'add region',
+  'regions.addRegion.close': 'close',
   'settings.currencies.description': 'manage the currencies of your store',
   'settings.currencies.title': 'currencies',
   'settings.languages.description': 'manage the translations of your content',

@@ -249,7 +249,8 @@ const Modal = component(({ modalRef }) => {
     if (updateStoreIsFetching) {
       return
     }
-    updateStore(storeData.id, { currency_codes: params })
+    const { id } = storeData.store
+    updateStore(id, { currency_codes: params })
   }
 
   if (storeData && currenciesData) {
