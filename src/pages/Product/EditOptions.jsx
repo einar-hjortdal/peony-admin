@@ -21,20 +21,22 @@ import {
 } from '../../data'
 import If from '../../components/If'
 
-const OptionTranslation = component(({ locale, onInput, value, handleDelete }) => {
+const OptionTranslation = component(({ locale, onInput, onBlur, value, handleDelete }) => {
   const { t, translator } = useTranslation('product.editOptions.optionTranslation')
+  const { id, code } = locale
   const handleLabelClick = (e) => {
     e.preventDefault()
   }
 
   return (
     <label onClick={handleLabelClick}>
-      {translator.formatName(locale.code, { type: 'region' })}
+      {translator.formatName(code, { type: 'language' })}
       <input
         type='text'
         placeholder='color'
-        data-locale-id={locale.id}
+        data-locale-id={id}
         onInput={onInput}
+        onBlur={onBlur}
         value={value}
       />
       <button type='button' onClick={handleDelete}>{t('delete')}</button>
@@ -158,7 +160,7 @@ const EditableOption = component(({ productId, option }) => {
       const title = optionTitleTranslations[localeId]
       translations.push({ localeId, title })
     }
-    updateOption({ translations })
+    updateOption(id, { translations })
   }
 
   const handleDeleteTranslation = (e) => {
@@ -185,6 +187,7 @@ const EditableOption = component(({ productId, option }) => {
       <OptionTranslation
         locale={locale}
         onInput={handleInput}
+        onBlur={handleUpdate}
         value={optionTitleTranslations[locale.id]}
         delete={handleDeleteTranslation}
       />
