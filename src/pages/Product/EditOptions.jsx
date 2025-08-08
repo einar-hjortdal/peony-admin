@@ -42,7 +42,7 @@ const OptionTranslation = component(({ locale, onInput, value, handleDelete }) =
   )
 })
 
-const NewOption = component(({ productId }) => {
+const NewOption = component(({ productId, handleCloseNewOption }) => {
   const { t } = useTranslation('product.newOption')
   const { data: storeData, isFetching: storeIsFetching, error: storeError } = useStore()
   const { defaultLocaleId, locales } = storeData.store
@@ -76,6 +76,7 @@ const NewOption = component(({ productId }) => {
       translations.push({ localeId, title })
     }
     createOption({ translations })
+    handleCloseNewOption()
   }
 
   const titleTranslations = []
@@ -221,11 +222,13 @@ const ProductOptions = component(({ productId }) => {
   const { data: productData } = useProductById(productId)
 
   const [showNewOption, setShowNewOption] = useState(false)
+
   const handleShowNewOption = () => {
-    if (showNewOption) {
-      return setShowNewOption(false)
-    }
     return setShowNewOption(true)
+  }
+
+  const handleCloseNewOption = () => {
+    return setShowNewOption(false)
   }
 
   if (productData) {
@@ -246,8 +249,8 @@ const ProductOptions = component(({ productId }) => {
           <button type='button' onClick={handleShowNewOption}>{t('addOption')}</button>
         </If>
         <If condition={showNewOption}>
-          <NewOption productId={productId} />
-          <button type='button' onClick={handleShowNewOption}>{t('removeOption')}</button>
+          <NewOption productId={productId} handleCloseNewOption={handleCloseNewOption} />
+          <button type='button' onClick={handleCloseNewOption}>{t('removeOption')}</button>
         </If>
       </div>
     )

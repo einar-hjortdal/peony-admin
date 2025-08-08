@@ -188,7 +188,6 @@ const InputOriginCountry = component(({ label, value, onChangeHandler }) => {
   return false
 })
 
-// inventory_quantity ?i32    @[json: 'inventoryQuantity']
 // allow_backorder    ?bool   @[json: 'allowBackorder']
 // manage_inventory   ?bool   @[json: 'manageInventory']
 // origin_country     ?string @[json: 'originCountry']

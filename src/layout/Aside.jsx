@@ -12,7 +12,13 @@ const Nav = styled.nav`
 `
 
 const Aside = component(() => {
-  const [logout, { isFetching: logoutIsFetching, error: logoutError }] = useUserLogoutMutation()
+  const [
+    logout,
+    {
+      isFetching: logoutIsFetching,
+      error: logoutError
+    }
+  ] = useUserLogoutMutation()
 
   const handleLogout = () => {
     if (logoutIsFetching) {
