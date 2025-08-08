@@ -126,10 +126,12 @@ const DefaultLocale = component(() => {
   }
 })
 
-const Locale = component(({ id, defaultLocaleId, translatedName, value, handleChange }) => {
+const Locale = component(({ locale, defaultLocaleId, translatedName, value, handleChange }) => {
+  const { id, code } = locale
+
   return (
     <div>
-      {translatedName}
+      {code} ({translatedName})
       <input
         type='checkbox'
         value={value}
@@ -226,13 +228,14 @@ const Modal = component(({ modalRef }) => {
     const { locales } = localesData
     const localesList = []
     for (let i = 0, len = locales.length; i < len; i++) {
-      const { id, code } = locales[i]
+      const locale = locales[i]
+      const { id, code } = locale
       const translatedName = translator.formatName(code.trim(), { type: 'language' })
       const value = params.includes(id)
       localesList.push(
         <Locale
           key={id}
-          id={id}
+          locale={locale}
           defaultLocaleId={storeData.store.defaultLocaleId}
           translatedName={translatedName}
           value={value}

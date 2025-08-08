@@ -39,7 +39,12 @@ const OptionTranslation = component(({ locale, onInput, onBlur, value, handleDel
         onBlur={onBlur}
         value={value}
       />
-      <button type='button' onClick={handleDelete}>{t('delete')}</button>
+      <button
+        type='button'
+        data-locale-id={id}
+        onClick={handleDelete}
+      >{t('delete')}
+      </button>
     </label>
   )
 })
@@ -93,7 +98,7 @@ const NewOption = component(({ productId, handleCloseNewOption }) => {
         locale={locale}
         onInput={handleInput}
         value={optionTitleTranslations[locale.id]}
-        delete={handleDeleteTranslation}
+        handleDelete={handleDeleteTranslation}
       />
     )
   }
@@ -152,24 +157,28 @@ const EditableOption = component(({ productId, option }) => {
     })
   }
 
-  const handleUpdate = () => {
+  const getTranslationsArray = (translationsMap) => {
     const translations = []
-    const localeIds = keys(optionTitleTranslations)
+    const localeIds = keys(translationsMap)
     for (let i = 0, len = localeIds.length; i < len; i++) {
       const localeId = localeIds[i]
-      const title = optionTitleTranslations[localeId]
+      const title = translationsMap[localeId]
       translations.push({ localeId, title })
     }
+    return translations
+  }
+
+  const handleUpdate = () => {
+    const translations = getTranslationsArray(optionTitleTranslations)
     updateOption(id, { translations })
   }
 
   const handleDeleteTranslation = (e) => {
     const localeId = e.target.dataset.localeId
-    setOptionTitleTranslations((prevState) => {
-      const newState = { ...prevState }
-      delete newState[localeId]
-      return newState
-    })
+    const translationsMap = { ...optionTitleTranslations }
+    delete translationsMap[localeId]
+    const translations = getTranslationsArray(translationsMap)
+    updateOption(id, { translations })
   }
 
   const handleDeleteOption = () => {
@@ -189,7 +198,7 @@ const EditableOption = component(({ productId, option }) => {
         onInput={handleInput}
         onBlur={handleUpdate}
         value={optionTitleTranslations[locale.id]}
-        delete={handleDeleteTranslation}
+        handleDelete={handleDeleteTranslation}
       />
     )
   }
