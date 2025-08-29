@@ -6,7 +6,7 @@ import { useStore, useProductById } from '../../data'
 import Card from '../../components/Card'
 import { formatLine } from './utils'
 import Variants from './Variants'
-import Images from './Images'
+import Image from './Image'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -133,7 +133,7 @@ const Product = component(() => {
           </div>
           <div>
             {t('images')}
-            <Images productId={productId} />
+            <Image productId={productId} />
           </div>
         </Card>
         <Variants productId={productId} />

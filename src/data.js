@@ -365,6 +365,38 @@ export const useUploadProductImageMutation = (productId) => {
   ] = useUpdateProductMutation(productId)
 
   const [
+    uploadImage,
+    { isFetching: uploadImageIsFetching, error: uploadImageError }
+  ] = useMutation(
+    dataKeys.uploadsUploadOne,
+    (file) => api.uploadsUploadOne(file),
+    {
+      onSuccess: ({ cache, data }) => {
+        const images = []
+        for (let i = 0, len = data.uploads.length; i < len; i++) {
+          images.push(data.uploads(i).url)
+        }
+        updateProduct({ images })
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      }
+    }
+  )
+
+  return {
+    uploadProductImage: uploadImage,
+    isFetching: updateProductIsFetching || uploadImageIsFetching,
+    error: updateProductError || uploadImageError
+  }
+}
+
+export const useUploadProductImagesMutation = (productId) => {
+  const api = useApi()
+  const [
+    updateProduct,
+    { isFetching: updateProductIsFetching, error: updateProductError }
+  ] = useUpdateProductMutation(productId)
+
+  const [
     uploadImages,
     { isFetching: uploadImagesIsFetching, error: uploadImagesError }
   ] = useMutation(
@@ -380,7 +412,7 @@ export const useUploadProductImageMutation = (productId) => {
         cache.invalidate(dataKeys.productGetById, { id: productId })
       },
       onError: () => {
-        // delete files that may have been uploaded if needed
+        // TODO delete files that may have been uploaded if needed
       }
     }
   )

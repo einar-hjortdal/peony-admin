@@ -42,7 +42,8 @@ export const dataKeys = {
   regionUpdate: 'regionUpdate',
   salesChannelsGet: 'salesChannelsGet',
   localesGet: 'localesGet',
-  uploadsUpload: 'uploadsUpload',
+  uploadsUploadOne: 'uploadsUploadOne',
+  uploadsUploadMany: 'uploadsUploadMany',
   uploadsDelete: 'uploadsDelete'
 }
 
@@ -256,7 +257,16 @@ export const api = {
     return checkResponse(response)
   },
 
-  uploadsUpload: async (formData, params) => {
+  uploadsUploadOne: async (file) => {
+    const response = await fetch(getRequestUrl(`/admin/uploads/${file.name}`), {
+      method: 'POST',
+      credentials: 'include',
+      body: file
+    })
+    return checkResponse(response)
+  },
+
+  uploadsUploadMany: async (formData, params) => {
     const response = await fetch(getRequestUrl('/admin/uploads', params), {
       method: 'POST',
       credentials: 'include',
