@@ -16,6 +16,7 @@
 
 - [ ] Product categories
 - [ ] User-defined data
+- [ ] Inventory items
 
 ## Working on soon
 

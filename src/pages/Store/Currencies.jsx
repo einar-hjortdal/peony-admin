@@ -11,7 +11,7 @@ import {
   useStoreUpdateMutation,
   useUpdateCurrencyMutation
 } from '../../data'
-import { currentPage, totalPages } from '../../utils_data'
+import { currentPage, totalPages } from '../../utils'
 
 const CurrenciesTable = styled.table`
   width: 100%;

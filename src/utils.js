@@ -1,0 +1,25 @@
+import { formatErrorMsg } from '@dark-engine/core'
+import { detectIsBrowser } from '@dark-engine/platform-browser'
+
+const lib = 'peony-admin'
+
+export const formatError = (errorMsg) => formatErrorMsg(errorMsg, lib)
+
+export const throwError = (errorMsg) => {
+  throw new Error(formatError(errorMsg))
+}
+
+export const getPrefersReducedMotion = () => {
+  if (detectIsBrowser()) {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  }
+  return true
+}
+
+export const totalPages = (count, fetched) => {
+  return Math.ceil(count / fetched)
+}
+
+export const currentPage = (offset, fetched) => {
+  return Math.floor(offset / fetched) + 1
+}

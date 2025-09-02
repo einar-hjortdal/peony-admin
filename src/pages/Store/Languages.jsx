@@ -9,7 +9,7 @@ import {
   useStore,
   useStoreUpdateMutation
 } from '../../data'
-import { currentPage, totalPages } from '../../utils_data'
+import { currentPage, totalPages } from '../../utils'
 
 const LocalesTable = styled.table`
   width: 100%;

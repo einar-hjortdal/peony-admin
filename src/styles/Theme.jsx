@@ -1,8 +1,16 @@
-import { component, useState, createContext, useContext, detectIsNull } from '@dark-engine/core'
+import {
+  component,
+  useState,
+  createContext,
+  useContext,
+  detectIsNull,
+  detectIsString
+} from '@dark-engine/core'
 import { ThemeProvider } from '@dark-engine/styled'
 import { invariant } from '@wareme/utils'
 
 import GlobalStyle from './GlobalStyle'
+import { detectIsBrowser } from '@dark-engine/platform-browser'
 
 const breakpoints = {
   sm: '576px', // < 576px = mobile portrait
@@ -65,6 +73,7 @@ const constants = {
 
 const themeNameLight = 'light'
 const themeNameDark = 'dark'
+const defaultTheme = themeNameLight
 
 const themeLight = {
   ...lightColors,
@@ -89,13 +98,53 @@ const Theme = component(({ slot }) => {
     [themeNameLight]: themeLight,
     [themeNameDark]: themeDark
   }
-  const [selectedThemeName, setSelectedThemeName] = useState(themeNameLight)
+
+  const getActiveTheme = () => {
+    if (!detectIsBrowser()) {
+      return defaultTheme
+    }
+
+    const setTheme = localStorage.getItem('theme')
+    if (detectIsString(setTheme)) {
+      return setTheme
+    }
+
+    const darkQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const lightQuery = window.matchMedia('(prefers-color-scheme: light)')
+
+    if (darkQuery.media === 'not all') {
+      return defaultTheme
+    }
+
+    if (darkQuery.matches) {
+      return themeNameDark
+    }
+
+    if (lightQuery.matches) {
+      return themeNameLight
+    }
+
+    return defaultTheme
+  }
+
+  const [selectedThemeName, setSelectedThemeName] = useState(getActiveTheme())
+
+  const setActiveTheme = (themeName) => {
+    if (!detectIsBrowser()) {
+      return
+    }
+
+    localStorage.setItem('theme', themeName)
+  }
 
   const switchTheme = () => {
     if (selectedThemeName === themeNameLight) {
-      return setSelectedThemeName(themeNameDark)
+      setActiveTheme(themeNameDark)
+      setSelectedThemeName(themeNameDark)
+    } else {
+      setActiveTheme(themeNameLight)
+      setSelectedThemeName(themeNameLight)
     }
-    return setSelectedThemeName(themeNameLight)
   }
 
   const value = { selectedThemeName, switchTheme }
