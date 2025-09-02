@@ -110,7 +110,7 @@ export const useStoreUpdateMutation = () => {
 export const useProducts = (params) => {
   const api = useApi()
   const p = getParams(params)
-  return useQuery(dataKeys.getProducts, () => api.getProducts(p), {
+  return useQuery(dataKeys.productsGet, () => api.productsGet(p), {
     variables: { p },
     extractId: (x) => x.p
   })
@@ -148,10 +148,15 @@ export const useProductById = (id) => {
   return { refetch, data, isFetching, error, translationsObject }
 }
 
-export const useCreateProductMutation = () => {
+export const useProductCreateMutation = () => {
   const api = useApi()
-  return useMutation(dataKeys.productCreate, (data) => api.productCreate(data))
-  // TODO onSuccess invalidate all dataKeys.getProducts from cache https://github.com/atellmer/dark/issues/107
+  return useMutation(
+    dataKeys.productCreate, (data) => api.productCreate(data),
+    {
+      onSuccess: ({ cache }) => { cache.invalidate(dataKeys.productsGet) }
+      // TODO onSuccess invalidate all dataKeys.productsGet from cache https://github.com/atellmer/dark/issues/107
+    }
+  )
 }
 
 export const useUpdateProductMutation = (id) => {
@@ -216,8 +221,8 @@ export const useProductOptionDeleteMutation = (productId) => {
 export const useVariantCreateMutation = (productId) => {
   const api = useApi()
   return useMutation(
-    dataKeys.variantCreate,
-    (data) => api.variantCreate(productId, data),
+    dataKeys.productVariantCreate,
+    (data) => api.productVariantCreate(productId, data),
     {
       onSuccess: ({ cache }) => {
         cache.invalidate(dataKeys.productGetById, { id: productId })
@@ -229,8 +234,8 @@ export const useVariantCreateMutation = (productId) => {
 export const useVariantUpdateMutation = (productId) => {
   const api = useApi()
   return useMutation(
-    dataKeys.variantUpdate,
-    (variantId, data) => api.variantUpdate(productId, variantId, data),
+    dataKeys.productVariantUpdate,
+    (variantId, data) => api.productVariantUpdate(productId, variantId, data),
     {
       onSuccess: ({ cache }) => {
         cache.invalidate(dataKeys.productGetById, { id: productId })
@@ -241,7 +246,7 @@ export const useVariantUpdateMutation = (productId) => {
 
 export const useDeleteVariantMutation = (productId) => {
   const api = useApi()
-  return useMutation(dataKeys.variantDelete, (id) => api.variantDelete(id), {
+  return useMutation(dataKeys.productVariantDelete, (id) => api.productVariantDelete(id), {
     onSuccess: ({ cache }) => {
       cache.invalidate(dataKeys.productGetById, { id: productId })
     }

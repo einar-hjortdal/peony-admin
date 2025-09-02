@@ -22,7 +22,7 @@ export const dataKeys = {
   authDelete: 'authDelete',
   storeGet: 'storeGet',
   storeUpdate: 'storeUpdate',
-  getProducts: 'getProducts',
+  productsGet: 'productsGet',
   productGetById: 'productGetById',
   productCreate: 'productCreate',
   productUpdate: 'productUpdate',
@@ -30,9 +30,9 @@ export const dataKeys = {
   productOptionCreate: 'productOptionCreate',
   productOptionUpdate: 'productOptionUpdate',
   productOptionDelete: 'productOptionDelete',
-  variantCreate: 'productVariantCreate',
-  variantUpdate: 'productVariantUpdate',
-  variantDelete: 'productVariantDelete',
+  productVariantCreate: 'productVariantCreate',
+  productVariantUpdate: 'productVariantUpdate',
+  productVariantDelete: 'productVariantDelete',
   countriesGet: 'countriesGet',
   currencyGet: 'currencyGet',
   currencyUpdate: 'currencyUpdate',
@@ -98,7 +98,7 @@ export const api = {
     return checkResponse(response)
   },
 
-  getProducts: async (params) => {
+  productsGet: async (params) => {
     const response = await fetch(getRequestUrl('/admin/products', params), {
       credentials: 'include'
     })
@@ -175,7 +175,7 @@ export const api = {
     return checkResponse(response)
   },
 
-  variantCreate: async (id, data) => {
+  productVariantCreate: async (id, data) => {
     const response = await fetch(
       getRequestUrl(`/admin/products/${id}/variants`),
       {
@@ -188,7 +188,7 @@ export const api = {
     return checkResponse(response)
   },
 
-  variantUpdate: async (productId, variantId, data) => {
+  productVariantUpdate: async (productId, variantId, data) => {
     const response = await fetch(
       getRequestUrl(`/admin/products/${productId}/variants/${variantId}`),
       {
@@ -201,7 +201,7 @@ export const api = {
     return checkResponse(response)
   },
 
-  variantDelete: async (id) => {
+  productVariantDelete: async (id) => {
     const response = await fetch(getRequestUrl(`/admin/variants/${id}`), {
       method: 'DELETE',
       credentials: 'include'

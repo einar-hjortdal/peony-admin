@@ -23,7 +23,7 @@ import If from '../components/If'
 import {
   constants,
   useProducts,
-  useCreateProductMutation,
+  useProductCreateMutation,
   useStore,
   useUpdateProductMutation,
   useDeleteProductMutation
@@ -130,7 +130,7 @@ const NewProduct = component(({ modalRef }) => {
     })
   }
 
-  const [createProduct, { isFetching, data, error }] = useCreateProductMutation()
+  const [createProduct, { isFetching, data, error }] = useProductCreateMutation()
 
   const handleSubmit = (e) => {
     e.preventDefault()
