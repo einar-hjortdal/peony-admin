@@ -94,8 +94,17 @@ const VariantRowActions = component(({ productId, variant }) => {
   )
 })
 
+const VariantRowInventory = component(({ manageInventory, inventoryQuantity }) => {
+  const { t } = useTranslation('product.variantRowInventory')
+  if (manageInventory) {
+    return inventoryQuantity
+  }
+  return t('unmanaged')
+})
+
 const VariantRow = component(({ productId, variant }) => {
-  const { title, ean, upc } = variant
+  const { title, ean, upc, inventoryQuantity, inventoryItem } = variant
+  const { manageInventory } = inventoryItem
   const [isOpen, setIsOpen] = useState(false)
   const handleOpen = () => {
     setIsOpen(true)
@@ -106,6 +115,12 @@ const VariantRow = component(({ productId, variant }) => {
       <td>{formatLine(title)}</td>
       <td>{formatLine(ean)}</td>
       <td>{formatLine(upc)}</td>
+      <td>
+        <VariantRowInventory
+          manageInventory={manageInventory}
+          inventoryQuantity={inventoryQuantity}
+        />
+      </td>
       <td>
         <button type='button' onClick={handleOpen}>
           ...
@@ -157,6 +172,7 @@ const VariantsTable = component(({ productId }) => {
             <th>title</th>
             <th>ean</th>
             <th>upc</th>
+            <th>inventory</th>
             <th>actions</th>
           </thead>
           <tbody>

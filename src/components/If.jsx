@@ -4,7 +4,7 @@ const If = component(({ condition, slot }) => {
   if (condition) {
     return slot
   }
-  return null
+  return false
 })
 
 export default If

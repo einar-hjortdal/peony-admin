@@ -94,6 +94,7 @@ export default freeze({
   'product.variantInputs.weightPlaceholder': '99',
   'product.variantInputs.width': 'Width',
   'product.variantInputs.widthPlaceholder': '99',
+  'product.variantRowInventory.unmanaged': 'not managed',
   'product.variants.title': 'variants',
   'products.actions.delete': 'delete',
   'products.actions.edit': 'edit',
