@@ -14,25 +14,28 @@
 
 ## Currently working on
 
-- [ ] Regions
-
-## Later releases
-
-- [ ] Taxes
+- [ ] Product categories
 - [ ] User-defined data
+
+## Working on soon
+
+- [ ] Regions
+- [ ] Sales channels
+- [ ] Taxes
+- [ ] Stock locations
+
+## Work on next
+
 - [ ] Customer
 - [ ] Cart
 - [ ] Orders
 - [ ] Prices: minQuantity, maxQuantity
 - [ ] Price lists
-- [ ] Sales channels
-- [ ] Stock locations
 - [ ] Product types
-- [ ] Product categories
 - [ ] Users
-- [ ] Tags
-- [ ] Pages
+- [ ] Product tags
 - [ ] Posts
+- [ ] Post tags
 - [ ] Notifications
 - [ ] Variant images
 - [ ] Stores
