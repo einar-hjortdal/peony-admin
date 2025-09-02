@@ -31,7 +31,11 @@ import VariantEdit from './VariantEdit'
 const Options = component(({ productId, slot }) => {
   const { t } = useTranslation('product.options')
   const { data, isFetching, error } = useProductById(productId)
-  const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
+  const {
+    data: storeData,
+    isFetching: storeIsFetching,
+    error: storeError, localesObject
+  } = useStore()
 
   const optionElements = useMemo(() => {
     if (detectIsEmpty(data) || detectIsEmpty(storeData)) {
@@ -91,7 +95,7 @@ const VariantRowActions = component(({ productId, variant }) => {
 })
 
 const VariantRow = component(({ productId, variant }) => {
-  const { title, sku, ean } = variant
+  const { title, ean, upc } = variant
   const [isOpen, setIsOpen] = useState(false)
   const handleOpen = () => {
     setIsOpen(true)
@@ -100,8 +104,8 @@ const VariantRow = component(({ productId, variant }) => {
   return (
     <tr>
       <td>{formatLine(title)}</td>
-      <td>{formatLine(sku)}</td>
       <td>{formatLine(ean)}</td>
+      <td>{formatLine(upc)}</td>
       <td>
         <button type='button' onClick={handleOpen}>
           ...
@@ -151,8 +155,8 @@ const VariantsTable = component(({ productId }) => {
         <table>
           <thead>
             <th>title</th>
-            <th>sku</th>
             <th>ean</th>
+            <th>upc</th>
             <th>actions</th>
           </thead>
           <tbody>

@@ -99,6 +99,7 @@ const Product = component(() => {
   // display attributes from variant with rank 0
   // check database changes when adding prices
   if (data) {
+    const { product } = data
     return (
       <>
         <Card>
@@ -110,12 +111,12 @@ const Product = component(() => {
             </div>
             <div>
               {t('collection')}
-            </div>
-            <div>
-              {t('category')}
             </div> */}
             <div>
-              {t('discountable')}: {String(data.discountable)}
+              {t('category')}:
+            </div>
+            <div>
+              {t('discountable')}: {String(product.discountable)}
               {/* TODO */}
             </div>
             <div>
