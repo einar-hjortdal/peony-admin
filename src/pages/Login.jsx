@@ -8,8 +8,8 @@ import { useUser, useUserLoginMutation } from '../data'
 import Navigate from '../components/Navigate'
 
 const Gate = component(({ slot }) => {
-  const { data } = useUser()
-  if (data) {
+  const { data: userData } = useUser()
+  if (userData) {
     return <Navigate to='/orders' />
   }
   return slot

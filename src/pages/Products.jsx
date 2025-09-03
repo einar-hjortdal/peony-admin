@@ -28,7 +28,8 @@ import {
   useUpdateProductMutation,
   useDeleteProductMutation
 } from '../data'
-import { getDefaultTranslation, valueOrDefault } from '../translations'
+import { getDefaultTranslation } from '../translations'
+import { valueOrDefault } from '../utils'
 import { Link } from '@dark-engine/web-router'
 
 const NewProductBody = styled.div`

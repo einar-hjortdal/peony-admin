@@ -4,6 +4,7 @@ import { languages } from './languages.js'
 
 export const defaultLanguage = languages[0]
 
+// TODO store preferences for each user
 export const loadLanguage = () => {
   const preference = localStorage.getItem('language')
   if (detectIsEmpty(preference)) {
@@ -11,6 +12,10 @@ export const loadLanguage = () => {
     return defaultLanguage
   }
   return preference
+}
+
+export const changeLanguage = (newLanguage) => {
+  localStorage.setItem('language', newLanguage)
 }
 
 export const isDefaultLanguage = (language) => {
@@ -71,11 +76,4 @@ export const getDefaultTranslation = (translations, defaultLocaleId) => {
     }
   }
   return null
-}
-
-export const valueOrDefault = (providedValue, defaultValue) => {
-  if (detectIsEmpty(providedValue)) {
-    return defaultValue
-  }
-  return providedValue
 }

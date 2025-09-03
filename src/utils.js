@@ -1,4 +1,4 @@
-import { formatErrorMsg } from '@dark-engine/core'
+import { detectIsEmpty, formatErrorMsg } from '@dark-engine/core'
 import { detectIsBrowser } from '@dark-engine/platform-browser'
 
 const lib = 'peony-admin'
@@ -22,4 +22,11 @@ export const totalPages = (count, fetched) => {
 
 export const currentPage = (offset, fetched) => {
   return Math.floor(offset / fetched) + 1
+}
+
+export const valueOrDefault = (providedValue, defaultValue) => {
+  if (detectIsEmpty(providedValue)) {
+    return defaultValue
+  }
+  return providedValue
 }
