@@ -68,6 +68,8 @@ const GlobalStyle = createGlobalStyle`
   #dark-root {
     isolation: isolate;
     min-height: 100vh;
+    background-color: ${p => p.theme.bg};
+    color: ${p => p.theme.fg};
   }
 
   a {

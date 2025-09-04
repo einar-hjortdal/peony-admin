@@ -1,8 +1,10 @@
 import { styled } from '@dark-engine/styled'
 
 const Card = styled.div`
-  box-shadow: 0 3px 16px rgba(142,134,171,.05);
-  padding: 1.5rem;
+  background-color: ${p => p.theme.cardBg};
+  border-radius: ${p => p.theme.borderRadius};
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  margin-bottom: 1.5rem;
 `
 
 Card.Header = styled.header`

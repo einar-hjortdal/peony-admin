@@ -10,6 +10,7 @@ import Theme from '../styles/Theme'
 import ThemeSwitch from './ThemeSwitch'
 import LanguageSelect from './LanguageSelect'
 import User from './User'
+import Breadcrumb from './Breadcrumb'
 
 const Gate = component(({ slot }) => {
   const { t } = useTranslation('root')
@@ -32,7 +33,9 @@ const Gate = component(({ slot }) => {
 
 const StyledAside = styled.aside`
   position: fixed;
-  inset: 0 auto 0 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
   border-right: 1px solid ${p => p.theme.borderColor};
   width: ${p => p.theme.asideWidth};
 `
@@ -63,15 +66,18 @@ const Nav = styled.nav`
 
 const StyledHeader = styled.header`
   position: fixed;
-  inset: 0 0 auto ${p => p.theme.asideWidth};
+  top: 0;
+  right: 0;
+  left: ${p => p.theme.asideWidth};
   height: ${p => p.theme.headerHeight};
   border-bottom: 1px solid ${p => p.theme.borderColor};
   align-content: center;
 `
 
 const StyledMain = styled.main`
-  margin-top: ${p => p.theme.headerHeight};
-  margin-left: ${p => p.theme.asideWidth};
+  box-sizing: border-box;
+  padding-top: ${p => p.theme.headerHeight};
+  padding-left: ${p => p.theme.asideWidth};
 `
 
 const Container = styled.div`
@@ -117,6 +123,7 @@ const Layout = component(({ slot }) => {
 
           <StyledMain>
             <Container>
+              <Breadcrumb />
               {slot}
             </Container>
           </StyledMain>

@@ -33,10 +33,11 @@ const zIndex = {
 }
 
 const lightColors = {
-  bg: '#FAFAFA',
+  bg: '#E6E6E6',
   fg: '#201A23',
   borderColor: '#CCCCCC',
-  cardBg: '#E6E6E6',
+  borderRadius: '0.75rem',
+  cardBg: '#FAFAFA',
   active: '#366396',
   dialogHeaderFg: '#FFFFFF',
   primary: '#22C55E',
