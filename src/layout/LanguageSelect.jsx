@@ -1,12 +1,10 @@
 import { component } from '@dark-engine/core'
 
-import { languages, getMessages } from '../../translations'
+import { languages, getMessages } from '../translations'
 import { useTranslation } from '@wareme/translations'
 
-const Language = component(() => {
+const LanguageSelect = component(() => {
   const { t, translator } = useTranslation('header.language')
-
-  console.log(translator)
 
   const handleChangeLanguage = async (e) => {
     const { value } = e.target
@@ -39,4 +37,4 @@ const Language = component(() => {
   )
 })
 
-export default Language
+export default LanguageSelect

@@ -1,13 +1,10 @@
 import { createGlobalStyle } from '@dark-engine/styled'
 
 const GlobalStyle = createGlobalStyle`
+  // reset
   body {
     margin: 0;
     -webkit-tap-highlight-color: transparent; /* Disable tap highlights */
-  }
-
-  #dark-root {
-    isolation: isolate;
   }
 
   html {
@@ -67,8 +64,21 @@ const GlobalStyle = createGlobalStyle`
     display: block;
   }
 
+  // app styles
   #dark-root {
+    isolation: isolate;
     min-height: 100vh;
+  }
+
+  a {
+    text-decoration: none;
+    color: ${p => p.theme.fg};
+  }
+
+  ul {
+    list-style: none;
+    margin: unset;
+    padding: unset;
   }
 `
 

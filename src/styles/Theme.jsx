@@ -22,10 +22,8 @@ const breakpoints = {
 }
 
 const spacing = {
-  headerHeightMobile: '3rem',
-  headerHeight: '4.5rem',
-  footerHeightMobile: '5rem',
-  footerHeight: '8rem'
+  asideWidth: '16rem',
+  headerHeight: '4rem'
 }
 
 const zIndex = {
@@ -35,10 +33,11 @@ const zIndex = {
 }
 
 const lightColors = {
-  asideBg: '#FFFFFF',
-  mainBg: '#F7F9FB',
-  cardBg: '#FFFFFF',
-  dialogHeaderBg: '#2B2D3B',
+  bg: '#FAFAFA',
+  fg: '#201A23',
+  borderColor: '#CCCCCC',
+  cardBg: '#E6E6E6',
+  active: '#366396',
   dialogHeaderFg: '#FFFFFF',
   primary: '#22C55E',
   secondary: '#96A0B5',

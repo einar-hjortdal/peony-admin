@@ -1,7 +1,6 @@
 import { styled } from '@dark-engine/styled'
 
 const Card = styled.div`
-  background-color: ${p => p.theme.cardBg};
   box-shadow: 0 3px 16px rgba(142,134,171,.05);
   padding: 1.5rem;
 `

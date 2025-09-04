@@ -1,8 +1,8 @@
 import { component } from '@dark-engine/core'
 
-import { useThemeSwitcher } from '../../styles/Theme'
+import { useThemeSwitcher } from '../styles/Theme'
 
-const Theme = component(() => {
+const ThemeSwitch = component(() => {
   const { selectedThemeName, switchTheme } = useThemeSwitcher()
   return (
     <label>
@@ -12,4 +12,4 @@ const Theme = component(() => {
   )
 })
 
-export default Theme
+export default ThemeSwitch

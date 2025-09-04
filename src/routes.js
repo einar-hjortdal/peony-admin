@@ -1,6 +1,6 @@
 import { lazy } from '@dark-engine/core'
 
-import Root from './layout/Root'
+import Layout from './layout'
 
 export const routes = [
   {
@@ -9,7 +9,7 @@ export const routes = [
   },
   {
     path: '',
-    component: Root,
+    component: Layout,
     children: [
       {
         path: '',

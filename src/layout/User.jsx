@@ -1,8 +1,8 @@
 import { component, detectIsUndefined, useState } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 
-import { useUser, useUserLogoutMutation } from '../../data'
-import If from '../../components/If'
+import { useUser, useUserLogoutMutation } from '../data'
+import If from '../components/If'
 
 const UserButton = styled.button`
   border: none;
