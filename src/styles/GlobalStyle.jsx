@@ -82,6 +82,10 @@ const GlobalStyle = createGlobalStyle`
     margin: unset;
     padding: unset;
   }
+
+  button {
+    border: none;
+  }
 `
 
 export default GlobalStyle

@@ -12,31 +12,11 @@ import { invariant } from '@wareme/utils'
 import GlobalStyle from './GlobalStyle'
 import { detectIsBrowser } from '@dark-engine/platform-browser'
 
-const breakpoints = {
-  sm: '576px', // < 576px = mobile portrait
-  md: '768px', // < 768px = mobile landscape
-  lg: '992px', // < 992px = tablet
-  xl: '1300px', // < 1300px = desktop smaller than 1280
-  xxl: '1500px', // < 1500px = desktop smaller than 1536
-  xxxl: '2000px' // < 2000px = desktop smaller than 1920
-}
-
-const spacing = {
-  asideWidth: '16rem',
-  headerHeight: '4rem'
-}
-
-const zIndex = {
-  zHeader: 1,
-  zMobileMenuBackground: 2,
-  zMobileMenuForeground: 3
-}
-
 const lightColors = {
   bg: '#E6E6E6',
   fg: '#201A23',
-  borderColor: '#CCCCCC',
-  borderRadius: '0.75rem',
+  borderColor: '#C2C2C2',
+  disabled: '#CCCCCC',
   cardBg: '#FAFAFA',
   active: '#366396',
   dialogHeaderFg: '#FFFFFF',
@@ -44,9 +24,9 @@ const lightColors = {
   secondary: '#96A0B5',
   button: {
     primary: {
-      fg: '#FFFFFF',
-      bg: '#22C55E',
-      hoverBg: '#20BB59'
+      fg: '#E6E6E6',
+      bg: '#366396',
+      hoverBg: '#2B4F78'
     },
     secondary: {
       fg: '#FFFFFF',
@@ -66,9 +46,22 @@ const darkColors = {
 }
 
 const constants = {
-  ...breakpoints,
-  ...spacing,
-  ...zIndex
+  // breakpoints
+  sm: '576px', // < 576px = mobile portrait
+  md: '768px', // < 768px = mobile landscape
+  lg: '992px', // < 992px = tablet
+  xl: '1300px', // < 1300px = desktop smaller than 1280
+  xxl: '1500px', // < 1500px = desktop smaller than 1536
+  xxxl: '2000px', // < 2000px = desktop smaller than 1920
+
+  // z-index
+  zHeader: 1,
+  zMobileMenuBackground: 2,
+  zMobileMenuForeground: 3,
+
+  borderRadius: '0.75rem',
+  asideWidth: '16rem',
+  headerHeight: '4rem'
 }
 
 const themeNameLight = 'light'

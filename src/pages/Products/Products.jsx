@@ -12,14 +12,14 @@ import { useTranslation } from '@wareme/translations'
 import { styled } from '@dark-engine/styled'
 import { detectIsEmptyString } from '@wareme/utils'
 
-import Card from '../components/Card'
-import Dialog from '../components/Dialog'
-import Button from '../components/Button'
-import AccordionItem from '../components/AccordionItem'
-import Input from '../components/Input'
-import Switch from '../components/Switch'
-import Table from '../components/Table'
-import If from '../components/If'
+import Card from '../../components/Card'
+import Dialog from '../../components/Dialog'
+import Button from '../../components/Button'
+import AccordionItem from '../../components/AccordionItem'
+import Input from '../../components/Input'
+import Switch from '../../components/Switch'
+import If from '../../components/If'
+import Table from './Table'
 import {
   constants,
   useProducts,
@@ -27,9 +27,9 @@ import {
   useStore,
   useUpdateProductMutation,
   useDeleteProductMutation
-} from '../data'
-import { getDefaultTranslation } from '../translations'
-import { valueOrDefault } from '../utils'
+} from '../../data'
+import { getDefaultTranslation } from '../../translations'
+import { valueOrDefault } from '../../utils'
 import { Link } from '@dark-engine/web-router'
 
 const NewProductBody = styled.div`
@@ -281,61 +281,6 @@ const NewProduct = component(({ modalRef }) => {
   )
 })
 
-const Actions = component(({ product }) => {
-  const { id, status } = product
-  const { t } = useTranslation('products.actions')
-  const [updateProduct, {
-    data: updateProductData,
-    isFetching: updateProductIsFetching,
-    error: updateProductError
-  }] = useUpdateProductMutation(id)
-  const [deleteProduct, {
-    data: deleteProductData,
-    isFetching: deleteProductIsFetching,
-    error: deleteProductError
-  }] = useDeleteProductMutation(id)
-
-  const handleChangeStatus = (e) => {
-    const { newStatus } = e.target.dataset
-    updateProduct({ ...product, status: newStatus })
-  }
-
-  const handleDelete = () => {
-    deleteProduct()
-  }
-
-  return (
-    <div>
-      <ul>
-        <li><Link to={`/product/${id}`}>{t('edit')}</Link></li>
-        <If condition={status === constants.statusDraft}>
-          <li>
-            <button
-              type='button'
-              data-new-status={constants.statusPublished}
-              onClick={handleChangeStatus}
-            >{t('publish')}
-            </button>
-          </li>
-        </If>
-        <If condition={status === constants.statusPublished}>
-          <li>
-            <button
-              type='button'
-              data-new-status={constants.statusDraft}
-              onClick={handleChangeStatus}
-            >{t('unpublish')}
-            </button>
-          </li>
-        </If>
-        <li>
-          <button type='button' name='delete' onClick={handleDelete}>{t('delete')}</button>
-        </li>
-      </ul>
-    </div>
-  )
-})
-
 const Products = component(() => {
   // TODO implement filters that are commented out
   const [params, setParams] = useState({
@@ -361,7 +306,7 @@ const Products = component(() => {
   const { isFetching: storeIsFetching, data: storeData, error: storeError } = useStore()
   // TODO show skeleton while fetching
   // TODO show error message
-  const { data, error, isFetching } = useProducts(params)
+  const { data: productsData, error: productsError, isFetching: productsIsFetching } = useProducts(params)
 
   const modalRef = useRef(null)
   const handleOpenModal = () => {
@@ -374,69 +319,31 @@ const Products = component(() => {
   const { t } = useTranslation('products')
   // keep state to build request query params
   // no sort, just filter (this simplifies a great deal)
-  const headings = [
-    t('name'),
-    t('collection'),
-    t('status'),
-    t('availability'),
-    t('inventory')
-  ]
+  if (productsData && storeData) {
+    const { products } = productsData
+    const { defaultLocaleId } = storeData
 
-  if (storeIsFetching) {
-    return null
-  }
-
-  const h = []
-  for (let i = 0, len = headings.length; i < len; i++) {
-    headings.push(<th key={headings[i]}>{headings[i]}</th>)
-  }
-
-  const { products } = data
-  const rows = []
-  for (let i = 0, len = products.length; i < len; i++) {
-    const product = products[i]
-    const defaultTranslation = getDefaultTranslation(product.translations, storeData.store.defaultLocaleId)
-    let title = product.id
-    if (!detectIsEmpty(defaultTranslation)) {
-      title = valueOrDefault(defaultTranslation.title, product.id)
-    }
-    rows.push(
-      <tr key={product.id}>
-        <td><Link to={`/product/${product.id}`}>{title}</Link></td>
-        <td>'TODO collection'</td>
-        <td>{product.status}</td>
-        <td>'TODO availability'</td>
-        <td>'TODO inventory'</td>
-        <td><Actions product={product} /></td>
-      </tr>)
-  }
-
-  return (
-    <>
-      <Card>
-        <Card.Header>
+    return (
+      <>
+        <Card>
+          <Card.Header title={t('title')}>
+            <Button
+              $variant='primary'
+              type='button'
+              disabled={detectIsNull(modalRef)}
+              onClick={handleOpenModal}
+            >{t('addProduct')}
+            </Button>
+          </Card.Header>
           {/* TODO change to Table.Title */}
-          <Card.HeaderTitle>{t('title')}</Card.HeaderTitle>
-          {/* <Filter /> */}
-          <Button
-            $variant='primary'
-            type='button'
-            disabled={detectIsNull(modalRef)}
-            onClick={handleOpenModal}
-          >{t('addProduct')}
-          </Button>
-        </Card.Header>
-        <table>
-          <thead>
-            <tr>{h}</tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </table>
-        {/* <Table.Footer /> */}
-      </Card>
-      <NewProduct modalRef={modalRef} />
-    </>
-  )
+          <Card.Body>
+            <Table products={products} defaultLocaleId={defaultLocaleId} />
+          </Card.Body>
+        </Card>
+        <NewProduct modalRef={modalRef} />
+      </>
+    )
+  }
 })
 
 export default Products

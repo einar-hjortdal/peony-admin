@@ -1,4 +1,6 @@
+import { component, detectIsString } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
+import If from './If'
 
 const Card = styled.div`
   background-color: ${p => p.theme.cardBg};
@@ -7,14 +9,53 @@ const Card = styled.div`
   margin-bottom: 1.5rem;
 `
 
-Card.Header = styled.header`
-  display: flex;
+const StyledHeader = styled.header`
+  display: flow-root;
+  padding-top: 1.5rem;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
 `
 
-Card.HeaderTitle = styled.h1`
-  flex: 1;
-  font-weight: 500;
-  line-height: 1.2;
+const HeaderLeft = styled.div`
+  display: inline-block;
+`
+
+const HeaderRight = styled.div`
+  float: right;
+`
+
+const Title = styled.span`
+  font-size: 130%;
+`
+
+const Subtitle = styled.span`
+  color: ${p => p.theme.disabled};
+`
+
+Card.Header = component(({ title, subtitle, slot }) => {
+  return (
+    <StyledHeader>
+      <HeaderLeft>
+        <If condition={detectIsString(title)}>
+          <Title>{title}</Title>
+        </If>
+        <If condition={detectIsString(subtitle)}>
+          <Subtitle>{subtitle}</Subtitle>
+        </If>
+      </HeaderLeft>
+
+      <HeaderRight>
+        {slot}
+      </HeaderRight>
+    </StyledHeader>
+  )
+})
+
+Card.Body = styled.div`
+  padding-top: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 1.5rem;
+  padding-left: 1.5rem;
 `
 
 export default Card
