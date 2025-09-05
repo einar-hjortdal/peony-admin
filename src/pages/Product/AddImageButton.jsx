@@ -7,6 +7,8 @@ import {
 } from '@dark-engine/core'
 
 import { useProductById, useUploadProductImageMutation } from '../../data'
+import { useTranslation } from '@wareme/translations'
+import PrimaryButton from '../../components/Buttons/PrimaryButton'
 
 const ExistingImages = component(({ images }) => {
   if (detectIsUndefined(images)) {
@@ -21,7 +23,8 @@ const ExistingImages = component(({ images }) => {
   return res
 })
 
-const Image = component(({ productId }) => {
+const AddImageButton = component(({ productId }) => {
+  const { t } = useTranslation('product.addImage')
   const { data } = useProductById(productId)
   const modalRef = useRef(null)
   const inputRef = useRef(null)
@@ -78,7 +81,9 @@ const Image = component(({ productId }) => {
     const { images } = data.product
     return (
       <div>
-        <button type='button' onClick={handleOpenModal}>add image</button>
+        <PrimaryButton type='button' onClick={handleOpenModal}>
+          {t('add')}
+        </PrimaryButton>
         <dialog ref={modalRef}>
           <label onClick={handleLabelClick}>
             select image
@@ -88,12 +93,12 @@ const Image = component(({ productId }) => {
               onChange={handleFileChange}
             />
           </label>
-          <button
+          <PrimaryButton
             type='button'
             onClick={handleSubmit}
             disabled={isSubmitDisabled()}
           >upload
-          </button>
+          </PrimaryButton>
         </dialog>
         <ExistingImages images={images} />
       </div>
@@ -103,4 +108,4 @@ const Image = component(({ productId }) => {
   return false
 })
 
-export default Image
+export default AddImageButton

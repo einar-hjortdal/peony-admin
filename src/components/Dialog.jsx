@@ -12,7 +12,7 @@ const Dialog = styled.dialog`
 
 Dialog.Header = styled.header`
   background-color: ${p => p.theme.dialogHeaderBg};
-  color: ${p => p.theme.dialogHeaderFg};
+  color: ${p => p.theme.cardBg};
   display: flex;
 `
 

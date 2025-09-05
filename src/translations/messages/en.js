@@ -110,6 +110,7 @@ export default freeze({
   'products.table.inventory': 'inventory',
   'products.table.inventory.content': '{quantity} available for {variants} variant(s)',
   'products.table.actions': 'actions',
+  'product.addImage.add': 'add',
   'regions.addRegion.add': 'add region',
   'regions.addRegion.close': 'close',
   'regions.heading': 'regions',

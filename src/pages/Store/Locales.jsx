@@ -3,13 +3,13 @@ import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import Card from '../../components/Card'
-import Button from '../../components/Button'
 import {
   useLocales,
   useStore,
   useStoreUpdateMutation
 } from '../../data'
 import { currentPage, totalPages } from '../../utils'
+import PrimaryButton from '../../components/Buttons/PrimaryButton'
 
 const LocalesTable = styled.table`
   width: 100%;
@@ -319,7 +319,7 @@ const Locales = component(() => {
           <div>
             <span>{t('description')}</span>
           </div>
-          <Button $variant='primary' onClick={handleOpenModal}>{t('edit')}</Button>
+          <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
           <StoreLocales />
         </Card>
       </ColumnLarge>

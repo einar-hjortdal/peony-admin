@@ -19,30 +19,29 @@ const lightColors = {
   disabled: '#CCCCCC',
   cardBg: '#FAFAFA',
   active: '#366396',
-  dialogHeaderFg: '#FFFFFF',
   primary: '#22C55E',
   secondary: '#96A0B5',
   button: {
     primary: {
-      fg: '#F5F5F5',
       bg: '#366396',
+      fg: '#F5F5F5',
       hoverBg: '#2B4F78'
     },
     secondary: {
-      fg: '#FFFFFF',
       bg: '#95a0c5',
+      fg: '#FFFFFF',
       hoverBg: '#8e98bb'
     },
     danger: {
-      fg: '#FFFFFF',
       bg: '#EF4D56',
+      fg: '#FFFFFF',
       hoverBg: '#E34952'
     }
   }
 }
 
 const darkColors = {
-
+  ...lightColors
 }
 
 const constants = {

@@ -1,4 +1,4 @@
-import { component, detectIsEmpty } from '@dark-engine/core'
+import { component, detectIsEmpty, detectIsUndefined } from '@dark-engine/core'
 import { Link } from '@dark-engine/web-router'
 import { Translate, useTranslation } from '@wareme/translations'
 
@@ -104,13 +104,12 @@ const StyledSpan = styled.span`
 `
 
 const Inventory = component(({ variants }) => {
-  const len = variants.length
-  if (len === 0) {
+  if (detectIsUndefined(variants) || variants.length === 0) {
     return '-'
   }
 
   let count = 0
-  for (let i = 0; i < len; i++) {
+  for (let i = 0, len = variants.length; i < len; i++) {
     const variant = variants[i]
     const { inventoryQuantity } = variant
     count += inventoryQuantity
@@ -121,7 +120,7 @@ const Inventory = component(({ variants }) => {
       id='products.table.inventory.content'
       values={{
         quantity: count,
-        variants: len
+        variants: variants.length
       }}
     />
   )

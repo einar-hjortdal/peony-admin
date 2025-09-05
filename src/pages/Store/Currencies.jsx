@@ -4,7 +4,6 @@ import { useTranslation } from '@wareme/translations'
 
 import Card from '../../components/Card'
 import Switch from '../../components/Switch'
-import Button from '../../components/Button'
 import {
   useCurrencies,
   useStore,
@@ -12,6 +11,7 @@ import {
   useUpdateCurrencyMutation
 } from '../../data'
 import { currentPage, totalPages } from '../../utils'
+import PrimaryButton from '../../components/Buttons/PrimaryButton'
 
 const CurrenciesTable = styled.table`
   width: 100%;
@@ -348,7 +348,7 @@ const Currencies = component(() => {
           <div>
             <span>{t('description')}</span>
           </div>
-          <Button $variant='primary' onClick={handleOpenModal}>{t('edit')}</Button>
+          <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
           <StoreCurrencies />
         </Card>
       </ColumnLarge>
