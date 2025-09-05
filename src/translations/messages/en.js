@@ -133,5 +133,9 @@ export default freeze({
   'store.defaultStockLocation': 'default stock location',
   'store.name': 'name',
   'store.save': 'save',
-  'store.title': 'store'
+  'store.title': 'store',
+  'store.salesChannels.title': 'sales channels',
+  'store.salesChannels.name': 'name',
+  'store.salesChannels.description': 'description',
+  'store.salesChannels.status': 'status'
 })

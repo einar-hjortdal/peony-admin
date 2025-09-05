@@ -4,7 +4,7 @@ import { useTranslation } from '@wareme/translations'
 
 import { useStore, useProductById } from '../../data'
 import Card from '../../components/Card'
-import { formatLine } from './utils'
+import { formatLine } from '../../utils'
 import Variants from './Variants'
 import AddImageButton from './AddImageButton'
 

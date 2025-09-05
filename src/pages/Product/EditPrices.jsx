@@ -21,7 +21,7 @@ import {
   useRegions,
   useUpdateVariantsMutation
 } from '../../data'
-import { formatLine } from './utils'
+import { formatLine } from '../../utils'
 import If from '../../components/If'
 
 // handles simple pricing: no quantity-based prices.

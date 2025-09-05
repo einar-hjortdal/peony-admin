@@ -32,7 +32,7 @@ const Title = styled.span`
 
 const Subtitle = styled.span`
   display: block;
-  color: ${p => p.theme.neutral20};
+  color: ${p => p.theme.neutral60};
 `
 
 Card.Header = component(({ title, subtitle, slot }) => {

@@ -11,6 +11,8 @@ import {
 import { currentPage, totalPages } from '../../utils'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import DefaultLocale from './DefaultLocale'
+import CardContainerLarge from './Containers/CardContainerLarge'
+import CardContainerSmall from './Containers/CardContainerSmall'
 
 const LocalesTable = styled.table`
   width: 100%;
@@ -220,22 +222,6 @@ const Modal = component(({ modalRef }) => {
   }
 })
 
-const ColumnLarge = styled.div`
-  padding: .75rem;
-  box-sizing: border-box;
-  vertical-align: top;
-  display: inline-block;
-  width: 60%;
-`
-
-const ColumnSmall = styled.div`
-  padding: .75rem;
-  box-sizing: border-box;
-  vertical-align: top;
-  display: inline-block;
-  width: 40%;
-`
-
 const Locales = component(() => {
   const { t } = useTranslation('locales')
   const modalRef = useRef(null)
@@ -248,18 +234,21 @@ const Locales = component(() => {
 
   return (
     <>
-      <ColumnLarge>
+      <CardContainerLarge>
         <Card>
-          <Card.Header title={t('title')} subtitle={t('description')} />
-          <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
-          <Modal modalRef={modalRef} />
-          <StoreLocales />
+          <Card.Header title={t('title')} subtitle={t('description')}>
+            <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
+          </Card.Header>
+          <Card.Body>
+            <Modal modalRef={modalRef} />
+            <StoreLocales />
+          </Card.Body>
         </Card>
-      </ColumnLarge>
+      </CardContainerLarge>
 
-      <ColumnSmall>
+      <CardContainerSmall>
         <DefaultLocale />
-      </ColumnSmall>
+      </CardContainerSmall>
     </>
   )
 })

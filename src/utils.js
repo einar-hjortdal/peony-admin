@@ -1,4 +1,4 @@
-import { detectIsEmpty, formatErrorMsg } from '@dark-engine/core'
+import { detectIsEmpty, detectIsUndefined, formatErrorMsg } from '@dark-engine/core'
 import { detectIsBrowser } from '@dark-engine/platform-browser'
 
 const lib = 'peony-admin'
@@ -29,4 +29,11 @@ export const valueOrDefault = (providedValue, defaultValue) => {
     return defaultValue
   }
   return providedValue
+}
+
+export const formatLine = (v) => {
+  if (detectIsUndefined(v)) {
+    return '-'
+  }
+  return v
 }

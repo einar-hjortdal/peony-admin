@@ -22,7 +22,7 @@ import {
 } from '../../data'
 import Card from '../../components/Card'
 import If from '../../components/If'
-import { formatLine } from './utils'
+import { formatLine } from '../../utils'
 import AddVariant from './VariantAdd'
 import EditPrices from './EditPrices'
 import EditOptions from './EditOptions'
