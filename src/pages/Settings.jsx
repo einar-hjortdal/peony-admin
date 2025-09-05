@@ -16,22 +16,12 @@ const Box = styled.div`
   }
 `
 
-const SettingCardTitle = styled.h2`
-  font-size: 130%;
-  padding: 0 0 1.5rem;
-`
-
-const SettingCardDescription = styled.p`
-  color: ${p => p.theme.secondary};
-`
-
 const SettingCard = component(({ to, title, description }) => {
   return (
     <Box>
       <Link to={to}>
         <Card>
-          <SettingCardTitle>{title}</SettingCardTitle>
-          <SettingCardDescription>{description}</SettingCardDescription>
+          <Card.Header title={title} subtitle={description} />
         </Card>
       </Link>
     </Box>

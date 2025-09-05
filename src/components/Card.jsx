@@ -3,7 +3,7 @@ import { styled } from '@dark-engine/styled'
 import If from './If'
 
 const Card = styled.div`
-  background-color: ${p => p.theme.cardBg};
+  background-color: ${p => p.theme.neutral00};
   border-radius: ${p => p.theme.borderRadius};
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   margin-bottom: 1.5rem;
@@ -13,6 +13,7 @@ const StyledHeader = styled.header`
   display: flow-root;
   padding-top: 1.5rem;
   padding-right: 1.5rem;
+  padding-bottom: 1.5rem;
   padding-left: 1.5rem;
 `
 
@@ -25,11 +26,13 @@ const HeaderRight = styled.div`
 `
 
 const Title = styled.span`
+  display: block;
   font-size: 130%;
 `
 
 const Subtitle = styled.span`
-  color: ${p => p.theme.disabled};
+  display: block;
+  color: ${p => p.theme.neutral20};
 `
 
 Card.Header = component(({ title, subtitle, slot }) => {
@@ -52,7 +55,6 @@ Card.Header = component(({ title, subtitle, slot }) => {
 })
 
 Card.Body = styled.div`
-  padding-top: 1.5rem;
   padding-right: 1.5rem;
   padding-bottom: 1.5rem;
   padding-left: 1.5rem;

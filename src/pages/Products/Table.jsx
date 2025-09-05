@@ -72,7 +72,7 @@ const StyledTable = styled.table`
   border-spacing: unset;
   & thead {
     border: unset;
-    background-color: ${p => p.theme.disabled};
+    background-color: ${p => p.theme.neutral20};
   }
   & thead tr th,
   & tbody tr td {
@@ -83,8 +83,8 @@ const StyledTable = styled.table`
   }
   & thead tr th {
     text-align: unset;
-    border-left: 1px solid ${p => p.theme.borderColor};
-    border-right: 1px solid ${p => p.theme.borderColor};
+    border-left: 1px solid ${p => p.theme.neutral30};
+    border-right: 1px solid ${p => p.theme.neutral30};
   }
   & thead tr th:first-child{
     border-left: unset;
@@ -95,7 +95,7 @@ const StyledTable = styled.table`
 `
 
 const StyledSpan = styled.span`
-  background-color: ${p => p.theme.disabled};
+  background-color: ${p => p.theme.neutral20};
   padding-top: .4375rem;
   padding-right: .35rem;
   padding-bottom:.4375rem;

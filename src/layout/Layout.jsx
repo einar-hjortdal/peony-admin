@@ -36,7 +36,7 @@ const StyledAside = styled.aside`
   top: 0;
   bottom: 0;
   left: 0;
-  border-right: 1px solid ${p => p.theme.borderColor};
+  border-right: 1px solid ${p => p.theme.neutral30};
   width: ${p => p.theme.asideWidth};
 `
 
@@ -70,7 +70,7 @@ const StyledHeader = styled.header`
   right: 0;
   left: ${p => p.theme.asideWidth};
   height: ${p => p.theme.headerHeight};
-  border-bottom: 1px solid ${p => p.theme.borderColor};
+  border-bottom: 1px solid ${p => p.theme.neutral30};
   align-content: center;
   padding-left: .75rem;
   padding-right: .75rem;
