@@ -11,8 +11,8 @@ import {
 import { currentPage, totalPages } from '../../utils'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import DefaultLocale from './DefaultLocale'
-import CardContainerLarge from './Containers/CardContainerLarge'
-import CardContainerSmall from './Containers/CardContainerSmall'
+import CardContainerLarge from '../../components/Containers/CardContainerLarge'
+import CardContainerSmall from '../../components/Containers/CardContainerSmall'
 
 const LocalesTable = styled.table`
   width: 100%;

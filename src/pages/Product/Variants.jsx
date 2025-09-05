@@ -190,9 +190,7 @@ const Variants = component(({ productId }) => {
   const { t } = useTranslation('product.variants')
   return (
     <Card>
-      <div>
-        {t('title')}
-      </div>
+      <Card.Header title={t('title')} />
       <div>
         <Options productId={productId} />
       </div>
@@ -200,7 +198,7 @@ const Variants = component(({ productId }) => {
         variants
         <VariantsTable productId={productId} />
       </div>
-    </Card>
+    </Card >
   )
 })
 

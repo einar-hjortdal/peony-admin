@@ -7,6 +7,9 @@ import Card from '../../components/Card'
 import { formatLine } from '../../utils'
 import Variants from './Variants'
 import AddImageButton from './AddImageButton'
+import CardContainerLarge from '../../components/Containers/CardContainerLarge'
+import CardContainerSmall from '../../components/Containers/CardContainerSmall'
+import CardContainerFull from '../../components/Containers/CardContainerFull'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -102,53 +105,60 @@ const Product = component(() => {
     const { product } = data
     return (
       <>
-        <Card>
-          <Card.Header title={t('details')} />
-          <Card.Body>
-            <TranslationDefault productId={productId} />
-            {/* <div>
+        <CardContainerLarge>
+          <Card>
+            <Card.Header title={t('details')} />
+            <Card.Body>
+              <TranslationDefault productId={productId} />
+              {/* <div>
               {t('type')}
             </div>
             <div>
               {t('collection')}
             </div> */}
-            <div>
-              {t('category')}:
-            </div>
-            <div>
-              {t('discountable')}: {String(product.discountable)}
-              {/* TODO */}
-            </div>
-            <div>
-              {t('salesChannels')}
-              {/* TODO */}
-            </div>
-          </Card.Body>
-        </Card>
+              <div>
+                {t('category')}:
+              </div>
+              <div>
+                {t('discountable')}: {String(product.discountable)}
+                {/* TODO */}
+              </div>
+              <div>
+                {t('salesChannels')}
+                {/* TODO */}
+              </div>
+            </Card.Body>
+          </Card>
+        </CardContainerLarge>
 
-        <Card>
-          <Card.Header title={t('images')}>
-            <AddImageButton productId={productId} />
-          </Card.Header>
-          <Card.Body>
-            {/* show images  */}
-          </Card.Body>
-        </Card>
-
-        <Card>
-          <div>
-            {t('translations')}
+        <CardContainerSmall>
+          <Card>
+            <Card.Header title={t('translations')} />
             <Translations productId={productId} />
-          </div>
-          <div>
-            {t('thumbnail')}
+          </Card>
+        </CardContainerSmall>
+
+        <CardContainerLarge>
+          <Card>
+            <Card.Header title={t('images')}>
+              <AddImageButton productId={productId} />
+            </Card.Header>
+            <Card.Body>
+              {/* show images  */}
+            </Card.Body>
+          </Card>
+        </CardContainerLarge>
+
+        <CardContainerSmall>
+          <Card>
+            <Card.Header title={t('thumbnail')} />
             <Thumbnail productId={productId} />
-          </div>
-          <div>
-            {t('images')}
-          </div>
-        </Card>
-        <Variants productId={productId} />
+          </Card>
+        </CardContainerSmall>
+
+        <CardContainerFull>
+          <Variants productId={productId} />
+        </CardContainerFull>
       </>
     )
   }

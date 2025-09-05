@@ -7,7 +7,7 @@ import Locales from './Locales'
 import Currencies from './Currencies'
 import SalesChannels from './SalesChannels'
 import Card from '../../components/Card'
-import CardContainerFull from './Containers/CardContainerFull'
+import CardContainerFull from '../../components/Containers/CardContainerFull'
 
 const Store = component(() => {
   const { t } = useTranslation('store')
