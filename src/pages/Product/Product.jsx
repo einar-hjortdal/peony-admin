@@ -12,6 +12,7 @@ import If from '../../components/If'
 import ColumnLarge from '../../components/Columns/ColumnLarge'
 import ColumnSmall from '../../components/Columns/ColumnSmall'
 import Organize from './Organize'
+import SalesChannels from './SalesChannels'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -152,12 +153,7 @@ const Product = component(() => {
         </ColumnLarge>
 
         <ColumnSmall>
-          <Card>
-            <Card.Header title={t('salesChannels')} />
-            {/* TODO ul sales channel */}
-            {/* available in x out of y sales channels */}
-          </Card>
-
+          <SalesChannels />
           <Organize />
         </ColumnSmall>
       </>

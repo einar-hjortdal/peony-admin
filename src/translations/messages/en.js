@@ -110,6 +110,7 @@ export default freeze({
   'products.table.name': 'name',
   'products.table.status': 'status',
   'products.title': 'products',
+  'product.salesChannels.title': 'sales channels',
   'regions.addRegion.add': 'add region',
   'regions.addRegion.close': 'close',
   'regions.heading': 'regions',
