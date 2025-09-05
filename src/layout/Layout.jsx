@@ -72,6 +72,8 @@ const StyledHeader = styled.header`
   height: ${p => p.theme.headerHeight};
   border-bottom: 1px solid ${p => p.theme.borderColor};
   align-content: center;
+  padding-left: .75rem;
+  padding-right: .75rem;
 `
 
 const StyledMain = styled.main`
@@ -84,9 +86,9 @@ const Container = styled.div`
   max-width: 1300px;
   margin-right: auto;
   margin-left: auto;
-  padding-right: 10px;
-  padding-bottom: 70px;
-  padding-left: 10px;
+  padding-left: .75rem;
+  padding-right: .75rem;
+  padding-bottom: 4rem;
 `
 
 const Layout = component(({ slot }) => {

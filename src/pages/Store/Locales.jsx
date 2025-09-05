@@ -156,7 +156,7 @@ const Modal = component(({ modalRef }) => {
     data: localesData,
     isFetching: localesIsFetching,
     error: localesError
-  } = useLocales({ offset })
+  } = useLocales({ offset, fetch: 20 })
   const [updateStore, {
     data: updateStoreData,
     isFetching: updateStoreIsFetching,
@@ -301,7 +301,7 @@ const CardTitle = styled.h2`
   padding: 0 0 1.5rem;
 `
 
-const Languages = component(() => {
+const Locales = component(() => {
   const { t } = useTranslation('locales')
   const modalRef = useRef(null)
   const handleOpenModal = () => {
@@ -333,4 +333,4 @@ const Languages = component(() => {
   )
 })
 
-export default Languages
+export default Locales

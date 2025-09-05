@@ -13,7 +13,7 @@ import GlobalStyle from './GlobalStyle'
 import { detectIsBrowser } from '@dark-engine/platform-browser'
 
 const lightColors = {
-  bg: '#E6E6E6',
+  bg: '#F5F5F5',
   fg: '#201A23',
   borderColor: '#C2C2C2',
   disabled: '#CCCCCC',
@@ -24,7 +24,7 @@ const lightColors = {
   secondary: '#96A0B5',
   button: {
     primary: {
-      fg: '#E6E6E6',
+      fg: '#F5F5F5',
       bg: '#366396',
       hoverBg: '#2B4F78'
     },

@@ -3,7 +3,7 @@ import { useTranslation } from '@wareme/translations'
 
 import SetTitle from '../../components/SetTitle'
 import { useSalesChannels, useStore, useStoreUpdateMutation } from '../../data'
-import Languages from './Languages'
+import Locales from './Locales'
 import Currencies from './Currencies'
 import SalesChannels from './SalesChannels'
 
@@ -93,7 +93,7 @@ const Store = component(() => {
             <span>{t('defaultSalesChannel')}</span>
             <span>{defaultSalesChannelName}</span>
           </div>
-          <Languages />
+          <Locales />
           <Currencies />
           <SalesChannels />
         </div>
