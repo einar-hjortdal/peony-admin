@@ -30,7 +30,9 @@ const lightColors = {
   neutral99: '#0A0A0A',
   active: '#366396',
   secondary: '#96A0B5',
-  safe: '#4C6B56',
+  info: '#73B8FC',
+  success: '#4C6B56',
+  warning: '#FFAA33',
   danger: '#AE2C1E',
   button: {
     primary: {

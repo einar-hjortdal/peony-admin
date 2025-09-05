@@ -11,6 +11,7 @@ import CardContainerLarge from '../../components/Containers/CardContainerLarge'
 import CardContainerSmall from '../../components/Containers/CardContainerSmall'
 import CardContainerFull from '../../components/Containers/CardContainerFull'
 import SetTitle from '../../components/SetTitle'
+import If from '../../components/If'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -117,13 +118,20 @@ const Product = component(() => {
   // display attributes from variant with rank 0
   // check database changes when adding prices
   if (data) {
-    const { product } = data
+    const { categoryId, discountable, status } = data.product
     return (
       <>
         <SetTitle title={t('details')} />
         <CardContainerLarge>
           <Card>
-            <Card.Header title={t('details')} />
+            <Card.Header title={t('details')}>
+              <If condition={status === 'draft'}>
+                <Card.Header.BadgeWarning>{status}</Card.Header.BadgeWarning>
+              </If>
+              <If condition={status === 'published'}>
+                <Card.Header.BadgeSuccess>{status}</Card.Header.BadgeSuccess>
+              </If>
+            </Card.Header>
             <Card.Body>
               <TranslationDefault productId={productId} />
               {/* <div>
@@ -133,10 +141,10 @@ const Product = component(() => {
               {t('collection')}
             </div> */}
               <div>
-                {t('category')}: <ProductCategory productCategoryId={product.categoryId} />
+                {t('category')}: <ProductCategory productCategoryId={categoryId} />
               </div>
               <div>
-                {t('discountable')}: {String(product.discountable)}
+                {t('discountable')}: {String(discountable)}
                 {/* TODO */}
               </div>
               <div>

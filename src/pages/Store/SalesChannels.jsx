@@ -28,7 +28,7 @@ const StyledTable = styled.table`
 
 const Status = styled.span`
   color: ${p => p.theme.bg};
-  background-color: ${p => nisha(p.$isDisabled, p.theme.danger, p.theme.safe)};
+  background-color: ${p => nisha(p.$isDisabled, p.theme.danger, p.theme.success)};
   padding-top: .3rem;
   padding-right: .2rem;
   padding-bottom:.3rem;

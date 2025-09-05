@@ -54,6 +54,30 @@ Card.Header = component(({ title, subtitle, slot }) => {
   )
 })
 
+const BadgeSuccess = styled.span`
+  background-color: ${p => p.theme.success};
+`
+
+Card.Header.BadgeSuccess = component(({ slot }) => {
+  return (
+    <BadgeSuccess>
+      {slot}
+    </BadgeSuccess>
+  )
+})
+
+const BadgeWarning = styled.span`
+  background-color: ${p => p.theme.warning};
+`
+
+Card.Header.BadgeWarning = component(({ slot }) => {
+  return (
+    <BadgeWarning>
+      {slot}
+    </BadgeWarning>
+  )
+})
+
 Card.Body = styled.div`
   padding-right: 1.5rem;
   padding-bottom: 1.5rem;
