@@ -7,11 +7,10 @@ import Card from '../../components/Card'
 import { formatLine } from '../../utils'
 import Variants from './Variants'
 import AddImageButton from './AddImageButton'
-import CardContainerLarge from '../../components/Containers/CardContainerLarge'
-import CardContainerSmall from '../../components/Containers/CardContainerSmall'
-import CardContainerFull from '../../components/Containers/CardContainerFull'
 import SetTitle from '../../components/SetTitle'
 import If from '../../components/If'
+import ColumnLarge from '../../components/Columns/ColumnLarge'
+import ColumnSmall from '../../components/Columns/ColumnSmall'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -117,12 +116,14 @@ const Product = component(() => {
   // display variants as a table (title, sku ean), buttons: add, edit prices, edit variants, edit options
   // display attributes from variant with rank 0
   // check database changes when adding prices
+
+  // TODO show thumbnail marker on image that is also the thumbnail
   if (data) {
     const { categoryId, discountable, status } = data.product
     return (
       <>
         <SetTitle title={t('details')} />
-        <CardContainerLarge>
+        <ColumnLarge>
           <Card>
             <Card.Header title={t('details')}>
               <If condition={status === 'draft'}>
@@ -147,22 +148,9 @@ const Product = component(() => {
                 {t('discountable')}: {String(discountable)}
                 {/* TODO */}
               </div>
-              <div>
-                {t('salesChannels')}
-                {/* TODO */}
-              </div>
             </Card.Body>
           </Card>
-        </CardContainerLarge>
 
-        <CardContainerSmall>
-          <Card>
-            <Card.Header title={t('translations')} />
-            <Translations productId={productId} />
-          </Card>
-        </CardContainerSmall>
-
-        <CardContainerLarge>
           <Card>
             <Card.Header title={t('images')}>
               <AddImageButton productId={productId} />
@@ -171,18 +159,19 @@ const Product = component(() => {
               {/* show images  */}
             </Card.Body>
           </Card>
-        </CardContainerLarge>
 
-        <CardContainerSmall>
-          <Card>
-            <Card.Header title={t('thumbnail')} />
-            <Thumbnail productId={productId} />
-          </Card>
-        </CardContainerSmall>
-
-        <CardContainerFull>
           <Variants productId={productId} />
-        </CardContainerFull>
+        </ColumnLarge>
+
+        <ColumnSmall>
+          <Card>
+            <Card.Header title={t('salesChannels')} />
+            {/* TODO ul sales channel */}
+            {/* available in x out of y sales channels */}
+          </Card>
+
+          {/* TODO organize card: category, type, tags, collections */}
+        </ColumnSmall>
       </>
     )
   }

@@ -10,9 +10,6 @@ import {
 } from '../../data'
 import { currentPage, totalPages } from '../../utils'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
-import DefaultLocale from './DefaultLocale'
-import CardContainerLarge from '../../components/Containers/CardContainerLarge'
-import CardContainerSmall from '../../components/Containers/CardContainerSmall'
 
 const LocalesTable = styled.table`
   width: 100%;
@@ -233,23 +230,15 @@ const Locales = component(() => {
   }
 
   return (
-    <>
-      <CardContainerLarge>
-        <Card>
-          <Card.Header title={t('title')} subtitle={t('description')}>
-            <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
-          </Card.Header>
-          <Card.Body>
-            <Modal modalRef={modalRef} />
-            <StoreLocales />
-          </Card.Body>
-        </Card>
-      </CardContainerLarge>
-
-      <CardContainerSmall>
-        <DefaultLocale />
-      </CardContainerSmall>
-    </>
+    <Card>
+      <Card.Header title={t('title')} subtitle={t('description')}>
+        <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
+      </Card.Header>
+      <Card.Body>
+        <Modal modalRef={modalRef} />
+        <StoreLocales />
+      </Card.Body>
+    </Card>
   )
 })
 

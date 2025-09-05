@@ -2,12 +2,27 @@ import { component, detectIsString } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 import If from './If'
 
-const Card = styled.div`
+const Wrapper = styled.div`
+  box-sizing: border-box;
+  padding-right: .75rem;
+  padding-left: .75rem;
+`
+const StyledDiv = styled.div`
   background-color: ${p => p.theme.neutral00};
   border-radius: ${p => p.theme.borderRadius};
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   margin-bottom: 1.5rem;
 `
+
+const Card = component(({ slot }) => {
+  return (
+    <Wrapper>
+      <StyledDiv>
+        {slot}
+      </StyledDiv>
+    </Wrapper>
+  )
+})
 
 const StyledHeader = styled.header`
   display: flow-root;

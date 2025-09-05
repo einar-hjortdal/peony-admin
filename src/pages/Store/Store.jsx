@@ -7,7 +7,10 @@ import Locales from './Locales'
 import Currencies from './Currencies'
 import SalesChannels from './SalesChannels'
 import Card from '../../components/Card'
-import CardContainerFull from '../../components/Containers/CardContainerFull'
+import DefaultCurrency from './DefaultCurrency'
+import DefaultLocale from './DefaultLocale'
+import ColumnLarge from '../../components/Columns/ColumnLarge'
+import ColumnSmall from '../../components/Columns/ColumnSmall'
 
 const Store = component(() => {
   const { t } = useTranslation('store')
@@ -70,7 +73,7 @@ const Store = component(() => {
     return (
       <>
         <SetTitle title={t('title')} />
-        <CardContainerFull>
+        <ColumnLarge>
           <Card>
             <Card.Header title={t('title')} />
             <Card.Body>
@@ -99,14 +102,17 @@ const Store = component(() => {
               </div>
             </Card.Body>
           </Card>
-        </CardContainerFull>
 
-        <Locales />
-        <Currencies />
+          <Locales />
+          <Currencies />
+        </ColumnLarge>
 
-        <CardContainerFull>
-          <SalesChannels />
-        </CardContainerFull>
+        <ColumnSmall>
+          <DefaultLocale />
+          <DefaultCurrency />
+        </ColumnSmall>
+
+        <SalesChannels />
       </>
     )
   }

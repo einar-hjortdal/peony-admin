@@ -12,7 +12,6 @@ import {
 } from '../../data'
 import { currentPage, totalPages } from '../../utils'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
-import DefaultCurrency from './DefaultCurrency'
 
 const CurrenciesTable = styled.table`
   width: 100%;
@@ -248,27 +247,6 @@ const Modal = component(({ modalRef }) => {
   }
 })
 
-const ColumnLarge = styled.div`
-  padding: .75rem;
-  box-sizing: border-box;
-  vertical-align: top;
-  display: inline-block;
-  width: 60%;
-`
-
-const ColumnSmall = styled.div`
-  padding: .75rem;
-  box-sizing: border-box;
-  vertical-align: top;
-  display: inline-block;
-  width: 40%;
-`
-
-const CardTitle = styled.h2`
-  font-size: 130%;
-  padding: 0 0 1.5rem;
-`
-
 const Currencies = component(() => {
   const { t } = useTranslation('currencies')
 
@@ -281,22 +259,15 @@ const Currencies = component(() => {
   }
 
   return (
-    <>
-      <ColumnLarge>
-        <Card>
-          <Card.Header title={t('title')} subtitle={t('description')}>
-            <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
-          </Card.Header>
-          <Card.Body>
-            <Modal modalRef={modalRef} />
-            <StoreCurrencies />
-          </Card.Body>
-        </Card>
-      </ColumnLarge>
-      <ColumnSmall>
-        <DefaultCurrency />
-      </ColumnSmall>
-    </>
+    <Card>
+      <Card.Header title={t('title')} subtitle={t('description')}>
+        <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
+      </Card.Header>
+      <Card.Body>
+        <Modal modalRef={modalRef} />
+        <StoreCurrencies />
+      </Card.Body>
+    </Card>
   )
 })
 
