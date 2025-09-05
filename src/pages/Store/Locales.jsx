@@ -10,6 +10,7 @@ import {
 } from '../../data'
 import { currentPage, totalPages } from '../../utils'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import DefaultLocale from './DefaultLocale'
 
 const LocalesTable = styled.table`
   width: 100%;
@@ -61,67 +62,6 @@ const StoreLocales = component(() => {
           {rows}
         </tbody>
       </LocalesTable>
-    )
-  }
-})
-
-const DefaultLocaleSelect = styled.select`
-  display: block;
-  width: 100%;
-`
-
-const DefaultLocale = component(() => {
-  const { t } = useTranslation('locales.defaultLocale')
-  const {
-    data: storeData,
-    isFetching: storeIsFetching,
-    error: storeError
-  } = useStore()
-  const [updateStore, {
-    data: updateStoreData,
-    isFetching: updateStoreIsFetching,
-    error: updateStoreError
-  }] = useStoreUpdateMutation()
-
-  const handleChange = (e) => {
-    if (updateStoreIsFetching) {
-      return
-    }
-    const { value } = e.target
-    updateStore(storeData.store.id, { defaultLocaleId: value })
-  }
-
-  if (storeData) {
-    const { locales, defaultLocaleId } = storeData.store
-    const options = []
-    for (let i = 0, len = locales.length; i < len; i++) {
-      const { id, code } = locales[i]
-      options.push(
-        <option
-          key={id}
-          value={id}
-          selected={defaultLocaleId === id}
-        >{code}
-        </option>
-      )
-    }
-
-    return (
-      <div>
-        <div>
-          {t('title')}
-        </div>
-        <label>
-          {t('description')}
-          <DefaultLocaleSelect
-            title={t('title')}
-            name={t('title')}
-            onChange={handleChange}
-            disabled={updateStoreIsFetching}
-          >{options}
-          </DefaultLocaleSelect>
-        </label>
-      </div>
     )
   }
 })
@@ -296,11 +236,6 @@ const ColumnSmall = styled.div`
   width: 40%;
 `
 
-const CardTitle = styled.h2`
-  font-size: 130%;
-  padding: 0 0 1.5rem;
-`
-
 const Locales = component(() => {
   const { t } = useTranslation('locales')
   const modalRef = useRef(null)
@@ -315,20 +250,16 @@ const Locales = component(() => {
     <>
       <ColumnLarge>
         <Card>
-          <CardTitle>{t('title')}</CardTitle>
-          <div>
-            <span>{t('description')}</span>
-          </div>
+          <Card.Header title={t('title')} subtitle={t('description')} />
           <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
+          <Modal modalRef={modalRef} />
           <StoreLocales />
         </Card>
       </ColumnLarge>
+
       <ColumnSmall>
-        <Card>
-          <DefaultLocale />
-        </Card>
+        <DefaultLocale />
       </ColumnSmall>
-      <Modal modalRef={modalRef} />
     </>
   )
 })

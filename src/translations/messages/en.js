@@ -6,7 +6,7 @@ const common = freeze({
 
 export default freeze({
   'currencies.defaultCurrency.description': 'this is the currency prices are shown in by default',
-  'currencies.defaultCurrency.title': 'default store currency',
+  'currencies.defaultCurrency.title': 'default currency',
   'currencies.description': 'all currencies accepted by your store',
   'currencies.edit': 'edit currencies',
   'currencies.modal.apply': 'apply changes',
@@ -15,7 +15,7 @@ export default freeze({
   'currencies.title': 'currencies',
   'header.language.language': 'language',
   'locales.defaultLocale.description': 'this is the langauge content is shown in by default',
-  'locales.defaultLocale.title': 'default store language',
+  'locales.defaultLocale.title': 'default language',
   'locales.description': 'all locales supported by your store',
   'locales.edit': 'edit locales',
   'locales.modal.apply': 'apply changes',

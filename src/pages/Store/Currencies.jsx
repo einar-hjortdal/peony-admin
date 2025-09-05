@@ -12,6 +12,7 @@ import {
 } from '../../data'
 import { currentPage, totalPages } from '../../utils'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import DefaultCurrency from './DefaultCurrency'
 
 const CurrenciesTable = styled.table`
   width: 100%;
@@ -91,67 +92,6 @@ const StoreCurrencies = component(() => {
           {rows}
         </tbody>
       </CurrenciesTable>
-    )
-  }
-})
-
-const DefaultCurrencySelect = styled.select`
-  display: block;
-  width: 100%;
-`
-
-const DefaultCurrency = component(() => {
-  const { t } = useTranslation('currencies.defaultCurrency')
-  const {
-    data: storeData,
-    isFetching: storeIsFetching,
-    error: storeError
-  } = useStore()
-  const [updateStore, {
-    data: updateStoreData,
-    isFetching: updateStoreIsFetching,
-    error: updateStoreError
-  }] = useStoreUpdateMutation()
-
-  const handleChange = (e) => {
-    if (updateStoreIsFetching) {
-      return
-    }
-    const { value } = e.target
-    updateStore(storeData.store.id, { defaultCurrencyCode: value })
-  }
-
-  if (storeData) {
-    const { currencies, defaultCurrencyCode } = storeData.store
-    const options = []
-    for (let i = 0, len = currencies.length; i < len; i++) {
-      const { code } = currencies[i]
-      options.push(
-        <option
-          key={code}
-          value={code}
-          selected={defaultCurrencyCode === code}
-        >{code}
-        </option>
-      )
-    }
-
-    return (
-      <div>
-        <div>
-          {t('title')}
-        </div>
-        <label>
-          {t('description')}
-          <DefaultCurrencySelect
-            title={t('title')}
-            name={t('title')}
-            onChange={handleChange}
-            disabled={updateStoreIsFetching}
-          >{options}
-          </DefaultCurrencySelect>
-        </label>
-      </div>
     )
   }
 })
@@ -344,20 +284,15 @@ const Currencies = component(() => {
     <>
       <ColumnLarge>
         <Card>
-          <CardTitle>{t('title')}</CardTitle>
-          <div>
-            <span>{t('description')}</span>
-          </div>
+          <Card.Header title={t('title')} subtitle={t('description')} />
           <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
+          <Modal modalRef={modalRef} />
           <StoreCurrencies />
         </Card>
       </ColumnLarge>
       <ColumnSmall>
-        <Card>
-          <DefaultCurrency />
-        </Card>
+        <DefaultCurrency />
       </ColumnSmall>
-      <Modal modalRef={modalRef} />
     </>
   )
 })
