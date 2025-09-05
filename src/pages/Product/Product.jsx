@@ -2,7 +2,7 @@ import { component, detectIsUndefined } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import { useStore, useProductById } from '../../data'
+import { useStore, useProductById, useProductCategoryById } from '../../data'
 import Card from '../../components/Card'
 import { formatLine } from '../../utils'
 import Variants from './Variants'
@@ -10,6 +10,7 @@ import AddImageButton from './AddImageButton'
 import CardContainerLarge from '../../components/Containers/CardContainerLarge'
 import CardContainerSmall from '../../components/Containers/CardContainerSmall'
 import CardContainerFull from '../../components/Containers/CardContainerFull'
+import SetTitle from '../../components/SetTitle'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -91,6 +92,20 @@ const Thumbnail = component(({ productId }) => {
   }
 })
 
+const Category = component(({ productCategoryId }) => {
+  const { data } = useProductCategoryById(productCategoryId)
+  return (
+    JSON.stringify(data) // TODO
+  )
+})
+
+const ProductCategory = component(({ productCategoryId }) => {
+  if (detectIsUndefined(productCategoryId)) {
+    return '-'
+  }
+  return <Category productCategoryId={productCategoryId} />
+})
+
 const Product = component(() => {
   const { t, translator } = useTranslation('product')
   const params = useParams()
@@ -105,6 +120,7 @@ const Product = component(() => {
     const { product } = data
     return (
       <>
+        <SetTitle title={t('details')} />
         <CardContainerLarge>
           <Card>
             <Card.Header title={t('details')} />
@@ -117,7 +133,7 @@ const Product = component(() => {
               {t('collection')}
             </div> */}
               <div>
-                {t('category')}:
+                {t('category')}: <ProductCategory productCategoryId={product.categoryId} />
               </div>
               <div>
                 {t('discountable')}: {String(product.discountable)}

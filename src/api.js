@@ -27,6 +27,11 @@ export const dataKeys = {
   productCreate: 'productCreate',
   productUpdate: 'productUpdate',
   productDelete: 'productDelete',
+  productCategoryCreate: 'productCategoryCreate',
+  productCategoryGet: 'productCategoryGet',
+  productCategoryGetById: 'productCategoryGetById',
+  productCategoryUpdate: 'productCategoryUpdate',
+  productCategoryDelete: 'productCategoryDelete',
   productOptionCreate: 'productOptionCreate',
   productOptionUpdate: 'productOptionUpdate',
   productOptionDelete: 'productOptionDelete',
@@ -137,6 +142,16 @@ export const api = {
       method: 'DELETE',
       credentials: 'include'
     })
+    return checkResponse(response)
+  },
+
+  productCategoryGetById: async (productCategoryId) => {
+    const response = await fetch(
+      getRequestUrl(`/admin/product-categories/${productCategoryId}`),
+      {
+        credentials: 'include'
+      }
+    )
     return checkResponse(response)
   },
 

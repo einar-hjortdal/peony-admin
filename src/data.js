@@ -179,6 +179,14 @@ export const useDeleteProductMutation = (id) => {
   })
 }
 
+export const useProductCategoryById = (productCategoryId) => {
+  const api = useApi()
+  return useQuery(dataKeys.productCategoryGetById, () => api.productCategoryGetById(productCategoryId), {
+    variables: { productCategoryId },
+    extractId: (x) => x.id
+  })
+}
+
 export const useProductOptionCreateMutation = (productId) => {
   const api = useApi()
   return useMutation(

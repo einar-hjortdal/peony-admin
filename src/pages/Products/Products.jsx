@@ -12,6 +12,7 @@ import Table from './Table'
 import NewProduct from './NewProduct'
 import { constants, useProducts, useStore } from '../../data'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import SetTitle from '../../components/SetTitle'
 
 const Products = component(() => {
   // TODO implement filters that are commented out
@@ -57,6 +58,7 @@ const Products = component(() => {
 
     return (
       <>
+        <SetTitle title={t('title')} />
         <Card>
           <Card.Header title={t('title')}>
             <PrimaryButton
