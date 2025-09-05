@@ -105,6 +105,7 @@ const Store = component(() => {
 
           <Locales />
           <Currencies />
+          <SalesChannels />
         </ColumnLarge>
 
         <ColumnSmall>
@@ -112,7 +113,6 @@ const Store = component(() => {
           <DefaultCurrency />
         </ColumnSmall>
 
-        <SalesChannels />
       </>
     )
   }

@@ -11,6 +11,7 @@ import SetTitle from '../../components/SetTitle'
 import If from '../../components/If'
 import ColumnLarge from '../../components/Columns/ColumnLarge'
 import ColumnSmall from '../../components/Columns/ColumnSmall'
+import Organize from './Organize'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -92,25 +93,15 @@ const Thumbnail = component(({ productId }) => {
   }
 })
 
-const Category = component(({ productCategoryId }) => {
-  const { data } = useProductCategoryById(productCategoryId)
-  return (
-    JSON.stringify(data) // TODO
-  )
-})
-
-const ProductCategory = component(({ productCategoryId }) => {
-  if (detectIsUndefined(productCategoryId)) {
-    return '-'
-  }
-  return <Category productCategoryId={productCategoryId} />
-})
-
 const Product = component(() => {
   const { t, translator } = useTranslation('product')
   const params = useParams()
   const productId = params.get('id')
-  const { data, isFetching, error } = useProductById(productId)
+  const {
+    data: productData,
+    isFetching: productIsFetching,
+    error: productError
+  } = useProductById(productId)
 
   // display data and allow updating
   // display variants as a table (title, sku ean), buttons: add, edit prices, edit variants, edit options
@@ -118,8 +109,8 @@ const Product = component(() => {
   // check database changes when adding prices
 
   // TODO show thumbnail marker on image that is also the thumbnail
-  if (data) {
-    const { categoryId, discountable, status } = data.product
+  if (productData) {
+    const { discountable, status } = productData.product
     return (
       <>
         <SetTitle title={t('details')} />
@@ -141,9 +132,6 @@ const Product = component(() => {
             <div>
               {t('collection')}
             </div> */}
-              <div>
-                {t('category')}: <ProductCategory productCategoryId={categoryId} />
-              </div>
               <div>
                 {t('discountable')}: {String(discountable)}
                 {/* TODO */}
@@ -170,7 +158,7 @@ const Product = component(() => {
             {/* available in x out of y sales channels */}
           </Card>
 
-          {/* TODO organize card: category, type, tags, collections */}
+          <Organize />
         </ColumnSmall>
       </>
     )
