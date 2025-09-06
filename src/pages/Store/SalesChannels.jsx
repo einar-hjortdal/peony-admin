@@ -73,20 +73,18 @@ const SalesChannels = component(() => {
     return (
       <Card>
         <Card.Header title={t('title')} />
-        <Card.Body>
-          <StyledTable>
-            <thead>
-              <tr>
-                <th>{t('name')}</th>
-                <th>{t('description')}</th>
-                <th>{t('status')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows}
-            </tbody>
-          </StyledTable>
-        </Card.Body>
+        <StyledTable>
+          <thead>
+            <tr>
+              <th>{t('name')}</th>
+              <th>{t('description')}</th>
+              <th>{t('status')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows}
+          </tbody>
+        </StyledTable>
       </Card>
     )
   }
