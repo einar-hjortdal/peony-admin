@@ -184,14 +184,15 @@ const Variants = component(() => {
   return (
     <Card>
       <Card.Header title={t('title')}>
-        <ButtonMore type='button' onClick={toggleMenu} />
-        <If condition={isOpen}>
-          <div>
-            <ul>
-              <li><EditPrices productId={productId} /></li>
-            </ul>
-          </div>
-        </If>
+        <ButtonMore type='button' onClick={toggleMenu}>
+          <If condition={isOpen}>
+            <div>
+              <ul>
+                <li><EditPrices productId={productId} /></li>
+              </ul>
+            </div>
+          </If>
+        </ButtonMore>
 
         <VariantAdd productId={productId} />
 

@@ -434,15 +434,16 @@ const EditPrices = component(({ productId }) => {
               </button>
             </div>
             <div>
-              <ButtonMore type='button' />
-              {/* TODO toggle columns */}
-              <If condition={isOpen}>
-                <div>
-                  <ul>
-                    <li>columns to toggle</li>
-                  </ul>
-                </div>
-              </If>
+              <ButtonMore type='button'>
+                {/* TODO toggle columns */}
+                <If condition={isOpen}>
+                  <div>
+                    <ul>
+                      <li>columns to toggle</li>
+                    </ul>
+                  </div>
+                </If>
+              </ButtonMore>
               <table>
                 <caption>{productTranslationsObject[storeData.store.defaultLocaleId].title}</caption>
                 <TableHead currencyColumns={currencyColumns} regionColumns={regionColumns} />

@@ -16,7 +16,7 @@ const StyledButton = styled.button`
   }
 `
 
-const ButtonMore = component(({ ...props }) => {
+const ButtonMore = component(({ slot, ...props }) => {
   const { t } = useTranslation('buttons.more')
   return (
     <StyledButton aria-label={t('label')} {...props}>
@@ -25,8 +25,13 @@ const ButtonMore = component(({ ...props }) => {
         <circle cx='12' cy='4' r='3' />
         <circle cx='20' cy='4' r='3' />
       </svg>
+      {slot}
     </StyledButton>
   )
 })
+
+ButtonMore.Container = styled.div`
+  position: absolute;
+`
 
 export default ButtonMore

@@ -69,7 +69,9 @@ const SalesChannels = component(() => {
       <Card>
         <Card.Header title={t('title')}>
           {/* TODO edit product sales channels */}
-          <ButtonMore type='button' />
+          <ButtonMore type='button'>
+            actions
+          </ButtonMore>
         </Card.Header>
         <SalesChannelsList salesChannels={salesChannels} />
         <SalesChannelAvailability productSalesChannels={salesChannels} />
