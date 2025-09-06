@@ -103,7 +103,7 @@ export default freeze({
   'products.actions.edit': 'edit',
   'products.actions.publish': 'publish',
   'products.actions.unpublish': 'unpublish',
-  'products.addProduct': 'add product',
+  'products.add': 'add',
   'products.table.actions': 'actions',
   'products.table.availability': 'availability',
   'products.table.collection': 'collection',

@@ -112,6 +112,7 @@ const Currency = component(({ code, defaultCurrencyCode, translatedName, value, 
 
 const Modal = component(({ modalRef }) => {
   const { t, translator } = useTranslation('currencies.modal')
+  const fetchAmount = 25
   const [offset, setOffset] = useState(0)
   const [params, setParams] = useState([])
   const {
@@ -123,7 +124,7 @@ const Modal = component(({ modalRef }) => {
     data: currenciesData,
     isFetching: currenciesIsFetching,
     error: currenciesError
-  } = useCurrencies({ offset })
+  } = useCurrencies({ offset, fetch: fetchAmount })
   const [updateStore, {
     data: updateStoreData,
     isFetching: updateStoreIsFetching,
@@ -158,14 +159,14 @@ const Modal = component(({ modalRef }) => {
 
     const { name } = e.target
     if (name === 'next') {
-      const newOffset = offset + 15
+      const newOffset = offset + fetchAmount
       if (newOffset >= currenciesData.count) {
         return
       }
       return setOffset(newOffset)
     }
 
-    const newOffset = offset - 15
+    const newOffset = offset - fetchAmount
     if (newOffset < 0) {
       return
     }

@@ -65,7 +65,7 @@ const Products = component(() => {
               type='button'
               disabled={detectIsNull(modalRef)}
               onClick={handleOpenModal}
-            >{t('addProduct')}
+            >{t('add')}
             </PrimaryButton>
           </Card.Header>
           {/* TODO change to Table.Title */}
