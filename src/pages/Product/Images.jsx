@@ -7,7 +7,12 @@ import {
 } from '@dark-engine/core'
 
 import { useProductById, useUploadProductImageMutation } from '../../data'
+import { useTranslation } from '@wareme/translations'
+import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import { useParams } from '@dark-engine/web-router'
+import Card from '../../components/Card'
 
+// TODO allow changing order and deletion
 const ExistingImages = component(({ images }) => {
   if (detectIsUndefined(images)) {
     return null
@@ -21,13 +26,14 @@ const ExistingImages = component(({ images }) => {
   return res
 })
 
-const Images = component(({ productId }) => {
+const AddImageButton = component(({ productId }) => {
+  const { t } = useTranslation('product.addImage')
   const { data } = useProductById(productId)
   const modalRef = useRef(null)
   const inputRef = useRef(null)
-  const [selectedFiles, setSelectedFiles] = useState([])
+  const [selectedFile, setSelectedFile] = useState(null)
   const {
-    uploadProductImages,
+    uploadProductImage,
     isFetching: uploadProductImagesIsFetching,
     error: uploadProductImagesError
   } = useUploadProductImageMutation(productId)
@@ -38,12 +44,11 @@ const Images = component(({ productId }) => {
   }
 
   const handleFileChange = (e) => {
-    const filesArray = []
-    const fileList = e.target.files
-    for (let i = 0, len = fileList.length; i < len; i++) {
-      filesArray.push(fileList[i])
+    const file = e.target.files[0]
+    if (detectIsUndefined(file)) {
+      return
     }
-    setSelectedFiles(filesArray)
+    setSelectedFile(file)
   }
 
   const handleOpenModal = () => {
@@ -59,46 +64,44 @@ const Images = component(({ productId }) => {
     if (inputRef.current) {
       inputRef.current.value = ''
     }
-    setSelectedFiles([])
+    setSelectedFile(null)
     modalRef.current.close()
   }
 
   const isSubmitDisabled = () => {
-    return uploadProductImagesIsFetching || (selectedFiles.length === 0)
+    return uploadProductImagesIsFetching || detectIsNull(selectedFile)
   }
 
   const handleSubmit = async () => {
-    const formData = new FormData()
-    for (let i = 0, len = selectedFiles.length; i < len; i++) {
-      formData.append('files', selectedFiles[i])
+    await uploadProductImage(selectedFile)
+    // TODO display error
+    if (detectIsNull(uploadProductImagesError)) {
+      handleCloseModal()
     }
-
-    await uploadProductImages(formData)
-    // maybe keep modal open on error?
-    handleCloseModal()
   }
 
   if (data) {
     const { images } = data.product
     return (
       <div>
-        <button type='button' onClick={handleOpenModal}>add image</button>
+        <PrimaryButton type='button' onClick={handleOpenModal}>
+          {t('add')}
+        </PrimaryButton>
         <dialog ref={modalRef}>
           <label onClick={handleLabelClick}>
             select image
             <input
               ref={inputRef}
               type='file'
-              multiple
               onChange={handleFileChange}
             />
           </label>
-          <button
+          <PrimaryButton
             type='button'
             onClick={handleSubmit}
             disabled={isSubmitDisabled()}
           >upload
-          </button>
+          </PrimaryButton>
         </dialog>
         <ExistingImages images={images} />
       </div>
@@ -106,6 +109,44 @@ const Images = component(({ productId }) => {
   }
 
   return null
+})
+
+const ImagesPreview = component(({ productId }) => {
+  const { data: productData } = useProductById(productId)
+
+  if (productData) {
+    const { product } = productData
+    const { images } = product
+    if (detectIsUndefined(images)) {
+      return null
+    }
+
+    return (
+      <div>
+        {JSON.stringify(images)}
+        {/* TODO preview images */}
+        {/* TODO mark thumbnail image */}
+      </div>
+    )
+  }
+
+  return null
+})
+
+const Images = component(() => {
+  const { t } = useTranslation('product.images')
+  const params = useParams()
+  const productId = params.get('id')
+
+  return (
+    <Card>
+      <Card.Header title={t('title')}>
+        <AddImageButton productId={productId} />
+      </Card.Header>
+      <ImagesPreview productId={productId} />
+    </Card>
+
+  )
 })
 
 export default Images

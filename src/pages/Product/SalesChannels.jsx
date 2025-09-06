@@ -39,7 +39,7 @@ const SalesChannelAvailability = component(({ productSalesChannels }) => {
     return (
       <StyledSpan>
         <Translate
-          id='products.salesChannels.availability'
+          id='product.salesChannels.availability'
           values={{
             available: productSalesChannels.length,
             total: salesChannels.length

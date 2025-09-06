@@ -20,6 +20,7 @@ import {
   useProductOptionUpdateMutation
 } from '../../data'
 import If from '../../components/If'
+import PrimaryButton from '../../components/Buttons/PrimaryButton'
 
 const OptionTranslation = component(({ locale, onInput, onBlur, value, handleDelete }) => {
   const { t, translator } = useTranslation('product.editOptions.optionTranslation')

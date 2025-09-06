@@ -6,13 +6,14 @@ import { useStore, useProductById, useProductCategoryById } from '../../data'
 import Card from '../../components/Card'
 import { formatLine } from '../../utils'
 import Variants from './Variants'
-import AddImageButton from './AddImageButton'
 import SetTitle from '../../components/SetTitle'
 import If from '../../components/If'
 import ColumnLarge from '../../components/Columns/ColumnLarge'
 import ColumnSmall from '../../components/Columns/ColumnSmall'
 import Organize from './Organize'
 import SalesChannels from './SalesChannels'
+import Options from './Options'
+import Images from './Images'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -138,14 +139,9 @@ const Product = component(() => {
             </div>
           </Card>
 
-          <Card>
-            <Card.Header title={t('images')}>
-              <AddImageButton productId={productId} />
-            </Card.Header>
-            {/* show images  */}
-          </Card>
-
-          <Variants productId={productId} />
+          <Images />
+          <Options />
+          <Variants />
         </ColumnLarge>
 
         <ColumnSmall>

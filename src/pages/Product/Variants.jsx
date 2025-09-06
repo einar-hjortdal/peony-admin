@@ -23,10 +23,10 @@ import {
 import Card from '../../components/Card'
 import If from '../../components/If'
 import { formatLine } from '../../utils'
-import AddVariant from './VariantAdd'
+import VariantAdd from './VariantAdd'
 import EditPrices from './EditPrices'
-import EditOptions from './EditOptions'
 import VariantEdit from './VariantEdit'
+import { useParams } from '@dark-engine/web-router'
 
 const Options = component(({ productId, slot }) => {
   const { t } = useTranslation('product.options')
@@ -136,12 +136,7 @@ const VariantRow = component(({ productId, variant }) => {
 
 const VariantsTable = component(({ productId }) => {
   const { data, isFetching, error } = useProductById(productId)
-  const [isOpen, setIsOpen] = useState(false)
   const { t } = useTranslation('product.variantsTable')
-
-  const handleOpen = () => {
-    setIsOpen(true)
-  }
 
   if (data) {
     const { variants } = data.product
@@ -155,18 +150,6 @@ const VariantsTable = component(({ productId }) => {
 
     return (
       <div>
-        <button type='button' onClick={handleOpen}>
-          ...
-          <If condition={isOpen}>
-            <div>
-              <ul>
-                <li><AddVariant productId={productId} /></li>
-                <li><EditPrices productId={productId} /></li>
-                <li><EditOptions productId={productId} /></li>
-              </ul>
-            </div>
-          </If>
-        </button>
         <table>
           <thead>
             <th>title</th>
@@ -186,11 +169,32 @@ const VariantsTable = component(({ productId }) => {
   return null
 })
 
-const Variants = component(({ productId }) => {
+const Variants = component(() => {
   const { t } = useTranslation('product.variants')
+  const params = useParams()
+  const productId = params.get('id')
+
+  const [isOpen, setIsOpen] = useState(false)
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen)
+  }
+
   return (
     <Card>
-      <Card.Header title={t('title')} />
+      <Card.Header title={t('title')}>
+        <button type='button' onClick={toggleMenu}>...</button>
+        <If condition={isOpen}>
+          <div>
+            <ul>
+              <li><EditPrices productId={productId} /></li>
+            </ul>
+          </div>
+        </If>
+
+        <VariantAdd productId={productId} />
+
+      </Card.Header>
       <div>
         <Options productId={productId} />
       </div>
