@@ -27,6 +27,7 @@ import VariantAdd from './VariantAdd'
 import EditPrices from './EditPrices'
 import VariantEdit from './VariantEdit'
 import { useParams } from '@dark-engine/web-router'
+import ButtonMore from '../../components/Buttons/ButtonMore'
 
 const Options = component(({ productId, slot }) => {
   const { t } = useTranslation('product.options')
@@ -183,7 +184,7 @@ const Variants = component(() => {
   return (
     <Card>
       <Card.Header title={t('title')}>
-        <button type='button' onClick={toggleMenu}>...</button>
+        <ButtonMore type='button' onClick={toggleMenu} />
         <If condition={isOpen}>
           <div>
             <ul>

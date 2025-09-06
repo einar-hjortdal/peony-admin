@@ -5,6 +5,7 @@ import { Translate, useTranslation } from '@wareme/translations'
 import Card from '../../components/Card'
 import { useProductById, useSalesChannels } from '../../data'
 import { styled } from '@dark-engine/styled'
+import ButtonMore from '../../components/Buttons/ButtonMore'
 
 const SalesChannelsList = component(({ salesChannels }) => {
   if (salesChannels.length === 0) {
@@ -68,7 +69,7 @@ const SalesChannels = component(() => {
       <Card>
         <Card.Header title={t('title')}>
           {/* TODO edit product sales channels */}
-          <button>...</button>
+          <ButtonMore type='button' />
         </Card.Header>
         <SalesChannelsList salesChannels={salesChannels} />
         <SalesChannelAvailability productSalesChannels={salesChannels} />

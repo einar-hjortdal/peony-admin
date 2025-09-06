@@ -10,8 +10,8 @@ const Wrapper = styled.div`
 const Breadcrumb = component(() => {
   return (
     <Wrapper>
-      <span>page name</span>
-      {/* TODO breadcrumb */}
+      {/* <span>page name</span> */}
+      {/* TODO breadcrumbs */}
     </Wrapper>
   )
 })

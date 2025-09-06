@@ -5,6 +5,7 @@ import { useTranslation } from '@wareme/translations'
 import Card from '../../components/Card'
 import EditOptions from './EditOptions'
 import If from '../../components/If'
+import ButtonMore from '../../components/Buttons/ButtonMore'
 
 const Options = component(() => {
   const { t } = useTranslation('product.options')
@@ -19,7 +20,7 @@ const Options = component(() => {
   return (
     <Card>
       <Card.Header title={t('title')}>
-        <button type='button' onClick={toggleMenu}>...</button>
+        <ButtonMore type='button' onClick={toggleMenu} />
         <If condition={isOpen}>
           <div>
             <ul>

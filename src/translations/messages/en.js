@@ -5,6 +5,7 @@ const common = freeze({
 })
 
 export default freeze({
+  'buttons.more.label': 'more',
   'currencies.defaultCurrency.description': 'this is the currency prices are shown in by default',
   'currencies.defaultCurrency.title': 'default currency',
   'currencies.description': 'all currencies accepted by your store',
@@ -62,6 +63,7 @@ export default freeze({
   'product.translationGroup.locale': 'language',
   'product.translationGroup.subtitle': 'subtitle',
   'product.translationGroup.title': 'title',
+  'product.variantAdd.add': 'add',
   'product.variantAdd.create': 'create variant',
   'product.variantEdit.button': 'edit',
   'product.variantEdit.save': 'save changes',

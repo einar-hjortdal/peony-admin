@@ -9,6 +9,7 @@ import { useTranslation } from '@wareme/translations'
 
 import { useVariantCreateMutation } from '../../data'
 import VariantInputs from './VariantInputs'
+import PrimaryButton from '../../components/Buttons/PrimaryButton'
 
 const VariantAdd = component(({ productId }) => {
   const { t } = useTranslation('product.variantAdd')
@@ -43,7 +44,7 @@ const VariantAdd = component(({ productId }) => {
 
   return (
     <>
-      <button type='button' onClick={handleOpenModal}>add variant</button>
+      <PrimaryButton type='button' onClick={handleOpenModal}>{t('add')}</PrimaryButton>
       <dialog ref={modalRef}>
         <button type='button' onClick={handleCloseModal}>x</button>
         <VariantInputs

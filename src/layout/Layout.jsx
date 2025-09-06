@@ -115,7 +115,7 @@ const Layout = component(({ slot }) => {
                 {/* <li><NavLink to='/groups'>groups</NavLink></li> */}
                 {/* <li><NavLink to='/discounts'>discounts</NavLink></li> */}
                 {/* <li><NavLink to='/gift-cards'>gift cards</NavLink></li> */}
-                <li><NavLink to='/pricing'>pricing</NavLink></li>
+                {/* <li><NavLink to='/pricing'>pricing</NavLink></li> */}
                 {/* <li><NavLink to='/pages'>pages</NavLink></li> */}
                 {/* <li><NavLink to='/posts'>posts</NavLink></li> */}
                 <li><NavLink to='/settings'>settings</NavLink></li>

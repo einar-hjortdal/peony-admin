@@ -23,6 +23,7 @@ import {
 } from '../../data'
 import { formatLine } from '../../utils'
 import If from '../../components/If'
+import ButtonMore from '../../components/Buttons/ButtonMore'
 
 // handles simple pricing: no quantity-based prices.
 // quantity-based prices pricing needs a less "convenient" layout.
@@ -433,7 +434,7 @@ const EditPrices = component(({ productId }) => {
               </button>
             </div>
             <div>
-              <button type='button'>...</button>
+              <ButtonMore type='button' />
               {/* TODO toggle columns */}
               <If condition={isOpen}>
                 <div>
