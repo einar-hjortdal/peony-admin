@@ -187,6 +187,15 @@ export const useProductCategoryById = (productCategoryId) => {
   })
 }
 
+export const useProductCategories = (params) => {
+  const api = useApi()
+  const p = getParams(params)
+  return useQuery(dataKeys.productCategoryGet, () => api.productCategoryGet(p), {
+    variables: params,
+    extractId: (x) => x.id
+  })
+}
+
 export const useProductOptionCreateMutation = (productId) => {
   const api = useApi()
   return useMutation(

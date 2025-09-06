@@ -86,6 +86,18 @@ const GlobalStyle = createGlobalStyle`
   button {
     border: none;
   }
+
+  dialog {
+    background-color: unset;
+    border: none;
+    max-width: unset;
+    max-height: unset;
+    padding: 0;
+  }
+  
+  dialog:focus{
+    outline: none;
+  }
 `
 
 export default GlobalStyle

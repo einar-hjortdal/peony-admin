@@ -67,11 +67,11 @@ const Products = component(() => {
               onClick={handleOpenModal}
             >{t('add')}
             </PrimaryButton>
+            <NewProduct modalRef={modalRef} />
           </Card.Header>
           {/* TODO change to Table.Title */}
           <Table products={products} defaultLocaleId={defaultLocaleId} />
         </Card>
-        <NewProduct modalRef={modalRef} />
       </>
     )
   }

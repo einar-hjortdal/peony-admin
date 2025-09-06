@@ -155,6 +155,16 @@ export const api = {
     return checkResponse(response)
   },
 
+  productCategoryGet: async (params) => {
+    const response = await fetch(
+      getRequestUrl('/admin/product-categories', params),
+      {
+        credentials: 'include'
+      }
+    )
+    return checkResponse(response)
+  },
+
   productOptionCreate: async (productId, data) => {
     const response = await fetch(
       getRequestUrl(`/admin/products/${productId}/options`),

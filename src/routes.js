@@ -28,6 +28,10 @@ export const routes = [
         component: lazy(() => import('./pages/Product'))
       },
       {
+        path: 'categories',
+        component: lazy(() => import('./pages/Categories'))
+      },
+      {
         path: 'settings',
         component: lazy(() => import('./pages/Settings'))
       },
