@@ -46,7 +46,7 @@ const OptionValues = component(({ productId, variantData, setVariantData }) => {
 
     // no inputs if no options
     if (detectIsUndefined(options)) {
-      return false
+      return null
     }
 
     const getValue = (id, localeId) => {
@@ -149,7 +149,7 @@ const OptionValues = component(({ productId, variantData, setVariantData }) => {
     )
   }
 
-  return false
+  return null
 })
 
 const InputOriginCountry = component(({ label, value, onChangeHandler }) => {
@@ -185,7 +185,7 @@ const InputOriginCountry = component(({ label, value, onChangeHandler }) => {
     )
   }
 
-  return false
+  return null
 })
 
 // allow_backorder    ?bool   @[json: 'allowBackorder']

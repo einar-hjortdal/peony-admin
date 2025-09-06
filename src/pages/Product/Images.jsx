@@ -10,7 +10,7 @@ import { useProductById, useUploadProductImageMutation } from '../../data'
 
 const ExistingImages = component(({ images }) => {
   if (detectIsUndefined(images)) {
-    return false
+    return null
   }
 
   const res = []
@@ -105,7 +105,7 @@ const Images = component(({ productId }) => {
     )
   }
 
-  return false
+  return null
 })
 
 export default Images

@@ -234,10 +234,8 @@ const Locales = component(() => {
       <Card.Header title={t('title')} subtitle={t('description')}>
         <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
       </Card.Header>
-      <Card.Body>
-        <Modal modalRef={modalRef} />
-        <StoreLocales />
-      </Card.Body>
+      <Modal modalRef={modalRef} />
+      <StoreLocales />
     </Card>
   )
 })

@@ -80,7 +80,7 @@ const Regions = component(() => {
     )
   }
 
-  return false
+  return null
 })
 
 export default Regions

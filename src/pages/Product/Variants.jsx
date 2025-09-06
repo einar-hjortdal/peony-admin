@@ -183,7 +183,7 @@ const VariantsTable = component(({ productId }) => {
     )
   }
 
-  return false
+  return null
 })
 
 const Variants = component(({ productId }) => {
@@ -198,7 +198,7 @@ const Variants = component(({ productId }) => {
         variants
         <VariantsTable productId={productId} />
       </div>
-    </Card >
+    </Card>
   )
 })
 

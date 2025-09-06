@@ -35,16 +35,14 @@ const Organize = component(() => {
     return (
       <Card>
         <Card.Header title={t('title')} />
-        <Card.Body>
-          <div>
-            {t('category')}: <ProductCategory productCategoryId={categoryId} />
-          </div>
-        </Card.Body>
+        <div>
+          {t('category')}: <ProductCategory productCategoryId={categoryId} />
+        </div>
       </Card>
     )
   }
 
-  return false
+  return null
 })
 
 export default Organize

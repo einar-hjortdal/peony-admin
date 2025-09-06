@@ -49,18 +49,16 @@ const DefaultLocale = component(() => {
     return (
       <Card>
         <Card.Header title={t('title')} />
-        <Card.Body>
-          <label>
-            {t('description')}
-            <DefaultLocaleSelect
-              title={t('title')}
-              name={t('title')}
-              onChange={handleChange}
-              disabled={updateStoreIsFetching}
-            >{options}
-            </DefaultLocaleSelect>
-          </label>
-        </Card.Body>
+        <label>
+          {t('description')}
+          <DefaultLocaleSelect
+            title={t('title')}
+            name={t('title')}
+            onChange={handleChange}
+            disabled={updateStoreIsFetching}
+          >{options}
+          </DefaultLocaleSelect>
+        </label>
       </Card>
     )
   }

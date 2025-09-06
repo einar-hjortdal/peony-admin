@@ -2,34 +2,35 @@ import { component, detectIsString } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 import If from './If'
 
-const Wrapper = styled.div`
+const Outer = styled.div`
   box-sizing: border-box;
   padding-right: .75rem;
   padding-left: .75rem;
 `
-const StyledDiv = styled.div`
+const Inner = styled.div`
   background-color: ${p => p.theme.neutral00};
   border-radius: ${p => p.theme.borderRadius};
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding-top: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 1.5rem;
+  padding-left: 1.5rem;
   margin-bottom: 1.5rem;
 `
 
 const Card = component(({ slot }) => {
   return (
-    <Wrapper>
-      <StyledDiv>
+    <Outer>
+      <Inner>
         {slot}
-      </StyledDiv>
-    </Wrapper>
+      </Inner>
+    </Outer>
   )
 })
 
 const StyledHeader = styled.header`
   display: flow-root;
-  padding-top: 1.5rem;
-  padding-right: 1.5rem;
   padding-bottom: 1.5rem;
-  padding-left: 1.5rem;
 `
 
 const HeaderLeft = styled.div`
@@ -47,7 +48,7 @@ const Title = styled.span`
 
 const Subtitle = styled.span`
   display: block;
-  color: ${p => p.theme.neutral60};
+  color: ${p => p.theme.neutral70};
 `
 
 Card.Header = component(({ title, subtitle, slot }) => {
@@ -92,11 +93,5 @@ Card.Header.BadgeWarning = component(({ slot }) => {
     </BadgeWarning>
   )
 })
-
-Card.Body = styled.div`
-  padding-right: 1.5rem;
-  padding-bottom: 1.5rem;
-  padding-left: 1.5rem;
-`
 
 export default Card

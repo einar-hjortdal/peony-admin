@@ -12,7 +12,7 @@ import PrimaryButton from '../../components/Buttons/PrimaryButton'
 
 const ExistingImages = component(({ images }) => {
   if (detectIsUndefined(images)) {
-    return false
+    return null
   }
 
   const res = []
@@ -105,7 +105,7 @@ const AddImageButton = component(({ productId }) => {
     )
   }
 
-  return false
+  return null
 })
 
 export default AddImageButton

@@ -111,6 +111,7 @@ export default freeze({
   'products.table.status': 'status',
   'products.title': 'products',
   'product.salesChannels.title': 'sales channels',
+  'products.salesChannels.availability': 'available in {available} of {total} sales channels',
   'regions.addRegion.add': 'add region',
   'regions.addRegion.close': 'close',
   'regions.heading': 'regions',

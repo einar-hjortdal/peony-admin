@@ -126,7 +126,7 @@ const NewOption = component(({ productId, handleCloseNewOption }) => {
     )
   }
 
-  return false
+  return null
 })
 
 const EditableOption = component(({ productId, option }) => {
@@ -268,7 +268,7 @@ const ProductOptions = component(({ productId }) => {
     )
   }
 
-  return false
+  return null
 })
 
 const EditOptions = component(({ productId }) => {

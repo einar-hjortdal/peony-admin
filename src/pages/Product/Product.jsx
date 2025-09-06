@@ -125,28 +125,24 @@ const Product = component(() => {
                 <Card.Header.BadgeSuccess>{status}</Card.Header.BadgeSuccess>
               </If>
             </Card.Header>
-            <Card.Body>
-              <TranslationDefault productId={productId} />
-              {/* <div>
+            <TranslationDefault productId={productId} />
+            {/* <div>
               {t('type')}
             </div>
             <div>
               {t('collection')}
             </div> */}
-              <div>
-                {t('discountable')}: {String(discountable)}
-                {/* TODO */}
-              </div>
-            </Card.Body>
+            <div>
+              {t('discountable')}: {String(discountable)}
+              {/* TODO */}
+            </div>
           </Card>
 
           <Card>
             <Card.Header title={t('images')}>
               <AddImageButton productId={productId} />
             </Card.Header>
-            <Card.Body>
-              {/* show images  */}
-            </Card.Body>
+            {/* show images  */}
           </Card>
 
           <Variants productId={productId} />

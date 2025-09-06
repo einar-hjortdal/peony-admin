@@ -76,31 +76,29 @@ const Store = component(() => {
         <ColumnLarge>
           <Card>
             <Card.Header title={t('title')} />
-            <Card.Body>
-              <div>
-                <label>
-                  {t('name')}
-                  <input type='text' name='name' value={storeName} onInput={handleInput} />
-                </label>
-                <button type='button' onClick={handleSave} disabled={isDisabled()}>{t('save')}</button>
-              </div>
-              <div>
-                <span>{t('defaultCurrency')}</span>
-                <span>{defaultCurrencyCode}</span>
-              </div>
-              <div>
-                <span>{t('defaultLocale')}</span>
-                <span>{defaultLocaleCode}</span>
-              </div>
-              <div>
-                <span>{t('defaultStockLocation')}</span>
-                <span>{defaultStockLocationId}</span>
-              </div>
-              <div>
-                <span>{t('defaultSalesChannel')}</span>
-                <span>{defaultSalesChannelName}</span>
-              </div>
-            </Card.Body>
+            <div>
+              <label>
+                {t('name')}
+                <input type='text' name='name' value={storeName} onInput={handleInput} />
+              </label>
+              <button type='button' onClick={handleSave} disabled={isDisabled()}>{t('save')}</button>
+            </div>
+            <div>
+              <span>{t('defaultCurrency')}</span>
+              <span>{defaultCurrencyCode}</span>
+            </div>
+            <div>
+              <span>{t('defaultLocale')}</span>
+              <span>{defaultLocaleCode}</span>
+            </div>
+            <div>
+              <span>{t('defaultStockLocation')}</span>
+              <span>{defaultStockLocationId}</span>
+            </div>
+            <div>
+              <span>{t('defaultSalesChannel')}</span>
+              <span>{defaultSalesChannelName}</span>
+            </div>
           </Card>
 
           <Locales />
@@ -117,7 +115,7 @@ const Store = component(() => {
     )
   }
 
-  return false
+  return null
 })
 
 export default Store

@@ -263,10 +263,8 @@ const Currencies = component(() => {
       <Card.Header title={t('title')} subtitle={t('description')}>
         <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
       </Card.Header>
-      <Card.Body>
-        <Modal modalRef={modalRef} />
-        <StoreCurrencies />
-      </Card.Body>
+      <Modal modalRef={modalRef} />
+      <StoreCurrencies />
     </Card>
   )
 })

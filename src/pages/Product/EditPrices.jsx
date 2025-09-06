@@ -123,7 +123,7 @@ const TableCell = component(({ decimalDigits, value, handler }) => {
 
 const TableBody = ({ variants, moneyAmounts, currencyColumns, regionColumns, handleInput }) => {
   if (detectIsUndefined(moneyAmounts)) {
-    return false
+    return null
   }
 
   const rows = []
@@ -407,7 +407,7 @@ const EditPrices = component(({ productId }) => {
   if (productData && storeData && regionsData) {
     const { variants } = productData.product
     if (detectIsUndefined(variants)) {
-      return false
+      return null
     }
 
     return (
@@ -460,7 +460,7 @@ const EditPrices = component(({ productId }) => {
     )
   }
 
-  return false
+  return null
 })
 
 export default EditPrices

@@ -58,7 +58,7 @@ const User = component(() => {
     )
   }
 
-  return false
+  return null
 })
 
 export default User

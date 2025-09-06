@@ -69,9 +69,7 @@ const Products = component(() => {
             </PrimaryButton>
           </Card.Header>
           {/* TODO change to Table.Title */}
-          <Card.Body>
-            <Table products={products} defaultLocaleId={defaultLocaleId} />
-          </Card.Body>
+          <Table products={products} defaultLocaleId={defaultLocaleId} />
         </Card>
         <NewProduct modalRef={modalRef} />
       </>

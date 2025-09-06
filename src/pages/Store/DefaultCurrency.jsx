@@ -49,18 +49,16 @@ const DefaultCurrency = component(() => {
     return (
       <Card>
         <Card.Header title={t('title')} />
-        <Card.Body>
-          <label>
-            {t('description')}
-            <DefaultCurrencySelect
-              title={t('title')}
-              name={t('title')}
-              onChange={handleChange}
-              disabled={updateStoreIsFetching}
-            >{options}
-            </DefaultCurrencySelect>
-          </label>
-        </Card.Body>
+        <label>
+          {t('description')}
+          <DefaultCurrencySelect
+            title={t('title')}
+            name={t('title')}
+            onChange={handleChange}
+            disabled={updateStoreIsFetching}
+          >{options}
+          </DefaultCurrencySelect>
+        </label>
       </Card>
     )
   }
