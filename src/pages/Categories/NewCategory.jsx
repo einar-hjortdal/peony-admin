@@ -31,9 +31,29 @@ const NewCategory = component(({ modalRef }) => {
     e.preventDefault()
   }
 
+  const getFieldValue = (e) => {
+    const { type, value, checked } = e.target
+    if (type === 'checkbox') {
+      return checked
+    }
+    return value
+  }
+
+  const handleInput = (e) => {
+    const { name } = e.target
+    setCategoryData((prevState) => {
+      return {
+        ...prevState,
+        [name]: getFieldValue(e)
+      }
+    })
+  }
+
   const handleSubmit = () => {
     createCategory(categoryData)
   }
+
+  console.log(categoryData)
 
   return (
     <ModalFull ref={modalRef} title={t('title')} handleClose={handleCloseModal}>
@@ -43,6 +63,8 @@ const NewCategory = component(({ modalRef }) => {
           <input
             type='text'
             name='name'
+            value={categoryData.name}
+            onInput={handleInput}
           />
         </StyledLabel>
 
@@ -51,6 +73,8 @@ const NewCategory = component(({ modalRef }) => {
           <input
             type='text'
             name='description'
+            value={categoryData.description}
+            onInput={handleInput}
           />
         </StyledLabel>
 
@@ -59,6 +83,8 @@ const NewCategory = component(({ modalRef }) => {
           <input
             type='text'
             name='handle'
+            value={categoryData.handle}
+            onInput={handleInput}
           />
         </StyledLabel>
 
@@ -67,6 +93,8 @@ const NewCategory = component(({ modalRef }) => {
           <input
             type='checkbox'
             name='isInternal'
+            value={categoryData.isInternal}
+            onChange={handleInput}
           />
         </StyledLabel>
 
@@ -75,6 +103,8 @@ const NewCategory = component(({ modalRef }) => {
           <input
             type='checkbox'
             name='isActive'
+            value={categoryData.isActive}
+            onChange={handleInput}
           />
         </StyledLabel>
       </form>
