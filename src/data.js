@@ -52,8 +52,8 @@ export const useUserLoginMutation = () => {
     dataKeys.authPost,
     (email, password) => api.loginUser(email, password),
     {
-      onSuccess: ({ cache, data }) => {
-        cache.write(dataKeys.getUser, data, { id: data.id })
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.getUser)
       }
     }
   )
