@@ -179,6 +179,20 @@ export const useDeleteProductMutation = (id) => {
   })
 }
 
+export const useProductCategoryCreateMutation = () => {
+  const api = useApi()
+  return useMutation(
+    dataKeys.productCategoryCreate,
+    (data) => api.productCategoryCreate(data),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productCategoryGet)
+        // TODO onSuccess invalidate all dataKeys.productCategoryGet from cache https://github.com/atellmer/dark/issues/107
+      }
+    }
+  )
+}
+
 export const useProductCategoryById = (productCategoryId) => {
   const api = useApi()
   return useQuery(dataKeys.productCategoryGetById, () => api.productCategoryGetById(productCategoryId), {

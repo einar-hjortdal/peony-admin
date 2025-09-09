@@ -145,6 +145,16 @@ export const api = {
     return checkResponse(response)
   },
 
+  productCategoryCreate: async (data) => {
+    const response = await fetch(getRequestUrl('/admin/product-categories'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
   productCategoryGetById: async (productCategoryId) => {
     const response = await fetch(
       getRequestUrl(`/admin/product-categories/${productCategoryId}`),

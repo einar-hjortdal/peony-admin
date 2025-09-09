@@ -1,8 +1,9 @@
-import { component, detectIsNull, useRef } from '@dark-engine/core'
+import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 
 import { useTranslation } from '@wareme/translations'
 import ModalFull from '../../components/Modals/ModalFull'
+import { useProductCategoryCreateMutation } from '../../data'
 
 const StyledLabel = styled.label`
   display: block;
@@ -12,6 +13,9 @@ const StyledLabel = styled.label`
 const NewCategory = component(({ modalRef }) => {
   const { t } = useTranslation('categories.newCategory')
   const formRef = useRef(null)
+
+  const [categoryData, setCategoryData] = useState({})
+  const [createCategory] = useProductCategoryCreateMutation()
 
   const handleCloseModal = () => {
     if (detectIsNull(modalRef) || detectIsNull(modalRef.current)) {
@@ -25,6 +29,10 @@ const NewCategory = component(({ modalRef }) => {
 
   const handleLabelClick = (e) => {
     e.preventDefault()
+  }
+
+  const handleSubmit = () => {
+    createCategory(categoryData)
   }
 
   return (
