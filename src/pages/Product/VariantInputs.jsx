@@ -152,42 +152,6 @@ const OptionValues = component(({ productId, variantData, setVariantData }) => {
   return null
 })
 
-const InputOriginCountry = component(({ label, value, onChangeHandler }) => {
-  const { data } = useCountries({ fetch: 250 })
-  const { translator } = useTranslation()
-
-  if (data) {
-    const { countries } = data
-    const options = []
-    options.push(<option value='' disabled hidden />)
-    for (let i = 0, len = countries.length; i < len; i++) {
-      const country = countries[i]
-      const { code } = country
-      options.push(
-        <option key={code} value={code}>
-          {code} ({translator.formatName(code.trim(), { type: 'region' })})
-        </option>
-      )
-    }
-
-    return (
-      <label>
-        {label}
-        <select
-          name='originCountry'
-          autoComplete='off'
-          value={value}
-          onChange={onChangeHandler}
-        >
-          {options}
-        </select>
-      </label>
-    )
-  }
-
-  return null
-})
-
 // allow_backorder    ?bool   @[json: 'allowBackorder']
 // manage_inventory   ?bool   @[json: 'manageInventory']
 // origin_country     ?string @[json: 'originCountry']

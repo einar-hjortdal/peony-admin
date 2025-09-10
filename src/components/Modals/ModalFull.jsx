@@ -1,5 +1,6 @@
 import { component } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
+import PrimaryButton from '../Buttons/PrimaryButton'
 
 const StyledDialog = styled.dialog`
   background-color: ${p => p.theme.bg};
@@ -31,13 +32,6 @@ const Title = styled.span`
   font-size: 130%;
 `
 
-const Body = styled.div`
-  padding-top: 1rem;
-  padding-right: 1rem;
-  padding-bottom: 1rem;
-  padding-left: 1rem;
-`
-
 const ModalFull = component(({ title, handleClose, slot, ref }) => {
   return (
     <StyledDialog ref={ref}>
@@ -51,11 +45,24 @@ const ModalFull = component(({ title, handleClose, slot, ref }) => {
         </HeaderRight>
       </StyledHeader>
 
-      <Body>
-        {slot}
-      </Body>
+      {slot}
     </StyledDialog>
   )
 })
+
+ModalFull.Body = styled.div`
+  padding-top: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+`
+
+ModalFull.Footer = styled.footer`
+  padding-top: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  border-top: 1px solid ${p => p.theme.neutral30};
+`
 
 export default ModalFull

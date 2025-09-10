@@ -16,6 +16,16 @@ const checkResponse = async (response) => {
   return data
 }
 
+const adminPrefix = '/admin/'
+
+// params must be a string that will be concatenated to path using the `?` separator
+const getRequestUrl = (path, params) => {
+  if (detectIsEmpty(params) || (detectIsString(params) && params === '')) {
+    return `${config.peonyUrl}${adminPrefix}${path}`
+  }
+  return `${config.peonyUrl}${adminPrefix}${path}?${params}`
+}
+
 export const dataKeys = {
   getUser: 'getUser',
   authPost: 'authPost',
@@ -52,24 +62,16 @@ export const dataKeys = {
   uploadsDelete: 'uploadsDelete'
 }
 
-// params must be a string that will be concatenated to path using the `?` separator
-const getRequestUrl = (path, params) => {
-  if (detectIsEmpty(params) || (detectIsString(params) && params === '')) {
-    return `${config.peonyUrl}${path}`
-  }
-  return `${config.peonyUrl}${path}?${params}`
-}
-
 export const api = {
   getUserData: async () => {
-    const response = await fetch(getRequestUrl('/admin/auth'), {
+    const response = await fetch(getRequestUrl('auth'), {
       credentials: 'include'
     })
     return checkResponse(response)
   },
 
   loginUser: async (email, password) => {
-    const response = await fetch(getRequestUrl('/admin/auth'), {
+    const response = await fetch(getRequestUrl('auth'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -79,7 +81,7 @@ export const api = {
   },
 
   logoutUser: async () => {
-    const response = await fetch(getRequestUrl('/admin/auth'), {
+    const response = await fetch(getRequestUrl('auth'), {
       method: 'DELETE',
       credentials: 'include'
     })
@@ -87,14 +89,14 @@ export const api = {
   },
 
   storeGet: async () => {
-    const response = await fetch(getRequestUrl('/admin/store'), {
+    const response = await fetch(getRequestUrl('store'), {
       credentials: 'include'
     })
     return checkResponse(response)
   },
 
   storeUpdate: async (id, data) => {
-    const response = await fetch(getRequestUrl(`/admin/store/${id}`), {
+    const response = await fetch(getRequestUrl(`store/${id}`), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -104,21 +106,21 @@ export const api = {
   },
 
   productsGet: async (params) => {
-    const response = await fetch(getRequestUrl('/admin/products', params), {
+    const response = await fetch(getRequestUrl('products', params), {
       credentials: 'include'
     })
     return checkResponse(response)
   },
 
   productGetById: async (id) => {
-    const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
+    const response = await fetch(getRequestUrl(`products/${id}`), {
       credentials: 'include'
     })
     return checkResponse(response)
   },
 
   productCreate: async (data) => {
-    const response = await fetch(getRequestUrl('/admin/products'), {
+    const response = await fetch(getRequestUrl('products'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -128,7 +130,7 @@ export const api = {
   },
 
   productUpdate: async (id, data) => {
-    const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
+    const response = await fetch(getRequestUrl(`products/${id}`), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -138,7 +140,7 @@ export const api = {
   },
 
   productDelete: async (id) => {
-    const response = await fetch(getRequestUrl(`/admin/products/${id}`), {
+    const response = await fetch(getRequestUrl(`products/${id}`), {
       method: 'DELETE',
       credentials: 'include'
     })
@@ -146,7 +148,7 @@ export const api = {
   },
 
   productCategoryCreate: async (data) => {
-    const response = await fetch(getRequestUrl('/admin/product-categories'), {
+    const response = await fetch(getRequestUrl('product-categories'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -157,7 +159,7 @@ export const api = {
 
   productCategoryGetById: async (productCategoryId) => {
     const response = await fetch(
-      getRequestUrl(`/admin/product-categories/${productCategoryId}`),
+      getRequestUrl(`product-categories/${productCategoryId}`),
       {
         credentials: 'include'
       }
@@ -167,7 +169,7 @@ export const api = {
 
   productCategoryGet: async (params) => {
     const response = await fetch(
-      getRequestUrl('/admin/product-categories', params),
+      getRequestUrl('product-categories', params),
       {
         credentials: 'include'
       }
@@ -177,7 +179,7 @@ export const api = {
 
   productOptionCreate: async (productId, data) => {
     const response = await fetch(
-      getRequestUrl(`/admin/products/${productId}/options`),
+      getRequestUrl(`products/${productId}/options`),
       {
         method: 'POST',
         credentials: 'include',
@@ -189,7 +191,7 @@ export const api = {
 
   productOptionUpdate: async (productId, optionId, data) => {
     const response = await fetch(
-      getRequestUrl(`/admin/products/${productId}/options/${optionId}`),
+      getRequestUrl(`products/${productId}/options/${optionId}`),
       {
         method: 'POST',
         credentials: 'include',
@@ -201,7 +203,7 @@ export const api = {
 
   productOptionDelete: async (productId, optionId) => {
     const response = await fetch(
-      getRequestUrl(`/admin/products/${productId}/options/${optionId}`),
+      getRequestUrl(`products/${productId}/options/${optionId}`),
       {
         method: 'DELETE',
         credentials: 'include'
@@ -212,7 +214,7 @@ export const api = {
 
   productVariantCreate: async (id, data) => {
     const response = await fetch(
-      getRequestUrl(`/admin/products/${id}/variants`),
+      getRequestUrl(`products/${id}/variants`),
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -225,7 +227,7 @@ export const api = {
 
   productVariantUpdate: async (productId, variantId, data) => {
     const response = await fetch(
-      getRequestUrl(`/admin/products/${productId}/variants/${variantId}`),
+      getRequestUrl(`products/${productId}/variants/${variantId}`),
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -237,7 +239,7 @@ export const api = {
   },
 
   productVariantDelete: async (id) => {
-    const response = await fetch(getRequestUrl(`/admin/variants/${id}`), {
+    const response = await fetch(getRequestUrl(`variants/${id}`), {
       method: 'DELETE',
       credentials: 'include'
     })
@@ -245,21 +247,21 @@ export const api = {
   },
 
   countriesGet: async (params) => {
-    const response = await fetch(getRequestUrl('/admin/countries', params), {
+    const response = await fetch(getRequestUrl('countries', params), {
       credentials: 'include'
     })
     return checkResponse(response)
   },
 
   currencyGet: async (params) => {
-    const response = await fetch(getRequestUrl('/admin/currencies', params), {
+    const response = await fetch(getRequestUrl('currencies', params), {
       credentials: 'include'
     })
     return checkResponse(response)
   },
 
   currencyUpdate: async (code, data) => {
-    const response = await fetch(getRequestUrl(`/admin/currencies/${code}`), {
+    const response = await fetch(getRequestUrl(`currencies/${code}`), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -269,7 +271,7 @@ export const api = {
   },
 
   regionsGet: async (params) => {
-    const response = await fetch(getRequestUrl('/admin/regions', params), {
+    const response = await fetch(getRequestUrl('regions', params), {
       credentials: 'include'
     })
     return checkResponse(response)
@@ -277,7 +279,7 @@ export const api = {
 
   salesChannelsGet: async (params) => {
     const response = await fetch(
-      getRequestUrl('/admin/sales-channels', params),
+      getRequestUrl('sales-channels', params),
       {
         credentials: 'include'
       }
@@ -286,14 +288,14 @@ export const api = {
   },
 
   localesGet: async (params) => {
-    const response = await fetch(getRequestUrl('/admin/locales', params), {
+    const response = await fetch(getRequestUrl('locales', params), {
       credentials: 'include'
     })
     return checkResponse(response)
   },
 
   uploadsUploadOne: async (file) => {
-    const response = await fetch(getRequestUrl(`/admin/uploads/${file.name}`), {
+    const response = await fetch(getRequestUrl(`uploads/${file.name}`), {
       method: 'POST',
       credentials: 'include',
       body: file
@@ -302,7 +304,7 @@ export const api = {
   },
 
   uploadsUploadMany: async (formData, params) => {
-    const response = await fetch(getRequestUrl('/admin/uploads', params), {
+    const response = await fetch(getRequestUrl('uploads', params), {
       method: 'POST',
       credentials: 'include',
       body: formData
@@ -311,7 +313,7 @@ export const api = {
   },
 
   uploadsDelete: async (id) => {
-    const response = await fetch(getRequestUrl(`/admin/uploads/${id}`), {
+    const response = await fetch(getRequestUrl(`uploads/${id}`), {
       method: 'DELETE',
       credentials: 'include'
     })
