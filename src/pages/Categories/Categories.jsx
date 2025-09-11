@@ -7,7 +7,9 @@ import Card from '../../components/Card'
 import ButtonMore from '../../components/Buttons/ButtonMore'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import SecondaryButton from '../../components/Buttons/SecondaryButton'
-import NewCategory from './NewCategory'
+import CategoryNew from './CategoryNew'
+import If from '../../components/If'
+import CategoryEdit from './CategoryEdit'
 
 const StyledTable = styled.table`
   width: 100%;
@@ -54,6 +56,38 @@ const Visibility = component(({ isInternal }) => {
   return <span>{getVisibility()}</span>
 })
 
+const StyledUl = styled.ul`
+  position: absolute;
+`
+
+const Category = component(({ productCategory }) => {
+  const { t } = useTranslation('categories.category')
+  const { handle, isActive, isInternal, name } = productCategory
+  const [isOpen, setIsOpen] = useState(false)
+  const toggleOpen = () => {
+    setIsOpen(!isOpen)
+  }
+
+  return (
+    <tr>
+      <td>{name}</td>
+      <td>{handle}</td>
+      <td><Status isActive={isActive} /></td>
+      <td><Visibility isInternal={isInternal} /></td>
+      <td>
+        <ButtonMore onClick={toggleOpen} />
+        <If condition={isOpen}>
+          <StyledUl>
+            <li>
+              <CategoryEdit productCategory={productCategory} />
+            </li>
+          </StyledUl>
+        </If>
+      </td>
+    </tr>
+  )
+})
+
 // table footer: x out of y results, x of y pages, prev/next page
 // TODO if category is parent, then nest children
 // TODO search button
@@ -76,18 +110,7 @@ const Categories = component(() => {
     const rows = []
     for (let i = 0, len = productCategories.length; i < len; i++) {
       const productCategory = productCategories[i]
-      const { handle, isActive, isInternal, name } = productCategory
-      rows.push(
-        <tr>
-          <td>{name}</td>
-          <td>{handle}</td>
-          <td><Status isActive={isActive} /></td>
-          <td><Visibility isInternal={isInternal} /></td>
-          <td>
-            <ButtonMore />
-          </td>
-        </tr>
-      )
+      rows.push(<Category productCategory={productCategory} />)
     }
 
     return (
@@ -100,7 +123,7 @@ const Categories = component(() => {
             onClick={handleOpenModal}
           >{t('create')}
           </PrimaryButton>
-          <NewCategory modalRef={modalRef} />
+          <CategoryNew modalRef={modalRef} />
         </Card.Header>
         <StyledTable>
           <thead>

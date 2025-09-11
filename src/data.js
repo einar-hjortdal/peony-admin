@@ -193,6 +193,20 @@ export const useProductCategoryCreateMutation = () => {
   )
 }
 
+export const useProductCategoryUpdateMutation = (productCategoryId) => {
+  const api = useApi()
+  return useMutation(
+    dataKeys.productCategoryUpdate,
+    (data) => api.productCategoryUpdate(productCategoryId, data),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productCategoryGet)
+        // TODO onSuccess invalidate all dataKeys.productCategoryGet from cache https://github.com/atellmer/dark/issues/107
+      }
+    }
+  )
+}
+
 export const useProductCategoryById = (productCategoryId) => {
   const api = useApi()
   return useQuery(dataKeys.productCategoryGetById, () => api.productCategoryGetById(productCategoryId), {

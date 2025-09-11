@@ -19,7 +19,7 @@ const StyledButton = styled.button`
 const ButtonMore = component(({ slot, ...props }) => {
   const { t } = useTranslation('buttons.more')
   return (
-    <StyledButton aria-label={t('label')} {...props}>
+    <StyledButton aria-label={t('label')} type='button' {...props}>
       <svg viewBox='0 0 24 8' aria-hidden='true'>
         <circle cx='4' cy='4' r='3' />
         <circle cx='12' cy='4' r='3' />

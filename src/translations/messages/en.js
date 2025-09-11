@@ -26,6 +26,7 @@ export default freeze({
   'categories.newCategory.visibility': 'internal',
   'categories.newCategory.status': 'active',
   'categories.newCategory.save': 'save',
+  'categories.categoryEdit.button': 'edit',
   'currencies.defaultCurrency.description': 'this is the currency prices are shown in by default',
   'currencies.defaultCurrency.title': 'default currency',
   'currencies.description': 'all currencies accepted by your store',

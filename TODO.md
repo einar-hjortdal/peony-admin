@@ -11,10 +11,10 @@
 - [x] Variants
 - [x] Prices
 - [x] Options
+- [x] Product categories
 
 ## Currently working on
 
-- [ ] Product categories
 - [ ] User-defined data
 - [ ] Inventory items
 

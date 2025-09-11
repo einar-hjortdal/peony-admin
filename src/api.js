@@ -177,11 +177,24 @@ export const api = {
     return checkResponse(response)
   },
 
+  productCategoryUpdate: async (productCategoryId, data) => {
+    const response = await fetch(
+      getRequestUrl(`product-categories/${productCategoryId}`),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        credentials: 'include'
+      })
+    return checkResponse(response)
+  },
+
   productOptionCreate: async (productId, data) => {
     const response = await fetch(
       getRequestUrl(`products/${productId}/options`),
       {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(data)
       }
@@ -194,6 +207,7 @@ export const api = {
       getRequestUrl(`products/${productId}/options/${optionId}`),
       {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(data)
       }
