@@ -30,26 +30,6 @@ const StyledTable = styled.table`
   }
 `
 
-const Name = component(({ translations }) => {
-  const { data: storeData } = useStore()
-
-  const getDefaultName = (defaultLocaleId) => {
-    for (let i = 0, len = translations.length; i < len; i++) {
-      const translation = translations[i]
-      if (translation.localeId === defaultLocaleId) {
-        return translation.name
-      }
-    }
-    return '-'
-  }
-
-  if (storeData) {
-    const { store } = storeData
-    const { defaultLocaleId } = store
-    return getDefaultName(translations, defaultLocaleId)
-  }
-})
-
 const Status = component(({ isActive }) => {
   const { t } = useTranslation('categories.status')
   const getStatus = () => {
@@ -94,12 +74,12 @@ const Categories = component(() => {
   if (productCategoriesData) {
     const { productCategories } = productCategoriesData
     const rows = []
-    for (let i = 0, len = productCategories.len; i < len; i++) {
+    for (let i = 0, len = productCategories.length; i < len; i++) {
       const productCategory = productCategories[i]
-      const { handle, isActive, isInternal, translations } = productCategory
+      const { handle, isActive, isInternal, name } = productCategory
       rows.push(
         <tr>
-          <td><Name translations={translations} /></td>
+          <td>{name}</td>
           <td>{handle}</td>
           <td><Status isActive={isActive} /></td>
           <td><Visibility isInternal={isInternal} /></td>

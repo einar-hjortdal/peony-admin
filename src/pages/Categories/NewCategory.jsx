@@ -106,8 +106,8 @@ const NewCategory = component(({ modalRef }) => {
 
   if (storeData) {
     const { store } = storeData
-    const { defaultLocaleId } = store
-    // TODO handle translations
+    const { defaultLocaleId, locales } = store
+    // TODO translations if locales.length > 1
 
     return (
       <ModalFull ref={modalRef} title={t('title')} handleClose={handleCloseModal}>
