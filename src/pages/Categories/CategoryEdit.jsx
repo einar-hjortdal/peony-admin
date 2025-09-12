@@ -1,6 +1,10 @@
-import { component, detectIsNull, useRef } from '@dark-engine/core'
+import { component, detectIsNull, keys, useEffect, useRef, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 import { useProductCategoryUpdateMutation, useProducts, useProductUpdateMutation } from '../../data'
+import Card from '../../components/Card'
+import ModalFull from '../../components/Modals/ModalFull'
+import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import CategoryInputs from './CategoryInputs'
 
 const CategoryProduct = component(({ product, categoryId }) => {
   const { id: productId } = product
@@ -14,11 +18,14 @@ const CategoryProduct = component(({ product, categoryId }) => {
 })
 
 const CategoryProducts = component(({ categoryId }) => {
+  const { t } = useTranslation('categories.categoryEdit.categoryProducts')
   const fetchAmount = 15
   const { data: productsData } = useProducts({ category_ids: categoryId, fetch: fetchAmount })
   if (productsData) {
-    // TODO list products in category
     const { products } = productsData
+    if (products.length === 0) {
+      return null
+    }
 
     const rows = []
     for (let i = 0, len = products.length; i < len; i++) {
@@ -27,19 +34,26 @@ const CategoryProducts = component(({ categoryId }) => {
     }
 
     return (
-      <ul>
-        {rows}
-      </ul>
+      <Card>
+        <Card.Header title={t('title')} />
+        <ul>
+          {rows}
+        </ul>
+      </Card>
     )
   }
 })
 
 const CategoryEdit = component(({ productCategory }) => {
-  const { id } = productCategory
-  const [updateCategory] = useProductCategoryUpdateMutation(id)
+  const { id, name } = productCategory
   const { t } = useTranslation('categories.categoryEdit')
+  const [updateCategory] = useProductCategoryUpdateMutation(id)
+  const [requestData, setRequestData] = useState({})
 
   const modalRef = useRef(null)
+
+  const formId = 'edit-category-form'
+  const formRef = useRef(null)
 
   const handleOpenModal = () => {
     if (detectIsNull(modalRef)) {
@@ -55,18 +69,39 @@ const CategoryEdit = component(({ productCategory }) => {
     modalRef.current.close()
   }
 
-  const handleUpdate = () => {
-    updateCategory(data)
+  const handleUpdate = (e) => {
+    e.preventDefault()
+    console.log(requestData)
+    // updateCategory(requestData)
   }
 
   return (
     <>
       <button type='button' onClick={handleOpenModal}>{t('button')}</button>
-      <dialog ref={modalRef}>
-        {/* <CategoryInputs /> */}
-        {/* TODO */}
-        <CategoryProducts categoryId={id} />
-      </dialog>
+      <ModalFull title={name} handleClose={handleCloseModal} ref={modalRef}>
+        <ModalFull.Body>
+
+          <Card>
+            <Card.Header title={t('general')} />
+
+            <CategoryInputs
+              formId={formId}
+              formRef={formRef}
+              categoryData={productCategory}
+              onChange={setRequestData}
+              onSubmit={handleUpdate}
+            />
+          </Card>
+
+          <CategoryProducts categoryId={id} />
+        </ModalFull.Body>
+
+        <ModalFull.Footer>
+          <PrimaryButton type='submit' form={formId}>
+            {t('save')}
+          </PrimaryButton>
+        </ModalFull.Footer>
+      </ModalFull>
     </>
   )
 })

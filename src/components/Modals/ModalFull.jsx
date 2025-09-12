@@ -32,7 +32,7 @@ const Title = styled.span`
   font-size: 130%;
 `
 
-const ModalFull = component(({ title, handleClose, slot, ref }) => {
+const ModalFull = component(({ title, handleClose, ref, slot }) => {
   return (
     <StyledDialog ref={ref}>
       <StyledHeader>
