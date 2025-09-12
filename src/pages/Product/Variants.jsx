@@ -17,7 +17,7 @@ import { useTranslation } from '@wareme/translations'
 import {
   useStore,
   useProductById,
-  useUpdateProductMutation,
+  useProductUpdateMutation,
   useDeleteVariantMutation
 } from '../../data'
 import Card from '../../components/Card'

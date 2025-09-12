@@ -1,6 +1,38 @@
 import { component, detectIsNull, useRef } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
-import { useProductCategoryById, useProductCategoryUpdateMutation } from '../../data'
+import { useProductCategoryUpdateMutation, useProducts, useProductUpdateMutation } from '../../data'
+
+const CategoryProduct = component(({ product, categoryId }) => {
+  const { id: productId } = product
+  const [updateProduct] = useProductUpdateMutation(productId)
+  // TODO allow romoving product from category
+  return (
+    <li>
+      {/* TODO */}
+    </li>
+  )
+})
+
+const CategoryProducts = component(({ categoryId }) => {
+  const fetchAmount = 15
+  const { data: productsData } = useProducts({ category_ids: categoryId, fetch: fetchAmount })
+  if (productsData) {
+    // TODO list products in category
+    const { products } = productsData
+
+    const rows = []
+    for (let i = 0, len = products.length; i < len; i++) {
+      const product = products[i]
+      rows.push(<CategoryProduct product={product} categoryId={categoryId} />)
+    }
+
+    return (
+      <ul>
+        {rows}
+      </ul>
+    )
+  }
+})
 
 const CategoryEdit = component(({ productCategory }) => {
   const { id } = productCategory
@@ -33,6 +65,7 @@ const CategoryEdit = component(({ productCategory }) => {
       <dialog ref={modalRef}>
         {/* <CategoryInputs /> */}
         {/* TODO */}
+        <CategoryProducts categoryId={id} />
       </dialog>
     </>
   )

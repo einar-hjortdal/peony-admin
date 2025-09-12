@@ -112,7 +112,7 @@ const NewCategory = component(({ modalRef }) => {
     return (
       <ModalFull ref={modalRef} title={t('title')} handleClose={handleCloseModal}>
         <ModalFull.Body>
-          <form ref={formRef}>
+          <form id='category-form' ref={formRef}>
             <StyledLabel onClick={handleLabelClick}>
               {t('name')}
               <input
@@ -169,7 +169,7 @@ const NewCategory = component(({ modalRef }) => {
         </ModalFull.Body>
 
         <ModalFull.Footer>
-          <PrimaryButton type='submit' onClick={handleSubmit}>
+          <PrimaryButton type='submit' form='category-form' onClick={handleSubmit}>
             {t('save')}
           </PrimaryButton>
         </ModalFull.Footer>

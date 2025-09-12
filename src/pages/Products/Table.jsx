@@ -7,7 +7,7 @@ import { valueOrDefault } from '../../utils'
 import {
   constants,
   useDeleteProductMutation,
-  useUpdateProductMutation
+  useProductUpdateMutation
 } from '../../data'
 import If from '../../components/If'
 import { styled } from '@dark-engine/styled'
@@ -19,7 +19,7 @@ const Actions = component(({ product }) => {
     data: updateProductData,
     isFetching: updateProductIsFetching,
     error: updateProductError
-  }] = useUpdateProductMutation(id)
+  }] = useProductUpdateMutation(id)
   const [deleteProduct, {
     data: deleteProductData,
     isFetching: deleteProductIsFetching,

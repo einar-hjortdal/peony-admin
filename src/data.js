@@ -159,7 +159,7 @@ export const useProductCreateMutation = () => {
   )
 }
 
-export const useUpdateProductMutation = (id) => {
+export const useProductUpdateMutation = (id) => {
   const api = useApi()
   return useMutation(
     dataKeys.productUpdate,
@@ -412,7 +412,7 @@ export const useUploadProductImageMutation = (productId) => {
   const [
     updateProduct,
     { isFetching: updateProductIsFetching, error: updateProductError }
-  ] = useUpdateProductMutation(productId)
+  ] = useProductUpdateMutation(productId)
 
   const [
     uploadImage,
@@ -444,7 +444,7 @@ export const useUploadProductImagesMutation = (productId) => {
   const [
     updateProduct,
     { isFetching: updateProductIsFetching, error: updateProductError }
-  ] = useUpdateProductMutation(productId)
+  ] = useProductUpdateMutation(productId)
 
   const [
     uploadImages,
@@ -481,7 +481,7 @@ export const useDeleteProductImageMutation = (productId) => {
   const [
     updateProduct,
     { isFetching: updateProductIsFetching, error: updateProductError }
-  ] = useUpdateProductMutation(productId)
+  ] = useProductUpdateMutation(productId)
 
   const [
     deleteImage,
