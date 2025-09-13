@@ -1,14 +1,11 @@
-import { component, detectIsUndefined, useEffect, useState } from '@dark-engine/core'
+import { component, detectIsNull, detectIsUndefined, useEffect, useRef, useState } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import {
-  useProductCategories,
-  useProductCategoryById,
-  useProductUpdateMutation
-} from '../../data'
+import { useProductCategories, useProductUpdateMutation } from '../../data'
 import Card from '../../components/Card'
 import ButtonMore from '../../components/Buttons/ButtonMore'
+import If from '../../components/If'
 
 const ProductCategoriesList = component(({ productCategories }) => {
   if (productCategories.length === 0) {
@@ -28,7 +25,8 @@ const ProductCategoriesList = component(({ productCategories }) => {
 // first build an array of existing product_category id
 // keep it up to date with user input: remove/add ids to the array
 // on submit send it to /admin/product/:product_id post with payload {category_ids: [...]}
-const CategoriesModal = component(({ productId, productCategories }) => {
+const EditCategories = component(({ productId, productCategories }) => {
+  const { t } = useTranslation('product.categories.editCategories')
   const [categoryIds, setCategoryIds] = useState([])
 
   useEffect(() => {
@@ -42,8 +40,32 @@ const CategoriesModal = component(({ productId, productCategories }) => {
   }, [productCategories])
 
   const [updateProduct] = useProductUpdateMutation(productId)
+  const { data: productCategoriesData } = useProductCategories()
 
-  return null
+  const modalRef = useRef(null)
+  const handleOpenModal = () => {
+    if (detectIsNull(modalRef)) {
+      return
+    }
+    modalRef.current.showModal()
+  }
+
+  const handleCloseModal = () => {
+    if (detectIsNull(modalRef)) {
+      return
+    }
+    modalRef.current.close()
+  }
+
+  // const allProductCategories = productCategoriesData.productCategories
+  return (
+    <>
+      <button type='button' onClick={handleOpenModal}>{t('button')}</button>
+      <dialog ref={modalRef}>
+        {/* TODO use a select element with one option per category? */}
+      </dialog>
+    </>
+  )
 })
 
 const Categories = component(() => {
@@ -51,15 +73,25 @@ const Categories = component(() => {
   const params = useParams()
   const productId = params.get('id')
   const { data: productCategoriesData } = useProductCategories({ product_ids: productId })
+  const [isOpen, setIsOpen] = useState(false)
+  const handleClick = () => {
+    setIsOpen(!isOpen)
+  }
 
   if (productCategoriesData) {
     const { productCategories } = productCategoriesData
     return (
       <Card>
         <Card.Header title={t('title')}>
-          <ButtonMore type='button'>
-            actions
-          </ButtonMore>
+          <ButtonMore type='button' onClick={handleClick} />
+          <If condition={isOpen}>
+            <ul>
+              <li>
+                <EditCategories productId={productId} productCategories={productCategories} />
+                {/* should there even be more entries? Maybe just use an edit primary button */}
+              </li>
+            </ul>
+          </If>
         </Card.Header>
         <div>
           <ProductCategoriesList productCategories={productCategories} />
