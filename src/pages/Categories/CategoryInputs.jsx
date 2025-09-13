@@ -1,4 +1,11 @@
-import { component, detectIsArray, detectIsObject, detectIsUndefined, keys, useEffect, useState } from '@dark-engine/core'
+import {
+  component,
+  detectIsArray,
+  detectIsUndefined,
+  keys,
+  useEffect,
+  useState
+} from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 
 import { useStore } from '../../data'
@@ -8,6 +15,9 @@ const StyledLabel = styled.label`
   display: block;
 `
 
+// TODO non-default translations
+// TODO handle delete translation
+// TODO compare with original data, only give onChange changed data
 const CategoryInputs = component(({ formId, formRef, categoryData, onChange, onSubmit }) => {
   const { t } = useTranslation('categories.categoryInputs')
   const { data: storeData } = useStore()

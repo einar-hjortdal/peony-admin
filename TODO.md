@@ -50,6 +50,11 @@
 - [ ] Validate inputs
 - [ ] Refactor
 
+## Deployment
+
+- [ ] deploy script
+- [ ] undeploy script
+
 ## Problems
 
 - [`@dark-engine/styled` has CSS order issues](https://github.com/atellmer/dark/issues/72)

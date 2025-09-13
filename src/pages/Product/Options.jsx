@@ -36,8 +36,6 @@ const ExistingOptions = component(({ productId }) => {
 
     return (<ul>{rows}</ul>)
   }
-
-  return null
 })
 
 const Options = component(() => {

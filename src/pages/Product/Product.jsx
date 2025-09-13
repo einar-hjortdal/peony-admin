@@ -10,7 +10,7 @@ import SetTitle from '../../components/SetTitle'
 import If from '../../components/If'
 import ColumnLarge from '../../components/Columns/ColumnLarge'
 import ColumnSmall from '../../components/Columns/ColumnSmall'
-import Organize from './Organize'
+import Categories from './Categories'
 import SalesChannels from './SalesChannels'
 import Options from './Options'
 import Images from './Images'
@@ -129,9 +129,6 @@ const Product = component(() => {
             <TranslationDefault productId={productId} />
             {/* <div>
               {t('type')}
-            </div>
-            <div>
-              {t('collection')}
             </div> */}
             <div>
               {t('discountable')}: {String(discountable)}
@@ -146,7 +143,9 @@ const Product = component(() => {
 
         <ColumnSmall>
           <SalesChannels />
-          <Organize />
+          <Categories />
+          {/* TODO tags */}
+          {/* TODO collections */}
         </ColumnSmall>
       </>
     )

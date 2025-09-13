@@ -1,4 +1,4 @@
-import { component, detectIsNull, keys, useEffect, useRef, useState } from '@dark-engine/core'
+import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 import { useProductCategoryUpdateMutation, useProducts, useProductUpdateMutation } from '../../data'
 import Card from '../../components/Card'
@@ -71,8 +71,7 @@ const CategoryEdit = component(({ productCategory }) => {
 
   const handleUpdate = (e) => {
     e.preventDefault()
-    console.log(requestData)
-    // updateCategory(requestData)
+    updateCategory(requestData)
   }
 
   return (
