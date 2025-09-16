@@ -16,7 +16,7 @@ const StyledButton = styled.button`
   }
 `
 
-const ButtonMore = component(({ slot, ...props }) => {
+const ButtonMore = component(({ ...props }) => {
   const { t } = useTranslation('buttons.more')
   return (
     <StyledButton aria-label={t('label')} type='button' {...props}>
@@ -25,7 +25,6 @@ const ButtonMore = component(({ slot, ...props }) => {
         <circle cx='12' cy='4' r='3' />
         <circle cx='20' cy='4' r='3' />
       </svg>
-      {slot}
     </StyledButton>
   )
 })

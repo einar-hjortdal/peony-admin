@@ -66,6 +66,7 @@ export default freeze({
   'newProduct.translations': 'translations',
   'orders.title': 'orders',
   'product.addImage.add': 'add',
+  'product.categories.editCategories.button': 'Edit categories',
   'product.details': 'details',
   'product.discountable': 'discountable',
   'product.editableOption.delete': 'delete option',
