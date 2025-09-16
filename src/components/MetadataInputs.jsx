@@ -1,6 +1,7 @@
 import { component, detectIsFunction, detectIsUndefined, hasKeys, keys, useEffect, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
+// accepts raw metadata string, will parse it internally
 const MetadataInputs = component(({ metadata, onChange }) => {
   const { t } = useTranslation('metadataInputs')
   const [newMetadata, setNewMetadata] = useState({})
@@ -16,7 +17,7 @@ const MetadataInputs = component(({ metadata, onChange }) => {
     if (detectIsUndefined(metadata)) {
       return
     }
-    handleChange(metadata)
+    handleChange(JSON.parse(metadata))
   }, [metadata])
 
   const handleDeleteKey = (e) => {
