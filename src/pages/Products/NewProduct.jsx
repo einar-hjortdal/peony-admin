@@ -139,7 +139,6 @@ const NewProduct = component(({ modalRef }) => {
       })
     }
     const data = { ...productData, translations, status }
-    console.log(data)
     createProduct(data)
   }
 
@@ -257,7 +256,7 @@ const NewProduct = component(({ modalRef }) => {
           </SecondaryButton>
           <PrimaryButton
             type='submit'
-            data-status='publish'
+            data-status='published'
             disabled={isFetching}
             onClick={handleSubmit}
           >{t('publish')}

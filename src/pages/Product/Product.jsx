@@ -10,10 +10,11 @@ import SetTitle from '../../components/SetTitle'
 import If from '../../components/If'
 import ColumnLarge from '../../components/Columns/ColumnLarge'
 import ColumnSmall from '../../components/Columns/ColumnSmall'
-import Categories from './Categories'
+import Organize from './Organize'
 import SalesChannels from './SalesChannels'
 import Options from './Options'
 import Images from './Images'
+import Metadata from './Metadata'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -139,11 +140,12 @@ const Product = component(() => {
           <Images />
           <Options />
           <Variants />
+          <Metadata />
         </ColumnLarge>
 
         <ColumnSmall>
           <SalesChannels />
-          <Categories />
+          <Organize />
           {/* TODO tags */}
           {/* TODO collections */}
         </ColumnSmall>

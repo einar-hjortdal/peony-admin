@@ -4,8 +4,13 @@ import { useThemeSwitcher } from '../styles/Theme'
 
 const ThemeSwitch = component(() => {
   const { selectedThemeName, switchTheme } = useThemeSwitcher()
+
+  const handleLabelClick = (e) => {
+    e.preventDefault()
+  }
+
   return (
-    <label>
+    <label onclick={handleLabelClick}>
       {selectedThemeName}
       <button type='button' onClick={switchTheme}>theme toggle</button>
     </label>
