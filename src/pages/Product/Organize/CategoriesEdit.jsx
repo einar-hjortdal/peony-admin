@@ -1,51 +1,54 @@
-import { component, detectIsNull, useEffect, useRef, useState } from '@dark-engine/core'
+import { component, detectIsNull, useEffect, useMemo, useRef, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductById, useProductCategories, useProductUpdateMutation } from '../../../data'
+import { useProductCategories, useProductUpdateMutation } from '../../../data'
 
-const CategoriesSet = component(({ productId }) => {
+const CategoriesSet = component(({ categoryIds, onChange }) => {
   const {
     data: productCategoriesData,
     isFetching: productCategoriesIsFetching
-  } = useProductCategories({ product_ids: productId })
-  const [updateProduct, { isFetching: updateProductIsFetching }] = useProductUpdateMutation(productId)
+  } = useProductCategories()
+
+  const productCategoriesMap = useMemo(() => {
+    if (productCategoriesData) {
+      const { productCategories } = productCategoriesData
+      const result = {}
+      for (let i = 0, len = productCategories.length; i < len; i++) {
+        const category = productCategories[i]
+        const { id, name } = category
+        result[id] = name
+      }
+      return result
+    }
+  }, [productCategoriesData])
 
   const handleRemove = (e) => {
     const { categoryId } = e.target.dataset
-    const { productCategories } = productCategoriesData
-    const categoryIds = []
-    for (let i = 0, len = productCategories.length; i < len; i++) {
-      const category = productCategories[i]
-      const { id } = category
+    const newCategoryIds = []
+    for (let i = 0, len = categoryIds.length; i < len; i++) {
+      const id = categoryIds[i]
       if (id !== categoryId) {
         categoryIds.push(id)
       }
-      console.log({ categories: categoryIds }) // TODO remove line and enable update
-      // updateProduct({ categories: categoryIds })
+      onChange(newCategoryIds)
     }
   }
 
-  const isDisabled = () => {
-    return productCategoriesIsFetching || updateProductIsFetching
-  }
-
   if (productCategoriesData) {
-    const { productCategories } = productCategoriesData
     const categoriesSet = []
-    for (let i = 0, len = productCategories.length; i < len; i++) {
-      const category = productCategories[i]
-      const { id, name } = category
+    for (let i = 0, len = categoryIds.length; i < len; i++) {
+      const categoryId = categoryIds[i]
+      const categoryName = productCategoriesMap[categoryId]
 
       categoriesSet.push(
-        <div key={id}>
-          <span>{name}</span>
+        <div key={categoryId}>
+          <span>{categoryName}</span>
           <button
             type='button'
-            data-category-id={id}
+            data-category-id={categoryId}
             onClick={handleRemove}
-            disabled={isDisabled()}
-          >remove
-            {/* TODO use t */}
+            disabled={productCategoriesIsFetching}
+          >remove {/* TODO use t */}
           </button>
         </div>
       )
@@ -54,50 +57,43 @@ const CategoriesSet = component(({ productId }) => {
   }
 })
 
-const CategoriesAdd = component(({ productId }) => {
+// TODO add input to filter categories
+const CategoriesAdd = component(({ productId, categoryIds, onChange }) => {
   const {
     data: allProductCategoriesData,
     isFetching: allProductCategoriesIsFetching
   } = useProductCategories()
+
   const {
     data: productCategoriesData,
     isFetching: productCategoriesIsFetching
   } = useProductCategories({ product_ids: productId })
 
-  const [
-    updateProduct,
-    { isFetching: updateProductIsFetching }
-  ] = useProductUpdateMutation(productId)
-
-  const [categoryIds, setCategoryIds] = useState([])
-
   useEffect(() => {
     const { productCategories } = productCategoriesData
-    const ids = []
+    const newCategoryIds = []
     for (let i = 0, len = productCategories.length; i < len; i++) {
       const productCategory = productCategories[i]
       const { id } = productCategory
-      ids.push(id)
+      newCategoryIds.push(id)
     }
-    setCategoryIds(ids)
+    onChange(newCategoryIds)
   }, [productCategoriesData])
 
   const isDisabled = () => {
-    return allProductCategoriesIsFetching || productCategoriesIsFetching || updateProductIsFetching
+    return allProductCategoriesIsFetching || productCategoriesIsFetching
   }
 
   const handleInput = (e) => {
     const { options } = e.target
-    const picked = []
+    const newCategoryIds = []
     for (let i = 0, len = options.length; i < len; i++) {
       const option = options[i]
       if (option.selected && !option.disabled) {
-        picked.push(option.value)
+        newCategoryIds.push(option.value)
       }
     }
-    setCategoryIds(picked)
-    console.log(picked)
-    // updateProduct({ category_ids: picked })
+    onChange(newCategoryIds)
   }
 
   if (allProductCategoriesData && productCategoriesData) {
@@ -106,16 +102,18 @@ const CategoriesAdd = component(({ productId }) => {
     for (let i = 0, len = allProductCategories.length; i < len; i++) {
       const category = allProductCategories[i]
       const { id, name } = category
-      const disabled = categoryIds.includes(id)
+
+      if (categoryIds.includes(id)) {
+        continue
+      }
+
       options.push(
-        <option key={id} value={id} disabled={disabled}>
+        <option key={id} value={id}>
           {name}
         </option>
       )
     }
 
-    // TODO can't unselect right now
-    // But also, if I can select and unselect, there is no point in having CategoriesSet component
     return (
       <select
         multiple
@@ -131,6 +129,12 @@ const CategoriesAdd = component(({ productId }) => {
 
 const CategoriesEdit = component(({ productId }) => {
   const { t } = useTranslation('product.categories.editCategories')
+
+  const [categoryIds, setCategoryIds] = useState([])
+  const [
+    updateProduct,
+    { isFetching: updateProductIsFetching }
+  ] = useProductUpdateMutation(productId)
 
   const modalRef = useRef(null)
   const handleOpenModal = () => {
@@ -151,8 +155,15 @@ const CategoriesEdit = component(({ productId }) => {
     <>
       <button type='button' onClick={handleOpenModal}>{t('button')}</button>
       <dialog ref={modalRef}>
-        <CategoriesAdd productId={productId} />
-        <CategoriesSet productId={productId} />
+        <CategoriesAdd
+          productId={productId}
+          categoryIds={categoryIds}
+          onChange={setCategoryIds}
+        />
+        <CategoriesSet
+          categoryIds={categoryIds}
+          onChange={setCategoryIds}
+        />
       </dialog>
     </>
   )
