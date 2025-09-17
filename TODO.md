@@ -12,10 +12,10 @@
 - [x] Prices
 - [x] Options
 - [x] Product categories
+- [x] Metadata
 
 ## Currently working on
 
-- [ ] User-defined data
 - [ ] Inventory items
 
 ## Working on soon

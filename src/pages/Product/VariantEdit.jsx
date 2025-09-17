@@ -9,6 +9,8 @@ import { useTranslation } from '@wareme/translations'
 
 import { useVariantUpdateMutation } from '../../data'
 import VariantInputs from './VariantInputs'
+import Card from '../../components/Card'
+import MetadataInputs from '../../components/MetadataInputs'
 
 const VariantEdit = component(({ productId, variant }) => {
   const { t } = useTranslation('product.variantEdit')
@@ -31,7 +33,8 @@ const VariantEdit = component(({ productId, variant }) => {
       height: variant.height,
       width: variant.width,
       originCountry: variant.originCountry,
-      optionValues: variant.optionValues
+      optionValues: variant.optionValues,
+      metadata: variant.metadata
     })
   }, [variant])
 
@@ -56,6 +59,15 @@ const VariantEdit = component(({ productId, variant }) => {
     modalRef.current.close()
   }
 
+  const handleMetadataUpdate = (newMetadata) => {
+    setNewVariantData((prevState) => {
+      return {
+        ...prevState,
+        metadata: newMetadata
+      }
+    })
+  }
+
   const handleUpdate = async () => {
     const { id } = variant
     // TODO only include changes: variantRank and optionValues may be the same
@@ -64,16 +76,27 @@ const VariantEdit = component(({ productId, variant }) => {
     handleCloseModal()
   }
 
+  const { metadata } = newVariantData
+
   return (
     <>
       <button type='button' onClick={handleOpenModal}>{t('button')}</button>
       <dialog ref={modalRef}>
         <button type='button' onClick={handleCloseModal}>x</button>
-        <VariantInputs
-          productId={productId}
-          variantData={newVariantData}
-          setVariantData={setNewVariantData}
-        />
+        <Card>
+          <Card.Header title={t('general')} />
+          <VariantInputs
+            productId={productId}
+            variantData={newVariantData}
+            setVariantData={setNewVariantData}
+          />
+        </Card>
+
+        <Card>
+          <Card.Header title={t('metadata')} />
+          <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
+        </Card>
+
         <div>
           <button
             type='button'

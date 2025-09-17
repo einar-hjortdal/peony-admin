@@ -10,6 +10,8 @@ import { useTranslation } from '@wareme/translations'
 import { useVariantCreateMutation } from '../../data'
 import VariantInputs from './VariantInputs'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import MetadataInputs from '../../components/MetadataInputs'
+import Card from '../../components/Card'
 
 const VariantAdd = component(({ productId }) => {
   const { t } = useTranslation('product.variantAdd')
@@ -42,6 +44,17 @@ const VariantAdd = component(({ productId }) => {
     handleCloseModal()
   }
 
+  const handleMetadataUpdate = (newMetadata) => {
+    setVariantData((prevState) => {
+      return {
+        ...prevState,
+        metadata: newMetadata
+      }
+    })
+  }
+
+  const { metadata } = variantData
+
   return (
     <>
       <PrimaryButton type='button' onClick={handleOpenModal}>{t('add')}</PrimaryButton>
@@ -52,6 +65,12 @@ const VariantAdd = component(({ productId }) => {
           variantData={variantData}
           setVariantData={setVariantData}
         />
+
+        <Card>
+          <Card.Header title={t('metadata')} />
+          <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
+        </Card>
+
         <div>
           <button
             type='button'

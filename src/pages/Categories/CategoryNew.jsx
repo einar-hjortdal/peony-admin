@@ -6,6 +6,7 @@ import { useProductCategoryCreateMutation } from '../../data'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import CategoryInputs from './CategoryInputs'
 import Card from '../../components/Card'
+import MetadataInputs from '../../components/MetadataInputs'
 
 const NewCategory = component(({ modalRef }) => {
   const { t } = useTranslation('categories.newCategory')
@@ -30,6 +31,17 @@ const NewCategory = component(({ modalRef }) => {
     createCategory(requestData)
   }
 
+  const handleMetadataUpdate = (newMetadata) => {
+    setRequestData((prevState) => {
+      return {
+        ...prevState,
+        metadata: newMetadata
+      }
+    })
+  }
+
+  const { metadata } = requestData
+
   return (
     <ModalFull ref={modalRef} title={t('title')} handleClose={handleCloseModal}>
       <ModalFull.Body>
@@ -41,6 +53,11 @@ const NewCategory = component(({ modalRef }) => {
             onChange={setRequestData}
             onSubmit={handleSubmit}
           />
+        </Card>
+
+        <Card>
+          <Card.Header title={t('metadata')} />
+          <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
         </Card>
       </ModalFull.Body>
 

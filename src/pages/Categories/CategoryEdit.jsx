@@ -5,6 +5,7 @@ import Card from '../../components/Card'
 import ModalFull from '../../components/Modals/ModalFull'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import CategoryInputs from './CategoryInputs'
+import MetadataInputs from '../../components/MetadataInputs'
 
 const CategoryProduct = component(({ product, categoryId }) => {
   const { id: productId } = product
@@ -74,6 +75,17 @@ const CategoryEdit = component(({ productCategory }) => {
     updateCategory(requestData)
   }
 
+  const handleMetadataUpdate = (newMetadata) => {
+    setRequestData((prevState) => {
+      return {
+        ...prevState,
+        metadata: newMetadata
+      }
+    })
+  }
+
+  const { metadata } = requestData
+
   return (
     <>
       <button type='button' onClick={handleOpenModal}>{t('button')}</button>
@@ -90,6 +102,11 @@ const CategoryEdit = component(({ productCategory }) => {
               onChange={setRequestData}
               onSubmit={handleUpdate}
             />
+          </Card>
+
+          <Card>
+            <Card.Header title={t('metadata')} />
+            <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
           </Card>
 
           <CategoryProducts categoryId={id} />
