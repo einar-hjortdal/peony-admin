@@ -200,8 +200,19 @@ export const useProductCategoryUpdateMutation = (productCategoryId) => {
     (data) => api.productCategoryUpdate(productCategoryId, data),
     {
       onSuccess: ({ cache }) => {
-        cache.invalidate(dataKeys.productCategoryGet)
+        cache.invalidate(dataKeys.productCategoryGetById, { id: productCategoryId })
+        // cache.invalidate(dataKeys.productCategoryGet)
         // TODO onSuccess invalidate all dataKeys.productCategoryGet from cache https://github.com/atellmer/dark/issues/107
+        const cacheState = cache.getState()
+        const productCategoryState = cacheState[dataKeys.productCategoryGet]
+        if (detectIsUndefined(productCategoryState)) {
+          return
+        }
+        const productCategoryStateKeys = keys(productCategoryState)
+        for (let i = 0, len = productCategoryStateKeys.length; i < len; i++) {
+          const key = productCategoryStateKeys[i]
+          cache.invalidate(dataKeys.productCategoryGet, { id: key })
+        }
       }
     }
   )
@@ -225,7 +236,7 @@ export const useProductCategoryById = (productCategoryId) => {
   const api = useApi()
   return useQuery(dataKeys.productCategoryGetById, () => api.productCategoryGetById(productCategoryId), {
     variables: { productCategoryId },
-    extractId: (x) => x.id
+    extractId: () => productCategoryId
   })
 }
 
