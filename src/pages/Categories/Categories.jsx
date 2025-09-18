@@ -10,6 +10,7 @@ import SecondaryButton from '../../components/Buttons/SecondaryButton'
 import CategoryNew from './CategoryNew'
 import If from '../../components/If'
 import CategoryEdit from './CategoryEdit'
+import CategoryDelete from './CategoryDelete'
 
 const StyledTable = styled.table`
   width: 100%;
@@ -62,7 +63,7 @@ const StyledUl = styled.ul`
 
 const Category = component(({ productCategory }) => {
   const { t } = useTranslation('categories.category')
-  const { handle, isActive, isInternal, name } = productCategory
+  const { id, handle, isActive, isInternal, name } = productCategory
   const [isOpen, setIsOpen] = useState(false)
   const toggleOpen = () => {
     setIsOpen(!isOpen)
@@ -80,6 +81,9 @@ const Category = component(({ productCategory }) => {
           <StyledUl>
             <li>
               <CategoryEdit productCategory={productCategory} />
+            </li>
+            <li>
+              <CategoryDelete id={id} />
             </li>
           </StyledUl>
         </If>

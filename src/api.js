@@ -189,6 +189,17 @@ export const api = {
     return checkResponse(response)
   },
 
+  productCategoryDelete: async (productCategoryId) => {
+    const response = await fetch(
+      getRequestUrl(`product-categories/${productCategoryId}`),
+      {
+        method: 'DELETE',
+        credentials: 'include'
+      }
+    )
+    return checkResponse(response)
+  },
+
   productOptionCreate: async (productId, data) => {
     const response = await fetch(
       getRequestUrl(`products/${productId}/options`),

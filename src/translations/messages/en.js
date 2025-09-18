@@ -93,6 +93,7 @@ export default freeze({
   'product.translationGroup.title': 'title',
   'product.variantAdd.add': 'add',
   'product.variantAdd.create': 'create variant',
+  'product.variantAdd.metadata': 'Metadata',
   'product.variantEdit.general': 'General',
   'product.variantEdit.metadata': 'Metadata',
   'product.variantEdit.button': 'edit',

@@ -19,10 +19,10 @@ const MetadataInputs = component(({ metadata, onChange }) => {
     }
 
     if (detectIsString(metadata)) {
-      handleChange(JSON.parse(metadata))
+      return handleChange(JSON.parse(metadata))
     }
 
-    handleChange(metadata)
+    return handleChange(metadata)
   }, [metadata])
 
   const handleDeleteKey = (e) => {
