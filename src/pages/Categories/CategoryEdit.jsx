@@ -46,10 +46,11 @@ const CategoryProducts = component(({ categoryId }) => {
 })
 
 const CategoryEdit = component(({ productCategory }) => {
-  const { id, name } = productCategory
+  const { id, name } = productCategory // TODO set metadata in requestData
   const { t } = useTranslation('categories.categoryEdit')
   const [updateCategory] = useProductCategoryUpdateMutation(id)
   const [requestData, setRequestData] = useState({})
+  // TODO re-render when refetch
 
   const modalRef = useRef(null)
 
