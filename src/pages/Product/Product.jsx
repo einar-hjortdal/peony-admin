@@ -2,7 +2,7 @@ import { component, detectIsUndefined } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import { useStore, useProductById, useProductCategoryById } from '../../data'
+import { useStore, useProductById } from '../../data'
 import Card from '../../components/Card'
 import { formatLine } from '../../utils'
 import Variants from './Variants'

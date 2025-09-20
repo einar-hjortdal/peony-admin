@@ -3,7 +3,8 @@ import {
   detectIsEmpty,
   useMemo,
   detectIsUndefined,
-  detectIsObject
+  detectIsObject,
+  detectIsArray
 } from '@dark-engine/core'
 import { useApi, useQuery, useMutation } from '@dark-engine/data'
 
@@ -434,6 +435,9 @@ export const useUpdateCurrencyMutation = () => {
 
 export const useUploadProductImageMutation = (productId) => {
   const api = useApi()
+
+  const { data: productData } = useProductById(productId)
+
   const [
     updateProduct,
     { isFetching: updateProductIsFetching, error: updateProductError }
@@ -447,11 +451,15 @@ export const useUploadProductImageMutation = (productId) => {
     (file) => api.uploadsUploadOne(file),
     {
       onSuccess: ({ cache, data }) => {
-        const images = []
-        for (let i = 0, len = data.uploads.length; i < len; i++) {
-          images.push(data.uploads(i).url)
+        const images = productData.product.images
+        const url = data.upload.url
+
+        let newImages = [url]
+        if (detectIsArray(images)) {
+          newImages = images.concat(images)
         }
-        updateProduct({ images })
+
+        updateProduct({ images: newImages })
         cache.invalidate(dataKeys.productGetById, { id: productId })
       }
     }
