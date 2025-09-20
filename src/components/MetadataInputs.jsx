@@ -68,7 +68,7 @@ const MetadataInputs = component(({ metadata, onChange }) => {
             type='text'
             name={key}
             value={key}
-            onInput={handleInputKey}
+            onBlur={handleInputKey}
           />
           <input
             type='text'
