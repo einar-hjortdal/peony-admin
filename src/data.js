@@ -454,9 +454,22 @@ export const useUploadProductImageMutation = (productId) => {
         const images = productData.product.images
         const url = data.upload.url
 
-        let newImages = [url]
+        const newImages = [{ url }]
         if (detectIsArray(images)) {
-          newImages = images.concat(images)
+          for (let i = 0, len = images.length; i < len; i++) {
+            const image = images[i]
+            const imageUrl = image.url
+            const imageTranslations = image.translations
+            if (detectIsArray(imageTranslations)) {
+              const translations = []
+              for (const translation of imageTranslations) {
+                translations.push({ localeId: translation.localeId, alt: translation.alt })
+              }
+              newImages.push({ url: imageUrl, translations })
+            } else {
+              newImages.push({ url: imageUrl })
+            }
+          }
         }
 
         updateProduct({ images: newImages })

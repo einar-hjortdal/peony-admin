@@ -11,6 +11,27 @@ import { useTranslation } from '@wareme/translations'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import { useParams } from '@dark-engine/web-router'
 import Card from '../../components/Card'
+import { styled } from '@dark-engine/styled'
+
+const PreviewWrapper = styled.div`
+  display: inline-block;
+  width: 10rem;
+  height: 14rem;
+`
+
+const PreviewImg = styled.img`
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+`
+
+const Preview = component(({ ...props }) => {
+  return (
+    <PreviewWrapper>
+      <PreviewImg {...props} />
+    </PreviewWrapper>
+  )
+})
 
 // TODO allow changing order and deletion
 const ExistingImages = component(({ images }) => {
@@ -21,7 +42,7 @@ const ExistingImages = component(({ images }) => {
   const res = []
   for (let i = 0, len = images.length; i < len; i++) {
     const image = images[i]
-    res.push(<img src={image.url} />)
+    res.push(<Preview src={image.url} alt={image.alt} />)
   }
   return res
 })
@@ -102,8 +123,8 @@ const AddImageButton = component(({ productId }) => {
             disabled={isSubmitDisabled()}
           >upload
           </PrimaryButton>
+          <ExistingImages images={images} />
         </dialog>
-        <ExistingImages images={images} />
       </div>
     )
   }
@@ -121,10 +142,16 @@ const ImagesPreview = component(({ productId }) => {
       return null
     }
 
+    const previews = []
+    for (let i = 0, len = images.length; i < len; i++) {
+      const image = images[i]
+      previews.push(<Preview src={image.url} alt={image.alt} />)
+    }
+
     return (
       <div>
+        {previews}
         {JSON.stringify(images)}
-        {/* TODO preview images */}
         {/* TODO mark thumbnail image */}
       </div>
     )
