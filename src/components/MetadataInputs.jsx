@@ -34,6 +34,10 @@ const MetadataInputs = component(({ metadata, onChange }) => {
 
   const handleAddKey = (e) => {
     const { value } = e.target
+    if (value === '') {
+      return
+    }
+
     const newState = { ...newMetadata }
     newState[value] = ''
     handleChange(newState)
