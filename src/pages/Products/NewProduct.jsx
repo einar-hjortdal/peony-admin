@@ -13,13 +13,16 @@ import { detectIsEmptyString } from '@wareme/utils'
 
 import { useProductCreateMutation, useStore } from '../../data'
 
-import Dialog from '../../components/Dialog'
 import AccordionItem from '../../components/AccordionItem'
 import Switch from '../../components/Switch'
 import If from '../../components/If'
 import Input from '../../components/Input'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import SecondaryButton from '../../components/Buttons/SecondaryButton'
+import ModalFull from '../../components/Modals/ModalFull'
+import ModalHeader from '../../components/Modals/ModalHeader'
+import ModalBody from '../../components/Modals/ModalBody'
+import ModalFooter from '../../components/Modals/ModalFooter'
 
 const Translation = component(({ localeId, localeCode, onInput, disabled }) => {
   const { t, translator } = useTranslation('newProduct')
@@ -172,81 +175,75 @@ const NewProduct = component(({ modalRef }) => {
   }
 
   return (
-    <Dialog ref={modalRef}>
+    <ModalFull ref={modalRef}>
       <form ref={formRef}>
-        <Dialog.Header>
-          <Dialog.Title>{t('title')}</Dialog.Title>
-          <Dialog.Close
-            type='button'
-            disabled={isFetching}
-            onClick={handleCloseModal}
-          >x
-          </Dialog.Close>
-        </Dialog.Header>
+        <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
-        <NewProductBody>
-          <AccordionItem title={t('general')} defaultOpen>
-            <fieldset disabled={isFetching}>
-              <Input
-                name='title'
-                data-locale-id={storeData.store.defaultLocaleId}
-                onInput={handleTranslationInput}
-              >{t('general.title')}
-              </Input>
-              <Input
-                name='subtitle'
-                data-locale-id={storeData.store.defaultLocaleId}
-                onInput={handleTranslationInput}
-              >{t('general.subtitle')}
-              </Input>
-              <Input
-                name='description'
-                data-locale-id={storeData.store.defaultLocaleId}
-                onInput={handleTranslationInput}
-              >{t('general.description')}
-              </Input>
-              <Input
-                name='handle'
-                onInput={handleInput}
-              >{t('general.handle')}
-              </Input>
-              <Switch
-                name='discountable'
-                checked={productData.discountable}
-                onChange={handleInput}
-              >{t('general.discountable')}
-              </Switch>
-            </fieldset>
-          </AccordionItem>
-
-          <If condition={storeData.store.locales.length > 1}>
-            <AccordionItem title={t('translations')}>
-              <Translations
-                locales={storeData.store.locales}
-                defaultLocaleId={storeData.store.defaultLocaleId}
-                onInput={handleTranslationInput}
-                disabled={isFetching}
-              />
+        <ModalBody>
+          <NewProductBody>
+            <AccordionItem title={t('general')} defaultOpen>
+              <fieldset disabled={isFetching}>
+                <Input
+                  name='title'
+                  data-locale-id={storeData.store.defaultLocaleId}
+                  onInput={handleTranslationInput}
+                >{t('general.title')}
+                </Input>
+                <Input
+                  name='subtitle'
+                  data-locale-id={storeData.store.defaultLocaleId}
+                  onInput={handleTranslationInput}
+                >{t('general.subtitle')}
+                </Input>
+                <Input
+                  name='description'
+                  data-locale-id={storeData.store.defaultLocaleId}
+                  onInput={handleTranslationInput}
+                >{t('general.description')}
+                </Input>
+                <Input
+                  name='handle'
+                  onInput={handleInput}
+                >{t('general.handle')}
+                </Input>
+                <Switch
+                  name='discountable'
+                  checked={productData.discountable}
+                  onChange={handleInput}
+                >{t('general.discountable')}
+                </Switch>
+              </fieldset>
             </AccordionItem>
-          </If>
 
-          <AccordionItem title={t('organize')}>
-            <fieldset disabled={isFetching}>
-              {/* TODO tags */}
-              {/* TODO create type */}
-              type, collection, categories, sales channels
-            </fieldset>
-          </AccordionItem>
+            <If condition={storeData.store.locales.length > 1}>
+              <AccordionItem title={t('translations')}>
+                <Translations
+                  locales={storeData.store.locales}
+                  defaultLocaleId={storeData.store.defaultLocaleId}
+                  onInput={handleTranslationInput}
+                  disabled={isFetching}
+                />
+              </AccordionItem>
+            </If>
 
-          <AccordionItem title={t('media')}>
-            <fieldset disabled={isFetching}>
-              {/* TODO upload */}
-              thumbnail, images
-            </fieldset>
-          </AccordionItem>
-        </NewProductBody>
+            <AccordionItem title={t('organize')}>
+              <fieldset disabled={isFetching}>
+                {/* TODO tags */}
+                {/* TODO create type */}
+                type, collection, categories, sales channels
+              </fieldset>
+            </AccordionItem>
 
-        <Dialog.Footer>
+            <AccordionItem title={t('media')}>
+              <fieldset disabled={isFetching}>
+                {/* TODO upload */}
+                thumbnail, images
+              </fieldset>
+            </AccordionItem>
+          </NewProductBody>
+        </ModalBody>
+
+        <ModalFooter>
           <SecondaryButton
             type='submit'
             data-status='draft'
@@ -261,9 +258,9 @@ const NewProduct = component(({ modalRef }) => {
             onClick={handleSubmit}
           >{t('publish')}
           </PrimaryButton>
-        </Dialog.Footer>
+        </ModalFooter>
       </form>
-    </Dialog>
+    </ModalFull>
   )
 })
 

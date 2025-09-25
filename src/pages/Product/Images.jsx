@@ -12,6 +12,9 @@ import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import { useParams } from '@dark-engine/web-router'
 import Card from '../../components/Card'
 import { styled } from '@dark-engine/styled'
+import ModalDefault from '../../components/Modals/ModalDefault'
+import ModalHeader from '../../components/Modals/ModalHeader'
+import ModalBody from '../../components/Modals/ModalBody'
 
 const PreviewWrapper = styled.div`
   display: inline-block;
@@ -55,6 +58,7 @@ const ExistingImages = component(({ images }) => {
   )
 })
 
+// TODO split add images from edit images
 const AddImageButton = component(({ productId }) => {
   const { t } = useTranslation('product.addImage')
   const { data } = useProductById(productId)
@@ -116,26 +120,30 @@ const AddImageButton = component(({ productId }) => {
         <PrimaryButton type='button' onClick={handleOpenModal}>
           {t('add')}
         </PrimaryButton>
-        <dialog ref={modalRef}>
-          <div>
-            <label onClick={handleLabelClick}>
-              select image
-              <input
-                ref={inputRef}
-                type='file'
-                onChange={handleFileChange}
-              />
-            </label>
-            <PrimaryButton
-              type='button'
-              onClick={handleSubmit}
-              disabled={isSubmitDisabled()}
-            >upload
-            </PrimaryButton>
-          </div>
+        <ModalDefault ref={modalRef}>
+          <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
-          <ExistingImages images={images} />
-        </dialog>
+          <ModalBody>
+            <div>
+              <label onClick={handleLabelClick}>
+                select image
+                <input
+                  ref={inputRef}
+                  type='file'
+                  onChange={handleFileChange}
+                />
+              </label>
+              <PrimaryButton
+                type='button'
+                onClick={handleSubmit}
+                disabled={isSubmitDisabled()}
+              >upload
+              </PrimaryButton>
+            </div>
+
+            <ExistingImages images={images} />
+          </ModalBody>
+        </ModalDefault>
       </div>
     )
   }

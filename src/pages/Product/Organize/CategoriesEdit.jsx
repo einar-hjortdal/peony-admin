@@ -2,6 +2,7 @@ import { component, detectIsNull, useEffect, useMemo, useRef, useState } from '@
 import { useTranslation } from '@wareme/translations'
 
 import { useProductCategories, useProductUpdateMutation } from '../../../data'
+import ModalDefault from '../../../components/Modals/ModalDefault'
 
 const CategoriesSet = component(({ categoryIds, onChange }) => {
   const {
@@ -154,7 +155,7 @@ const CategoriesEdit = component(({ productId }) => {
   return (
     <>
       <button type='button' onClick={handleOpenModal}>{t('button')}</button>
-      <dialog ref={modalRef}>
+      <ModalDefault ref={modalRef}>
         <CategoriesAdd
           productId={productId}
           categoryIds={categoryIds}
@@ -164,7 +165,7 @@ const CategoriesEdit = component(({ productId }) => {
           categoryIds={categoryIds}
           onChange={setCategoryIds}
         />
-      </dialog>
+      </ModalDefault>
     </>
   )
 })

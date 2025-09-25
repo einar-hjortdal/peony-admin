@@ -11,6 +11,10 @@ import { useVariantUpdateMutation } from '../../data'
 import VariantInputs from './VariantInputs'
 import Card from '../../components/Card'
 import MetadataInputs from '../../components/MetadataInputs'
+import ModalDefault from '../../components/Modals/ModalDefault'
+import ModalHeader from '../../components/Modals/ModalHeader'
+import ModalFooter from '../../components/Modals/ModalFooter'
+import ModalBody from '../../components/Modals/ModalBody'
 
 const VariantEdit = component(({ productId, variant }) => {
   const { t } = useTranslation('product.variantEdit')
@@ -81,31 +85,36 @@ const VariantEdit = component(({ productId, variant }) => {
   return (
     <>
       <button type='button' onClick={handleOpenModal}>{t('button')}</button>
-      <dialog ref={modalRef}>
-        <button type='button' onClick={handleCloseModal}>x</button>
-        <Card>
-          <Card.Header title={t('general')} />
-          <VariantInputs
-            productId={productId}
-            variantData={newVariantData}
-            setVariantData={setNewVariantData}
-          />
-        </Card>
+      <ModalDefault ref={modalRef}>
+        <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
-        <Card>
-          <Card.Header title={t('metadata')} />
-          <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
-        </Card>
+        <ModalBody>
+          <Card>
+            <Card.Header title={t('general')} />
+            <VariantInputs
+              productId={productId}
+              variantData={newVariantData}
+              setVariantData={setNewVariantData}
+            />
+          </Card>
 
-        <div>
-          <button
-            type='button'
-            onClick={handleUpdate}
-            disabled={updateVariantIsFetching}
-          >{t('save')}
-          </button>
-        </div>
-      </dialog>
+          <Card>
+            <Card.Header title={t('metadata')} />
+            <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
+          </Card>
+        </ModalBody>
+
+        <ModalFooter>
+          <div>
+            <button
+              type='button'
+              onClick={handleUpdate}
+              disabled={updateVariantIsFetching}
+            >{t('save')}
+            </button>
+          </div>
+        </ModalFooter>
+      </ModalDefault>
     </>
   )
 })

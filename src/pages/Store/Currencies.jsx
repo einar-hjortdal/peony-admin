@@ -12,6 +12,9 @@ import {
 } from '../../data'
 import { currentPage, totalPages } from '../../utils'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import ModalDefault from '../../components/Modals/ModalDefault'
+import ModalHeader from '../../components/Modals/ModalHeader'
+import ModalBody from '../../components/Modals/ModalBody'
 
 const CurrenciesTable = styled.table`
   width: 100%;
@@ -212,12 +215,12 @@ const Modal = component(({ modalRef }) => {
     }
 
     return (
-      <dialog ref={modalRef}>
-        <div>
-          <button onClick={handleClose}>x</button>
-        </div>
-        <div>
+      <ModalDefault ref={modalRef}>
+        <ModalHeader title={t('title')} handleClose={handleClose} />
+
+        <ModalBody>
           <div>{currenciesList}</div>
+
           <button
             type='button'
             onClick={handleSubmit}
@@ -242,8 +245,9 @@ const Modal = component(({ modalRef }) => {
           >next
           </button>
           total pages: {totalPages(currenciesData.count, currenciesData.fetch)}
-        </div>
-      </dialog>
+        </ModalBody>
+
+      </ModalDefault>
     )
   }
 })

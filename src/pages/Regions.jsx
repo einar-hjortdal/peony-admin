@@ -3,6 +3,8 @@ import { useTranslation } from '@wareme/translations'
 
 import SetTitle from '../components/SetTitle'
 import { useRegions } from '../data'
+import ModalDefault from '../components/Modals/ModalDefault'
+import ModalHeader from '../components/Modals/ModalHeader'
 
 const AddRegion = component(() => {
   const modalRef = useRef(null)
@@ -26,9 +28,9 @@ const AddRegion = component(() => {
         onClick={handleOpenModal}
       >{t('add')}
       </button>
-      <dialog ref={modalRef}>
+      <ModalDefault ref={modalRef}>
+        <ModalHeader title={t('title')} handleClose={handleCloseModal} />
         <div>
-          <button type='button' onClick={handleCloseModal}>{t('close')}</button>
           <div>
             {/* country_codes   []string */}
             {/* currency_code   string */}
@@ -37,7 +39,7 @@ const AddRegion = component(() => {
             {/* rate_id         string */}
           </div>
         </div>
-      </dialog>
+      </ModalDefault>
     </>
   )
 })

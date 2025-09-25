@@ -24,6 +24,8 @@ import {
 import { formatLine } from '../../utils'
 import If from '../../components/If'
 import ButtonMore from '../../components/Buttons/ButtonMore'
+import ModalDefault from '../../components/Modals/ModalDefault'
+import ModalHeader from '../../components/Modals/ModalHeader'
 
 // handles simple pricing: no quantity-based prices.
 // quantity-based prices pricing needs a less "convenient" layout.
@@ -414,9 +416,9 @@ const EditPrices = component(({ productId }) => {
     return (
       <>
         <button type='button' onClick={handleOpenModal}>edit prices</button>
-        <dialog ref={modalRef}>
+        <ModalDefault ref={modalRef}>
           {/* TODO x should ask for confirmation if state changed */}
-          <button type='button' onClick={handleCloseModal}>x</button>
+          <ModalHeader title={t('title')} handleClose={handleCloseModal} />
           <div>
             <div>
               {/* TODO save button should save and then close on success */}
@@ -457,7 +459,7 @@ const EditPrices = component(({ productId }) => {
               </table>
             </div>
           </div>
-        </dialog>
+        </ModalDefault>
       </>
     )
   }

@@ -12,6 +12,10 @@ import VariantInputs from './VariantInputs'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import MetadataInputs from '../../components/MetadataInputs'
 import Card from '../../components/Card'
+import ModalDefault from '../../components/Modals/ModalDefault'
+import ModalHeader from '../../components/Modals/ModalHeader'
+import ModalBody from '../../components/Modals/ModalBody'
+import ModalFooter from '../../components/Modals/ModalFooter'
 
 const VariantAdd = component(({ productId }) => {
   const { t } = useTranslation('product.variantAdd')
@@ -58,28 +62,33 @@ const VariantAdd = component(({ productId }) => {
   return (
     <>
       <PrimaryButton type='button' onClick={handleOpenModal}>{t('add')}</PrimaryButton>
-      <dialog ref={modalRef}>
-        <button type='button' onClick={handleCloseModal}>x</button>
-        <VariantInputs
-          productId={productId}
-          variantData={variantData}
-          setVariantData={setVariantData}
-        />
+      <ModalDefault ref={modalRef}>
+        <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
-        <Card>
-          <Card.Header title={t('metadata')} />
-          <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
-        </Card>
+        <ModalBody>
+          <VariantInputs
+            productId={productId}
+            variantData={variantData}
+            setVariantData={setVariantData}
+          />
 
-        <div>
-          <button
-            type='button'
-            onClick={handleCreate}
-            disabled={createVariantIsFetching}
-          >{t('create')}
-          </button>
-        </div>
-      </dialog>
+          <Card>
+            <Card.Header title={t('metadata')} />
+            <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
+          </Card>
+        </ModalBody>
+
+        <ModalFooter>
+          <div>
+            <button
+              type='button'
+              onClick={handleCreate}
+              disabled={createVariantIsFetching}
+            >{t('create')}
+            </button>
+          </div>
+        </ModalFooter>
+      </ModalDefault>
     </>
   )
 })

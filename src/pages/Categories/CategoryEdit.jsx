@@ -93,7 +93,7 @@ const CategoryEdit = component(({ productCategory }) => {
   return (
     <>
       <button type='button' onClick={handleOpenModal}>{t('button')}</button>
-      <ModalFull title={name} handleClose={handleCloseModal} ref={modalRef}>
+      <ModalFull ref={modalRef}>
         <ModalHeader title={name} handleClose={handleCloseModal} />
         <ModalBody>
 
