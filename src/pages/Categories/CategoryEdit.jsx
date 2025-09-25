@@ -3,6 +3,9 @@ import { useTranslation } from '@wareme/translations'
 import { useProductCategoryUpdateMutation, useProducts, useProductUpdateMutation } from '../../data'
 import Card from '../../components/Card'
 import ModalFull from '../../components/Modals/ModalFull'
+import ModalHeader from '../../components/Modals/ModalHeader'
+import ModalBody from '../../components/Modals/ModalBody'
+import ModalFooter from '../../components/Modals/ModalFooter'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import CategoryInputs from './CategoryInputs'
 import MetadataInputs from '../../components/MetadataInputs'
@@ -91,7 +94,8 @@ const CategoryEdit = component(({ productCategory }) => {
     <>
       <button type='button' onClick={handleOpenModal}>{t('button')}</button>
       <ModalFull title={name} handleClose={handleCloseModal} ref={modalRef}>
-        <ModalFull.Body>
+        <ModalHeader title={name} handleClose={handleCloseModal} />
+        <ModalBody>
 
           <Card>
             <Card.Header title={t('general')} />
@@ -111,13 +115,13 @@ const CategoryEdit = component(({ productCategory }) => {
           </Card>
 
           <CategoryProducts categoryId={id} />
-        </ModalFull.Body>
+        </ModalBody>
 
-        <ModalFull.Footer>
+        <ModalFooter>
           <PrimaryButton type='submit' form={formId}>
             {t('save')}
           </PrimaryButton>
-        </ModalFull.Footer>
+        </ModalFooter>
       </ModalFull>
     </>
   )

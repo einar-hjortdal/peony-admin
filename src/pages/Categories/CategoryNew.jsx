@@ -2,6 +2,9 @@ import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
 
 import { useTranslation } from '@wareme/translations'
 import ModalFull from '../../components/Modals/ModalFull'
+import ModalHeader from '../../components/Modals/ModalHeader'
+import ModalBody from '../../components/Modals/ModalBody'
+import ModalFooter from '../../components/Modals/ModalFooter'
 import { useProductCategoryCreateMutation } from '../../data'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import CategoryInputs from './CategoryInputs'
@@ -43,8 +46,10 @@ const NewCategory = component(({ modalRef }) => {
   const { metadata } = requestData
 
   return (
-    <ModalFull ref={modalRef} title={t('title')} handleClose={handleCloseModal}>
-      <ModalFull.Body>
+    <ModalFull ref={modalRef}>
+      <ModalHeader title={t('title')} handleClose={handleCloseModal} />
+
+      <ModalBody>
         <Card>
           <Card.Header title={t('general')} />
           <CategoryInputs
@@ -59,13 +64,13 @@ const NewCategory = component(({ modalRef }) => {
           <Card.Header title={t('metadata')} />
           <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
         </Card>
-      </ModalFull.Body>
+      </ModalBody>
 
-      <ModalFull.Footer>
+      <ModalFooter>
         <PrimaryButton type='submit' form={formId}>
           {t('save')}
         </PrimaryButton>
-      </ModalFull.Footer>
+      </ModalFooter>
     </ModalFull>
   )
 })

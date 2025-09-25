@@ -34,6 +34,7 @@ const Preview = component(({ ...props }) => {
 })
 
 // TODO allow changing order and deletion
+// TODO allow changing alt and alt translations
 const ExistingImages = component(({ images }) => {
   if (detectIsUndefined(images)) {
     return null
@@ -42,9 +43,16 @@ const ExistingImages = component(({ images }) => {
   const res = []
   for (let i = 0, len = images.length; i < len; i++) {
     const image = images[i]
-    res.push(<Preview src={image.url} alt={image.alt} />)
+    res.push(
+      <Preview src={image.url} alt={image.alt} />
+    )
   }
-  return res
+
+  return (
+    <div>
+      {res}
+    </div>
+  )
 })
 
 const AddImageButton = component(({ productId }) => {
@@ -109,20 +117,23 @@ const AddImageButton = component(({ productId }) => {
           {t('add')}
         </PrimaryButton>
         <dialog ref={modalRef}>
-          <label onClick={handleLabelClick}>
-            select image
-            <input
-              ref={inputRef}
-              type='file'
-              onChange={handleFileChange}
-            />
-          </label>
-          <PrimaryButton
-            type='button'
-            onClick={handleSubmit}
-            disabled={isSubmitDisabled()}
-          >upload
-          </PrimaryButton>
+          <div>
+            <label onClick={handleLabelClick}>
+              select image
+              <input
+                ref={inputRef}
+                type='file'
+                onChange={handleFileChange}
+              />
+            </label>
+            <PrimaryButton
+              type='button'
+              onClick={handleSubmit}
+              disabled={isSubmitDisabled()}
+            >upload
+            </PrimaryButton>
+          </div>
+
           <ExistingImages images={images} />
         </dialog>
       </div>
@@ -151,7 +162,6 @@ const ImagesPreview = component(({ productId }) => {
     return (
       <div>
         {previews}
-        {JSON.stringify(images)}
         {/* TODO mark thumbnail image */}
       </div>
     )
