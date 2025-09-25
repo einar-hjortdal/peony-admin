@@ -2,8 +2,8 @@ import { component } from '@dark-engine/core'
 import { Link } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
-
-import Card from '../components/Card'
+import CardDefault from '../components/Cards/CardDefault'
+import CardHeader from '../components/Cards/CardHeader'
 
 const Box = styled.div`
   display: inline-block;
@@ -20,9 +20,9 @@ const SettingCard = component(({ to, title, description }) => {
   return (
     <Box>
       <Link to={to}>
-        <Card>
-          <Card.Header title={title} subtitle={description} />
-        </Card>
+        <CardDefault>
+          <CardHeader title={title} subtitle={description} />
+        </CardDefault>
       </Link>
     </Box>
   )

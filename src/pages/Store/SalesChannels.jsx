@@ -4,8 +4,8 @@ import { useTranslation } from '@wareme/translations'
 import { nisha } from '@wareme/utils'
 
 import { useSalesChannels } from '../../data'
-import Card from '../../components/Card'
 import { formatLine } from '../../utils'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const StyledTable = styled.table`
   width: 100%;
@@ -71,8 +71,8 @@ const SalesChannels = component(() => {
     }
 
     return (
-      <Card>
-        <Card.Header title={t('title')} />
+      <CardDefault>
+        <CardHeader title={t('title')} />
         <StyledTable>
           <thead>
             <tr>
@@ -85,7 +85,7 @@ const SalesChannels = component(() => {
             {rows}
           </tbody>
         </StyledTable>
-      </Card>
+      </CardDefault>
     )
   }
 

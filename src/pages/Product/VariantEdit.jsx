@@ -9,12 +9,13 @@ import { useTranslation } from '@wareme/translations'
 
 import { useVariantUpdateMutation } from '../../data'
 import VariantInputs from './VariantInputs'
-import Card from '../../components/Card'
 import MetadataInputs from '../../components/MetadataInputs'
 import ModalDefault from '../../components/Modals/ModalDefault'
 import ModalHeader from '../../components/Modals/ModalHeader'
 import ModalFooter from '../../components/Modals/ModalFooter'
 import ModalBody from '../../components/Modals/ModalBody'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const VariantEdit = component(({ productId, variant }) => {
   const { t } = useTranslation('product.variantEdit')
@@ -89,19 +90,19 @@ const VariantEdit = component(({ productId, variant }) => {
         <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
         <ModalBody>
-          <Card>
-            <Card.Header title={t('general')} />
+          <CardDefault>
+            <CardHeader title={t('general')} />
             <VariantInputs
               productId={productId}
               variantData={newVariantData}
               setVariantData={setNewVariantData}
             />
-          </Card>
+          </CardDefault>
 
-          <Card>
-            <Card.Header title={t('metadata')} />
+          <CardDefault>
+            <CardHeader title={t('metadata')} />
             <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
-          </Card>
+          </CardDefault>
         </ModalBody>
 
         <ModalFooter>

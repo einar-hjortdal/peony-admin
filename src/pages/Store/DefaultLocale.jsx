@@ -3,7 +3,8 @@ import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import { useStore, useStoreUpdateMutation } from '../../data'
-import Card from '../../components/Card'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const DefaultLocaleSelect = styled.select`
   display: block;
@@ -47,8 +48,8 @@ const DefaultLocale = component(() => {
     }
 
     return (
-      <Card>
-        <Card.Header title={t('title')} />
+      <CardDefault>
+        <CardHeader title={t('title')} />
         <label>
           {t('description')}
           <DefaultLocaleSelect
@@ -59,7 +60,7 @@ const DefaultLocale = component(() => {
           >{options}
           </DefaultLocaleSelect>
         </label>
-      </Card>
+      </CardDefault>
     )
   }
 })

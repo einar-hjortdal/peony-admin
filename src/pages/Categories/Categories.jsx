@@ -3,14 +3,14 @@ import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import { useProductCategories, useStore } from '../../data'
-import Card from '../../components/Card'
 import ButtonMore from '../../components/Buttons/ButtonMore'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import SecondaryButton from '../../components/Buttons/SecondaryButton'
 import CategoryNew from './CategoryNew'
-import If from '../../components/If'
 import CategoryEdit from './CategoryEdit'
 import CategoryDelete from './CategoryDelete'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const StyledTable = styled.table`
   width: 100%;
@@ -57,17 +57,9 @@ const Visibility = component(({ isInternal }) => {
   return <span>{getVisibility()}</span>
 })
 
-const StyledUl = styled.ul`
-  position: absolute;
-`
-
 const Category = component(({ productCategory }) => {
   const { t } = useTranslation('categories.category')
   const { id, handle, isActive, isInternal, name } = productCategory
-  const [isOpen, setIsOpen] = useState(false)
-  const toggleOpen = () => {
-    setIsOpen(!isOpen)
-  }
 
   return (
     <tr>
@@ -76,17 +68,16 @@ const Category = component(({ productCategory }) => {
       <td><Status isActive={isActive} /></td>
       <td><Visibility isInternal={isInternal} /></td>
       <td>
-        <ButtonMore onClick={toggleOpen} />
-        <If condition={isOpen}>
-          <StyledUl>
+        <ButtonMore>
+          <ul>
             <li>
               <CategoryEdit productCategory={productCategory} />
             </li>
             <li>
               <CategoryDelete id={id} />
             </li>
-          </StyledUl>
-        </If>
+          </ul>
+        </ButtonMore>
       </td>
     </tr>
   )
@@ -118,8 +109,8 @@ const Categories = component(() => {
     }
 
     return (
-      <Card>
-        <Card.Header title={t('title')} subtitle={t('subtitle')}>
+      <CardDefault>
+        <CardHeader title={t('title')} subtitle={t('subtitle')}>
           <SecondaryButton>{t('editRanking')}</SecondaryButton>
           <PrimaryButton
             type='button'
@@ -128,7 +119,7 @@ const Categories = component(() => {
           >{t('create')}
           </PrimaryButton>
           <CategoryNew modalRef={modalRef} />
-        </Card.Header>
+        </CardHeader>
         <StyledTable>
           <thead>
             <tr>
@@ -143,7 +134,7 @@ const Categories = component(() => {
             {rows}
           </tbody>
         </StyledTable>
-      </Card>
+      </CardDefault>
     )
   }
 })

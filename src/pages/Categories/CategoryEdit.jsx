@@ -1,7 +1,6 @@
 import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 import { useProductCategoryUpdateMutation, useProducts, useProductUpdateMutation } from '../../data'
-import Card from '../../components/Card'
 import ModalFull from '../../components/Modals/ModalFull'
 import ModalHeader from '../../components/Modals/ModalHeader'
 import ModalBody from '../../components/Modals/ModalBody'
@@ -9,6 +8,8 @@ import ModalFooter from '../../components/Modals/ModalFooter'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import CategoryInputs from './CategoryInputs'
 import MetadataInputs from '../../components/MetadataInputs'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const CategoryProduct = component(({ product, categoryId }) => {
   const { id: productId } = product
@@ -38,12 +39,12 @@ const CategoryProducts = component(({ categoryId }) => {
     }
 
     return (
-      <Card>
-        <Card.Header title={t('title')} />
+      <CardDefault>
+        <CardHeader title={t('title')} />
         <ul>
           {rows}
         </ul>
-      </Card>
+      </CardDefault>
     )
   }
 })
@@ -97,8 +98,8 @@ const CategoryEdit = component(({ productCategory }) => {
         <ModalHeader title={name} handleClose={handleCloseModal} />
         <ModalBody>
 
-          <Card>
-            <Card.Header title={t('general')} />
+          <CardDefault>
+            <CardHeader title={t('general')} />
 
             <CategoryInputs
               formId={formId}
@@ -107,12 +108,12 @@ const CategoryEdit = component(({ productCategory }) => {
               onChange={setRequestData}
               onSubmit={handleUpdate}
             />
-          </Card>
+          </CardDefault>
 
-          <Card>
-            <Card.Header title={t('metadata')} />
+          <CardDefault>
+            <CardHeader title={t('metadata')} />
             <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
-          </Card>
+          </CardDefault>
 
           <CategoryProducts categoryId={id} />
         </ModalBody>

@@ -1,7 +1,8 @@
 import { styled } from '@dark-engine/styled'
 
-import { component } from '@dark-engine/core'
+import { component, detectIsArray, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
+import If from '../If'
 
 const StyledButton = styled.button`
   border-radius: 0.3125rem;
@@ -16,21 +17,42 @@ const StyledButton = styled.button`
   }
 `
 
-const ButtonMore = component(({ ...props }) => {
+const Wrapper = styled.div`
+  position: relative;
+  display: inline-block;
+
+  & ul {
+    position: absolute;
+    top: 1.5rem;
+    right: 0;
+    white-space: nowrap;
+  }
+`
+
+const ButtonMore = component(({ slot }) => {
   const { t } = useTranslation('buttons.more')
+  const [isOpen, setIsOpen] = useState(false)
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen)
+  }
+
   return (
-    <StyledButton aria-label={t('label')} type='button' {...props}>
-      <svg viewBox='0 0 24 8' aria-hidden='true'>
-        <circle cx='4' cy='4' r='3' />
-        <circle cx='12' cy='4' r='3' />
-        <circle cx='20' cy='4' r='3' />
-      </svg>
-    </StyledButton>
+    <>
+      <StyledButton aria-label={t('label')} type='button' onClick={toggleMenu}>
+        <svg viewBox='0 0 24 8' aria-hidden='true'>
+          <circle cx='4' cy='4' r='3' />
+          <circle cx='12' cy='4' r='3' />
+          <circle cx='20' cy='4' r='3' />
+        </svg>
+      </StyledButton>
+      <Wrapper>
+        <If condition={isOpen}>
+          {slot}
+        </If>
+      </Wrapper>
+    </>
   )
 })
-
-ButtonMore.Container = styled.div`
-  position: absolute;
-`
 
 export default ButtonMore

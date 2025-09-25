@@ -2,10 +2,11 @@ import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 import { Translate, useTranslation } from '@wareme/translations'
 
-import Card from '../../components/Card'
 import { useProductById, useSalesChannels } from '../../data'
 import { styled } from '@dark-engine/styled'
 import ButtonMore from '../../components/Buttons/ButtonMore'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const SalesChannelsList = component(({ salesChannels }) => {
   if (salesChannels.length === 0) {
@@ -66,15 +67,17 @@ const SalesChannels = component(() => {
   if (productData) {
     const { salesChannels } = productData.product
     return (
-      <Card>
-        <Card.Header title={t('title')}>
+      <CardDefault>
+        <CardHeader title={t('title')}>
           {/* TODO edit product sales channels */}
-          <ButtonMore type='button' />
-        </Card.Header>
+          <ButtonMore>
+            {/* TODO */}
+          </ButtonMore>
+        </CardHeader>
         <SalesChannelsList salesChannels={salesChannels} />
         <SalesChannelAvailability productSalesChannels={salesChannels} />
         {/* TODO available in x out of y sales channels */}
-      </Card>
+      </CardDefault>
     )
   }
 

@@ -7,12 +7,13 @@ import {
 import { useTranslation } from '@wareme/translations'
 import { styled } from '@dark-engine/styled'
 
-import Card from '../../components/Card'
 import Table from './Table'
 import NewProduct from './NewProduct'
 import { constants, useProducts, useStore } from '../../data'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import SetTitle from '../../components/SetTitle'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const Products = component(() => {
   // TODO implement filters that are commented out
@@ -59,8 +60,8 @@ const Products = component(() => {
     return (
       <>
         <SetTitle title={t('title')} />
-        <Card>
-          <Card.Header title={t('title')}>
+        <CardDefault>
+          <CardHeader title={t('title')}>
             <PrimaryButton
               type='button'
               disabled={detectIsNull(modalRef)}
@@ -68,10 +69,10 @@ const Products = component(() => {
             >{t('add')}
             </PrimaryButton>
             <NewProduct modalRef={modalRef} />
-          </Card.Header>
+          </CardHeader>
           {/* TODO change to Table.Title */}
           <Table products={products} defaultLocaleId={defaultLocaleId} />
-        </Card>
+        </CardDefault>
       </>
     )
   }

@@ -3,7 +3,8 @@ import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import { useStore, useStoreUpdateMutation } from '../../data'
-import Card from '../../components/Card'
+import CardHeader from '../../components/Cards/CardHeader'
+import CardDefault from '../../components/Cards/CardDefault'
 
 const DefaultCurrencySelect = styled.select`
   display: block;
@@ -47,8 +48,8 @@ const DefaultCurrency = component(() => {
     }
 
     return (
-      <Card>
-        <Card.Header title={t('title')} />
+      <CardDefault>
+        <CardHeader title={t('title')} />
         <label>
           {t('description')}
           <DefaultCurrencySelect
@@ -59,7 +60,7 @@ const DefaultCurrency = component(() => {
           >{options}
           </DefaultCurrencySelect>
         </label>
-      </Card>
+      </CardDefault>
     )
   }
 })

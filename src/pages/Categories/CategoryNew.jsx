@@ -8,8 +8,9 @@ import ModalFooter from '../../components/Modals/ModalFooter'
 import { useProductCategoryCreateMutation } from '../../data'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import CategoryInputs from './CategoryInputs'
-import Card from '../../components/Card'
 import MetadataInputs from '../../components/MetadataInputs'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const NewCategory = component(({ modalRef }) => {
   const { t } = useTranslation('categories.newCategory')
@@ -50,20 +51,20 @@ const NewCategory = component(({ modalRef }) => {
       <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
       <ModalBody>
-        <Card>
-          <Card.Header title={t('general')} />
+        <CardDefault>
+          <CardHeader title={t('general')} />
           <CategoryInputs
             formId={formId}
             formRef={formRef}
             onChange={setRequestData}
             onSubmit={handleSubmit}
           />
-        </Card>
+        </CardDefault>
 
-        <Card>
-          <Card.Header title={t('metadata')} />
+        <CardDefault>
+          <CardHeader title={t('metadata')} />
           <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
-        </Card>
+        </CardDefault>
       </ModalBody>
 
       <ModalFooter>

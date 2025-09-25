@@ -2,12 +2,12 @@ import { component, useState } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import Card from '../../../components/Card'
 import ButtonMore from '../../../components/Buttons/ButtonMore'
-import If from '../../../components/If'
 import { styled } from '@dark-engine/styled'
 import CategoriesEdit from './CategoriesEdit'
 import CategoriesList from './CategoriesList'
+import CardDefault from '../../../components/Cards/CardDefault'
+import CardHeader from '../../../components/Cards/CardHeader'
 
 const StyledDiv = styled.div`
   display: inline-block;
@@ -24,44 +24,25 @@ const OrganizeListItem = component(({ title, slot }) => {
   )
 })
 
-const Wrapper = styled.div`
-  position: relative;
-`
-
-const StyledUl = styled.ul`
-  position: absolute;
-  top: 1.5rem;
-  right: 0;
-  white-space: nowrap;
-`
-
 const Organize = component(() => {
   const { t } = useTranslation('product.organize')
   const params = useParams()
   const productId = params.get('id')
 
-  const [isOpen, setIsOpen] = useState(false)
-  const handleClick = () => {
-    setIsOpen(!isOpen)
-  }
-
   return (
-    <Card>
-      <Card.Header title={t('title')}>
-        <Wrapper>
-          <ButtonMore type='button' onClick={handleClick} />
-          <If condition={isOpen}>
-            <StyledUl>
-              <li>
-                {/* TODO  product type */}
-                <CategoriesEdit productId={productId} />
-                {/* TODO product tags */}
-                {/* TODO product collections */}
-              </li>
-            </StyledUl>
-          </If>
-        </Wrapper>
-      </Card.Header>
+    <CardDefault>
+      <CardHeader title={t('title')}>
+        <ButtonMore>
+          <ul>
+            <li>
+              {/* TODO  product type */}
+              <CategoriesEdit productId={productId} />
+              {/* TODO product tags */}
+              {/* TODO product collections */}
+            </li>
+          </ul>
+        </ButtonMore>
+      </CardHeader>
       <ul>
         {/* TODO product type */}
         <OrganizeListItem title={t('categories')}>
@@ -70,7 +51,7 @@ const Organize = component(() => {
         {/* TODO product tags */}
         {/* TODO product collections */}
       </ul>
-    </Card>
+    </CardDefault>
   )
 })
 

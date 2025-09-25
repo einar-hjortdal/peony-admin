@@ -2,7 +2,6 @@ import { component, detectIsNull, useEffect, useRef, useState } from '@dark-engi
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import Card from '../../components/Card'
 import {
   useLocales,
   useStore,
@@ -13,6 +12,8 @@ import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import ModalDefault from '../../components/Modals/ModalDefault'
 import ModalHeader from '../../components/Modals/ModalHeader'
 import ModalBody from '../../components/Modals/ModalBody'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const LocalesTable = styled.table`
   width: 100%;
@@ -233,13 +234,13 @@ const Locales = component(() => {
   }
 
   return (
-    <Card>
-      <Card.Header title={t('title')} subtitle={t('description')}>
+    <CardDefault>
+      <CardHeader title={t('title')} subtitle={t('description')}>
         <PrimaryButton onClick={handleOpenModal}>{t('edit')}</PrimaryButton>
-      </Card.Header>
+      </CardHeader>
       <Modal modalRef={modalRef} />
       <StoreLocales />
-    </Card>
+    </CardDefault>
   )
 })
 

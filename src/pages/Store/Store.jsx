@@ -6,11 +6,12 @@ import { useSalesChannels, useStore, useStoreUpdateMutation } from '../../data'
 import Locales from './Locales'
 import Currencies from './Currencies'
 import SalesChannels from './SalesChannels'
-import Card from '../../components/Card'
 import DefaultCurrency from './DefaultCurrency'
 import DefaultLocale from './DefaultLocale'
 import ColumnLarge from '../../components/Columns/ColumnLarge'
 import ColumnSmall from '../../components/Columns/ColumnSmall'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const Store = component(() => {
   const { t } = useTranslation('store')
@@ -74,8 +75,8 @@ const Store = component(() => {
       <>
         <SetTitle title={t('title')} />
         <ColumnLarge>
-          <Card>
-            <Card.Header title={t('title')} />
+          <CardDefault>
+            <CardHeader title={t('title')} />
             <div>
               <label>
                 {t('name')}
@@ -99,7 +100,7 @@ const Store = component(() => {
               <span>{t('defaultSalesChannel')}</span>
               <span>{defaultSalesChannelName}</span>
             </div>
-          </Card>
+          </CardDefault>
 
           <Locales />
           <Currencies />

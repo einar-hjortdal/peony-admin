@@ -189,7 +189,6 @@ const TableBody = ({ variants, moneyAmounts, currencyColumns, regionColumns, han
 }
 
 const EditPrices = component(({ productId }) => {
-  const [isOpen, setIsOpen] = useState(false)
   const { t } = useTranslation('product.editPrices')
   const {
     data: productData,
@@ -436,15 +435,11 @@ const EditPrices = component(({ productId }) => {
               </button>
             </div>
             <div>
-              <ButtonMore type='button'>
+              <ButtonMore>
                 {/* TODO toggle columns */}
-                <If condition={isOpen}>
-                  <div>
-                    <ul>
-                      <li>columns to toggle</li>
-                    </ul>
-                  </div>
-                </If>
+                <ul>
+                  <li>columns to toggle</li>
+                </ul>
               </ButtonMore>
               <table>
                 <caption>{productTranslationsObject[storeData.store.defaultLocaleId].title}</caption>

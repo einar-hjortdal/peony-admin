@@ -12,6 +12,8 @@ import {
   useRef,
   useState
 } from '@dark-engine/core'
+import { useParams } from '@dark-engine/web-router'
+import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import {
@@ -20,14 +22,14 @@ import {
   useProductUpdateMutation,
   useDeleteVariantMutation
 } from '../../data'
-import Card from '../../components/Card'
 import If from '../../components/If'
 import { formatLine } from '../../utils'
 import VariantAdd from './VariantAdd'
 import EditPrices from './EditPrices'
 import VariantEdit from './VariantEdit'
-import { useParams } from '@dark-engine/web-router'
 import ButtonMore from '../../components/Buttons/ButtonMore'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const Options = component(({ productId, slot }) => {
   const { t } = useTranslation('product.options')
@@ -175,28 +177,16 @@ const Variants = component(() => {
   const params = useParams()
   const productId = params.get('id')
 
-  const [isOpen, setIsOpen] = useState(false)
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen)
-  }
-
   return (
-    <Card>
-      <Card.Header title={t('title')}>
-        <ButtonMore type='button' onClick={toggleMenu}>
-          <If condition={isOpen}>
-            <div>
-              <ul>
-                <li><EditPrices productId={productId} /></li>
-              </ul>
-            </div>
-          </If>
-        </ButtonMore>
-
+    <CardDefault>
+      <CardHeader title={t('title')}>
         <VariantAdd productId={productId} />
-
-      </Card.Header>
+        <ButtonMore type='button'>
+          <ul>
+            <li><EditPrices productId={productId} /></li>
+          </ul>
+        </ButtonMore>
+      </CardHeader>
       <div>
         <Options productId={productId} />
       </div>
@@ -204,7 +194,7 @@ const Variants = component(() => {
         variants
         <VariantsTable productId={productId} />
       </div>
-    </Card>
+    </CardDefault>
   )
 })
 

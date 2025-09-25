@@ -3,7 +3,6 @@ import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
 import { useStore, useProductById } from '../../data'
-import Card from '../../components/Card'
 import { formatLine } from '../../utils'
 import Variants from './Variants'
 import SetTitle from '../../components/SetTitle'
@@ -15,6 +14,10 @@ import SalesChannels from './SalesChannels'
 import Options from './Options'
 import Images from './Images'
 import Metadata from './Metadata'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
+import BadgeWarning from '../../components/Badges/BadgeWarning'
+import BadgeSuccess from '../../components/Badges/BadgeSuccess'
 
 const TranslationGroup = component(({ locale, title, subtitle, description }) => {
   const { t, translator } = useTranslation('product.translationGroup')
@@ -118,15 +121,15 @@ const Product = component(() => {
       <>
         <SetTitle title={t('details')} />
         <ColumnLarge>
-          <Card>
-            <Card.Header title={t('details')}>
+          <CardDefault>
+            <CardHeader title={t('details')}>
               <If condition={status === 'draft'}>
-                <Card.Header.BadgeWarning>{status}</Card.Header.BadgeWarning>
+                <BadgeWarning>{status}</BadgeWarning>
               </If>
               <If condition={status === 'published'}>
-                <Card.Header.BadgeSuccess>{status}</Card.Header.BadgeSuccess>
+                <BadgeSuccess>{status}</BadgeSuccess>
               </If>
-            </Card.Header>
+            </CardHeader>
             <TranslationDefault productId={productId} />
             {/* <div>
               {t('type')}
@@ -135,7 +138,7 @@ const Product = component(() => {
               {t('discountable')}: {String(discountable)}
               {/* TODO */}
             </div>
-          </Card>
+          </CardDefault>
 
           <Images />
           <Options />

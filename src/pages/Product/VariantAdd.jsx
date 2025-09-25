@@ -11,11 +11,12 @@ import { useVariantCreateMutation } from '../../data'
 import VariantInputs from './VariantInputs'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import MetadataInputs from '../../components/MetadataInputs'
-import Card from '../../components/Card'
 import ModalDefault from '../../components/Modals/ModalDefault'
 import ModalHeader from '../../components/Modals/ModalHeader'
 import ModalBody from '../../components/Modals/ModalBody'
 import ModalFooter from '../../components/Modals/ModalFooter'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
 
 const VariantAdd = component(({ productId }) => {
   const { t } = useTranslation('product.variantAdd')
@@ -72,10 +73,10 @@ const VariantAdd = component(({ productId }) => {
             setVariantData={setVariantData}
           />
 
-          <Card>
-            <Card.Header title={t('metadata')} />
+          <CardDefault>
+            <CardHeader title={t('metadata')} />
             <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
-          </Card>
+          </CardDefault>
         </ModalBody>
 
         <ModalFooter>
