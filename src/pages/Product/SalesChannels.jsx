@@ -1,9 +1,9 @@
 import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
+import { styled } from '@dark-engine/styled'
 import { Translate, useTranslation } from '@wareme/translations'
 
 import { useProductById, useSalesChannels } from '../../data'
-import { styled } from '@dark-engine/styled'
 import ButtonMore from '../../components/Buttons/ButtonMore'
 import CardDefault from '../../components/Cards/CardDefault'
 import CardHeader from '../../components/Cards/CardHeader'
@@ -80,8 +80,6 @@ const SalesChannels = component(() => {
       </CardDefault>
     )
   }
-
-  return null
 })
 
 export default SalesChannels

@@ -48,6 +48,7 @@
 - [ ] Dark theme
 - [ ] Responsiveness
 - [ ] Validate inputs
+- [ ] Verify changes before new changes
 - [ ] Refactor
 
 ## Deployment
