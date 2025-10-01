@@ -30,7 +30,6 @@ const NewProductBody = styled.div`
 
 const NewProduct = component(({ modalRef }) => {
   const { t } = useTranslation('newProduct')
-  const formRef = useRef(null)
 
   const [productData, setProductData] = useState({ discountable: true })
 
@@ -66,6 +65,7 @@ const NewProduct = component(({ modalRef }) => {
     }
   ] = useProductCreateMutation()
 
+  // TODO validate inputs: require a title in the default language
   const handleSubmit = (e) => {
     e.preventDefault()
     if (createProductIsFetching) {
@@ -82,7 +82,6 @@ const NewProduct = component(({ modalRef }) => {
       return
     }
 
-    formRef.current.reset()
     setProductData({ discountable: true })
     modalRef.current.close()
   }
@@ -99,72 +98,71 @@ const NewProduct = component(({ modalRef }) => {
 
   return (
     <ModalFull ref={modalRef}>
-      <form ref={formRef}>
-        <ModalHeader title={t('title')} handleClose={handleCloseModal} />
+      <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
-        <ModalBody>
-          <NewProductBody>
-            <AccordionItem title={t('general')} defaultOpen>
-              <fieldset disabled={createProductIsFetching}>
-                <TranslationDefaultInputs
+      <ModalBody>
+        <NewProductBody>
+          <AccordionItem title={t('general')} defaultOpen>
+            <fieldset disabled={createProductIsFetching}>
+              <TranslationDefaultInputs
+                translations={productData.translations}
+                onChange={handleTranslationsChange}
+              />
+
+              {/* TODO etxract handle input */}
+              <Input
+                name='handle'
+                onInput={handleInput}
+              >{t('general.handle')}
+              </Input>
+
+              <Switch
+                name='discountable'
+                checked={productData.discountable}
+                onChange={handleInput}
+              >{t('general.discountable')}
+              </Switch>
+            </fieldset>
+          </AccordionItem>
+
+          {/* <TranslationsInputs
                   translations={productData.translations}
                   onChange={handleTranslationsChange}
-                />
+             /> */}
 
-                <Input
-                  name='handle'
-                  onInput={handleInput}
-                >{t('general.handle')}
-                </Input>
+          <AccordionItem title={t('organize')}>
+            <fieldset disabled={createProductIsFetching}>
+              {/* TODO tags */}
+              {/* TODO create type */}
+              type, collection, categories, sales channels
+            </fieldset>
+          </AccordionItem>
 
-                <Switch
-                  name='discountable'
-                  checked={productData.discountable}
-                  onChange={handleInput}
-                >{t('general.discountable')}
-                </Switch>
-              </fieldset>
-            </AccordionItem>
+          <AccordionItem title={t('media')}>
+            <fieldset disabled={createProductIsFetching}>
+              {/* TODO upload */}
+              thumbnail, images
+            </fieldset>
+          </AccordionItem>
+        </NewProductBody>
+      </ModalBody>
 
-            {/* <TranslationsInputs
-                              translations={productData.translations}
-                  onChange={handleTranslationsChange}
- /> */}
-
-            <AccordionItem title={t('organize')}>
-              <fieldset disabled={createProductIsFetching}>
-                {/* TODO tags */}
-                {/* TODO create type */}
-                type, collection, categories, sales channels
-              </fieldset>
-            </AccordionItem>
-
-            <AccordionItem title={t('media')}>
-              <fieldset disabled={createProductIsFetching}>
-                {/* TODO upload */}
-                thumbnail, images
-              </fieldset>
-            </AccordionItem>
-          </NewProductBody>
-        </ModalBody>
-
-        <ModalFooter>
-          <SecondaryButton
-            type='submit'
-            data-status='draft'
-            disabled={createProductIsFetching}
-            onClick={handleSubmit}
-          >{t('save')}
-          </SecondaryButton>
-          <PrimaryButton
-            type='submit'
-            data-status='published'
-            disabled={createProductIsFetching}
-            onClick={handleSubmit}
-          >{t('publish')}
-          </PrimaryButton>
-        </ModalFooter>
-      </form>
+      <ModalFooter>
+        <SecondaryButton
+          type='submit'
+          data-status='draft'
+          disabled={createProductIsFetching}
+          onClick={handleSubmit}
+        >{t('save')}
+        </SecondaryButton>
+        <PrimaryButton
+          type='submit'
+          data-status='published'
+          disabled={createProductIsFetching}
+          onClick={handleSubmit}
+        >{t('publish')}
+        </PrimaryButton>
+      </ModalFooter>
     </ModalFull>
   )
 })
