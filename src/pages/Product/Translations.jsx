@@ -34,7 +34,7 @@ const TranslationGroup = component(({ locale, title, subtitle, description }) =>
 
 const Translations = component(({ productId }) => {
   const { translationsObject } = useProductById(productId)
-  const { data: storeData, isFetching: storeIsFetching, error: storeError, localesObject } = useStore()
+  const { data: storeData, localesObject } = useStore()
   const { defaultLocaleId, locales } = storeData.store
 
   const res = []

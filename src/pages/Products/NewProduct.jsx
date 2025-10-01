@@ -1,8 +1,6 @@
 import {
   component,
   detectIsNull,
-  hasKeys,
-  keys,
   useEffect,
   useRef,
   useState
@@ -11,11 +9,10 @@ import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 import { detectIsEmptyString } from '@wareme/utils'
 
-import { useProductCreateMutation, useStore } from '../../data'
+import { useProductCreateMutation } from '../../data'
 
 import AccordionItem from '../../components/AccordionItem'
 import Switch from '../../components/Switch'
-import If from '../../components/If'
 import Input from '../../components/Input'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import SecondaryButton from '../../components/Buttons/SecondaryButton'
@@ -23,54 +20,8 @@ import ModalFull from '../../components/Modals/ModalFull'
 import ModalHeader from '../../components/Modals/ModalHeader'
 import ModalBody from '../../components/Modals/ModalBody'
 import ModalFooter from '../../components/Modals/ModalFooter'
-
-const Translation = component(({ localeId, localeCode, onInput, disabled }) => {
-  const { t, translator } = useTranslation('newProduct')
-  return (
-    <fieldset disabled={disabled}>
-      <legend>{translator.formatName(localeCode, { type: 'language' })}</legend>
-      <Input
-        name='title'
-        data-locale-id={localeId}
-        onInput={onInput}
-      >{t('general.title')}
-      </Input>
-      <Input
-        name='subtitle'
-        data-locale-id={localeId}
-        onInput={onInput}
-      >{t('general.subtitle')}
-      </Input>
-      <Input
-        name='description'
-        data-locale-id={localeId}
-        onInput={onInput}
-      >{t('general.description')}
-      </Input>
-    </fieldset>
-  )
-})
-
-const Translations = component(({ locales, defaultLocaleId, onInput, disabled }) => {
-  const translations = []
-  for (let i = 0, len = locales.length; i < len; i++) {
-    const { id, code } = locales[i]
-    if (id === defaultLocaleId) {
-      continue
-    }
-
-    translations.push(
-      <Translation
-        key={id}
-        localeId={id}
-        localeCode={code}
-        onInput={onInput}
-        disabled={disabled}
-      />
-    )
-  }
-  return translations
-})
+import TranslationDefaultInputs from '../../components/Product/TranslationDefaultInputs'
+import TranslationsInputs from '../../components/Product/TranslationsInputs'
 
 const NewProductBody = styled.div`
   max-width: 1300px;
@@ -80,10 +31,8 @@ const NewProductBody = styled.div`
 const NewProduct = component(({ modalRef }) => {
   const { t } = useTranslation('newProduct')
   const formRef = useRef(null)
-  const { isFetching: storeIsFetching, data: storeData, error: storeError } = useStore()
 
   const [productData, setProductData] = useState({ discountable: true })
-  const [productTranslations, setProductTranslations] = useState({})
 
   const handleInput = (e) => {
     const { type, name, checked, value } = e.target
@@ -101,47 +50,30 @@ const NewProduct = component(({ modalRef }) => {
     }
   }
 
-  const handleTranslationInput = (e) => {
-    const { name, value } = e.target
-    const { localeId } = e.target.dataset
-    const newTranslations = { ...productTranslations }
-    const newTranslation = { ...productTranslations[localeId] }
-
-    if (detectIsEmptyString(value)) {
-      delete newTranslation[name]
-      if (hasKeys(newTranslation)) {
-        return setProductTranslations({ ...newTranslations, [localeId]: { ...newTranslation } })
-      }
-
-      delete newTranslations[localeId]
-      return setProductTranslations({ ...newTranslations })
-    }
-
-    return setProductTranslations({
-      ...productTranslations,
-      [localeId]: { ...productTranslations[localeId], [name]: value }
+  const handleTranslationsChange = (newTranslations) => {
+    setProductData((prevState) => {
+      const newState = { ...prevState, translations: newTranslations }
+      return newState
     })
   }
 
-  const [createProduct, { isFetching, data, error }] = useProductCreateMutation()
+  const [
+    createProduct,
+    {
+      isFetching: createProductIsFetching,
+      data: createProductData,
+      error: createProductError
+    }
+  ] = useProductCreateMutation()
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (isFetching) {
+    if (createProductIsFetching) {
       return
     }
 
     const { status } = e.target.dataset
-    const translations = []
-    const localeIds = keys(productTranslations)
-    for (let i = 0, len = localeIds.length; i < len; i++) {
-      const localeId = localeIds[i]
-      translations.push({
-        localeId,
-        ...productTranslations[localeId]
-      })
-    }
-    const data = { ...productData, translations, status }
+    const data = { ...productData, status }
     createProduct(data)
   }
 
@@ -152,25 +84,16 @@ const NewProduct = component(({ modalRef }) => {
 
     formRef.current.reset()
     setProductData({ discountable: true })
-    setProductTranslations({})
     modalRef.current.close()
   }
 
   useEffect(() => {
-    if (data) {
+    if (createProductData) {
       handleCloseModal()
     }
-  }, [data])
+  }, [createProductData])
 
-  if (storeIsFetching) {
-    return null // TODO return skeleton
-  }
-
-  if (storeError) {
-    return null // TODO handle error
-  }
-
-  if (error) {
+  if (createProductError) {
     return null // TODO handle error
   }
 
@@ -182,30 +105,18 @@ const NewProduct = component(({ modalRef }) => {
         <ModalBody>
           <NewProductBody>
             <AccordionItem title={t('general')} defaultOpen>
-              <fieldset disabled={isFetching}>
-                <Input
-                  name='title'
-                  data-locale-id={storeData.store.defaultLocaleId}
-                  onInput={handleTranslationInput}
-                >{t('general.title')}
-                </Input>
-                <Input
-                  name='subtitle'
-                  data-locale-id={storeData.store.defaultLocaleId}
-                  onInput={handleTranslationInput}
-                >{t('general.subtitle')}
-                </Input>
-                <Input
-                  name='description'
-                  data-locale-id={storeData.store.defaultLocaleId}
-                  onInput={handleTranslationInput}
-                >{t('general.description')}
-                </Input>
+              <fieldset disabled={createProductIsFetching}>
+                <TranslationDefaultInputs
+                  translations={productData.translations}
+                  onChange={handleTranslationsChange}
+                />
+
                 <Input
                   name='handle'
                   onInput={handleInput}
                 >{t('general.handle')}
                 </Input>
+
                 <Switch
                   name='discountable'
                   checked={productData.discountable}
@@ -215,19 +126,13 @@ const NewProduct = component(({ modalRef }) => {
               </fieldset>
             </AccordionItem>
 
-            <If condition={storeData.store.locales.length > 1}>
-              <AccordionItem title={t('translations')}>
-                <Translations
-                  locales={storeData.store.locales}
-                  defaultLocaleId={storeData.store.defaultLocaleId}
-                  onInput={handleTranslationInput}
-                  disabled={isFetching}
-                />
-              </AccordionItem>
-            </If>
+            {/* <TranslationsInputs
+                              translations={productData.translations}
+                  onChange={handleTranslationsChange}
+ /> */}
 
             <AccordionItem title={t('organize')}>
-              <fieldset disabled={isFetching}>
+              <fieldset disabled={createProductIsFetching}>
                 {/* TODO tags */}
                 {/* TODO create type */}
                 type, collection, categories, sales channels
@@ -235,7 +140,7 @@ const NewProduct = component(({ modalRef }) => {
             </AccordionItem>
 
             <AccordionItem title={t('media')}>
-              <fieldset disabled={isFetching}>
+              <fieldset disabled={createProductIsFetching}>
                 {/* TODO upload */}
                 thumbnail, images
               </fieldset>
@@ -247,14 +152,14 @@ const NewProduct = component(({ modalRef }) => {
           <SecondaryButton
             type='submit'
             data-status='draft'
-            disabled={isFetching}
+            disabled={createProductIsFetching}
             onClick={handleSubmit}
           >{t('save')}
           </SecondaryButton>
           <PrimaryButton
             type='submit'
             data-status='published'
-            disabled={isFetching}
+            disabled={createProductIsFetching}
             onClick={handleSubmit}
           >{t('publish')}
           </PrimaryButton>
