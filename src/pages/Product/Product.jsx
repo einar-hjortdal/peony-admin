@@ -21,6 +21,7 @@ import BadgeWarning from '../../components/Badges/BadgeWarning'
 import BadgeSuccess from '../../components/Badges/BadgeSuccess'
 import ButtonMore from '../../components/Buttons/ButtonMore'
 import Edit from './Edit'
+import Translations from './Translations'
 
 const StatusUpdate = component(({ productId, status, slot }) => {
   const [updateProduct] = useProductUpdateMutation(productId)
@@ -124,6 +125,7 @@ const Product = component(() => {
             </If>
           </CardDefault>
 
+          <Translations />
           <Images />
           <Options />
           <Variants />

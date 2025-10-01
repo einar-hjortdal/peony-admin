@@ -3,6 +3,9 @@ import { useTranslation } from '@wareme/translations'
 
 import { useLocaleById, useProductById, useStore } from '../../data'
 import If from '../../components/If'
+import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/Cards/CardHeader'
+import { useParams } from '@dark-engine/web-router'
 
 const Translation = component(({ localeId, title, subtitle, description }) => {
   const { data: localeData } = useLocaleById(localeId)
@@ -36,15 +39,19 @@ const Translation = component(({ localeId, title, subtitle, description }) => {
   }
 })
 
-const Translations = component(({ productId }) => {
+const Translations = component(() => {
+  const params = useParams()
+  const productId = params.get('id')
+  const { t } = useTranslation('product.translations')
   const { data: productData } = useProductById(productId)
   const { data: storeData } = useStore()
 
   if (storeData && productData) {
     const { translations } = productData.product
-    const { defaultLocaleId } = storeData.store
+    const { defaultLocaleId, locales } = storeData.store
 
-    if (translations.length === 1) {
+    // Don't do any more work if store only has one locale
+    if (locales.length === 1) {
       return null
     }
 
@@ -66,6 +73,16 @@ const Translations = component(({ productId }) => {
         />
       )
     }
+
+    return (
+      <CardDefault>
+        <CardHeader title={t('title')}>
+          edit
+          {/* TODO modal with TranslationsInputs */}
+        </CardHeader>
+        {res}
+      </CardDefault>
+    )
   }
 })
 

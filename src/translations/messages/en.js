@@ -106,6 +106,7 @@ export default freeze({
   'product.delete': 'delete',
   'product.published': 'published',
   'product.draft': 'draft',
+  'product.translations.title': 'Translations',
   'product.variantAdd.add': 'add',
   'product.variantAdd.create': 'create variant',
   'product.variantAdd.metadata': 'Metadata',
