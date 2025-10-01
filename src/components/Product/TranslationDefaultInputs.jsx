@@ -1,8 +1,8 @@
 import { component, detectIsUndefined, useEffect, useMemo } from '@dark-engine/core'
+import { useTranslation } from '@wareme/translations'
 
 import Input from '../Input'
 import { useStore } from '../../data'
-import { useTranslation } from '@wareme/translations'
 
 const TranslationDefaultInputs = component(({ translations, onChange }) => {
   const { t } = useTranslation('translationDefaultInputs')

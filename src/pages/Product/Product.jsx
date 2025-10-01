@@ -2,8 +2,9 @@ import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductById } from '../../data'
+import { useProductById, useProductDeleteMutation, useProductUpdateMutation } from '../../data'
 import { formatLine } from '../../utils'
+import { productStatus } from '../../constants'
 import Variants from './Variants'
 import SetTitle from '../../components/SetTitle'
 import If from '../../components/If'
@@ -18,7 +19,26 @@ import CardDefault from '../../components/Cards/CardDefault'
 import CardHeader from '../../components/Cards/CardHeader'
 import BadgeWarning from '../../components/Badges/BadgeWarning'
 import BadgeSuccess from '../../components/Badges/BadgeSuccess'
-import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import ButtonMore from '../../components/Buttons/ButtonMore'
+import Edit from './Edit'
+
+const StatusUpdate = component(({ productId, status, slot }) => {
+  const [updateProduct] = useProductUpdateMutation(productId)
+  const handlePublish = () => {
+    updateProduct({ status })
+  }
+
+  return <button type='button' onClick={handlePublish}>{slot}</button>
+})
+
+const Delete = component(({ productId, slot }) => {
+  const [deleteProduct] = useProductDeleteMutation(productId)
+  const handleDelete = () => {
+    deleteProduct()
+  }
+
+  return <button type='button' onClick={handleDelete}>{slot}</button>
+})
 
 const Product = component(() => {
   const { t, translator } = useTranslation('product')
@@ -41,6 +61,32 @@ const Product = component(() => {
         <ColumnLarge>
           <CardDefault>
             <CardHeader title={t('details')}>
+              <ButtonMore>
+                <ul>
+                  <li><Edit /></li>
+                  <If condition={status === productStatus.draft}>
+                    <li>
+                      <StatusUpdate
+                        productId={productId}
+                        status={productStatus.published}
+                      >{t('publish')}
+                      </StatusUpdate>
+                    </li>
+                  </If>
+                  <If condition={status === productStatus.published}>
+                    <li>
+                      <StatusUpdate
+                        productId={productId}
+                        status={productStatus.draft}
+                      >{t('unpublish')}
+                      </StatusUpdate>
+                    </li>
+                  </If>
+                  <li>
+                    <Delete productId={productId}>{t('delete')}</Delete>
+                  </li>
+                </ul>
+              </ButtonMore>
               {/* TODO more button edit, publish/unpublish */}
             </CardHeader>
 
@@ -60,10 +106,10 @@ const Product = component(() => {
 
             <div>
               {t('status')}:
-              <If condition={status === 'draft'}>
+              <If condition={status === productStatus.draft}>
                 <BadgeWarning>{status}</BadgeWarning>
               </If>
-              <If condition={status === 'published'}>
+              <If condition={status === productStatus.published}>
                 <BadgeSuccess>{status}</BadgeSuccess>
               </If>
             </div>

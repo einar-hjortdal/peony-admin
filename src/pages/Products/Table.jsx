@@ -6,7 +6,7 @@ import { getDefaultTranslation } from '../../translations'
 import { valueOrDefault } from '../../utils'
 import {
   constants,
-  useDeleteProductMutation,
+  useProductDeleteMutation,
   useProductUpdateMutation
 } from '../../data'
 import If from '../../components/If'
@@ -24,7 +24,7 @@ const Actions = component(({ product }) => {
     data: deleteProductData,
     isFetching: deleteProductIsFetching,
     error: deleteProductError
-  }] = useDeleteProductMutation(id)
+  }] = useProductDeleteMutation(id)
 
   const handleChangeStatus = (e) => {
     const { newStatus } = e.target.dataset
@@ -38,7 +38,10 @@ const Actions = component(({ product }) => {
   return (
     <div>
       <ul>
-        <li><Link to={`/product/${id}`}>{t('edit')}</Link></li>
+        <li>
+          <Link to={`/product/${id}`}>{t('edit')}</Link>
+        </li>
+
         <If condition={status === constants.statusDraft}>
           <li>
             <button
@@ -49,6 +52,7 @@ const Actions = component(({ product }) => {
             </button>
           </li>
         </If>
+
         <If condition={status === constants.statusPublished}>
           <li>
             <button
@@ -59,6 +63,7 @@ const Actions = component(({ product }) => {
             </button>
           </li>
         </If>
+
         <li>
           <button type='button' name='delete' onClick={handleDelete}>{t('delete')}</button>
         </li>

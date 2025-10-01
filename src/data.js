@@ -172,7 +172,7 @@ export const useProductUpdateMutation = (id) => {
   )
 }
 
-export const useDeleteProductMutation = (id) => {
+export const useProductDeleteMutation = (id) => {
   const api = useApi()
   return useMutation(dataKeys.productDelete, () => api.productDelete(id), {
     variables: { id },
