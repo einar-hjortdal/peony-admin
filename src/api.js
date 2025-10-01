@@ -57,6 +57,7 @@ export const dataKeys = {
   regionUpdate: 'regionUpdate',
   salesChannelsGet: 'salesChannelsGet',
   localesGet: 'localesGet',
+  localeGetById: 'localeGetById',
   uploadsUploadOne: 'uploadsUploadOne',
   uploadsUploadMany: 'uploadsUploadMany',
   uploadsDelete: 'uploadsDelete'
@@ -314,6 +315,13 @@ export const api = {
 
   localesGet: async (params) => {
     const response = await fetch(getRequestUrl('locales', params), {
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
+  localeGetById: async (localeId) => {
+    const response = await fetch(getRequestUrl(`locales/${localeId}`), {
       credentials: 'include'
     })
     return checkResponse(response)

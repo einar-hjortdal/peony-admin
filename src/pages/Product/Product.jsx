@@ -87,10 +87,8 @@ const Product = component(() => {
                   </li>
                 </ul>
               </ButtonMore>
-              {/* TODO more button edit, publish/unpublish */}
             </CardHeader>
 
-            {/* TODO display current data */}
             <div>
               {t('title')}: {formatLine(title)}
             </div>
@@ -107,10 +105,10 @@ const Product = component(() => {
             <div>
               {t('status')}:
               <If condition={status === productStatus.draft}>
-                <BadgeWarning>{status}</BadgeWarning>
+                <BadgeWarning>{t('draft')}</BadgeWarning>
               </If>
               <If condition={status === productStatus.published}>
-                <BadgeSuccess>{status}</BadgeSuccess>
+                <BadgeSuccess>{t('published')}</BadgeSuccess>
               </If>
             </div>
 
@@ -119,10 +117,11 @@ const Product = component(() => {
             {/* <div>
               {t('type')}
             </div> */}
-            <div>
-              {t('discountable')}: {String(discountable)}
-              {/* TODO */}
-            </div>
+            <If condition={discountable}>
+              <div>
+                <BadgeSuccess>{t('discountable')}</BadgeSuccess>
+              </div>
+            </If>
           </CardDefault>
 
           <Images />

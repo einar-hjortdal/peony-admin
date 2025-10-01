@@ -164,7 +164,7 @@ const Modal = component(({ modalRef }) => {
     if (updateStoreIsFetching) {
       return
     }
-    updateStore(storeData.store.id, { locale_ids: params })
+    updateStore(storeData.store.id, { localeIds: params })
   }
 
   if (storeData && localesData) {

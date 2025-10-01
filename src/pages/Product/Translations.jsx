@@ -1,65 +1,72 @@
-import { component, detectIsString, detectIsUndefined } from '@dark-engine/core'
+import { component, detectIsString } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductById, useStore } from '../../data'
+import { useLocaleById, useProductById, useStore } from '../../data'
 import If from '../../components/If'
 
-const TranslationGroup = component(({ locale, title, subtitle, description }) => {
+const Translation = component(({ localeId, title, subtitle, description }) => {
+  const { data: localeData } = useLocaleById(localeId)
   const { t, translator } = useTranslation('product.translationGroup')
 
-  return (
-    <div>
-      {t('locale')}: {locale} <span>{translator.formatName(locale, { type: 'language' })}</span>
+  if (localeData) {
+    const { code } = localeData.locale
+    return (
+      <div>
+        <span>{translator.formatName(code, { type: 'language' })}</span>
 
-      <If condition={detectIsString(title)}>
-        <div>
-          {t('title')}: {title}
-        </div>
-      </If>
+        <If condition={detectIsString(title)}>
+          <div>
+            {t('title')}: {title}
+          </div>
+        </If>
 
-      <If condition={detectIsString(subtitle)}>
-        <div>
-          {t('subtitle')}: {subtitle}
-        </div>
-      </If>
+        <If condition={detectIsString(subtitle)}>
+          <div>
+            {t('subtitle')}: {subtitle}
+          </div>
+        </If>
 
-      <If condition={detectIsString(description)}>
-        <div>
-          {t('description')}: {description}
-        </div>
-      </If>
-    </div>
-  )
+        <If condition={detectIsString(description)}>
+          <div>
+            {t('description')}: {description}
+          </div>
+        </If>
+      </div>
+    )
+  }
 })
 
 const Translations = component(({ productId }) => {
-  const { translationsObject } = useProductById(productId)
-  const { data: storeData, localesObject } = useStore()
-  const { defaultLocaleId, locales } = storeData.store
+  const { data: productData } = useProductById(productId)
+  const { data: storeData } = useStore()
 
-  const res = []
-  for (let i = 0, len = locales.length; i < len; i++) {
-    const { id } = locales[i]
-    if (defaultLocaleId === id) {
-      continue
+  if (storeData && productData) {
+    const { translations } = productData.product
+    const { defaultLocaleId } = storeData.store
+
+    if (translations.length === 1) {
+      return null
     }
 
-    const translation = translationsObject[id]
-    if (detectIsUndefined(translation)) {
-      continue
-    }
+    const res = []
+    for (let i = 0, len = translations.length; i < len; i++) {
+      const translation = translations[i]
+      const { localeId, title, subtitle, description } = translation
 
-    res.push(
-      <TranslationGroup
-        locale={localesObject[id]}
-        title={translation.title}
-        subtitle={translation.subtitle}
-        description={translation.description}
-      />
-    )
+      if (localeId === defaultLocaleId) {
+        continue
+      }
+
+      res.push(
+        <Translation
+          localeCode={localeId}
+          title={title}
+          subtitle={subtitle}
+          description={description}
+        />
+      )
+    }
   }
-
-  return res
 })
 
 export default Translations

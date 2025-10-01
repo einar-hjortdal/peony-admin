@@ -104,6 +104,8 @@ export default freeze({
   'product.publish': 'publish',
   'product.unpublish': 'unpublish',
   'product.delete': 'delete',
+  'product.published': 'published',
+  'product.draft': 'draft',
   'product.variantAdd.add': 'add',
   'product.variantAdd.create': 'create variant',
   'product.variantAdd.metadata': 'Metadata',
