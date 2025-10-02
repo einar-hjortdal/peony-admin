@@ -145,8 +145,7 @@ const Translations = component(() => {
 
     const res = []
     for (let i = 0, len = translations.length; i < len; i++) {
-      const translation = translations[i]
-      const { localeId, title, subtitle, description } = translation
+      const { localeId, title, subtitle, description } = translations[i]
 
       if (localeId === defaultLocaleId) {
         continue
@@ -154,7 +153,7 @@ const Translations = component(() => {
 
       res.push(
         <Translation
-          localeCode={localeId}
+          localeId={localeId}
           title={title}
           subtitle={subtitle}
           description={description}
