@@ -85,6 +85,7 @@ const GlobalStyle = createGlobalStyle`
 
   button {
     border: none;
+    padding: unset;
   }
 
   dialog {

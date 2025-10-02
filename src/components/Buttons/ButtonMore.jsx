@@ -17,12 +17,13 @@ const StyledButton = styled.button`
   }
 `
 
-const Wrapper = styled.div`
+const StyledDiv = styled.div`
   position: relative;
   display: inline-block;
   
   & ul {
     position: absolute;
+    border-radius: .3rem;
     top: 1.5rem;
     right: 0;
     white-space: nowrap;
@@ -35,16 +36,20 @@ const Wrapper = styled.div`
     min-width: 8rem;
   }
 
-  & ul li {
+  & ul li button {
+    width: 100%;
+    border-radius: .3rem;
     padding-left: 1rem;
     padding-right: 1rem;
     padding-top: .5rem;
     padding-bottom: .5rem;
+    text-align: left;
     cursor: pointer;
+    color: inherit;
+    background-color: inherit;
   }
 
-  & ul li:hover {
-    border-radius: .3rem;
+  & ul li button:hover {
     color: ${p => p.theme.bg};
     background-color: ${p => p.theme.active};
   }
@@ -59,7 +64,7 @@ const ButtonMore = component(({ slot }) => {
   }
 
   return (
-    <Wrapper>
+    <StyledDiv>
       <StyledButton aria-label={t('label')} type='button' onClick={toggleMenu}>
         <svg viewBox='0 0 24 8' aria-hidden='true'>
           <circle cx='4' cy='4' r='3' />
@@ -70,7 +75,7 @@ const ButtonMore = component(({ slot }) => {
       <If condition={isOpen}>
         {slot}
       </If>
-    </Wrapper>
+    </StyledDiv>
   )
 })
 

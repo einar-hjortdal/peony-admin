@@ -1,13 +1,98 @@
-import { component, detectIsString } from '@dark-engine/core'
+import {
+  component,
+  detectIsNull,
+  detectIsString,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from '@dark-engine/core'
+import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import { useLocaleById, useProductById, useStore } from '../../data'
+import { useLocaleById, useProductById, useProductUpdateMutation, useStore } from '../../data'
 import If from '../../components/If'
 import CardDefault from '../../components/Cards/CardDefault'
 import CardHeader from '../../components/Cards/CardHeader'
-import { useParams } from '@dark-engine/web-router'
-import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import ButtonMore from '../../components/Buttons/ButtonMore'
+import ModalDefault from '../../components/Modals/ModalDefault'
+import ModalHeader from '../../components/Modals/ModalHeader'
+import ModalFooter from '../../components/Modals/ModalFooter'
+import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import TranslationsInputs from '../../components/Product/TranslationsInputs'
+
+const TranslationsEdit = component(({ productId, title, slot }) => {
+  const [updateProduct] = useProductUpdateMutation(productId)
+  const { data: productData } = useProductById(productId)
+  const { data: storeData } = useStore()
+
+  const [translationsData, setTranslationsData] = useState([])
+  useEffect(() => {
+    if (productData && storeData) {
+      const { translations } = productData.product
+      const { defaultLocaleId } = storeData.store
+      const newTranslationsData = []
+      for (let i = 0, len = translations.length; i < len; i++) {
+        const translation = translations[i]
+        if (translation.localeId === defaultLocaleId) {
+          continue
+        }
+        newTranslationsData.push(translation)
+      }
+      setTranslationsData(newTranslationsData)
+    }
+  }, [productData, storeData])
+
+  const defaultTranslation = useMemo(() => {
+    if (productData && storeData) {
+      const { translations } = productData.product
+      const { defaultLocaleId } = storeData.store
+      for (let i = 0, len = translations.length; i < len; i++) {
+        const translation = translations[i]
+        if (translation.localeId === defaultLocaleId) {
+          return translation
+        }
+      }
+    }
+  }, [productData, storeData])
+
+  const modalRef = useRef(null)
+
+  const handleOpenModal = () => {
+    if (detectIsNull(modalRef.current)) {
+      return
+    }
+    return modalRef.current.showModal()
+  }
+
+  const handleCloseModal = () => {
+    return modalRef.current.close()
+  }
+
+  const handleChange = (newTranslationsData) => {
+    setTranslationsData(newTranslationsData)
+  }
+
+  const handleSave = () => {
+    const newTranslations = [...translationsData, defaultTranslation]
+    updateProduct({ translations: newTranslations })
+  }
+
+  if (productData && storeData) {
+    return (
+      <>
+        <button type='button' onClick={handleOpenModal}>{slot}</button>
+        <ModalDefault ref={modalRef}>
+          <ModalHeader title={title} handleClose={handleCloseModal} />
+          <TranslationsInputs translations={translationsData} onChange={handleChange} />
+          <ModalFooter>
+            <PrimaryButton type='button' onClick={handleSave}>save</PrimaryButton>
+          </ModalFooter>
+        </ModalDefault>
+      </>
+    )
+  }
+})
 
 const Translation = component(({ localeId, title, subtitle, description }) => {
   const { data: localeData } = useLocaleById(localeId)
@@ -45,6 +130,7 @@ const Translations = component(() => {
   const params = useParams()
   const productId = params.get('id')
   const { t } = useTranslation('product.translations')
+  const [updateProduct] = useProductUpdateMutation(productId)
   const { data: productData } = useProductById(productId)
   const { data: storeData } = useStore()
 
@@ -76,17 +162,36 @@ const Translations = component(() => {
       )
     }
 
+    const handleDeleteAll = () => {
+      for (let i = 0, len = translations.length; i < len; i++) {
+        const translation = translations[i]
+        if (translation.localeId === defaultLocaleId) {
+          updateProduct({ translations: [translation] })
+          break
+        }
+      }
+    }
+
     return (
       <CardDefault>
         <CardHeader title={t('title')}>
           <ButtonMore>
             <ul>
               <li>
-                edit
+                <TranslationsEdit productId={productId} title={t('modalTitle')}>
+                  <If condition={translations.length === 1}>
+                    {t('add')}
+                  </If>
+                  <If condition={translations.length > 1}>
+                    {t('edit')}
+                  </If>
+                </TranslationsEdit>
               </li>
-              <li>
-                delete all
-              </li>
+              <If condition={translations.length > 1}>
+                <li>
+                  <button type='button' onClick={handleDeleteAll}>{t('deleteAll')}</button>
+                </li>
+              </If>
             </ul>
           </ButtonMore>
         </CardHeader>
