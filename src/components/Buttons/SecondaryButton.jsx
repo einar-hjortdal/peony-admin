@@ -1,5 +1,5 @@
 import { styled } from '@dark-engine/styled'
-import { base } from './baseButton'
+import { base } from './base'
 
 const SecondaryButton = styled.button`
   ${base}

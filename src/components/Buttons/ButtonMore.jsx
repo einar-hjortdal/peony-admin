@@ -20,12 +20,33 @@ const StyledButton = styled.button`
 const Wrapper = styled.div`
   position: relative;
   display: inline-block;
-
+  
   & ul {
     position: absolute;
     top: 1.5rem;
     right: 0;
     white-space: nowrap;
+    background-color: ${p => p.theme.bg};
+    box-shadow: 0 .2rem 1.5rem 0 rgba(0, 0, 0, 0.25);
+    padding-top: .3rem;
+    padding-right: .3rem;
+    padding-bottom: .3rem;
+    padding-left: .3rem;
+    min-width: 8rem;
+  }
+
+  & ul li {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    cursor: pointer;
+  }
+
+  & ul li:hover {
+    border-radius: .3rem;
+    color: ${p => p.theme.bg};
+    background-color: ${p => p.theme.active};
   }
 `
 
@@ -38,7 +59,7 @@ const ButtonMore = component(({ slot }) => {
   }
 
   return (
-    <>
+    <Wrapper>
       <StyledButton aria-label={t('label')} type='button' onClick={toggleMenu}>
         <svg viewBox='0 0 24 8' aria-hidden='true'>
           <circle cx='4' cy='4' r='3' />
@@ -46,12 +67,10 @@ const ButtonMore = component(({ slot }) => {
           <circle cx='20' cy='4' r='3' />
         </svg>
       </StyledButton>
-      <Wrapper>
-        <If condition={isOpen}>
-          {slot}
-        </If>
-      </Wrapper>
-    </>
+      <If condition={isOpen}>
+        {slot}
+      </If>
+    </Wrapper>
   )
 })
 

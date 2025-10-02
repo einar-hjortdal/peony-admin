@@ -6,6 +6,8 @@ import If from '../../components/If'
 import CardDefault from '../../components/Cards/CardDefault'
 import CardHeader from '../../components/Cards/CardHeader'
 import { useParams } from '@dark-engine/web-router'
+import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import ButtonMore from '../../components/Buttons/ButtonMore'
 
 const Translation = component(({ localeId, title, subtitle, description }) => {
   const { data: localeData } = useLocaleById(localeId)
@@ -77,8 +79,16 @@ const Translations = component(() => {
     return (
       <CardDefault>
         <CardHeader title={t('title')}>
-          edit
-          {/* TODO modal with TranslationsInputs */}
+          <ButtonMore>
+            <ul>
+              <li>
+                edit
+              </li>
+              <li>
+                delete all
+              </li>
+            </ul>
+          </ButtonMore>
         </CardHeader>
         {res}
       </CardDefault>

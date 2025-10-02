@@ -22,6 +22,7 @@ import BadgeSuccess from '../../components/Badges/BadgeSuccess'
 import ButtonMore from '../../components/Buttons/ButtonMore'
 import Edit from './Edit'
 import Translations from './Translations'
+import { styled } from '@dark-engine/styled'
 
 const StatusUpdate = component(({ productId, status, slot }) => {
   const [updateProduct] = useProductUpdateMutation(productId)
@@ -41,6 +42,19 @@ const Delete = component(({ productId, slot }) => {
   return <button type='button' onClick={handleDelete}>{slot}</button>
 })
 
+const StyledUl = styled.ul`
+  & li {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    border-bottom: 1px solid ${(p) => p.theme.neutral20};
+  }
+`
+
+const Column = styled.div`
+  display: inline-block;
+  width: 50%;
+`
+
 const Product = component(() => {
   const { t, translator } = useTranslation('product')
   const params = useParams()
@@ -51,17 +65,30 @@ const Product = component(() => {
     error: productError
   } = useProductById(productId)
 
-  // check database changes when adding prices
-
-  // TODO show thumbnail marker on image that is also the thumbnail
+  // TODO check for database changes when adding prices
   if (productData) {
-    const { title, subtitle, description, discountable, status } = productData.product
+    const {
+      title,
+      subtitle,
+      description,
+      handle,
+      discountable,
+      status
+    } = productData.product
+
     return (
       <>
-        <SetTitle title={t('details')} />
+        <SetTitle title={t('title')} />
         <ColumnLarge>
           <CardDefault>
-            <CardHeader title={t('details')}>
+            <CardHeader title={t('general')}>
+              <If condition={status === productStatus.draft}>
+                <BadgeWarning>{t('general.draft')}</BadgeWarning>
+              </If>
+              <If condition={status === productStatus.published}>
+                <BadgeSuccess>{t('general.published')}</BadgeSuccess>
+              </If>
+
               <ButtonMore>
                 <ul>
                   <li><Edit /></li>
@@ -70,7 +97,7 @@ const Product = component(() => {
                       <StatusUpdate
                         productId={productId}
                         status={productStatus.published}
-                      >{t('publish')}
+                      >{t('general.publish')}
                       </StatusUpdate>
                     </li>
                   </If>
@@ -79,51 +106,58 @@ const Product = component(() => {
                       <StatusUpdate
                         productId={productId}
                         status={productStatus.draft}
-                      >{t('unpublish')}
+                      >{t('general.unpublish')}
                       </StatusUpdate>
                     </li>
                   </If>
                   <li>
-                    <Delete productId={productId}>{t('delete')}</Delete>
+                    <Delete productId={productId}>{t('general.delete')}</Delete>
                   </li>
                 </ul>
               </ButtonMore>
             </CardHeader>
 
-            <div>
-              {t('title')}: {formatLine(title)}
-            </div>
+            <StyledUl>
+              <li>
+                <Column>{t('general.title')}</Column>
+                <Column>{formatLine(title)}</Column>
+              </li>
 
-            <div>
-              {t('subtitle')}: {formatLine(subtitle)}
-            </div>
+              <li>
+                <Column>{t('general.subtitle')}</Column>
+                <Column>{formatLine(subtitle)}</Column>
+              </li>
 
-            {/* TODO description may be long. Trim if longer than, display on click? */}
-            <div>
-              {t('description')}: {formatLine(description)}
-            </div>
+              {/* TODO description may be long. Trim if longer than, display on click? */}
+              <li>
+                <Column>{t('general.description')}</Column>
+                <Column>{formatLine(description)}</Column>
+              </li>
 
-            <div>
-              {t('status')}:
-              <If condition={status === productStatus.draft}>
-                <BadgeWarning>{t('draft')}</BadgeWarning>
-              </If>
-              <If condition={status === productStatus.published}>
-                <BadgeSuccess>{t('published')}</BadgeSuccess>
-              </If>
-            </div>
+              <li>
+                <Column>{t('general.handle')}</Column>
+                <Column>{handle}</Column>
+              </li>
 
-            {/* TODO display translations without clogging */}
+              <li>
+                <Column>{t('general.discountable')}</Column>
+                <Column>
+                  <If condition={discountable}>
+                    {t('general.true')}
+                  </If>
+                  <If condition={!discountable}>
+                    {t('general.false')}
+                  </If>
+                </Column>
+              </li>
 
-            {/* <div>
+              {/* <li>
               {t('type')}
-            </div> */}
-            <If condition={discountable}>
-              <div>
-                <BadgeSuccess>{t('discountable')}</BadgeSuccess>
-              </div>
-            </If>
+            </li> */}
+            </StyledUl>
+
           </CardDefault>
+          {/* TODO display translations without clogging */}
 
           <Translations />
           <Images />
