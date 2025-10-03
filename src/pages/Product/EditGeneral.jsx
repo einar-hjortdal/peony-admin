@@ -7,6 +7,8 @@ import { useTranslation } from '@wareme/translations'
 import ModalHeader from '../../components/Modals/ModalHeader'
 import ModalFooter from '../../components/Modals/ModalFooter'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import HandleInput from '../../components/HandleInput'
+import Switch from '../../components/Switch'
 
 const EditGeneral = component(() => {
   const params = useParams()
@@ -45,12 +47,29 @@ const EditGeneral = component(() => {
     modalRef.current.close()
   }
 
+  const handleHandleChange = (newHandle) => {
+    setNewProductData((prevState) => {
+      return { ...prevState, handle: newHandle }
+    })
+  }
+
+  const handleInput = (e) => {
+    const { type, name, checked } = e.target
+    if (type === 'checkbox') {
+      return setNewProductData((prevState) => {
+        return { ...prevState, [name]: checked }
+      })
+    }
+  }
+
   const handleSave = () => {
     updateProduct(newProductData)
   }
 
+  console.log(newProductData)
   if (productData) {
     const { translations } = productData.product
+    const { handle, discountable } = newProductData
     return (
       <>
         <button type='button' onClick={handleOpenModal}>{t('edit')}</button>
@@ -58,8 +77,13 @@ const EditGeneral = component(() => {
           <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
           <TranslationDefaultInputs translations={translations} onChange={handleTranslationsChange} />
-          {/* handle */}
-          {/* discountable */}
+          <HandleInput value={handle} onChange={handleHandleChange} />
+          <Switch
+            name='discountable'
+            checked={discountable}
+            onChange={handleInput}
+          >{t('discountable')}
+          </Switch>
 
           <ModalFooter>
             <PrimaryButton type='button' onClick={handleSave}>{t('save')}</PrimaryButton>

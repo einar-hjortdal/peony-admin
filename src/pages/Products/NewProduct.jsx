@@ -22,6 +22,7 @@ import ModalBody from '../../components/Modals/ModalBody'
 import ModalFooter from '../../components/Modals/ModalFooter'
 import TranslationDefaultInputs from '../../components/Product/TranslationDefaultInputs'
 import TranslationsInputs from '../../components/Product/TranslationsInputs'
+import HandleInput from '../../components/HandleInput'
 
 const NewProductBody = styled.div`
   max-width: 1300px;
@@ -53,6 +54,12 @@ const NewProduct = component(({ modalRef }) => {
     setProductData((prevState) => {
       const newState = { ...prevState, translations: newTranslations }
       return newState
+    })
+  }
+
+  const handleHandleChange = (newHandle) => {
+    setProductData((prevState) => {
+      return { ...prevState, handle: newHandle }
     })
   }
 
@@ -109,12 +116,7 @@ const NewProduct = component(({ modalRef }) => {
                 onChange={handleTranslationsChange}
               />
 
-              {/* TODO etxract handle input */}
-              <Input
-                name='handle'
-                onInput={handleInput}
-              >{t('general.handle')}
-              </Input>
+              <HandleInput value={productData.handle} onChange={handleHandleChange} />
 
               <Switch
                 name='discountable'
