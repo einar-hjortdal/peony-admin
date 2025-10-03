@@ -33,14 +33,12 @@ const Organize = component(() => {
     <CardDefault>
       <CardHeader title={t('title')}>
         <ButtonMore>
-          <ul>
-            <li>
-              {/* TODO  product type */}
-              <CategoriesEdit productId={productId} />
-              {/* TODO product tags */}
-              {/* TODO product collections */}
-            </li>
-          </ul>
+          <li>
+            {/* TODO  product type */}
+            <CategoriesEdit productId={productId} />
+            {/* TODO product tags */}
+            {/* TODO product collections */}
+          </li>
         </ButtonMore>
       </CardHeader>
       <ul>

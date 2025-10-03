@@ -69,14 +69,12 @@ const Category = component(({ productCategory }) => {
       <td><Visibility isInternal={isInternal} /></td>
       <td>
         <ButtonMore>
-          <ul>
-            <li>
-              <CategoryEdit productCategory={productCategory} />
-            </li>
-            <li>
-              <CategoryDelete id={id} />
-            </li>
-          </ul>
+          <li>
+            <CategoryEdit productCategory={productCategory} />
+          </li>
+          <li>
+            <CategoryDelete id={id} />
+          </li>
         </ButtonMore>
       </td>
     </tr>

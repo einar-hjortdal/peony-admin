@@ -1,7 +1,9 @@
 import {
   component,
+  detectIsFunction,
   detectIsNull,
   detectIsString,
+  detectIsUndefined,
   useEffect,
   useMemo,
   useRef,
@@ -20,8 +22,9 @@ import ModalHeader from '../../components/Modals/ModalHeader'
 import ModalFooter from '../../components/Modals/ModalFooter'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'
 import TranslationsInputs from '../../components/Product/TranslationsInputs'
+import { styled } from '@dark-engine/styled'
 
-const TranslationsEdit = component(({ productId, title, slot }) => {
+const TranslationsEdit = component(({ productId, title, renderButton, slot }) => {
   const [updateProduct] = useProductUpdateMutation(productId)
   const { data: productData } = useProductById(productId)
   const { data: storeData } = useStore()
@@ -78,10 +81,15 @@ const TranslationsEdit = component(({ productId, title, slot }) => {
     updateProduct({ translations: newTranslations })
   }
 
+  let Button = 'button'
+  if (detectIsFunction(renderButton)) {
+    Button = renderButton
+  }
+
   if (productData && storeData) {
     return (
       <>
-        <button type='button' onClick={handleOpenModal}>{slot}</button>
+        <Button type='button' onClick={handleOpenModal}>{slot}</Button>
         <ModalDefault ref={modalRef}>
           <ModalHeader title={title} handleClose={handleCloseModal} />
           <TranslationsInputs translations={translationsData} onChange={handleChange} />
@@ -94,33 +102,72 @@ const TranslationsEdit = component(({ productId, title, slot }) => {
   }
 })
 
+const Column = styled.div`
+  display: inline-block;
+  width: 50%;
+`
+
+const TopLeft = styled.div`
+  display: inline-block;
+`
+
+const LanguageName = styled.span`
+  font-size: 120%;
+`
+
+const TopRight = styled.div`
+  float: right;
+`
+
+const StyledLi = styled.li`
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid ${(p) => p.theme.neutral20};
+`
+
 const Translation = component(({ localeId, title, subtitle, description }) => {
   const { data: localeData } = useLocaleById(localeId)
-  const { t, translator } = useTranslation('product.translationGroup')
+  const { t, translator } = useTranslation('product.translation')
 
   if (localeData) {
     const { code } = localeData.locale
+    const languageName = translator.formatName(code, { type: 'language' })
+
     return (
       <div>
-        <span>{translator.formatName(code, { type: 'language' })}</span>
+        <TopLeft>
+          <LanguageName>{languageName}</LanguageName>
+        </TopLeft>
+        <TopRight>
+          {/*
+          <ButtonMore>
+            <li>delete language translations</li>
+          </ButtonMore>
+          */}
+        </TopRight>
 
-        <If condition={detectIsString(title)}>
-          <div>
-            {t('title')}: {title}
-          </div>
-        </If>
+        <ul>
+          <If condition={detectIsString(title)}>
+            <StyledLi>
+              <Column>{t('title')}</Column>
+              <Column>{title}</Column>
+            </StyledLi>
+          </If>
 
-        <If condition={detectIsString(subtitle)}>
-          <div>
-            {t('subtitle')}: {subtitle}
-          </div>
-        </If>
+          <If condition={detectIsString(subtitle)}>
+            <StyledLi>
+              <Column>{t('subtitle')}</Column>
+              <Column>{subtitle}</Column>
+            </StyledLi>
+          </If>
 
-        <If condition={detectIsString(description)}>
-          <div>
-            {t('description')}: {description}
-          </div>
-        </If>
+          <If condition={detectIsString(description)}>
+            <StyledLi>
+              <Column>{t('description')}</Column>
+              <Column>{description}</Column>
+            </StyledLi>
+          </If>
+        </ul>
       </div>
     )
   }
@@ -174,27 +221,40 @@ const Translations = component(() => {
     return (
       <CardDefault>
         <CardHeader title={t('title')}>
-          <ButtonMore>
-            <ul>
+          <If condition={translations.length === 1}>
+            <TranslationsEdit
+              productId={productId}
+              title={t('modalTitle')}
+              renderButton={(props) => <PrimaryButton {...props} />}
+            >{t('add')}
+            </TranslationsEdit>
+          </If>
+
+          <If condition={translations.length > 1}>
+            <ButtonMore>
               <li>
-                <TranslationsEdit productId={productId} title={t('modalTitle')}>
-                  <If condition={translations.length === 1}>
-                    {t('add')}
-                  </If>
-                  <If condition={translations.length > 1}>
-                    {t('edit')}
-                  </If>
+                <TranslationsEdit
+                  productId={productId}
+                  title={t('modalTitle')}
+                >{t('edit')}
                 </TranslationsEdit>
               </li>
-              <If condition={translations.length > 1}>
-                <li>
-                  <button type='button' onClick={handleDeleteAll}>{t('deleteAll')}</button>
-                </li>
-              </If>
-            </ul>
-          </ButtonMore>
+              <li>
+                <button type='button' onClick={handleDeleteAll}>{t('deleteAll')}</button>
+              </li>
+            </ButtonMore>
+
+          </If>
         </CardHeader>
-        {res}
+
+        <If condition={translations.length === 1}>
+          {t('noTranslations')}
+        </If>
+
+        <If condition={translations.length > 1}>
+          {res}
+        </If>
+
       </CardDefault>
     )
   }

@@ -90,30 +90,28 @@ const Product = component(() => {
               </If>
 
               <ButtonMore>
-                <ul>
-                  <li><Edit /></li>
-                  <If condition={status === productStatus.draft}>
-                    <li>
-                      <StatusUpdate
-                        productId={productId}
-                        status={productStatus.published}
-                      >{t('general.publish')}
-                      </StatusUpdate>
-                    </li>
-                  </If>
-                  <If condition={status === productStatus.published}>
-                    <li>
-                      <StatusUpdate
-                        productId={productId}
-                        status={productStatus.draft}
-                      >{t('general.unpublish')}
-                      </StatusUpdate>
-                    </li>
-                  </If>
+                <li><Edit /></li>
+                <If condition={status === productStatus.draft}>
                   <li>
-                    <Delete productId={productId}>{t('general.delete')}</Delete>
+                    <StatusUpdate
+                      productId={productId}
+                      status={productStatus.published}
+                    >{t('general.publish')}
+                    </StatusUpdate>
                   </li>
-                </ul>
+                </If>
+                <If condition={status === productStatus.published}>
+                  <li>
+                    <StatusUpdate
+                      productId={productId}
+                      status={productStatus.draft}
+                    >{t('general.unpublish')}
+                    </StatusUpdate>
+                  </li>
+                </If>
+                <li>
+                  <Delete productId={productId}>{t('general.delete')}</Delete>
+                </li>
               </ButtonMore>
             </CardHeader>
 

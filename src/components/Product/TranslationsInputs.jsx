@@ -1,9 +1,11 @@
 import { component, keys } from '@dark-engine/core'
+import { useTranslation } from '@wareme/translations'
 
 import { useStore } from '../../data'
 
 const TranslationsInputs = component(({ translations, onChange }) => {
   const { data: storeData } = useStore()
+  const { translator } = useTranslation()
 
   if (storeData) {
     const { defaultLocaleId, locales } = storeData.store
@@ -54,9 +56,11 @@ const TranslationsInputs = component(({ translations, onChange }) => {
       const localeId = localeIds[i]
       const translation = translationsMap[localeId]
       const { localeCode, title, subtitle, description } = translation
+      const languageName = translator.formatName(localeCode, { type: 'language' })
+
       rows.push(
         <li>
-          <div>{localeCode}</div>
+          <div>{languageName}</div>
           <div>
             title:
             <input
@@ -90,19 +94,10 @@ const TranslationsInputs = component(({ translations, onChange }) => {
         </li>
       )
     }
-    // locales is an array of objects {id, code}
-    // we have to ignore the locale with id === defaultLocaleId
-    // existingTranslations is an array of object: {localeId, title, subtitle, description}
-    // In each object, title, subtitle, description may be undefined.
-    // The array may not contain all localeId in locales
 
     return (
       <ul>
         {rows}
-        {/*
-        For each locale I need: title, subtitle and description inputs
-        each input needs an onInput handler: add the change to existingTranslations and call onChange callback
-        */}
       </ul>
     )
   }

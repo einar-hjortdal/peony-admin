@@ -48,9 +48,7 @@ const Options = component(() => {
     <CardDefault>
       <CardHeader title={t('title')}>
         <ButtonMore>
-          <ul>
-            <li><EditOptions productId={productId} /></li>
-          </ul>
+          <li><EditOptions productId={productId} /></li>
         </ButtonMore>
       </CardHeader>
 

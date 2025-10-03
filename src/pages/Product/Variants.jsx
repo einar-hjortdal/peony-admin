@@ -182,9 +182,7 @@ const Variants = component(() => {
       <CardHeader title={t('title')}>
         <VariantAdd productId={productId} />
         <ButtonMore type='button'>
-          <ul>
-            <li><EditPrices productId={productId} /></li>
-          </ul>
+          <li><EditPrices productId={productId} /></li>
         </ButtonMore>
       </CardHeader>
       <div>

@@ -9,6 +9,7 @@ const StyledButton = styled.button`
   padding: 0.5rem 1rem;
   cursor: pointer;
   background-color: unset;
+  
   & svg {
     width: 1.5rem;
     height: .5rem;
@@ -20,23 +21,22 @@ const StyledButton = styled.button`
 const StyledDiv = styled.div`
   position: relative;
   display: inline-block;
-  
-  & ul {
-    position: absolute;
-    border-radius: .3rem;
-    top: 1.5rem;
-    right: 0;
-    white-space: nowrap;
-    background-color: ${p => p.theme.bg};
-    box-shadow: 0 .2rem 1.5rem 0 rgba(0, 0, 0, 0.25);
-    padding-top: .3rem;
-    padding-right: .3rem;
-    padding-bottom: .3rem;
-    padding-left: .3rem;
-    min-width: 8rem;
-  }
+`
+const StyledUl = styled.ul`
+  position: absolute;
+  border-radius: .3rem;
+  top: 1.5rem;
+  right: 0;
+  white-space: nowrap;
+  background-color: ${p => p.theme.bg};
+  box-shadow: 0 .2rem 1.5rem 0 rgba(0, 0, 0, 0.25);
+  padding-top: .3rem;
+  padding-right: .3rem;
+  padding-bottom: .3rem;
+  padding-left: .3rem;
+  min-width: 8rem;
 
-  & ul li button {
+  & li button {
     width: 100%;
     border-radius: .3rem;
     padding-left: 1rem;
@@ -49,7 +49,7 @@ const StyledDiv = styled.div`
     background-color: inherit;
   }
 
-  & ul li button:hover {
+  & li button:hover {
     color: ${p => p.theme.bg};
     background-color: ${p => p.theme.active};
   }
@@ -73,7 +73,9 @@ const ButtonMore = component(({ slot }) => {
         </svg>
       </StyledButton>
       <If condition={isOpen}>
-        {slot}
+        <StyledUl>
+          {slot}
+        </StyledUl>
       </If>
     </StyledDiv>
   )

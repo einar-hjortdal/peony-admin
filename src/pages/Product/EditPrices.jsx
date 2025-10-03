@@ -437,9 +437,7 @@ const EditPrices = component(({ productId }) => {
             <div>
               <ButtonMore>
                 {/* TODO toggle columns */}
-                <ul>
-                  <li>columns to toggle</li>
-                </ul>
+                <li>columns to toggle</li>
               </ButtonMore>
               <table>
                 <caption>{productTranslationsObject[storeData.store.defaultLocaleId].title}</caption>
