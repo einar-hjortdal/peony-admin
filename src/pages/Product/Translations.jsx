@@ -243,18 +243,11 @@ const Translations = component(() => {
                 <button type='button' onClick={handleDeleteAll}>{t('deleteAll')}</button>
               </li>
             </ButtonMore>
-
           </If>
         </CardHeader>
 
-        <If condition={translations.length === 1}>
-          {t('noTranslations')}
-        </If>
-
-        <If condition={translations.length > 1}>
-          {res}
-        </If>
-
+        <If condition={translations.length === 1}>{t('noTranslations')}</If>
+        <If condition={translations.length > 1}>{res}</If>
       </CardDefault>
     )
   }

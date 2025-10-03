@@ -8,7 +8,7 @@ const CategoriesList = component(({ productId }) => {
   if (productCategoriesData) {
     const { productCategories } = productCategoriesData
     if (productCategories.length === 0) {
-      return 'This product is not in any category'
+      return '-'
     }
 
     const spans = []

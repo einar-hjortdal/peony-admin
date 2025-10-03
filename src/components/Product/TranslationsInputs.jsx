@@ -5,7 +5,7 @@ import { useStore } from '../../data'
 
 const TranslationsInputs = component(({ translations, onChange }) => {
   const { data: storeData } = useStore()
-  const { translator } = useTranslation()
+  const { t, translator } = useTranslation('translationsInputs')
 
   if (storeData) {
     const { defaultLocaleId, locales } = storeData.store
@@ -62,7 +62,7 @@ const TranslationsInputs = component(({ translations, onChange }) => {
         <li>
           <div>{languageName}</div>
           <div>
-            title:
+            {t('title')}:
             <input
               type='text'
               name='title'
@@ -72,7 +72,7 @@ const TranslationsInputs = component(({ translations, onChange }) => {
             />
           </div>
           <div>
-            subtitle:
+            {t('subtitle')}:
             <input
               type='text'
               name='title'
@@ -82,7 +82,7 @@ const TranslationsInputs = component(({ translations, onChange }) => {
             />
           </div>
           <div>
-            description:
+            {t('description')}:
             <input
               type='text'
               name='title'

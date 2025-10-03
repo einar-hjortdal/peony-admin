@@ -33,13 +33,12 @@
 - [ ] Prices: minQuantity, maxQuantity
 - [ ] Price lists
 - [ ] Product types
-- [ ] Users
 - [ ] Product tags
 - [ ] Posts
 - [ ] Post tags
+- [ ] Users
 - [ ] Notifications
 - [ ] Variant images
-- [ ] Stores
 
 ## Low priority
 
@@ -48,7 +47,8 @@
 - [ ] Dark theme
 - [ ] Responsiveness
 - [ ] Validate inputs
-- [ ] Verify changes before new changes
+- [ ] Verify user intent before applying new changes
+- [ ] Verify server state before applying new changes
 - [ ] Refactor
 
 ## Deployment

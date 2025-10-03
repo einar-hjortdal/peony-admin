@@ -20,7 +20,7 @@ import CardHeader from '../../components/Cards/CardHeader'
 import BadgeWarning from '../../components/Badges/BadgeWarning'
 import BadgeSuccess from '../../components/Badges/BadgeSuccess'
 import ButtonMore from '../../components/Buttons/ButtonMore'
-import Edit from './Edit'
+import EditGeneral from './EditGeneral'
 import Translations from './Translations'
 import { styled } from '@dark-engine/styled'
 
@@ -90,7 +90,7 @@ const Product = component(() => {
               </If>
 
               <ButtonMore>
-                <li><Edit /></li>
+                <li><EditGeneral /></li>
                 <If condition={status === productStatus.draft}>
                   <li>
                     <StatusUpdate

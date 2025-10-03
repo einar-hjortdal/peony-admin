@@ -441,6 +441,7 @@ export const useUpdateCurrencyMutation = () => {
   )
 }
 
+// TODO change workflow: to add images during product creation, uploading and upading product must be separate
 export const useUploadProductImageMutation = (productId) => {
   const api = useApi()
 
