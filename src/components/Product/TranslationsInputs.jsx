@@ -1,4 +1,4 @@
-import { component, keys } from '@dark-engine/core'
+import { component, detectIsArray, keys } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
 import { useStore } from '../../data'
@@ -12,20 +12,19 @@ const TranslationsInputs = component(({ translations, onChange }) => {
     const translationsMap = {}
     for (let i = 0, len = locales.length; i < len; i++) {
       const locale = locales[i]
-      if (locale.id === defaultLocaleId) {
-        continue
-      }
       translationsMap[locale.id] = {
         localeCode: locale.code,
         localeId: locale.id
       }
     }
 
-    for (let i = 0, len = translations.length; i < len; i++) {
-      const { localeId, title, subtitle, description } = translations[i]
-      translationsMap[localeId].title = title
-      translationsMap[localeId].subtitle = subtitle
-      translationsMap[localeId].description = description
+    if (detectIsArray(translations)) {
+      for (let i = 0, len = translations.length; i < len; i++) {
+        const { localeId, title, subtitle, description } = translations[i]
+        translationsMap[localeId].title = title
+        translationsMap[localeId].subtitle = subtitle
+        translationsMap[localeId].description = description
+      }
     }
 
     const handleChange = (e) => {
@@ -54,6 +53,10 @@ const TranslationsInputs = component(({ translations, onChange }) => {
     const localeIds = keys(translationsMap)
     for (let i = 0, len = localeIds.length; i < len; i++) {
       const localeId = localeIds[i]
+      if (localeId === defaultLocaleId) {
+        continue
+      }
+
       const translation = translationsMap[localeId]
       const { localeCode, title, subtitle, description } = translation
       const languageName = translator.formatName(localeCode, { type: 'language' })
@@ -75,7 +78,7 @@ const TranslationsInputs = component(({ translations, onChange }) => {
             {t('subtitle')}:
             <input
               type='text'
-              name='title'
+              name='subtitle'
               data-locale-id={localeId}
               value={subtitle}
               onInput={handleChange}
@@ -85,7 +88,7 @@ const TranslationsInputs = component(({ translations, onChange }) => {
             {t('description')}:
             <input
               type='text'
-              name='title'
+              name='description'
               data-locale-id={localeId}
               value={description}
               onInput={handleChange}

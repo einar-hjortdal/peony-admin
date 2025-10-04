@@ -78,7 +78,8 @@ const TranslationsEdit = component(({ productId, title, renderButton, slot }) =>
 
   const handleSave = () => {
     const newTranslations = [...translationsData, defaultTranslation]
-    updateProduct({ translations: newTranslations })
+    console.log(newTranslations)
+    // updateProduct({ translations: newTranslations })
   }
 
   let Button = 'button'

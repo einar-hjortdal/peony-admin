@@ -127,10 +127,10 @@ const NewProduct = component(({ modalRef }) => {
             </fieldset>
           </AccordionItem>
 
-          {/* <TranslationsInputs
-                  translations={productData.translations}
-                  onChange={handleTranslationsChange}
-             /> */}
+          <TranslationsInputs
+            translations={productData.translations}
+            onChange={handleTranslationsChange}
+          />
 
           <AccordionItem title={t('organize')}>
             <fieldset disabled={createProductIsFetching}>

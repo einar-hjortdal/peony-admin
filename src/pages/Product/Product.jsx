@@ -1,5 +1,6 @@
 import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
+import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import { useProductById, useProductDeleteMutation, useProductUpdateMutation } from '../../data'
@@ -22,19 +23,20 @@ import BadgeSuccess from '../../components/Badges/BadgeSuccess'
 import ButtonMore from '../../components/Buttons/ButtonMore'
 import EditGeneral from './EditGeneral'
 import Translations from './Translations'
-import { styled } from '@dark-engine/styled'
 
 const StatusUpdate = component(({ productId, status, slot }) => {
   const [updateProduct] = useProductUpdateMutation(productId)
-  const handlePublish = () => {
+
+  const handleStatusUpdate = () => {
     updateProduct({ status })
   }
 
-  return <button type='button' onClick={handlePublish}>{slot}</button>
+  return <button type='button' onClick={handleStatusUpdate}>{slot}</button>
 })
 
 const Delete = component(({ productId, slot }) => {
   const [deleteProduct] = useProductDeleteMutation(productId)
+
   const handleDelete = () => {
     deleteProduct()
   }
@@ -56,14 +58,10 @@ const Column = styled.div`
 `
 
 const Product = component(() => {
-  const { t, translator } = useTranslation('product')
+  const { t } = useTranslation('product')
   const params = useParams()
   const productId = params.get('id')
-  const {
-    data: productData,
-    isFetching: productIsFetching,
-    error: productError
-  } = useProductById(productId)
+  const { data: productData } = useProductById(productId)
 
   // TODO check for database changes when adding prices
   if (productData) {
@@ -126,7 +124,7 @@ const Product = component(() => {
                 <Column>{formatLine(subtitle)}</Column>
               </li>
 
-              {/* TODO description may be long. Trim if longer than, display on click? */}
+              {/* TODO description may be long. Trim if longer than x, display on click? */}
               <li>
                 <Column>{t('general.description')}</Column>
                 <Column>{formatLine(description)}</Column>
