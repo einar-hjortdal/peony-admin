@@ -1,28 +1,9 @@
-import {
-  component,
-  detectIsArray,
-  detectIsEmpty,
-  detectIsNull,
-  detectIsObject,
-  detectIsString,
-  detectIsUndefined,
-  keys,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from '@dark-engine/core'
+import { component, detectIsArray } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import {
-  useStore,
-  useProductById,
-  useProductUpdateMutation,
-  useDeleteVariantMutation
-} from '../../data'
-import If from '../../components/If'
+import { useProductById, useDeleteVariantMutation } from '../../data'
 import { formatLine } from '../../utils'
 import VariantAdd from './VariantAdd'
 import EditPrices from './EditPrices'
@@ -30,72 +11,6 @@ import VariantEdit from './VariantEdit'
 import ButtonMore from '../../components/Buttons/ButtonMore'
 import CardDefault from '../../components/Cards/CardDefault'
 import CardHeader from '../../components/Cards/CardHeader'
-
-const Options = component(({ productId, slot }) => {
-  const { t } = useTranslation('product.options')
-  const { data, isFetching, error } = useProductById(productId)
-  const {
-    data: storeData,
-    isFetching: storeIsFetching,
-    error: storeError, localesObject
-  } = useStore()
-
-  const optionElements = useMemo(() => {
-    if (detectIsEmpty(data) || detectIsEmpty(storeData)) {
-      return []
-    }
-
-    const { defaultLocaleId } = storeData.store
-    const { options } = data.product
-    if (detectIsArray(options)) {
-      const res = []
-      for (let i = 0, len = options.length; i < len; i++) {
-        const { translations } = options[i]
-        for (let k = 0, tlen = translations.length; k < tlen; k++) {
-          const translation = translations[k]
-          const { localeId, title } = translation
-          if (localeId === defaultLocaleId) {
-            res.push(<span>{title}</span>)
-            // TODO display translations on hover
-            // TODO display values with translations on click
-          }
-        }
-      }
-      return res
-    }
-
-    return []
-  }, [data, storeData])
-
-  if (data && storeData) {
-    return (
-      <div>
-        {t('options')}
-        <div>{optionElements}</div>
-      </div>
-    )
-  }
-})
-
-const VariantRowActions = component(({ productId, variant }) => {
-  const [deleteVariant, { data, isFetching, error }] = useDeleteVariantMutation(productId)
-
-  const handleDelete = () => {
-    const { id } = variant
-    deleteVariant(id)
-  }
-
-  return (
-    <div>
-      <ul>
-        <li><VariantEdit productId={productId} variant={variant} /></li>
-        <li><button>manage inventory</button></li>
-        <li><button>duplicate variant</button></li>
-        <li><button onClick={handleDelete} disabled={isFetching}>delete variant</button></li>
-      </ul>
-    </div>
-  )
-})
 
 const VariantRowInventory = component(({ manageInventory, inventoryQuantity }) => {
   const { t } = useTranslation('product.variantRowInventory')
@@ -105,13 +20,20 @@ const VariantRowInventory = component(({ manageInventory, inventoryQuantity }) =
   return t('unmanaged')
 })
 
-const VariantRow = component(({ productId, variant }) => {
-  const { title, ean, upc, inventoryQuantity, inventoryItem } = variant
-  const { manageInventory } = inventoryItem
-  const [isOpen, setIsOpen] = useState(false)
-  const handleOpen = () => {
-    setIsOpen(true)
+const VariantDeleteButton = ({ productId, variantId, slot }) => {
+  const [deleteVariant, { isFetching }] = useDeleteVariantMutation(productId)
+
+  const handleDelete = () => {
+    deleteVariant(variantId)
   }
+
+  return <button type='button' onClick={handleDelete} disabled={isFetching}>{slot}</button>
+}
+
+const VariantRow = component(({ productId, variant }) => {
+  const { t } = useTranslation('product.variants.row')
+  const { id, title, ean, upc, inventoryQuantity, inventoryItem } = variant
+  const { manageInventory } = inventoryItem
 
   return (
     <tr>
@@ -125,24 +47,46 @@ const VariantRow = component(({ productId, variant }) => {
         />
       </td>
       <td>
-        <button type='button' onClick={handleOpen}>
-          ...
-          <If condition={isOpen}>
-            <VariantRowActions productId={productId} variant={variant} />
-          </If>
-        </button>
+        <ButtonMore>
+          <li><VariantEdit productId={productId} variant={variant} /></li>
+          <li><button>manage inventory</button></li>
+          <li><button>duplicate variant</button></li>
+          <li>
+            <VariantDeleteButton
+              productId={productId}
+              variantId={id}
+            >{t('delete')}
+            </VariantDeleteButton>
+          </li>
+
+        </ButtonMore>
         {/* TODO dialog */}
       </td>
     </tr>
   )
 })
 
-const VariantsTable = component(({ productId }) => {
-  const { data, isFetching, error } = useProductById(productId)
-  const { t } = useTranslation('product.variantsTable')
+const StyledTable = styled.table`
+  width: 100%;
+`
 
-  if (data) {
-    const { variants } = data.product
+const StyledThead = styled.thead`
+  border-bottom: 1px solid ${(p) => p.theme.neutral20};
+`
+
+const StyledTh = styled.th`
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-weight: unset;
+  text-align: unset;
+`
+
+const VariantsTable = component(({ productId }) => {
+  const { data: productData } = useProductById(productId)
+  const { t } = useTranslation('product.variants.table')
+
+  if (productData) {
+    const { variants } = productData.product
     const rows = []
     if (detectIsArray(variants)) {
       for (let i = 0, len = variants.length; i < len; i++) {
@@ -152,46 +96,39 @@ const VariantsTable = component(({ productId }) => {
     }
 
     return (
-      <div>
-        <table>
-          <thead>
-            <th>title</th>
-            <th>ean</th>
-            <th>upc</th>
-            <th>inventory</th>
-            <th>actions</th>
-          </thead>
-          <tbody>
-            {rows}
-          </tbody>
-        </table>
-      </div>
+      <StyledTable>
+        <StyledThead>
+          <StyledTh>{t('title')}</StyledTh>
+          <StyledTh>{t('ean')}</StyledTh>
+          <StyledTh>{t('upc')}</StyledTh>
+          <StyledTh>{t('inventory')}</StyledTh>
+          <StyledTh>{t('actions')}</StyledTh>
+        </StyledThead>
+        <tbody>
+          {rows}
+        </tbody>
+      </StyledTable>
     )
   }
 
   return null
 })
 
+// peony should guarantee that a product always has at least one variant.
 const Variants = component(() => {
   const { t } = useTranslation('product.variants')
   const params = useParams()
   const productId = params.get('id')
-
   return (
     <CardDefault>
       <CardHeader title={t('title')}>
-        <VariantAdd productId={productId} />
         <ButtonMore type='button'>
+          <li><VariantAdd productId={productId} /></li>
           <li><EditPrices productId={productId} /></li>
         </ButtonMore>
       </CardHeader>
-      <div>
-        <Options productId={productId} />
-      </div>
-      <div>
-        variants
-        <VariantsTable productId={productId} />
-      </div>
+
+      <VariantsTable productId={productId} />
     </CardDefault>
   )
 })

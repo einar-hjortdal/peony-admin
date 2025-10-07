@@ -264,11 +264,14 @@ export const api = {
     return checkResponse(response)
   },
 
-  productVariantDelete: async (id) => {
-    const response = await fetch(getRequestUrl(`variants/${id}`), {
-      method: 'DELETE',
-      credentials: 'include'
-    })
+  productVariantDelete: async (productId, variantId) => {
+    const response = await fetch(
+      getRequestUrl(`products/${productId}/variants/${variantId}`),
+      {
+        method: 'DELETE',
+        credentials: 'include'
+      }
+    )
     return checkResponse(response)
   },
 

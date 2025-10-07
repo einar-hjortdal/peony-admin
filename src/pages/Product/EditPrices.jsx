@@ -193,29 +193,17 @@ const EditPrices = component(({ productId }) => {
   const {
     data: productData,
     isFetching: productIsFetching,
-    error: productError,
     translationsObject: productTranslationsObject
   } = useProductById(productId)
 
-  const {
-    data: storeData,
-    isFetching: storeIsFetching,
-    error: storeError
-  } = useStore()
+  const { data: storeData } = useStore()
+  const { data: regionsData } = useRegions()
 
-  const {
-    data: regionsData,
-    isFetching: regionsIsFetching,
-    error: regionsError
-  } = useRegions()
+  const [
+    updateVariants,
+    { isFetching: updateVariantsIsFetching }
+  ] = useUpdateVariantsMutation(productId)
 
-  const [updateVariants, {
-    data: updateVariantsData,
-    isFetching: updateVariantsIsFetching,
-    error: updateVarianstError
-  }] = useUpdateVariantsMutation(productId)
-
-  // TODO create state variables from storeData.currencies and regionsData.items
   const [currencyColumns, setCurrencyColumns] = useState([])
   const [regionColumns, setRegionColumns] = useState([])
   useEffect(() => {
@@ -408,6 +396,7 @@ const EditPrices = component(({ productId }) => {
 
   if (productData && storeData && regionsData) {
     const { variants } = productData.product
+    // TODO remove this (peony must guarantee there is always at least one variant per product)
     if (detectIsUndefined(variants)) {
       return null
     }

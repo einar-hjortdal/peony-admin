@@ -1,9 +1,10 @@
 import { component, detectIsNull, useEffect, useRef, useState } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
+import { useTranslation } from '@wareme/translations'
+
 import { useProductById, useProductUpdateMutation } from '../../data'
 import ModalDefault from '../../components/Modals/ModalDefault'
 import TranslationDefaultInputs from '../../components/Product/TranslationDefaultInputs'
-import { useTranslation } from '@wareme/translations'
 import ModalHeader from '../../components/Modals/ModalHeader'
 import ModalFooter from '../../components/Modals/ModalFooter'
 import PrimaryButton from '../../components/Buttons/PrimaryButton'

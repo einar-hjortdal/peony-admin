@@ -10,14 +10,15 @@ import If from '../../components/If'
 import ButtonMore from '../../components/Buttons/ButtonMore'
 import CardHeader from '../../components/Cards/CardHeader'
 
-const ExistingOptions = component(({ productId }) => {
+const Existing = component(({ productId }) => {
   const { data: productData } = useProductById(productId)
+  const { t } = useTranslation('product.options.existing')
 
   if (productData) {
     const { product } = productData
     const { options } = product
     if (detectIsUndefined(options)) {
-      return null
+      return t('noOptions')
     }
 
     const rows = []
@@ -52,7 +53,7 @@ const Options = component(() => {
         </ButtonMore>
       </CardHeader>
 
-      <ExistingOptions productId={productId} />
+      <Existing productId={productId} />
     </CardDefault>
   )
 })

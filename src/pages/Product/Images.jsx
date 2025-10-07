@@ -17,23 +17,23 @@ import ModalBody from '../../components/Modals/ModalBody'
 import CardDefault from '../../components/Cards/CardDefault'
 import CardHeader from '../../components/Cards/CardHeader'
 
-const PreviewWrapper = styled.div`
+const ImagePreviewWrapper = styled.div`
   display: inline-block;
   width: 10rem;
   height: 14rem;
 `
 
-const PreviewImg = styled.img`
+const StyledImg = styled.img`
   height: 100%;
   width: 100%;
   object-fit: cover;
 `
 
-const Preview = component(({ ...props }) => {
+const ImagePreview = component(({ ...props }) => {
   return (
-    <PreviewWrapper>
-      <PreviewImg {...props} />
-    </PreviewWrapper>
+    <ImagePreviewWrapper>
+      <StyledImg {...props} />
+    </ImagePreviewWrapper>
   )
 })
 
@@ -48,7 +48,7 @@ const ExistingImages = component(({ images }) => {
   for (let i = 0, len = images.length; i < len; i++) {
     const image = images[i]
     res.push(
-      <Preview src={image.url} alt={image.alt} />
+      <ImagePreview src={image.url} alt={image.alt} />
     )
   }
 
@@ -148,18 +148,17 @@ const AddImageButton = component(({ productId }) => {
       </div>
     )
   }
-
-  return null
 })
 
-const ImagesPreview = component(({ productId }) => {
+const Preview = component(({ productId }) => {
   const { data: productData } = useProductById(productId)
+  const { t } = useTranslation('product.images.preview')
 
   if (productData) {
     const { product } = productData
     const { images } = product
     if (detectIsUndefined(images)) {
-      return null
+      return t('noImages')
     }
 
     const previews = []
@@ -175,8 +174,6 @@ const ImagesPreview = component(({ productId }) => {
       </div>
     )
   }
-
-  return null
 })
 
 const Images = component(() => {
@@ -189,7 +186,7 @@ const Images = component(() => {
       <CardHeader title={t('title')}>
         <AddImageButton productId={productId} />
       </CardHeader>
-      <ImagesPreview productId={productId} />
+      <Preview productId={productId} />
     </CardDefault>
 
   )

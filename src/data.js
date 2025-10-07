@@ -317,11 +317,15 @@ export const useVariantUpdateMutation = (productId) => {
 
 export const useDeleteVariantMutation = (productId) => {
   const api = useApi()
-  return useMutation(dataKeys.productVariantDelete, (id) => api.productVariantDelete(id), {
-    onSuccess: ({ cache }) => {
-      cache.invalidate(dataKeys.productGetById, { id: productId })
+  return useMutation(
+    dataKeys.productVariantDelete,
+    (variantId) => api.productVariantDelete(productId, variantId),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      }
     }
-  })
+  )
 }
 
 // expects an object with variant_id keys and ProductVariantRequest values
