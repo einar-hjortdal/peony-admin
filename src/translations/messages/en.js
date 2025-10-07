@@ -44,6 +44,8 @@ export default freeze({
   'currencies.storeCurrencies.includesTax': 'tax incl. prices',
   'currencies.title': 'currencies',
   'header.language.language': 'language',
+  'layout.themeSwitch.light': 'light',
+  'layout.themeSwitch.dark': 'dark',
   'locales.defaultLocale.description': 'this is the langauge content is shown in by default',
   'locales.defaultLocale.title': 'default language',
   'locales.description': 'all locales supported by your store',

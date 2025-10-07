@@ -70,6 +70,7 @@ const StyledHeader = styled.header`
   right: 0;
   left: ${p => p.theme.asideWidth};
   height: ${p => p.theme.headerHeight};
+  background-color: ${p => p.theme.bg};
   border-bottom: 1px solid ${p => p.theme.neutral30};
   align-content: center;
   padding-left: .75rem;

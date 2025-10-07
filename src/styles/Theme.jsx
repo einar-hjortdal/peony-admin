@@ -152,7 +152,7 @@ const Theme = component(({ slot }) => {
     }
   }
 
-  const value = { selectedThemeName, switchTheme }
+  const value = { selectedThemeName, switchTheme, themeNameDark, themeNameLight }
 
   return (
     <ThemeSwitcherContext value={value}>
