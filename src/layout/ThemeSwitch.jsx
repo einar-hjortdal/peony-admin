@@ -3,24 +3,27 @@ import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import { useThemeSwitcher } from '../styles/Theme'
-import { nisha } from '@wareme/utils'
 
 const StyledDiv = styled.div`
   display: inline-block;
-  padding-top: .4rem;
-  padding-right: .4rem;
-  padding-bottom: .4rem;
-  padding-left: .4rem;
+  padding-top: .375rem;
+  padding-right: .375rem;
+  padding-bottom: .375rem;
+  padding-left: .375rem;
   border-radius: 20rem;
   border: 1px solid ${p => p.theme.neutral30};
 `
 
 const StyledButton = styled.button`
-  color: ${p => nisha(p.$isActive, p.theme.neutral00, p.theme.fg)};
-  background-color: ${p => nisha(p.$isActive, p.theme.warning, p.theme.bg)};
-  height: 2rem;
-  width: 2rem;
+  background-color: ${p => p.theme.bg};
+  height: 2.25rem;
+  width: 2.25rem;
   border-radius: 50%;
+
+  &:disabled{
+    color: ${p => p.theme.neutral00};
+    background-color: ${p => p.theme.warning}
+  }
 `
 
 const ThemeSwitch = component(() => {
@@ -33,7 +36,6 @@ const ThemeSwitch = component(() => {
         type='button'
         aria-label={t('light')}
         onClick={switchTheme}
-        $isActive={selectedThemeName === themeNameLight}
         disabled={selectedThemeName === themeNameLight}
       >
         sun
@@ -42,7 +44,6 @@ const ThemeSwitch = component(() => {
         type='button'
         aria-label={t('dark')}
         onClick={switchTheme}
-        $isActive={selectedThemeName === themeNameDark}
         disabled={selectedThemeName === themeNameDark}
       >
         moon
