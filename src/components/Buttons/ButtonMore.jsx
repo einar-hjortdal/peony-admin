@@ -1,7 +1,7 @@
+import { component, useState } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
-
-import { component, detectIsArray, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
+
 import If from '../If'
 
 const StyledButton = styled.button`
@@ -22,6 +22,7 @@ const StyledDiv = styled.div`
   position: relative;
   display: inline-block;
 `
+
 const StyledUl = styled.ul`
   position: absolute;
   border-radius: .3rem;

@@ -12,6 +12,7 @@ const StyledDiv = styled.div`
   padding-left: .375rem;
   border-radius: 20rem;
   border: 1px solid ${p => p.theme.neutral30};
+  vertical-align: middle;
 `
 
 const StyledButton = styled.button`
@@ -19,10 +20,12 @@ const StyledButton = styled.button`
   height: 2.25rem;
   width: 2.25rem;
   border-radius: 50%;
+  cursor: pointer;
 
   &:disabled{
     color: ${p => p.theme.neutral00};
-    background-color: ${p => p.theme.warning}
+    background-color: ${p => p.theme.warning};
+    cursor: auto;
   }
 `
 

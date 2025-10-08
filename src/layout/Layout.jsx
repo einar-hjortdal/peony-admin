@@ -77,6 +77,16 @@ const StyledHeader = styled.header`
   padding-right: .75rem;
 `
 
+const HeaderLeft = styled.div`
+  display: inline-block;
+  width: 50%;
+`
+const HeaderRight = styled.div`
+  display: inline-block;
+  width: 50%;
+  text-align: right;
+`
+
 const StyledMain = styled.main`
   box-sizing: border-box;
   padding-top: ${p => p.theme.headerHeight};
@@ -98,10 +108,15 @@ const Layout = component(({ slot }) => {
       <Gate>
         <SmoothScrollingProvider root>
           <StyledHeader>
-            <ThemeSwitch />
-            <LanguageSelect />
-            {/* TODO notifications */}
-            <User />
+            <HeaderLeft>
+              {/* TODO search */}
+            </HeaderLeft>
+            <HeaderRight>
+              {/* TODO notifications */}
+              <ThemeSwitch />
+              <LanguageSelect />
+              <User />
+            </HeaderRight>
           </StyledHeader>
 
           <StyledAside>
