@@ -1,8 +1,8 @@
 import { component, detectIsNull, useEffect, useMemo, useRef, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductCategories, useProductUpdateMutation } from '../../../data'
-import ModalDefault from '../../../components/Modals/ModalDefault'
+import { useProductCategories, useProductUpdateMutation } from '../../../../data'
+import ModalDefault from '../../../../components/Modals/ModalDefault'
 
 const CategoriesSet = component(({ categoryIds, onChange }) => {
   const {

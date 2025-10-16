@@ -6,7 +6,6 @@ import { useSalesChannels, useStore, useStoreUpdateMutation } from '../../data'
 import Locales from './Locales'
 import Currencies from './Currencies'
 import SalesChannels from './SalesChannels'
-import DefaultCurrency from './DefaultCurrency'
 import DefaultLocale from './DefaultLocale'
 import ColumnLarge from '../../components/Columns/ColumnLarge'
 import ColumnSmall from '../../components/Columns/ColumnSmall'
@@ -62,6 +61,7 @@ const Store = component(() => {
     const {
       defaultLocaleId,
       defaultCurrencyCode,
+      defaultRegionId,
       defaultStockLocationId,
       defaultSalesChannelId
     } = storeData.store
@@ -93,6 +93,10 @@ const Store = component(() => {
               <span>{defaultLocaleCode}</span>
             </div>
             <div>
+              <span>default region id</span>
+              <span>{defaultRegionId}</span>
+            </div>
+            <div>
               <span>{t('defaultStockLocation')}</span>
               <span>{defaultStockLocationId}</span>
             </div>
@@ -109,7 +113,6 @@ const Store = component(() => {
 
         <ColumnSmall>
           <DefaultLocale />
-          <DefaultCurrency />
         </ColumnSmall>
 
       </>

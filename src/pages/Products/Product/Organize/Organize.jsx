@@ -1,13 +1,13 @@
 import { component, useState } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
+import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import ButtonMore from '../../../components/Buttons/ButtonMore'
-import { styled } from '@dark-engine/styled'
-import CategoriesEdit from './CategoriesEdit'
+import ButtonMore from '../../../../components/Buttons/ButtonMore'
+import CardDefault from '../../../../components/Cards/CardDefault'
+import CardHeader from '../../../../components/Cards/CardHeader'
 import CategoriesList from './CategoriesList'
-import CardDefault from '../../../components/Cards/CardDefault'
-import CardHeader from '../../../components/Cards/CardHeader'
+import CategoriesEdit from './CategoriesEdit'
 
 const StyledDiv = styled.div`
   display: inline-block;

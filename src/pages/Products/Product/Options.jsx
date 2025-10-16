@@ -3,12 +3,11 @@ import { useParams } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductById } from '../../data'
-import CardDefault from '../../components/Cards/CardDefault'
+import { useProductById } from '../../../data'
+import CardDefault from '../../../components/Cards/CardDefault'
+import ButtonMore from '../../../components/Buttons/ButtonMore'
+import CardHeader from '../../../components/Cards/CardHeader'
 import EditOptions from './EditOptions'
-import If from '../../components/If'
-import ButtonMore from '../../components/Buttons/ButtonMore'
-import CardHeader from '../../components/Cards/CardHeader'
 
 const Existing = component(({ productId }) => {
   const { data: productData } = useProductById(productId)

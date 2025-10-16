@@ -1,6 +1,7 @@
 import { lazy } from '@dark-engine/core'
 
 import Layout from './layout'
+import NoLayout from './layout/NoLayout'
 
 export const routes = [
   {
@@ -21,27 +22,43 @@ export const routes = [
       },
       {
         path: 'products',
-        component: lazy(() => import('./pages/Products'))
-      },
-      {
-        path: 'product/:id',
-        component: lazy(() => import('./pages/Product'))
-      },
-      {
-        path: 'categories',
-        component: lazy(() => import('./pages/Categories'))
+        component: NoLayout,
+        children: [
+          {
+            path: '',
+            component: lazy(() => import('./pages/Products'))
+          },
+          {
+            path: 'new',
+            component: lazy(() => import('./pages/Products/New'))
+          },
+          {
+            path: ':id',
+            component: lazy(() => import('./pages/Products/Product'))
+          },
+          {
+            path: 'categories',
+            component: lazy(() => import('./pages/Categories'))
+          }
+        ]
       },
       {
         path: 'settings',
-        component: lazy(() => import('./pages/Settings'))
-      },
-      {
-        path: 'regions',
-        component: lazy(() => import('./pages/Regions'))
-      },
-      {
-        path: 'store',
-        component: lazy(() => import('./pages/Store'))
+        component: NoLayout,
+        children: [
+          {
+            path: '',
+            component: lazy(() => import('./pages/Settings'))
+          },
+          {
+            path: 'regions',
+            component: lazy(() => import('./pages/Regions'))
+          },
+          {
+            path: 'store',
+            component: lazy(() => import('./pages/Store'))
+          }
+        ]
       },
       {
         path: 'not-found',

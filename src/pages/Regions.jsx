@@ -65,7 +65,7 @@ const Regions = component(() => {
     const listItems = []
     for (let i = 0, len = regions.length; i < len; i++) {
       const region = regions[i]
-      listItems.push(<RegionRow regions={region} />)
+      listItems.push(<RegionRow region={region} />)
     }
 
     return (

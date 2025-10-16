@@ -10,19 +10,19 @@ import {
   useState
 } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
+import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { useLocaleById, useProductById, useProductUpdateMutation, useStore } from '../../data'
-import If from '../../components/If'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
-import ButtonMore from '../../components/Buttons/ButtonMore'
-import ModalDefault from '../../components/Modals/ModalDefault'
-import ModalHeader from '../../components/Modals/ModalHeader'
-import ModalFooter from '../../components/Modals/ModalFooter'
-import PrimaryButton from '../../components/Buttons/PrimaryButton'
-import TranslationsInputs from '../../components/Product/TranslationsInputs'
-import { styled } from '@dark-engine/styled'
+import { useLocaleById, useProductById, useProductUpdateMutation, useStore } from '../../../data'
+import If from '../../../components/If'
+import CardDefault from '../../../components/Cards/CardDefault'
+import CardHeader from '../../../components/Cards/CardHeader'
+import ButtonMore from '../../../components/Buttons/ButtonMore'
+import ModalDefault from '../../../components/Modals/ModalDefault'
+import ModalHeader from '../../../components/Modals/ModalHeader'
+import ModalFooter from '../../../components/Modals/ModalFooter'
+import PrimaryButton from '../../../components/Buttons/PrimaryButton'
+import TranslationsInputs from '../../../components/Product/TranslationsInputs'
 
 const TranslationsEdit = component(({ productId, title, renderButton, slot }) => {
   const [updateProduct] = useProductUpdateMutation(productId)

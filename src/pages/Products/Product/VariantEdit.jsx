@@ -7,15 +7,15 @@ import {
 } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import { useVariantUpdateMutation } from '../../data'
+import { useVariantUpdateMutation } from '../../../data'
+import MetadataInputs from '../../../components/MetadataInputs'
+import ModalDefault from '../../../components/Modals/ModalDefault'
+import ModalHeader from '../../../components/Modals/ModalHeader'
+import ModalFooter from '../../../components/Modals/ModalFooter'
+import ModalBody from '../../../components/Modals/ModalBody'
+import CardDefault from '../../../components/Cards/CardDefault'
+import CardHeader from '../../../components/Cards/CardHeader'
 import VariantInputs from './VariantInputs'
-import MetadataInputs from '../../components/MetadataInputs'
-import ModalDefault from '../../components/Modals/ModalDefault'
-import ModalHeader from '../../components/Modals/ModalHeader'
-import ModalFooter from '../../components/Modals/ModalFooter'
-import ModalBody from '../../components/Modals/ModalBody'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
 
 const VariantEdit = component(({ productId, variant }) => {
   const { t } = useTranslation('product.variantEdit')

@@ -1,7 +1,7 @@
 import { component, detectIsEmpty, detectIsUndefined, keys, useEffect, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import { useCountries, useProductById, useStore } from '../../data'
+import { useCountries, useProductById, useStore } from '../../../data'
 
 const OptionValues = component(({ productId, variantData, setVariantData }) => {
   const { t } = useTranslation('product.variantInputs.optionValues')

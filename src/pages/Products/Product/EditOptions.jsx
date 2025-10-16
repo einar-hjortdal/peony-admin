@@ -18,12 +18,11 @@ import {
   useProductOptionDeleteMutation,
   useProductOptionCreateMutation,
   useProductOptionUpdateMutation
-} from '../../data'
-import If from '../../components/If'
-import PrimaryButton from '../../components/Buttons/PrimaryButton'
-import ModalDefault from '../../components/Modals/ModalDefault'
-import ModalHeader from '../../components/Modals/ModalHeader'
-import ModalBody from '../../components/Modals/ModalBody'
+} from '../../../data'
+import If from '../../../components/If'
+import ModalDefault from '../../../components/Modals/ModalDefault'
+import ModalHeader from '../../../components/Modals/ModalHeader'
+import ModalBody from '../../../components/Modals/ModalBody'
 
 const OptionTranslation = component(({ locale, onInput, onBlur, value, handleDelete }) => {
   const { t, translator } = useTranslation('product.editOptions.optionTranslation')

@@ -3,14 +3,14 @@ import { useParams } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductById, useDeleteVariantMutation } from '../../data'
-import { formatLine } from '../../utils'
-import VariantAdd from './VariantAdd'
+import { useProductById, useDeleteVariantMutation } from '../../../data'
+import { formatLine } from '../../../utils'
+import ButtonMore from '../../../components/Buttons/ButtonMore'
+import CardDefault from '../../../components/Cards/CardDefault'
+import CardHeader from '../../../components/Cards/CardHeader'
 import EditPrices from './EditPrices'
 import VariantEdit from './VariantEdit'
-import ButtonMore from '../../components/Buttons/ButtonMore'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
+import VariantAdd from './VariantAdd'
 
 const VariantRowInventory = component(({ manageInventory, inventoryQuantity }) => {
   const { t } = useTranslation('product.variantRowInventory')

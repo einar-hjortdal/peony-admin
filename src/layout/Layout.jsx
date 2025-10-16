@@ -126,12 +126,13 @@ const Layout = component(({ slot }) => {
                 <li><NavLink to='/orders'>orders</NavLink></li>
                 <li><NavLink to='/products'>products</NavLink></li>
                 {/* <li><NavLink to='/collections'>collections</NavLink></li> */}
-                <li><NavLink to='/categories'>categories</NavLink></li>
-                {/* <li><NavLink to='/customers'>customers</NavLink></li> */}
-                {/* <li><NavLink to='/groups'>groups</NavLink></li> */}
                 {/* <li><NavLink to='/discounts'>discounts</NavLink></li> */}
                 {/* <li><NavLink to='/gift-cards'>gift cards</NavLink></li> */}
                 {/* <li><NavLink to='/pricing'>pricing</NavLink></li> */}
+
+                {/* <li><NavLink to='/customers'>customers</NavLink></li> */}
+                {/* <li><NavLink to='/groups'>groups</NavLink></li> */}
+
                 {/* <li><NavLink to='/pages'>pages</NavLink></li> */}
                 {/* <li><NavLink to='/posts'>posts</NavLink></li> */}
                 <li><NavLink to='/settings'>settings</NavLink></li>

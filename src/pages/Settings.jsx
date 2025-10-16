@@ -35,22 +35,22 @@ const Settings = component(() => {
   return (
     <>
       <SettingCard
-        to='/regions'
+        to='/settings/regions'
         title={t('regions.title')}
         description={t('regions.description')}
       />
       {/* <SettingCard
-        to='/taxes'
+        to='/settings/taxes'
         title={t('taxes.title')}
         description={t('taxes.description')}
       />
       <SettingCard
-        to='/users'
+        to='/settings/users'
         title={t('users.title')}
         description={t('users.description')}
       /> */}
       <SettingCard
-        to='/store'
+        to='/settings/store'
         title={t('store.title')}
         description={t('store.description')}
       />

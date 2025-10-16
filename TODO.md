@@ -16,11 +16,11 @@
 
 ## Currently working on
 
+- [ ] Regions
 - [ ] Inventory items
 
 ## Working on soon
 
-- [ ] Regions
 - [ ] Sales channels
 - [ ] Taxes
 - [ ] Stock locations

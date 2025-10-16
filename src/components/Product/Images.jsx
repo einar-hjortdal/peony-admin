@@ -8,14 +8,14 @@ import {
 
 import { useProductById, useUploadProductImageMutation } from '../../data'
 import { useTranslation } from '@wareme/translations'
-import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import PrimaryButton from '../Buttons/PrimaryButton'
 import { useParams } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
-import ModalDefault from '../../components/Modals/ModalDefault'
-import ModalHeader from '../../components/Modals/ModalHeader'
-import ModalBody from '../../components/Modals/ModalBody'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
+import ModalDefault from '../Modals/ModalDefault'
+import ModalHeader from '../Modals/ModalHeader'
+import ModalBody from '../Modals/ModalBody'
+import CardDefault from '../Cards/CardDefault'
+import CardHeader from '../Cards/CardHeader'
 
 const ImagePreviewWrapper = styled.div`
   display: inline-block;

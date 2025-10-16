@@ -2,10 +2,10 @@ import { component, useState } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductById, useProductUpdateMutation } from '../../data'
-import MetadataInputs from '../../components/MetadataInputs'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
+import { useProductById, useProductUpdateMutation } from '../../../data'
+import MetadataInputs from '../../../components/MetadataInputs'
+import CardDefault from '../../../components/Cards/CardDefault'
+import CardHeader from '../../../components/Cards/CardHeader'
 
 const Metadata = component(() => {
   const { t } = useTranslation('product.metadata')

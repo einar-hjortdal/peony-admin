@@ -1,8 +1,9 @@
 import { component, detectIsUndefined, useEffect, useMemo } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import Input from '../Input'
 import { useStore } from '../../data'
+import Text from '../input/Text'
+import Textarea from '../input/InputTextarea'
 
 const TranslationDefaultInputs = component(({ translations, onChange }) => {
   const { t } = useTranslation('translationDefaultInputs')
@@ -57,24 +58,26 @@ const TranslationDefaultInputs = component(({ translations, onChange }) => {
 
     return (
       <>
-        <Input
+        <Text
           name='title'
           onInput={handleInput}
           value={title}
         >{t('title')}
-        </Input>
-        <Input
+        </Text>
+
+        <Text
           name='subtitle'
           onInput={handleInput}
           value={subtitle}
         >{t('subtitle')}
-        </Input>
-        <Input
+        </Text>
+
+        <Textarea
           name='description'
           onInput={handleInput}
           value={description}
         >{t('description')}
-        </Input>
+        </Textarea>
       </>
     )
   }

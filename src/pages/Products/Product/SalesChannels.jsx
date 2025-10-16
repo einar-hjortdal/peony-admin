@@ -3,10 +3,10 @@ import { useParams } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
 import { Translate, useTranslation } from '@wareme/translations'
 
-import { useProductById, useSalesChannels } from '../../data'
-import ButtonMore from '../../components/Buttons/ButtonMore'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
+import { useProductById, useSalesChannels } from '../../../data'
+import ButtonMore from '../../../components/Buttons/ButtonMore'
+import CardDefault from '../../../components/Cards/CardDefault'
+import CardHeader from '../../../components/Cards/CardHeader'
 
 const SalesChannelsList = component(({ salesChannels }) => {
   if (salesChannels.length === 0) {

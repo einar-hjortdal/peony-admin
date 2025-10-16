@@ -20,12 +20,11 @@ import {
   // useUpdateProductMutation,
   useRegions,
   useUpdateVariantsMutation
-} from '../../data'
-import { formatLine } from '../../utils'
-import If from '../../components/If'
-import ButtonMore from '../../components/Buttons/ButtonMore'
-import ModalDefault from '../../components/Modals/ModalDefault'
-import ModalHeader from '../../components/Modals/ModalHeader'
+} from '../../../data'
+import { formatLine } from '../../../utils'
+import ButtonMore from '../../../components/Buttons/ButtonMore'
+import ModalDefault from '../../../components/Modals/ModalDefault'
+import ModalHeader from '../../../components/Modals/ModalHeader'
 
 // handles simple pricing: no quantity-based prices.
 // quantity-based prices pricing needs a less "convenient" layout.

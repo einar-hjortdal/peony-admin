@@ -2,14 +2,14 @@ import { component, detectIsNull, useEffect, useRef, useState } from '@dark-engi
 import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductById, useProductUpdateMutation } from '../../data'
-import ModalDefault from '../../components/Modals/ModalDefault'
-import TranslationDefaultInputs from '../../components/Product/TranslationDefaultInputs'
-import ModalHeader from '../../components/Modals/ModalHeader'
-import ModalFooter from '../../components/Modals/ModalFooter'
-import PrimaryButton from '../../components/Buttons/PrimaryButton'
-import HandleInput from '../../components/HandleInput'
-import Switch from '../../components/Switch'
+import { useProductById, useProductUpdateMutation } from '../../../data'
+import ModalDefault from '../../../components/Modals/ModalDefault'
+import TranslationDefaultInputs from '../../../components/Product/TranslationDefaultInputs'
+import ModalHeader from '../../../components/Modals/ModalHeader'
+import ModalFooter from '../../../components/Modals/ModalFooter'
+import PrimaryButton from '../../../components/Buttons/PrimaryButton'
+import HandleInput from '../../../components/input/Handle'
+import Switch from '../../../components/Switch'
 
 const EditGeneral = component(() => {
   const params = useParams()

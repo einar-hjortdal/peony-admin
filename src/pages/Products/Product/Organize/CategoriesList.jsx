@@ -1,6 +1,6 @@
 import { component } from '@dark-engine/core'
 
-import { useProductCategories } from '../../../data'
+import { useProductCategories } from '../../../../data'
 
 const CategoriesList = component(({ productId }) => {
   const { data: productCategoriesData } = useProductCategories({ product_ids: productId })
