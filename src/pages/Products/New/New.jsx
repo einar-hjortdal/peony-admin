@@ -21,6 +21,7 @@ import SetTitle from '../../../components/SetTitle'
 import Status from '../../../components/Product/Status'
 import RowRight from '../../../components/Rows/RowRight'
 import PrimaryButton from '../../../components/Buttons/PrimaryButton'
+import Options from './Options'
 
 const ProductNew = component(({ modalRef }) => {
   const { t } = useTranslation('products.new')
@@ -133,7 +134,7 @@ const ProductNew = component(({ modalRef }) => {
         />
 
         {/* TODO images */}
-        {/* TODO options and option values */}
+        <Options options={productData.options} />
       </ColumnLarge>
 
       <ColumnSmall>

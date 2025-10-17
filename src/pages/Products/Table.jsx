@@ -39,7 +39,7 @@ const Actions = component(({ product }) => {
     <div>
       <ul>
         <li>
-          <Link to={`/product/${id}`}>{t('edit')}</Link>
+          <Link to={`/products/${id}`}>{t('edit')}</Link>
         </li>
 
         <If condition={status === constants.statusDraft}>
@@ -155,7 +155,7 @@ const Table = component(({ products, defaultLocaleId }) => {
 
     rows.push(
       <tr key={product.id}>
-        <td><Link to={`/product/${id}`}>{title}</Link></td>
+        <td><Link to={`/products/${id}`}>{title}</Link></td>
         <td>-</td>{/* TODO collection */}
         <td>{product.status}</td>
         <td>{sc}</td>
