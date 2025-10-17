@@ -11,6 +11,24 @@ const Container = styled.div`
   border-radius: .3125rem;
 `
 
+// TODO refactor, the index game is too complex, just return a whole values array or the whole value
+const ProductOptionValueEdit = component(({ value, index, defaultLocaleId, onInput }) => {
+  const { translations } = value
+  const defaultTranslation = getTranslation(translations, defaultLocaleId).translation
+  console.log(defaultTranslation)
+  // if isDefault no delete
+  return (
+    <Text
+      name='name'
+      value={defaultTranslation.name}
+      data-locale-id={defaultTranslation.localeId}
+      data-index={index}
+      placeholder='Green' // TODO change to t func
+      onInput={onInput}
+    />
+  )
+})
+
 const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
   const { data: storeData } = useStore()
   const [optionData, setOptionData] = useState(option)
@@ -36,7 +54,13 @@ const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
     }
 
     if (name === 'name') { // value
-
+      const { index } = e.target.dataset
+      setOptionData(prevState => {
+        const newValues = [...prevState.values]
+        const newValue = { localeId, name: value }
+        newValues[index] = newValue
+        return { ...prevState, values: newValues }
+      })
     }
   }
 
@@ -97,11 +121,27 @@ const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
     saveOption(optionData)
   }
 
+  console.log(optionData)
+
   if (storeData) {
     const { translations, values } = option
     const { defaultLocaleId } = storeData.store
 
     const defaultOptionTranslation = getTranslation(translations, defaultLocaleId).translation
+
+    const valueInputs = []
+    for (let i = 0, len = values.length; i < len; i++) {
+      const value = values[i]
+      valueInputs.push(
+        <ProductOptionValueEdit
+          key={i}
+          value={value}
+          index={i}
+          defaultLocaleId={defaultLocaleId}
+          onInput={handleInput}
+        />
+      )
+    }
 
     return (
       <Container>
@@ -112,7 +152,8 @@ const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
           placeholder='Color' // TODO change to t func
           onInput={handleInput}
         />
-        {/* values */}
+
+        {valueInputs}
 
         <PrimaryButton type='button' onClick={handleSave}>save</PrimaryButton>
         <PrimaryButton type='button' onClick={deleteOption}>delete</PrimaryButton>

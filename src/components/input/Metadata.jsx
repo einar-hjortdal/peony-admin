@@ -1,8 +1,17 @@
-import { component, detectIsFunction, detectIsString, detectIsUndefined, hasKeys, keys, useEffect, useState } from '@dark-engine/core'
+import {
+  component,
+  detectIsFunction,
+  detectIsString,
+  detectIsUndefined,
+  hasKeys,
+  keys,
+  useEffect,
+  useState
+} from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
 // accepts raw metadata string, will parse it internally
-const MetadataInputs = component(({ metadata, onChange }) => {
+const Metadata = component(({ metadata, onChange }) => {
   const { t } = useTranslation('metadataInputs')
   const [newMetadata, setNewMetadata] = useState({})
 
@@ -101,4 +110,4 @@ const MetadataInputs = component(({ metadata, onChange }) => {
   return (<ul>{rows}</ul>)
 })
 
-export default MetadataInputs
+export default Metadata

@@ -7,7 +7,7 @@ import ModalBody from '../../components/modals/ModalBody'
 import ModalFooter from '../../components/modals/ModalFooter'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
 import CategoryInputs from './CategoryInputs'
-import MetadataInputs from '../../components/MetadataInputs'
+import MetadataInputs from '../../components/input/Metadata'
 import CardDefault from '../../components/cards/CardDefault'
 import CardHeader from '../../components/cards/CardHeader'
 

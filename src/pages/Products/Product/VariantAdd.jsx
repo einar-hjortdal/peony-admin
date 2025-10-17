@@ -9,7 +9,7 @@ import { useTranslation } from '@wareme/translations'
 
 import { useVariantCreateMutation } from '../../../data'
 import PrimaryButton from '../../../components/buttons/PrimaryButton'
-import MetadataInputs from '../../../components/MetadataInputs'
+import MetadataInputs from '../../../components/input/Metadata'
 import ModalDefault from '../../../components/modals/ModalDefault'
 import ModalHeader from '../../../components/modals/ModalHeader'
 import ModalBody from '../../../components/modals/ModalBody'

@@ -3,7 +3,7 @@ import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
 import { useProductById, useProductUpdateMutation } from '../../../data'
-import MetadataInputs from '../../../components/MetadataInputs'
+import MetadataInputs from '../../../components/input/Metadata'
 import CardDefault from '../../../components/cards/CardDefault'
 import CardHeader from '../../../components/cards/CardHeader'
 

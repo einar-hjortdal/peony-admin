@@ -8,7 +8,7 @@ import ButtonMore from '../../../components/buttons/ButtonMore'
 import PrimaryButton from '../../../components/buttons/PrimaryButton'
 import If from '../../../components/If'
 import { useStore } from '../../../data'
-import Text from '../../../components/input/Text'
+import ProductOptionEdit from '../../../components/products/ProductOptionEdit'
 
 const AddButton = styled.button`
   text-align: unset;
@@ -104,7 +104,7 @@ const AddOption = component(({ buttonText, onAdd }) => {
 
   if (storeData && isOpen) {
     return (
-      <Edit
+      <ProductOptionEdit
         option={optionData}
         saveOption={handleSave}
         deleteOption={handleDelete}

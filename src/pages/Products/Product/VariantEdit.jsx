@@ -8,7 +8,7 @@ import {
 import { useTranslation } from '@wareme/translations'
 
 import { useVariantUpdateMutation } from '../../../data'
-import MetadataInputs from '../../../components/MetadataInputs'
+import MetadataInputs from '../../../components/input/Metadata'
 import ModalDefault from '../../../components/modals/ModalDefault'
 import ModalHeader from '../../../components/modals/ModalHeader'
 import ModalFooter from '../../../components/modals/ModalFooter'
