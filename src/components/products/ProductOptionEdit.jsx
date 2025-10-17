@@ -1,0 +1,125 @@
+import { component, detectIsUndefined, useState } from '@dark-engine/core'
+import { styled } from '@dark-engine/styled'
+
+import { getTranslation } from './utils'
+import { useStore } from '../../data'
+import PrimaryButton from '../buttons/PrimaryButton'
+import Text from '../input/Text'
+
+const Container = styled.div`
+  border: 1px solid ${p => p.theme.neutral30};
+  border-radius: .3125rem;
+`
+
+const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
+  const { data: storeData } = useStore()
+  const [optionData, setOptionData] = useState(option)
+
+  const handleInput = (e) => {
+    const { name, value } = e.target
+    const { localeId } = e.target.dataset
+
+    if (name === 'title') { // option
+      setOptionData(prevState => {
+        const { translations } = prevState
+        const newTranslations = [...translations]
+        const translation = getTranslation(translations, localeId)
+        if (detectIsUndefined(translation)) {
+          newTranslations.push({ localeId, title: value })
+          return { ...prevState, translations: newTranslations }
+        }
+        const { index } = translation
+        const newTranslation = { ...newTranslations[index], title: value }
+        newTranslations[index] = newTranslation
+        return { ...prevState, translations: newTranslations }
+      })
+    }
+
+    if (name === 'name') { // value
+
+    }
+  }
+
+  const isEmptyString = (s) => {
+    return s.trim().length === 0 || s === ''
+  }
+
+  const handleSave = () => {
+    const { defaultLocaleId } = storeData.store
+    const { translations, values } = optionData
+    if (translations.length === 0 || values.length === 0) {
+      console.error(`translations.length: ${translations.length}, values.length :${values.length}`)
+      return // TODO error
+    }
+
+    let defaultOptionTranslationExists = false
+    for (let i = 0, len = translations.length; i < len; i++) {
+      const { localeId, title } = translations[i]
+
+      if (localeId === defaultLocaleId) {
+        defaultOptionTranslationExists = true
+
+        if (isEmptyString(title)) {
+          console.error('default title is empty')
+          return // TODO error
+        }
+      }
+    }
+
+    if (!defaultOptionTranslationExists) {
+      console.error('default option translation doesn\'t exist')
+      return // TODO error
+    }
+
+    for (let i = 0, len = values.length; i < len; i++) {
+      const { translations } = values[i]
+      let defaultValueTranslationExists = false
+
+      for (let j = 0, jlen = translations.length; j < jlen; j++) {
+        const { localeId, name } = translations[j]
+
+        if (localeId === defaultLocaleId) {
+          defaultValueTranslationExists = true
+
+          if (isEmptyString(name)) {
+            console.error('default name is empty')
+            return // TODO error
+          }
+        }
+      }
+
+      if (!defaultValueTranslationExists) {
+        console.error('default value translation doesn\'t exist')
+        return // TODO error
+      }
+    }
+
+    saveOption(optionData)
+  }
+
+  if (storeData) {
+    const { translations, values } = option
+    const { defaultLocaleId } = storeData.store
+
+    const defaultOptionTranslation = getTranslation(translations, defaultLocaleId).translation
+
+    return (
+      <Container>
+        <Text
+          name='title'
+          value={defaultOptionTranslation.title}
+          data-locale-id={defaultLocaleId}
+          placeholder='Color' // TODO change to t func
+          onInput={handleInput}
+        />
+        {/* values */}
+
+        <PrimaryButton type='button' onClick={handleSave}>save</PrimaryButton>
+        <PrimaryButton type='button' onClick={deleteOption}>delete</PrimaryButton>
+        {/* delete, save buttons */}
+      </Container>
+    )
+  }
+})
+
+export default ProductOptionEdit

@@ -4,10 +4,10 @@ import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import { constants, useProducts, useStore } from '../../data'
-import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import PrimaryButton from '../../components/buttons/PrimaryButton'
 import SetTitle from '../../components/SetTitle'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
+import CardDefault from '../../components/cards/CardDefault'
+import CardHeader from '../../components/cards/CardHeader'
 import Table from './Table'
 import If from '../../components/If'
 

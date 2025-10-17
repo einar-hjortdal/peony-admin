@@ -8,12 +8,12 @@ import {
   useStoreUpdateMutation
 } from '../../data'
 import { currentPage, totalPages } from '../../utils'
-import PrimaryButton from '../../components/Buttons/PrimaryButton'
-import ModalDefault from '../../components/Modals/ModalDefault'
-import ModalHeader from '../../components/Modals/ModalHeader'
-import ModalBody from '../../components/Modals/ModalBody'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
+import PrimaryButton from '../../components/buttons/PrimaryButton'
+import ModalDefault from '../../components/modals/ModalDefault'
+import ModalHeader from '../../components/modals/ModalHeader'
+import ModalBody from '../../components/modals/ModalBody'
+import CardDefault from '../../components/cards/CardDefault'
+import CardHeader from '../../components/cards/CardHeader'
 
 const LocalesTable = styled.table`
   width: 100%;

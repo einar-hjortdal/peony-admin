@@ -2,7 +2,7 @@ import { component, detectIsNull, useEffect, useMemo, useRef, useState } from '@
 import { useTranslation } from '@wareme/translations'
 
 import { useProductCategories, useProductUpdateMutation } from '../../../../data'
-import ModalDefault from '../../../../components/Modals/ModalDefault'
+import ModalDefault from '../../../../components/modals/ModalDefault'
 
 const CategoriesSet = component(({ categoryIds, onChange }) => {
   const {

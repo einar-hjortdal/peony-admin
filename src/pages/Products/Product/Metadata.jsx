@@ -4,8 +4,8 @@ import { useTranslation } from '@wareme/translations'
 
 import { useProductById, useProductUpdateMutation } from '../../../data'
 import MetadataInputs from '../../../components/MetadataInputs'
-import CardDefault from '../../../components/Cards/CardDefault'
-import CardHeader from '../../../components/Cards/CardHeader'
+import CardDefault from '../../../components/cards/CardDefault'
+import CardHeader from '../../../components/cards/CardHeader'
 
 const Metadata = component(() => {
   const { t } = useTranslation('product.metadata')

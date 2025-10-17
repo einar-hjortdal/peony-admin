@@ -15,14 +15,14 @@ import { useTranslation } from '@wareme/translations'
 
 import { useLocaleById, useProductById, useProductUpdateMutation, useStore } from '../../../data'
 import If from '../../../components/If'
-import CardDefault from '../../../components/Cards/CardDefault'
-import CardHeader from '../../../components/Cards/CardHeader'
-import ButtonMore from '../../../components/Buttons/ButtonMore'
-import ModalDefault from '../../../components/Modals/ModalDefault'
-import ModalHeader from '../../../components/Modals/ModalHeader'
-import ModalFooter from '../../../components/Modals/ModalFooter'
-import PrimaryButton from '../../../components/Buttons/PrimaryButton'
-import TranslationsInputs from '../../../components/Product/TranslationsInputs'
+import CardDefault from '../../../components/cards/CardDefault'
+import CardHeader from '../../../components/cards/CardHeader'
+import ButtonMore from '../../../components/buttons/ButtonMore'
+import ModalDefault from '../../../components/modals/ModalDefault'
+import ModalHeader from '../../../components/modals/ModalHeader'
+import ModalFooter from '../../../components/modals/ModalFooter'
+import PrimaryButton from '../../../components/buttons/PrimaryButton'
+import TranslationsInputs from '../../../components/products/TranslationsInputs'
 
 const TranslationsEdit = component(({ productId, title, renderButton, slot }) => {
   const [updateProduct] = useProductUpdateMutation(productId)

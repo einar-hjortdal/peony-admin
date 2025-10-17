@@ -7,10 +7,10 @@ import Locales from './Locales'
 import Currencies from './Currencies'
 import SalesChannels from './SalesChannels'
 import DefaultLocale from './DefaultLocale'
-import ColumnLarge from '../../components/Columns/ColumnLarge'
-import ColumnSmall from '../../components/Columns/ColumnSmall'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
+import ColumnLarge from '../../components/columns/ColumnLarge'
+import ColumnSmall from '../../components/columns/ColumnSmall'
+import CardDefault from '../../components/cards/CardDefault'
+import CardHeader from '../../components/cards/CardHeader'
 
 const Store = component(() => {
   const { t } = useTranslation('store')

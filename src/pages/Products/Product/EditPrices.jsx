@@ -22,9 +22,9 @@ import {
   useUpdateVariantsMutation
 } from '../../../data'
 import { formatLine } from '../../../utils'
-import ButtonMore from '../../../components/Buttons/ButtonMore'
-import ModalDefault from '../../../components/Modals/ModalDefault'
-import ModalHeader from '../../../components/Modals/ModalHeader'
+import ButtonMore from '../../../components/buttons/ButtonMore'
+import ModalDefault from '../../../components/modals/ModalDefault'
+import ModalHeader from '../../../components/modals/ModalHeader'
 
 // handles simple pricing: no quantity-based prices.
 // quantity-based prices pricing needs a less "convenient" layout.

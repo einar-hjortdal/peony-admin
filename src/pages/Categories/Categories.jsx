@@ -3,14 +3,14 @@ import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import { useProductCategories, useStore } from '../../data'
-import ButtonMore from '../../components/Buttons/ButtonMore'
-import PrimaryButton from '../../components/Buttons/PrimaryButton'
-import SecondaryButton from '../../components/Buttons/SecondaryButton'
+import ButtonMore from '../../components/buttons/ButtonMore'
+import PrimaryButton from '../../components/buttons/PrimaryButton'
+import SecondaryButton from '../../components/buttons/SecondaryButton'
 import CategoryNew from './CategoryNew'
 import CategoryEdit from './CategoryEdit'
 import CategoryDelete from './CategoryDelete'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
+import CardDefault from '../../components/cards/CardDefault'
+import CardHeader from '../../components/cards/CardHeader'
 
 const StyledTable = styled.table`
   width: 100%;

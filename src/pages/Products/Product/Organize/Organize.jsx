@@ -3,9 +3,9 @@ import { useParams } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import ButtonMore from '../../../../components/Buttons/ButtonMore'
-import CardDefault from '../../../../components/Cards/CardDefault'
-import CardHeader from '../../../../components/Cards/CardHeader'
+import ButtonMore from '../../../../components/buttons/ButtonMore'
+import CardDefault from '../../../../components/cards/CardDefault'
+import CardHeader from '../../../../components/cards/CardHeader'
 import CategoriesList from './CategoriesList'
 import CategoriesEdit from './CategoriesEdit'
 

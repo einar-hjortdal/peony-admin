@@ -1,16 +1,16 @@
 import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
 
 import { useTranslation } from '@wareme/translations'
-import ModalFull from '../../components/Modals/ModalFull'
-import ModalHeader from '../../components/Modals/ModalHeader'
-import ModalBody from '../../components/Modals/ModalBody'
-import ModalFooter from '../../components/Modals/ModalFooter'
+import ModalFull from '../../components/modals/ModalFull'
+import ModalHeader from '../../components/modals/ModalHeader'
+import ModalBody from '../../components/modals/ModalBody'
+import ModalFooter from '../../components/modals/ModalFooter'
 import { useProductCategoryCreateMutation } from '../../data'
-import PrimaryButton from '../../components/Buttons/PrimaryButton'
+import PrimaryButton from '../../components/buttons/PrimaryButton'
 import CategoryInputs from './CategoryInputs'
 import MetadataInputs from '../../components/MetadataInputs'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
+import CardDefault from '../../components/cards/CardDefault'
+import CardHeader from '../../components/cards/CardHeader'
 
 const NewCategory = component(({ modalRef }) => {
   const { t } = useTranslation('categories.newCategory')

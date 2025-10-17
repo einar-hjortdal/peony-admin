@@ -3,8 +3,8 @@ import { useTranslation } from '@wareme/translations'
 
 import SetTitle from '../components/SetTitle'
 import { useRegions } from '../data'
-import ModalDefault from '../components/Modals/ModalDefault'
-import ModalHeader from '../components/Modals/ModalHeader'
+import ModalDefault from '../components/modals/ModalDefault'
+import ModalHeader from '../components/modals/ModalHeader'
 
 const AddRegion = component(() => {
   const modalRef = useRef(null)

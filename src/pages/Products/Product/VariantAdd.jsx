@@ -8,14 +8,14 @@ import {
 import { useTranslation } from '@wareme/translations'
 
 import { useVariantCreateMutation } from '../../../data'
-import PrimaryButton from '../../../components/Buttons/PrimaryButton'
+import PrimaryButton from '../../../components/buttons/PrimaryButton'
 import MetadataInputs from '../../../components/MetadataInputs'
-import ModalDefault from '../../../components/Modals/ModalDefault'
-import ModalHeader from '../../../components/Modals/ModalHeader'
-import ModalBody from '../../../components/Modals/ModalBody'
-import ModalFooter from '../../../components/Modals/ModalFooter'
-import CardDefault from '../../../components/Cards/CardDefault'
-import CardHeader from '../../../components/Cards/CardHeader'
+import ModalDefault from '../../../components/modals/ModalDefault'
+import ModalHeader from '../../../components/modals/ModalHeader'
+import ModalBody from '../../../components/modals/ModalBody'
+import ModalFooter from '../../../components/modals/ModalFooter'
+import CardDefault from '../../../components/cards/CardDefault'
+import CardHeader from '../../../components/cards/CardHeader'
 import VariantInputs from './VariantInputs'
 
 const VariantAdd = component(({ productId }) => {

@@ -1,7 +1,7 @@
 import { component } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
-import CardDefault from '../Cards/CardDefault'
-import CardHeader from '../Cards/CardHeader'
+import CardDefault from '../cards/CardDefault'
+import CardHeader from '../cards/CardHeader'
 
 const SearchEngines = component(({ handle, onHandleChange }) => {
   const { t } = useTranslation('SearchEngines')

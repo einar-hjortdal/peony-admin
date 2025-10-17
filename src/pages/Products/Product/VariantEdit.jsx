@@ -9,12 +9,12 @@ import { useTranslation } from '@wareme/translations'
 
 import { useVariantUpdateMutation } from '../../../data'
 import MetadataInputs from '../../../components/MetadataInputs'
-import ModalDefault from '../../../components/Modals/ModalDefault'
-import ModalHeader from '../../../components/Modals/ModalHeader'
-import ModalFooter from '../../../components/Modals/ModalFooter'
-import ModalBody from '../../../components/Modals/ModalBody'
-import CardDefault from '../../../components/Cards/CardDefault'
-import CardHeader from '../../../components/Cards/CardHeader'
+import ModalDefault from '../../../components/modals/ModalDefault'
+import ModalHeader from '../../../components/modals/ModalHeader'
+import ModalFooter from '../../../components/modals/ModalFooter'
+import ModalBody from '../../../components/modals/ModalBody'
+import CardDefault from '../../../components/cards/CardDefault'
+import CardHeader from '../../../components/cards/CardHeader'
 import VariantInputs from './VariantInputs'
 
 const VariantEdit = component(({ productId, variant }) => {

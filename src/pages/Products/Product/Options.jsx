@@ -4,9 +4,9 @@ import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import { useProductById } from '../../../data'
-import CardDefault from '../../../components/Cards/CardDefault'
-import ButtonMore from '../../../components/Buttons/ButtonMore'
-import CardHeader from '../../../components/Cards/CardHeader'
+import CardDefault from '../../../components/cards/CardDefault'
+import ButtonMore from '../../../components/buttons/ButtonMore'
+import CardHeader from '../../../components/cards/CardHeader'
 import EditOptions from './EditOptions'
 
 const Existing = component(({ productId }) => {

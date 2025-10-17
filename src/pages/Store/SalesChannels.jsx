@@ -5,8 +5,8 @@ import { nisha } from '@wareme/utils'
 
 import { useSalesChannels } from '../../data'
 import { formatLine } from '../../utils'
-import CardHeader from '../../components/Cards/CardHeader'
-import CardDefault from '../../components/Cards/CardDefault'
+import CardHeader from '../../components/cards/CardHeader'
+import CardDefault from '../../components/cards/CardDefault'
 
 const StyledTable = styled.table`
   width: 100%;

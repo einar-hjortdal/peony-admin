@@ -3,8 +3,8 @@ import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import { useStore, useStoreUpdateMutation } from '../../data'
-import CardDefault from '../../components/Cards/CardDefault'
-import CardHeader from '../../components/Cards/CardHeader'
+import CardDefault from '../../components/cards/CardDefault'
+import CardHeader from '../../components/cards/CardHeader'
 
 const DefaultLocaleSelect = styled.select`
   display: block;
