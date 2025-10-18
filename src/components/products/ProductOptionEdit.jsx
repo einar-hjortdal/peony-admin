@@ -1,68 +1,53 @@
 import { component, detectIsUndefined, useState } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
+import { useTranslation } from '@wareme/translations'
 
 import { getTranslation } from './utils'
 import { useStore } from '../../data'
 import PrimaryButton from '../buttons/PrimaryButton'
 import Text from '../input/Text'
+import ProductOptionValueEdit from './ProductOptionValueEdit'
 
 const Container = styled.div`
   border: 1px solid ${p => p.theme.neutral30};
   border-radius: .3125rem;
 `
 
-// TODO refactor, the index game is too complex, just return a whole values array or the whole value
-const ProductOptionValueEdit = component(({ value, index, defaultLocaleId, onInput }) => {
-  const { translations } = value
-  const defaultTranslation = getTranslation(translations, defaultLocaleId).translation
-  console.log(defaultTranslation)
-  // if isDefault no delete
-  return (
-    <Text
-      name='name'
-      value={defaultTranslation.name}
-      data-locale-id={defaultTranslation.localeId}
-      data-index={index}
-      placeholder='Green' // TODO change to t func
-      onInput={onInput}
-    />
-  )
-})
-
 const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
+  const { t } = useTranslation('productOptionEdit')
   const { data: storeData } = useStore()
   const [optionData, setOptionData] = useState(option)
 
   const handleInput = (e) => {
-    const { name, value } = e.target
+    const { value } = e.target
     const { localeId } = e.target.dataset
 
-    if (name === 'title') { // option
-      setOptionData(prevState => {
-        const { translations } = prevState
-        const newTranslations = [...translations]
-        const translation = getTranslation(translations, localeId)
-        if (detectIsUndefined(translation)) {
-          newTranslations.push({ localeId, title: value })
-          return { ...prevState, translations: newTranslations }
-        }
-        const { index } = translation
-        const newTranslation = { ...newTranslations[index], title: value }
-        newTranslations[index] = newTranslation
-        return { ...prevState, translations: newTranslations }
-      })
-    }
+    setOptionData(prevState => {
+      const { translations } = prevState
+      const newTranslations = [...translations]
+      const translation = getTranslation(translations, localeId)
 
-    if (name === 'name') { // value
-      const { index } = e.target.dataset
-      setOptionData(prevState => {
-        const newValues = [...prevState.values]
-        const newValue = { localeId, name: value }
-        newValues[index] = newValue
-        return { ...prevState, values: newValues }
-      })
-    }
+      if (detectIsUndefined(translation)) {
+        newTranslations.push({ localeId, title: value })
+        return { ...prevState, translations: newTranslations }
+      }
+
+      const { index } = translation
+      const newTranslation = { ...newTranslations[index], title: value }
+      newTranslations[index] = newTranslation
+      return { ...prevState, translations: newTranslations }
+    })
   }
+
+  const handleOptionValueChange = (newOptionValue, index) => {
+    const { values } = option
+    const newOptionValues = [...values]
+    newOptionValues[index] = newOptionValue
+    setOptionData(prevState => {
+      return { ...prevState, values: newOptionValues }
+    })
+  }
+  console.log(optionData)
 
   const isEmptyString = (s) => {
     return s.trim().length === 0 || s === ''
@@ -121,8 +106,6 @@ const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
     saveOption(optionData)
   }
 
-  console.log(optionData)
-
   if (storeData) {
     const { translations, values } = option
     const { defaultLocaleId } = storeData.store
@@ -132,13 +115,17 @@ const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
     const valueInputs = []
     for (let i = 0, len = values.length; i < len; i++) {
       const value = values[i]
+
+      // attach optionValue index to handler
+      const handleOptionValueChangeWithIndex = (newOptionValue) => {
+        handleOptionValueChange(newOptionValue, i)
+      }
+
       valueInputs.push(
         <ProductOptionValueEdit
           key={i}
-          value={value}
-          index={i}
-          defaultLocaleId={defaultLocaleId}
-          onInput={handleInput}
+          optionValue={value}
+          onInput={handleOptionValueChangeWithIndex}
         />
       )
     }
@@ -146,10 +133,9 @@ const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
     return (
       <Container>
         <Text
-          name='title'
           value={defaultOptionTranslation.title}
           data-locale-id={defaultLocaleId}
-          placeholder='Color' // TODO change to t func
+          placeholder={t('placeholder')}
           onInput={handleInput}
         />
 

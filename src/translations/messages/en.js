@@ -189,6 +189,8 @@ export default freeze({
   'productsNew.options.title': 'Options',
   'productsNew.options.addFromZero': 'Add options like size or color',
   'productsNew.options.addFromSome': 'Add another option',
+  'productOptionEdit.placeholder': 'Color',
+  'productOptionValueEdit.placeholder': 'Green',
   'regions.addRegion.add': 'add region',
   'regions.addRegion.close': 'close',
   'regions.addRegion.title': 'Add a region',
