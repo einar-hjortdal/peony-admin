@@ -37,3 +37,14 @@ export const formatLine = (v) => {
   }
   return v
 }
+
+export const getTranslation = (translations, localeId) => {
+  for (let i = 0, len = translations.length; i < len; i++) {
+    if (translations[i].localeId === localeId) {
+      return {
+        translation: translations[i],
+        index: i
+      }
+    }
+  }
+}

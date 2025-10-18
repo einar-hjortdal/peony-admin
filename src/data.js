@@ -117,13 +117,13 @@ export const useProducts = (params) => {
   })
 }
 
-export const useProductById = (id) => {
+export const useProductById = (productId) => {
   const api = useApi()
   const { refetch, data, isFetching, error } = useQuery(
     dataKeys.productGetById,
-    () => api.productGetById(id),
+    () => api.productGetById(productId),
     {
-      variables: { id },
+      variables: { productId },
       extractId: (x) => x.id
     }
   )
@@ -154,29 +154,32 @@ export const useProductCreateMutation = () => {
   return useMutation(
     dataKeys.productCreate, (data) => api.productCreate(data),
     {
-      onSuccess: ({ cache }) => { cache.invalidate(dataKeys.productsGet) }
-      // TODO onSuccess invalidate all dataKeys.productsGet from cache https://github.com/atellmer/dark/issues/107
+      onSuccess: ({ cache }) => { cache.clear(dataKeys.productsGet) }
     }
   )
 }
 
-export const useProductUpdateMutation = (id) => {
+export const useProductUpdateMutation = (productId) => {
   const api = useApi()
   return useMutation(
     dataKeys.productUpdate,
-    (data) => api.productUpdate(id, data),
+    (data) => api.productUpdate(productId, data),
     {
-      variables: { id },
-      extractId: (x) => x.id
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+        cache.clear(dataKeys.productsGet)
+      }
     }
   )
 }
 
-export const useProductDeleteMutation = (id) => {
+export const useProductDeleteMutation = (productId) => {
   const api = useApi()
-  return useMutation(dataKeys.productDelete, () => api.productDelete(id), {
-    variables: { id },
-    extractId: (x) => x.id
+  return useMutation(dataKeys.productDelete, () => api.productDelete(productId), {
+    onSuccess: ({ cache }) => {
+      cache.delete(dataKeys.productGetById, { id: productId })
+      cache.clear(dataKeys.productsGet)
+    }
   })
 }
 
@@ -187,8 +190,7 @@ export const useProductCategoryCreateMutation = () => {
     (data) => api.productCategoryCreate(data),
     {
       onSuccess: ({ cache }) => {
-        cache.invalidate(dataKeys.productCategoryGet)
-        // TODO onSuccess invalidate all dataKeys.productCategoryGet from cache https://github.com/atellmer/dark/issues/107
+        cache.clear(dataKeys.productCategoryGet)
       }
     }
   )
@@ -202,18 +204,7 @@ export const useProductCategoryUpdateMutation = (productCategoryId) => {
     {
       onSuccess: ({ cache }) => {
         cache.invalidate(dataKeys.productCategoryGetById, { id: productCategoryId })
-        // cache.invalidate(dataKeys.productCategoryGet)
-        // TODO onSuccess invalidate all dataKeys.productCategoryGet from cache https://github.com/atellmer/dark/issues/107
-        const cacheState = cache.getState()
-        const productCategoryState = cacheState[dataKeys.productCategoryGet]
-        if (detectIsUndefined(productCategoryState)) {
-          return
-        }
-        const productCategoryStateKeys = keys(productCategoryState)
-        for (let i = 0, len = productCategoryStateKeys.length; i < len; i++) {
-          const key = productCategoryStateKeys[i]
-          cache.invalidate(dataKeys.productCategoryGet, { id: key })
-        }
+        cache.clear(dataKeys.productCategoryGet)
       }
     }
   )
@@ -226,8 +217,8 @@ export const useProductCategoryDeleteMutation = (productCategoryId) => {
     () => api.productCategoryDelete(productCategoryId),
     {
       onSuccess: ({ cache }) => {
-        cache.invalidate(dataKeys.productCategoryGet)
-        // TODO onSuccess invalidate all dataKeys.productCategoryGet from cache https://github.com/atellmer/dark/issues/107
+        cache.delete(dataKeys.productCategoryGetById, { id: productCategoryId })
+        cache.clear(dataKeys.productCategoryGet)
       }
     }
   )
@@ -237,7 +228,7 @@ export const useProductCategoryById = (productCategoryId) => {
   const api = useApi()
   return useQuery(dataKeys.productCategoryGetById, () => api.productCategoryGetById(productCategoryId), {
     variables: { productCategoryId },
-    extractId: () => productCategoryId
+    extractId: (x) => x.productCategoryId
   })
 }
 
@@ -245,8 +236,8 @@ export const useProductCategories = (params) => {
   const api = useApi()
   const p = getParams(params)
   return useQuery(dataKeys.productCategoryGet, () => api.productCategoryGet(p), {
-    variables: params,
-    extractId: () => p
+    variables: { p },
+    extractId: (x) => x.p
   })
 }
 

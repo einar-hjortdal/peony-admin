@@ -1,9 +1,9 @@
 import { component, detectIsUndefined } from '@dark-engine/core'
+import { useTranslation } from '@wareme/translations'
 
 import { useStore } from '../../data'
-import { getTranslation } from './utils'
 import Text from '../input/Text'
-import { useTranslation } from '@wareme/translations'
+import { getTranslation } from '../../utils'
 
 // TODO handle other translations
 // TODO add delete translation
@@ -23,8 +23,7 @@ const ProductOptionValueEdit = component(({ optionValue, onInput }) => {
     if (detectIsUndefined(translation)) {
       newTranslations.push(newTranslation)
     } else {
-      const { index } = translation
-      newTranslations[index] = newTranslation
+      newTranslations[translation.index] = newTranslation
     }
 
     const newOptionValue = { ...optionValue, translations: newTranslations }

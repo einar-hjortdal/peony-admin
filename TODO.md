@@ -8,14 +8,13 @@
 - [x] Add/edit currencies
 - [x] Add/edit languages
 - [x] Products
-- [x] Variants
 - [x] Prices
-- [x] Options
 - [x] Product categories
 - [x] Metadata
 
 ## Currently working on
 
+- [ ] Variants
 - [ ] Regions
 - [ ] Inventory items
 
@@ -59,7 +58,6 @@
 ## Problems
 
 - [`@dark-engine/styled` has CSS order issues](https://github.com/atellmer/dark/issues/72)
-- [`@dark-engine/data` cannot delete all cached data associated with one key](https://github.com/atellmer/dark/issues/107)
 
 ## Considerations
 

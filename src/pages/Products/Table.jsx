@@ -2,8 +2,6 @@ import { component, detectIsEmpty, detectIsUndefined } from '@dark-engine/core'
 import { Link } from '@dark-engine/web-router'
 import { Translate, useTranslation } from '@wareme/translations'
 
-import { getDefaultTranslation } from '../../translations'
-import { valueOrDefault } from '../../utils'
 import {
   constants,
   useProductDeleteMutation,
@@ -138,14 +136,8 @@ const Table = component(({ products, defaultLocaleId }) => {
   const rows = []
   for (let i = 0, len = products.length; i < len; i++) {
     const product = products[i]
-    const { id, translations, collectionId, salesChannels, variants } = product
+    const { id, title, collectionId, salesChannels, variants } = product
     // TODO match collectionId to collection.translations title
-
-    const defaultTranslation = getDefaultTranslation(translations, defaultLocaleId)
-    let title = product.id
-    if (!detectIsEmpty(defaultTranslation)) {
-      title = valueOrDefault(defaultTranslation.title, product.id)
-    }
 
     const sc = []
     for (let i = 0, len = salesChannels.length; i < len; i++) {

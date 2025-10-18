@@ -4,41 +4,41 @@
     "": {
       "name": "peony-admin",
       "dependencies": {
-        "@dark-engine/animations": "^1.5.1",
-        "@dark-engine/core": "^1.5.1",
-        "@dark-engine/data": "^1.5.1",
-        "@dark-engine/platform-browser": "^1.5.1",
-        "@dark-engine/platform-server": "^1.5.1",
-        "@dark-engine/styled": "^1.5.1",
-        "@dark-engine/web-router": "^1.5.1",
-        "@wareme/currency-input": "^3.2.2",
-        "@wareme/event-emitter": "3.4.0",
-        "@wareme/raf-nexus": "^3.4.0",
-        "@wareme/smooth-scrolling": "^3.7.4",
-        "@wareme/translations": "^3.13.1",
-        "@wareme/use-in-view": "^3.3.0",
-        "@wareme/use-scrollbar-width": "^3.2.0",
-        "@wareme/utils": "^3.12.1",
+        "@dark-engine/animations": "latest",
+        "@dark-engine/core": "latest",
+        "@dark-engine/data": "latest",
+        "@dark-engine/platform-browser": "latest",
+        "@dark-engine/platform-server": "latest",
+        "@dark-engine/styled": "latest",
+        "@dark-engine/web-router": "latest",
+        "@wareme/currency-input": "latest",
+        "@wareme/event-emitter": "latest",
+        "@wareme/raf-nexus": "latest",
+        "@wareme/smooth-scrolling": "latest",
+        "@wareme/translations": "latest",
+        "@wareme/use-in-view": "latest",
+        "@wareme/use-scrollbar-width": "latest",
+        "@wareme/utils": "latest",
       },
       "devDependencies": {
-        "standard": "^17.1.2",
+        "standard": "latest",
       },
     },
   },
   "packages": {
-    "@dark-engine/animations": ["@dark-engine/animations@1.5.1", "", { "peerDependencies": { "@dark-engine/core": "*" } }, "sha512-LUrI4vGuNAgoJADkvEDh8B4lm6Ic35gFTgkTZO84m9Fyv72cz1zHpwwJr07VsnY0+Y+7y/JxrvkH+Nj9wS5fDQ=="],
+    "@dark-engine/animations": ["@dark-engine/animations@1.6.0", "", { "peerDependencies": { "@dark-engine/core": "*" } }, "sha512-0vxhj1Q4ccZWUhBjFjBQ1mf8lux8vVZ/MMCiq1QlFKXkIU4SCzxYbhESiqr5MSJjbCQCOvTRBQu09Gbar1p+7Q=="],
 
-    "@dark-engine/core": ["@dark-engine/core@1.5.1", "", {}, "sha512-2U92ZRCOKJiJzaBdbewG+8hfC72C3FX4md4ybRdBe3e6urSI/u7HjuHw45lfBzHx40uR6EWRyiJv0AYOOqgmqg=="],
+    "@dark-engine/core": ["@dark-engine/core@1.6.0", "", {}, "sha512-afrZ+psjo5Vov1U4ROPSHzU/pQix0V0OsfgFrPkFeXmbQvZCriQrGzD7/u0N3ZbPp6DsOGfPvXeaLsQyOA9Fvg=="],
 
-    "@dark-engine/data": ["@dark-engine/data@1.5.1", "", { "peerDependencies": { "@dark-engine/core": "*" } }, "sha512-1NVk/Fadv9ydl8v0yLC0WkyTCsfE3naQsn6xwuuxAq95KVaxLGmonSz8BSsf5QGkZYD80a6lWatgLOKPGbiyUA=="],
+    "@dark-engine/data": ["@dark-engine/data@1.6.0", "", { "peerDependencies": { "@dark-engine/core": "*" } }, "sha512-STkl9+jMK+RzA7mSVyXEm4uo1psU08CIsQQhI+EZyvr6fJG1YReVFfhklrK0xYUEXJT6T648+NYhx+sc1ulHYA=="],
 
-    "@dark-engine/platform-browser": ["@dark-engine/platform-browser@1.5.1", "", { "peerDependencies": { "@dark-engine/core": "*" } }, "sha512-4J0b5nNaxJazW41AveMN+VhADObkhere5cwf5u3CROIdjIhu/hyffOu14kPNymVDX2+w7vddoFYkfvCeZA+tZA=="],
+    "@dark-engine/platform-browser": ["@dark-engine/platform-browser@1.6.0", "", { "peerDependencies": { "@dark-engine/core": "*" } }, "sha512-OJAG6d4awpxv0hirJ4kax942kpfi1XQ44wZsN7XqjwlH4gocHavlFJok08Zle87Nv2N+HG8dkO/bXcNipI2PBA=="],
 
-    "@dark-engine/platform-server": ["@dark-engine/platform-server@1.5.1", "", { "peerDependencies": { "@dark-engine/core": "*", "@dark-engine/platform-browser": "*" } }, "sha512-Owyp6ynERdM61/o8H+dOyUXqo3s54CIYkEW2CHny1RdS6daH9tk87nzm8pyhT/455DYVoDEWBAVZypJ/iaXgZA=="],
+    "@dark-engine/platform-server": ["@dark-engine/platform-server@1.6.0", "", { "peerDependencies": { "@dark-engine/core": "*", "@dark-engine/platform-browser": "*" } }, "sha512-6a6vf6yEkCpE0463GGwt3q/TbD5l6XOxABvjuDG4LfKJEstvnH01jW30VrsEwUxNxv2N5/UBPPi6//HNkpC/Rw=="],
 
-    "@dark-engine/styled": ["@dark-engine/styled@1.5.1", "", { "peerDependencies": { "@dark-engine/core": "*", "@dark-engine/platform-browser": "*" } }, "sha512-oWwk/0fSiufGWdFXk/EMiuKzfFMqu6JASJ3c4KAlCjViBEOBAMvClywvnBuULaON8wfTGukIKAqydMFCgtVcBg=="],
+    "@dark-engine/styled": ["@dark-engine/styled@1.6.0", "", { "peerDependencies": { "@dark-engine/core": "*", "@dark-engine/platform-browser": "*" } }, "sha512-ZzlyPVSSDv5EyJ2EDLgFv8/JdSBtvyL5/cDE4LHDAY9EsCA4j15W79QLh4/MXuRkq3MZyd0rq27PxEFboZ8d9g=="],
 
-    "@dark-engine/web-router": ["@dark-engine/web-router@1.5.1", "", { "peerDependencies": { "@dark-engine/core": "*", "@dark-engine/platform-browser": "*" } }, "sha512-P3TQy+9mkYa8oIThMyvQ8GBs4Ww21V7jx6xauECKg+FWsIo+VNfKYX52GIY81umeionsFOQzFNrKThmy62Njzw=="],
+    "@dark-engine/web-router": ["@dark-engine/web-router@1.6.0", "", { "peerDependencies": { "@dark-engine/core": "*", "@dark-engine/platform-browser": "*" } }, "sha512-MaWVCtxxeCMkmxk0AswL7bRZdXw+10RhAKovq4tCPXRjs8BjY+zw1YWTziqEN6fsSxEPn+AObV0PZeWhrWE6WA=="],
 
     "@eslint-community/eslint-utils": ["@eslint-community/eslint-utils@4.7.0", "", { "dependencies": { "eslint-visitor-keys": "^3.4.3" }, "peerDependencies": { "eslint": "^6.0.0 || ^7.0.0 || >=8.0.0" } }, "sha512-dyybb3AcajC7uha6CvhdVRJqaKyn7w2YKqKyAN37NKYgZT36w+iRb0Dymmc5qEJ549c/S31cMMSFd75bteCpCw=="],
 
@@ -66,21 +66,21 @@
 
     "@ungap/structured-clone": ["@ungap/structured-clone@1.3.0", "", {}, "sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g=="],
 
-    "@wareme/currency-input": ["@wareme/currency-input@3.2.2", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1", "@wareme/utils": "3.12.1" } }, "sha512-CgODIJ4ZzVIZBa7O+29aozSbcybyTVRBIOD5zXtRKALCXFrL+aA73bgafMyTFA5aGgNZF94HKlFBZDfbsWlHfg=="],
+    "@wareme/currency-input": ["@wareme/currency-input@3.3.0", "", { "peerDependencies": { "@dark-engine/core": "^1.6.0", "@wareme/utils": "3.12.1" } }, "sha512-nAEhQFurbGmJOlM5XimQdLmWmFiKvY0kiUv+Eo+II+jDj7SQWmzismFCC+hxwLYWCzgtFiX9i8h13aq+pkTgrg=="],
 
-    "@wareme/event-emitter": ["@wareme/event-emitter@3.4.0", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1" } }, "sha512-JBEW0HaCvbU4OwHsLwOQga/qliKTg2cyL3Qz/FkLmUre6TiPe1I4gKyZSqgkG6GgaivcNx5nPkF1Px4iLepdtA=="],
+    "@wareme/event-emitter": ["@wareme/event-emitter@3.5.0", "", { "peerDependencies": { "@dark-engine/core": "^1.6.0" } }, "sha512-AaG1fzSmYTOhzReVdc/QQdcP3RD/nEnQKPyLxNOxJfZ/xfMBaqQOZY9P2ztX/9MSRQ608GihzhQ9OVwNch+Ztw=="],
 
-    "@wareme/raf-nexus": ["@wareme/raf-nexus@3.4.0", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1", "@dark-engine/platform-browser": "^1.5.1" } }, "sha512-1iSWl0G2mn2OId67N5+5aZIicUlNW8OO5upGoY7bNUJlibxXoQG/YRf9ac32dw3F9nGwxueIaaDTLk7G2Us/dA=="],
+    "@wareme/raf-nexus": ["@wareme/raf-nexus@3.5.0", "", { "peerDependencies": { "@dark-engine/core": "^1.6.0", "@dark-engine/platform-browser": "^1.6.0" } }, "sha512-ab73U1PrKg62J2DY+zKHgnsRHqO9ndCPQRqeU+iHpACFo7rYTViV+XwtnUMbQU8Y2yzUMz+0UGy60gq1ncq+Ig=="],
 
-    "@wareme/smooth-scrolling": ["@wareme/smooth-scrolling@3.7.4", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1", "@dark-engine/styled": "^1.5.1", "@wareme/event-emitter": "3.4.0", "@wareme/raf-nexus": "3.4.0", "@wareme/utils": "3.12.0" } }, "sha512-lQ5brwlCBc7H8x0BX99yk2vNz824XjSE27PqFGd1+SZQzL9BbKFy7AkwhbkV9Q6RrG2d3BrAB/uBwlggcWwZUQ=="],
+    "@wareme/smooth-scrolling": ["@wareme/smooth-scrolling@3.8.0", "", { "peerDependencies": { "@dark-engine/core": "^1.6.0", "@dark-engine/styled": "^1.6.0", "@wareme/event-emitter": "3.4.0", "@wareme/raf-nexus": "3.4.0", "@wareme/utils": "3.12.1" } }, "sha512-9ccxoemLXlljDrt0ofGcc9m7n5fIxYfktZXHW3PbMnohblRwnWlETmP3XFpT0S4YnNbms+U9itpyZ5T+VTke2A=="],
 
-    "@wareme/translations": ["@wareme/translations@3.13.1", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1", "@wareme/event-emitter": "3.4.0" } }, "sha512-w2+zb9zuYCfmsgvNAhMKRfzvxqs8TfXlwt8Yt4rcaJ0MVdGFC4L0sF+oUDK3N+Rl4RcL83qZLEAGm8r/8ZpdUg=="],
+    "@wareme/translations": ["@wareme/translations@3.14.0", "", { "peerDependencies": { "@dark-engine/core": "^1.6.0", "@wareme/event-emitter": "3.4.0" } }, "sha512-tGQFzBH773yOKrJCsx+sTq/UcZZru/kP38pKR/FpMNTmOimF3WJKU8eA9TllGheS2vEVDk3E7jrt1lOWmPgY6Q=="],
 
-    "@wareme/use-in-view": ["@wareme/use-in-view@3.3.0", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1" } }, "sha512-wKDYgFRxlNgi7Tf2pQZhIfcClbnGc2N87/qf5PNVfTpTjSjdjwffdLrbcjFRsgzrY5h24RjbHCrGuS237ZhH9g=="],
+    "@wareme/use-in-view": ["@wareme/use-in-view@3.4.0", "", { "peerDependencies": { "@dark-engine/core": "^1.6.0" } }, "sha512-pw1awAEIO5h+6mF2KS/q0pNC2kOXcdd62YGvhh/iGeA9bbyMbgQ4pSiZ0IyWcl98Pw3CInUP47FZkXyBdGFe6w=="],
 
-    "@wareme/use-scrollbar-width": ["@wareme/use-scrollbar-width@3.2.0", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1" } }, "sha512-CDiHt47FiBGCRBsd57Y9INgERNg9oQBf1KAi/dP8qcFpP4Mws0vZW7+I2fP6Kmlw0JZcTgdbeJcY907HTU026A=="],
+    "@wareme/use-scrollbar-width": ["@wareme/use-scrollbar-width@3.3.0", "", { "peerDependencies": { "@dark-engine/core": "^1.6.0" } }, "sha512-C1Ww2+xBz2WP52abjgbvSiPI4OfpB//8Uw6Hl8oQqMNn+2RtqiNb/SF3WDBoCoOhuMLmyc1vSwIman7F60pk/A=="],
 
-    "@wareme/utils": ["@wareme/utils@3.12.1", "", { "peerDependencies": { "@dark-engine/core": "^1.5.1" } }, "sha512-x8gIRGNZlSCqTrU8o3+pSNIr9qdc68NM7nNNl0eD+sikfjQDjCGrfgnSuCbJmE3d6dkw/PfsFTxqyx1uwRVH3g=="],
+    "@wareme/utils": ["@wareme/utils@3.13.0", "", { "peerDependencies": { "@dark-engine/core": "^1.6.0" } }, "sha512-aqAuHSEEtCaUFJAJaFpTIJolf4h8SY3yVCwjPZC5Tnrv0J0wY5RD+r6PmTjivkYjao2OvTRRmEQSfcgwhq9agQ=="],
 
     "acorn": ["acorn@8.15.0", "", { "bin": { "acorn": "bin/acorn" } }, "sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg=="],
 

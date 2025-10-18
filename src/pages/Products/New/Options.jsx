@@ -9,77 +9,63 @@ import PrimaryButton from '../../../components/buttons/PrimaryButton'
 import If from '../../../components/If'
 import { useStore } from '../../../data'
 import ProductOptionEdit from '../../../components/products/ProductOptionEdit'
+import { getTranslation } from '../../../utils'
 
-const AddButton = styled.button`
-  text-align: unset;
-  cursor: pointer;
-  padding-top: .5725rem;
-  padding-bottom: .5725rem;
-  padding-right: 1.125rem;
-  padding-left: 1.125rem;
-  background-color: unset;
-  border-radius: .3125rem;
-  transition: background-color 0.2s;
-  
-  &:hover{
-    background-color: ${p => p.theme.neutral20};
-  }
+const OptionContainer = styled.div`
 
-  &:disabled{
-    color: ${p => p.theme.neutral80};
-    background-color: ${p => p.theme.neutral20};
-  }
 `
 
-const Preview = component(({ option, onChange }) => {
-  const { values } = option
-  const { data: storeData } = useStore()
+const OptionTitle = styled.span`
+  font-weight: 700;
+`
 
-  const valuesPreview = []
-  for (let i = 0, len = values.length; i < len; i++) {
-    const value = values[i]
-    const { name } = value
-    valuesPreview.push(<span key={name}>{name}</span>)
-  }
+const OptionValuesContainer = styled.div``
+
+// TODO preview non-default translations
+const OptionValuesPreview = component(({ values }) => {
+  const { data: storeData } = useStore()
 
   if (storeData) {
     const { defaultLocaleId } = storeData.store
-    const { translations } = option
-    let title = ''
-    for (let i = 0, len = translations.length; i < len; i++) {
-      const translation = translations[i]
-      const { localeId } = translation
-      if (localeId === defaultLocaleId) {
-        title = translation.title
-        console.log(title)
-      }
+    const valuesPreview = []
+    for (let i = 0, len = values.length; i < len; i++) {
+      const value = values[i]
+      const { translations } = value
+      const translation = getTranslation(translations, defaultLocaleId).translation
+      const name = translation.name
+      valuesPreview.push(<span key={name}>{name}</span>)
     }
-
-    return (
-      <div>
-        <span>{title}</span>
-        {valuesPreview}
-      </div>
-    )
+    return valuesPreview
   }
 })
 
+// TODO preview non-default translations
 const OptionsPreview = component(({ options }) => {
-  if (detectIsUndefined(options)) {
-    return
-  }
+  const { data: storeData } = useStore()
 
-  const optionsPreview = []
-  for (let i = 0, len = options.length; i < len; i++) {
-    const option = options[i]
-    const { id } = option
-    optionsPreview.push(<Preview key={id} option={option} />)
-  }
+  if (options && storeData) {
+    const { defaultLocaleId } = storeData.store
 
-  return optionsPreview
+    const optionsPreview = []
+    for (let i = 0, len = options.length; i < len; i++) {
+      const option = options[i]
+      const { values, translations } = option
+      const translation = getTranslation(translations, defaultLocaleId).translation
+      const title = translation.title
+      optionsPreview.push(
+        <OptionContainer>
+          <OptionTitle>{title}</OptionTitle>
+          <OptionValuesContainer>
+            <OptionValuesPreview values={values} />
+          </OptionValuesContainer>
+        </OptionContainer>
+      )
+    }
+    return optionsPreview
+  }
 })
 
-const AddOption = component(({ buttonText, onAdd }) => {
+const AddOption = component(({ onAdd, slot }) => {
   const { data: storeData } = useStore()
   const [isOpen, setIsOpen] = useState(false)
   const [optionData, setOptionData] = useState({})
@@ -127,12 +113,12 @@ const AddOption = component(({ buttonText, onAdd }) => {
   }
 
   return (
-    <AddButton
+    <PrimaryButton
       type='button'
       disabled={isOpen}
       onClick={handleOpen}
-    >{buttonText}
-    </AddButton>
+    >{slot}
+    </PrimaryButton>
   )
 })
 
@@ -161,7 +147,7 @@ const Options = component(({ options, onChange }) => {
 
       <OptionsPreview options={options} onChange={handleChange} />
 
-      <AddOption buttonText={buttonText} onAdd={handleAdd} />
+      <AddOption onAdd={handleAdd}>{buttonText}</AddOption>
     </CardDefault>
   )
 })
