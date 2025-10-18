@@ -31,8 +31,9 @@ const AddButton = styled.button`
   }
 `
 
-const Preview = component(({ option }) => {
-  const { title, values } = option
+const Preview = component(({ option, onChange }) => {
+  const { values } = option
+  const { data: storeData } = useStore()
 
   const valuesPreview = []
   for (let i = 0, len = values.length; i < len; i++) {
@@ -41,12 +42,26 @@ const Preview = component(({ option }) => {
     valuesPreview.push(<span key={name}>{name}</span>)
   }
 
-  return (
-    <div>
-      <span>{title}</span>
-      {valuesPreview}
-    </div>
-  )
+  if (storeData) {
+    const { defaultLocaleId } = storeData.store
+    const { translations } = option
+    let title = ''
+    for (let i = 0, len = translations.length; i < len; i++) {
+      const translation = translations[i]
+      const { localeId } = translation
+      if (localeId === defaultLocaleId) {
+        title = translation.title
+        console.log(title)
+      }
+    }
+
+    return (
+      <div>
+        <span>{title}</span>
+        {valuesPreview}
+      </div>
+    )
+  }
 })
 
 const OptionsPreview = component(({ options }) => {
@@ -58,7 +73,7 @@ const OptionsPreview = component(({ options }) => {
   for (let i = 0, len = options.length; i < len; i++) {
     const option = options[i]
     const { id } = option
-    optionsPreview.push(<Preview key={id} />)
+    optionsPreview.push(<Preview key={id} option={option} />)
   }
 
   return optionsPreview
@@ -90,24 +105,23 @@ const AddOption = component(({ buttonText, onAdd }) => {
     setIsOpen(!isOpen)
   }
 
-  const handleDelete = () => {
+  const handleCancel = () => {
     const initialData = getInitialData()
     setOptionData(initialData)
     setIsOpen(false)
   }
 
-  const handleSave = () => {
-    onAdd(optionData)
-    handleDelete()
+  const handleSave = (newOptionData) => {
+    onAdd(newOptionData)
+    handleCancel()
   }
-  console.log(optionData)
 
   if (storeData && isOpen) {
     return (
       <ProductOptionEdit
         option={optionData}
         saveOption={handleSave}
-        deleteOption={handleDelete}
+        deleteOption={handleCancel}
       />
     )
   }
@@ -130,8 +144,10 @@ const Options = component(({ options, onChange }) => {
   }
 
   const handleAdd = (newOption) => {
-    const newOptions = { ...options, newOption }
-    onChange(newOptions)
+    if (detectIsUndefined(options)) {
+      return onChange([newOption])
+    }
+    return onChange([...options, newOption])
   }
 
   let buttonText = t('addFromSome')
@@ -143,7 +159,7 @@ const Options = component(({ options, onChange }) => {
     <CardDefault>
       <CardHeader title={t('title')} />
 
-      <OptionsPreview options={options} />
+      <OptionsPreview options={options} onChange={handleChange} />
 
       <AddOption buttonText={buttonText} onAdd={handleAdd} />
     </CardDefault>

@@ -11,7 +11,7 @@ import { useProductCreateMutation } from '../../../data'
 
 import TranslationDefaultInputs from '../../../components/products/TranslationDefaultInputs'
 import TranslationsInputs from '../../../components/products/TranslationsInputs'
-import HandleInput from '../../../components/input/Handle'
+import Handle from '../../../components/input/Handle'
 import CardDefault from '../../../components/cards/CardDefault'
 import CardHeader from '../../../components/cards/CardHeader'
 import Checkbox from '../../../components/input/Checkbox'
@@ -62,6 +62,12 @@ const ProductNew = component(({ modalRef }) => {
     })
   }
 
+  const handleOptionsChange = (newOptions) => {
+    setProductData((prevState) => {
+      return { ...prevState, options: newOptions }
+    })
+  }
+
   const [
     createProduct,
     {
@@ -105,8 +111,6 @@ const ProductNew = component(({ modalRef }) => {
     <>
       <SetTitle title={t('title')} />
 
-      {/* <ModalHeader title={t('title')} handleClose={handleCloseModal} /> */}
-
       <ColumnLarge>
         <CardDefault>
           <CardHeader title={t('general.title')} />
@@ -117,7 +121,7 @@ const ProductNew = component(({ modalRef }) => {
               onChange={handleTranslationsChange}
             />
 
-            <HandleInput value={productData.handle} onChange={handleHandleChange} />
+            <Handle value={productData.handle} onChange={handleHandleChange} />
 
             <Checkbox
               name='discountable'
@@ -134,7 +138,8 @@ const ProductNew = component(({ modalRef }) => {
         />
 
         {/* TODO images */}
-        <Options options={productData.options} />
+
+        <Options options={productData.options} onChange={handleOptionsChange} />
       </ColumnLarge>
 
       <ColumnSmall>

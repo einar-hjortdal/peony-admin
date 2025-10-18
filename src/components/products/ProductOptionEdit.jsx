@@ -13,6 +13,7 @@ const Container = styled.div`
   border-radius: .3125rem;
 `
 
+// TODO add values
 const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
   const { t } = useTranslation('productOptionEdit')
   const { data: storeData } = useStore()
@@ -47,7 +48,6 @@ const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
       return { ...prevState, values: newOptionValues }
     })
   }
-  console.log(optionData)
 
   const isEmptyString = (s) => {
     return s.trim().length === 0 || s === ''
