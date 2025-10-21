@@ -2,14 +2,12 @@ import { component, detectIsUndefined, useEffect, useState } from '@dark-engine/
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import CardDefault from '../../../components/cards/CardDefault'
-import CardHeader from '../../../components/cards/CardHeader'
-import ButtonMore from '../../../components/buttons/ButtonMore'
-import PrimaryButton from '../../../components/buttons/PrimaryButton'
-import If from '../../../components/If'
 import { useStore } from '../../../data'
-import ProductOptionEdit from '../../../components/products/ProductOptionEdit'
 import { getTranslation } from '../../../utils'
+import ProductOptionEdit from './ProductOptionEdit'
+import CardDefault from '../../cards/CardDefault'
+import CardHeader from '../../cards/CardHeader'
+import PrimaryButton from '../../buttons/PrimaryButton'
 
 const OptionContainer = styled.div`
 
@@ -40,7 +38,8 @@ const OptionValuesPreview = component(({ values }) => {
 })
 
 // TODO preview non-default translations
-const OptionsPreview = component(({ options }) => {
+// TODO implement change logic (need component with internal state)
+const OptionsPreview = component(({ options, onChange }) => {
   const { data: storeData } = useStore()
 
   if (options && storeData) {
@@ -122,18 +121,37 @@ const AddOption = component(({ onAdd, slot }) => {
   )
 })
 
-const Options = component(({ options, onChange }) => {
+// Manages product options for both new product creation (options = undefined)
+// and existing product editing (options = array).
+//
+// PROP: options
+// - The current list of product options. Be prepared to handle 'undefined'
+//   for a newly created product.
+//
+// PROP: onChange(payload)
+// - Callback called on any change (add, edit, delete).
+// - PAYLOAD always contains the FULL, updated 'options' array.
+// - PAYLOAD also contains ONE change object: e.g., 'addedOption',
+//   'changedOption', 'deletedOptionValue', etc., depending on the action.
+const ProductOptions = component(({ options, onChange }) => {
   const { t } = useTranslation('productsNew.options')
 
-  const handleChange = (newOptions) => {
-    onChange(newOptions)
+  const handleChange = (newOptions, changedOption) => {
+    onChange({
+      options: newOptions,
+      optionChanged: changedOption
+    })
   }
 
   const handleAdd = (newOption) => {
+    const res = {}
     if (detectIsUndefined(options)) {
-      return onChange([newOption])
+      res.options = [newOption]
+    } else {
+      res.options = [...options, newOption]
     }
-    return onChange([...options, newOption])
+    res.optionAdded = newOption
+    onChange(res)
   }
 
   let buttonText = t('addFromSome')
@@ -152,4 +170,4 @@ const Options = component(({ options, onChange }) => {
   )
 })
 
-export default Options
+export default ProductOptions

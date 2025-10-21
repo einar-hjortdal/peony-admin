@@ -21,7 +21,7 @@ import SetTitle from '../../../components/SetTitle'
 import Status from '../../../components/products/Status'
 import RowRight from '../../../components/rows/RowRight'
 import PrimaryButton from '../../../components/buttons/PrimaryButton'
-import Options from './Options'
+import ProductOptions from '../../../components/products/ProductOptions'
 
 const ProductNew = component(({ modalRef }) => {
   const { t } = useTranslation('products.new')
@@ -62,9 +62,9 @@ const ProductNew = component(({ modalRef }) => {
     })
   }
 
-  const handleOptionsChange = (newOptions) => {
+  const handleOptionsChange = (data) => {
     setProductData((prevState) => {
-      return { ...prevState, options: newOptions }
+      return { ...prevState, options: data.options }
     })
   }
 
@@ -139,7 +139,7 @@ const ProductNew = component(({ modalRef }) => {
 
         {/* TODO images */}
 
-        <Options options={productData.options} onChange={handleOptionsChange} />
+        <ProductOptions options={productData.options} onChange={handleOptionsChange} />
       </ColumnLarge>
 
       <ColumnSmall>

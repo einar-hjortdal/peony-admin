@@ -45,6 +45,9 @@ export const dataKeys = {
   productOptionCreate: 'productOptionCreate',
   productOptionUpdate: 'productOptionUpdate',
   productOptionDelete: 'productOptionDelete',
+  productOptionValueCreate: 'productOptionValueCreate',
+  productOptionValueUpdate: 'productOptionValueUpdate',
+  productOptionValueDelete: 'productOptionValueDelete',
   productVariantCreate: 'productVariantCreate',
   productVariantUpdate: 'productVariantUpdate',
   productVariantDelete: 'productVariantDelete',
@@ -230,6 +233,41 @@ export const api = {
   productOptionDelete: async (productId, optionId) => {
     const response = await fetch(
       getRequestUrl(`products/${productId}/options/${optionId}`),
+      {
+        method: 'DELETE',
+        credentials: 'include'
+      }
+    )
+    return checkResponse(response)
+  },
+
+  productOptionValueCreate: async (productId, optionId, data) => {
+    const response = await fetch(
+      getRequestUrl(`products/${productId}/options/${optionId}/values`),
+      {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(data)
+      }
+    )
+    return checkResponse(response)
+  },
+
+  productOptionValueUpdate: async (productId, optionId, valueId, data) => {
+    const response = await fetch(
+      getRequestUrl(`products/${productId}/options/${optionId}/values/${valueId}`),
+      {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(data)
+      }
+    )
+    return checkResponse(response)
+  },
+
+  productOptionValueDelete: async (productId, optionId, valueId) => {
+    const response = await fetch(
+      getRequestUrl(`products/${productId}/options/${optionId}/values/${valueId}`),
       {
         method: 'DELETE',
         credentials: 'include'

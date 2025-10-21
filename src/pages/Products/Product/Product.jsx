@@ -18,11 +18,11 @@ import BadgeSuccess from '../../../components/badges/BadgeSuccess'
 import ButtonMore from '../../../components/buttons/ButtonMore'
 import Organize from './Organize/Organize'
 import SalesChannels from './SalesChannels'
-import Options from './Options'
 import Metadata from './Metadata'
 import Variants from './Variants'
 import EditGeneral from './EditGeneral'
 import Translations from './Translations'
+import Options from './Options'
 
 const StatusUpdate = component(({ productId, status, slot }) => {
   const [updateProduct] = useProductUpdateMutation(productId)

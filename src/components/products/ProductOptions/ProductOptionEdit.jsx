@@ -2,11 +2,11 @@ import { component, detectIsUndefined, useState } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { useStore } from '../../data'
-import PrimaryButton from '../buttons/PrimaryButton'
-import Text from '../input/Text'
+import { useStore } from '../../../data'
+import PrimaryButton from '../../buttons/PrimaryButton'
+import Text from '../../input/Text'
 import ProductOptionValueEdit from './ProductOptionValueEdit'
-import { getTranslation } from '../../utils'
+import { getTranslation } from '../../../utils'
 
 const Container = styled.div`
   border: 1px solid ${p => p.theme.neutral30};
@@ -107,10 +107,10 @@ const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
   }
 
   if (storeData) {
-    const { translations, values } = option
+    const { translations, values } = optionData
     const { defaultLocaleId } = storeData.store
 
-    const defaultOptionTranslation = getTranslation(translations, defaultLocaleId)
+    const defaultOptionTranslation = getTranslation(translations, defaultLocaleId).translation
 
     const valueInputs = []
     for (let i = 0, len = values.length; i < len; i++) {

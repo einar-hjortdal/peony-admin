@@ -152,9 +152,12 @@ export const useProductById = (productId) => {
 export const useProductCreateMutation = () => {
   const api = useApi()
   return useMutation(
-    dataKeys.productCreate, (data) => api.productCreate(data),
+    dataKeys.productCreate,
+    (data) => api.productCreate(data),
     {
-      onSuccess: ({ cache }) => { cache.clear(dataKeys.productsGet) }
+      onSuccess: ({ cache }) => {
+        cache.clear(dataKeys.productsGet)
+      }
     }
   )
 }
@@ -175,12 +178,16 @@ export const useProductUpdateMutation = (productId) => {
 
 export const useProductDeleteMutation = (productId) => {
   const api = useApi()
-  return useMutation(dataKeys.productDelete, () => api.productDelete(productId), {
-    onSuccess: ({ cache }) => {
-      cache.delete(dataKeys.productGetById, { id: productId })
-      cache.clear(dataKeys.productsGet)
+  return useMutation(
+    dataKeys.productDelete,
+    () => api.productDelete(productId),
+    {
+      onSuccess: ({ cache }) => {
+        cache.delete(dataKeys.productGetById, { id: productId })
+        cache.clear(dataKeys.productsGet)
+      }
     }
-  })
+  )
 }
 
 export const useProductCategoryCreateMutation = () => {
@@ -203,7 +210,9 @@ export const useProductCategoryUpdateMutation = (productCategoryId) => {
     (data) => api.productCategoryUpdate(productCategoryId, data),
     {
       onSuccess: ({ cache }) => {
-        cache.invalidate(dataKeys.productCategoryGetById, { id: productCategoryId })
+        cache.invalidate(dataKeys.productCategoryGetById, {
+          id: productCategoryId
+        })
         cache.clear(dataKeys.productCategoryGet)
       }
     }
@@ -217,7 +226,9 @@ export const useProductCategoryDeleteMutation = (productCategoryId) => {
     () => api.productCategoryDelete(productCategoryId),
     {
       onSuccess: ({ cache }) => {
-        cache.delete(dataKeys.productCategoryGetById, { id: productCategoryId })
+        cache.delete(dataKeys.productCategoryGetById, {
+          id: productCategoryId
+        })
         cache.clear(dataKeys.productCategoryGet)
       }
     }
@@ -226,19 +237,27 @@ export const useProductCategoryDeleteMutation = (productCategoryId) => {
 
 export const useProductCategoryById = (productCategoryId) => {
   const api = useApi()
-  return useQuery(dataKeys.productCategoryGetById, () => api.productCategoryGetById(productCategoryId), {
-    variables: { productCategoryId },
-    extractId: (x) => x.productCategoryId
-  })
+  return useQuery(
+    dataKeys.productCategoryGetById,
+    () => api.productCategoryGetById(productCategoryId),
+    {
+      variables: { productCategoryId },
+      extractId: (x) => x.productCategoryId
+    }
+  )
 }
 
 export const useProductCategories = (params) => {
   const api = useApi()
   const p = getParams(params)
-  return useQuery(dataKeys.productCategoryGet, () => api.productCategoryGet(p), {
-    variables: { p },
-    extractId: (x) => x.p
-  })
+  return useQuery(
+    dataKeys.productCategoryGet,
+    () => api.productCategoryGet(p),
+    {
+      variables: { p },
+      extractId: (x) => x.p
+    }
+  )
 }
 
 export const useProductOptionCreateMutation = (productId) => {
@@ -272,6 +291,47 @@ export const useProductOptionDeleteMutation = (productId) => {
   return useMutation(
     dataKeys.productOptionDelete,
     (optionId) => api.productOptionDelete(productId, optionId),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      }
+    }
+  )
+}
+
+export const useProductOptionValueCreateMutation = (productId) => {
+  const api = useApi()
+  return useMutation(
+    dataKeys.productOptionValueCreate,
+    (optionId, data) => api.productOptionValueCreate(productId, optionId, data),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      }
+    }
+  )
+}
+
+export const useProductOptionValueUpdateMutation = (productId) => {
+  const api = useApi()
+  return useMutation(
+    dataKeys.productOptionValueUpdate,
+    (optionId, valueId, data) =>
+      api.productOptionValueUpdate(productId, optionId, valueId, data),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+      }
+    }
+  )
+}
+
+export const useProductOptionValueDeleteMutation = (productId) => {
+  const api = useApi()
+  return useMutation(
+    dataKeys.productOptionValueDelete,
+    (optionId, valueId) =>
+      api.productOptionValueDelete(productId, optionId, valueId),
     {
       onSuccess: ({ cache }) => {
         cache.invalidate(dataKeys.productGetById, { id: productId })
@@ -330,7 +390,9 @@ export const useUpdateVariantsMutation = (productId) => {
       for (let i = 0, len = variantIds.length; i < len; i++) {
         const variantId = variantIds[i]
         const productVariantRequest = variantsMoneyAmounts[variantId]
-        promises.push(api.variantUpdate(productId, variantId, productVariantRequest))
+        promises.push(
+          api.variantUpdate(productId, variantId, productVariantRequest)
+        )
       }
       return Promise.all(promises)
     },
@@ -467,7 +529,10 @@ export const useUploadProductImageMutation = (productId) => {
             if (detectIsArray(imageTranslations)) {
               const translations = []
               for (const translation of imageTranslations) {
-                translations.push({ localeId: translation.localeId, alt: translation.alt })
+                translations.push({
+                  localeId: translation.localeId,
+                  alt: translation.alt
+                })
               }
               newImages.push({ url: imageUrl, translations })
             } else {
