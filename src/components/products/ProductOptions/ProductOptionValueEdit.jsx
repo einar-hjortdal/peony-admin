@@ -41,7 +41,8 @@ const ProductOptionValueEdit = component(({ optionValue, onInput }) => {
         data-locale-id={defaultLocaleId}
         placeholder={t('placeholder')}
         onInput={handleInput}
-      />
+      >{t('values')}
+      </Text>
     )
   }
 })

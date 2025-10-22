@@ -50,7 +50,6 @@ const VariantRow = component(({ productId, variant }) => {
         <ButtonMore>
           <li><VariantEdit productId={productId} variant={variant} /></li>
           <li><button>manage inventory</button></li>
-          <li><button>duplicate variant</button></li>
           <li>
             <VariantDeleteButton
               productId={productId}

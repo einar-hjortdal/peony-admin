@@ -14,7 +14,7 @@ const Container = styled.div`
 `
 
 // TODO add more values
-const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
+const ProductOptionEdit = component(({ option, onOptionUpdate, onOptionDelete }) => {
   const { t } = useTranslation('productOptionEdit')
   const { data: storeData } = useStore()
   const [optionData, setOptionData] = useState(option)
@@ -103,7 +103,11 @@ const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
       }
     }
 
-    saveOption(optionData)
+    onOptionUpdate(optionData)
+  }
+
+  const handleDelete = () => {
+    return onOptionDelete(optionData)
   }
 
   if (storeData) {
@@ -137,13 +141,13 @@ const ProductOptionEdit = component(({ option, saveOption, deleteOption }) => {
           data-locale-id={defaultLocaleId}
           placeholder={t('placeholder')}
           onInput={handleInput}
-        />
+        >{t('name')}
+        </Text>
 
         {valueInputs}
 
         <PrimaryButton type='button' onClick={handleSave}>save</PrimaryButton>
-        <PrimaryButton type='button' onClick={deleteOption}>delete</PrimaryButton>
-        {/* delete, save buttons */}
+        <PrimaryButton type='button' onClick={handleDelete}>delete</PrimaryButton>
       </Container>
     )
   }

@@ -1,4 +1,4 @@
-import { component, useEffect } from '@dark-engine/core'
+import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 
 import ProductOptions from '../../../components/products/ProductOptions'
@@ -25,16 +25,16 @@ const Options = component(() => {
 
   const handleChange = (data) => {
     const {
-      optionAdded,
+      optionCreated,
       optionChanged,
       optionDeleted,
-      optionValueAdded,
+      optionValueCreated,
       optionValueChanged,
       optionValueDeleted
     } = data
-    if (optionAdded) {
+    if (optionCreated) {
       // TODO
-      console.log(optionAdded)
+      console.log(optionCreated)
     }
 
     if (optionChanged) {
@@ -47,9 +47,9 @@ const Options = component(() => {
       console.log(optionDeleted)
     }
 
-    if (optionValueAdded) {
+    if (optionValueCreated) {
       // TODO
-      console.log(optionValueAdded)
+      console.log(optionValueCreated)
     }
 
     if (optionValueChanged) {
