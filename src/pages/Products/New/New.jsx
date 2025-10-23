@@ -63,7 +63,6 @@ const ProductNew = component(({ modalRef }) => {
   }
 
   const handleOptionsChange = (data) => {
-    console.log(data)
     setProductData((prevState) => {
       return { ...prevState, options: data.options }
     })

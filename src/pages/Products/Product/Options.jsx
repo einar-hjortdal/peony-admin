@@ -26,10 +26,10 @@ const Options = component(() => {
   const handleChange = (data) => {
     const {
       optionCreated,
-      optionChanged,
+      optionUpdated,
       optionDeleted,
       optionValueCreated,
-      optionValueChanged,
+      optionValueUpdated,
       optionValueDeleted
     } = data
     if (optionCreated) {
@@ -37,9 +37,9 @@ const Options = component(() => {
       console.log(optionCreated)
     }
 
-    if (optionChanged) {
+    if (optionUpdated) {
       // TODO
-      console.log(optionChanged)
+      console.log(optionUpdated)
     }
 
     if (optionDeleted) {
@@ -52,9 +52,9 @@ const Options = component(() => {
       console.log(optionValueCreated)
     }
 
-    if (optionValueChanged) {
+    if (optionValueUpdated) {
       // TODO
-      console.log(optionValueChanged)
+      console.log(optionValueUpdated)
     }
 
     if (optionValueDeleted) {

@@ -41,7 +41,14 @@ const RightListItem = styled.div`
   vertical-align: middle;
 `
 
-const Option = component(({ option, onOptionUpdate, onOptionDelete }) => {
+const Option = component(({
+  option,
+  onOptionUpdate,
+  onOptionDelete,
+  onOptionValueCreate,
+  onOptionValueUpdate,
+  onOptionValueDelete
+}) => {
   const { t } = useTranslation('productOptions')
   const { data: storeData } = useStore()
   const [isEditing, setIsEditing] = useState(false)
@@ -78,6 +85,9 @@ const Option = component(({ option, onOptionUpdate, onOptionDelete }) => {
               option={option}
               onOptionUpdate={handleUpdate}
               onOptionDelete={handleDelete}
+              onOptionValueCreate={onOptionValueCreate}
+              onOptionValueUpdate={onOptionValueUpdate}
+              onOptionValueDelete={onOptionValueDelete}
             />
           </LeftListItem>
 
@@ -123,10 +133,19 @@ const AddOption = component(({ onAdd, slot }) => {
   const getInitialData = () => {
     if (storeData) {
       const { defaultLocaleId } = storeData.store
+      // generate ids to identify changes to created options and values
+      const optionId = Date.now() + Math.floor(Math.random() * 10000)
+      const valueId = Date.now() + Math.floor(Math.random() * 10000)
       return {
-        creationId: Date.now(), // to identify changes to created options
+        id: optionId,
         translations: [{ localeId: defaultLocaleId, title: '' }],
-        values: [{ translations: [{ localeId: defaultLocaleId, name: '' }] }]
+        values: [
+          {
+            optionId,
+            id: valueId,
+            translations: [{ localeId: defaultLocaleId, name: '' }]
+          }
+        ]
       }
     }
   }
@@ -173,18 +192,16 @@ const AddOption = component(({ onAdd, slot }) => {
   )
 })
 
-// Manages product options for both new product creation (options = undefined)
-// and existing product editing (options = array).
+// options:
+// - The current list of product options. undefined for a newly created product.
 //
-// PROP: options
-// - The current list of product options. Be prepared to handle 'undefined'
-//   for a newly created product.
+// onChange(payload):
+// - payload always contains the full updated 'options' array.
+// - payload also contains one change object: e.g., 'optionCreated', 'optionUpdated', 'optionDeleted',
+//   'optionValueCreated', etc., depending on the action.
 //
-// PROP: onChange(payload)
-// - Callback called on any change (add, edit, delete).
-// - PAYLOAD always contains the FULL, updated 'options' array.
-// - PAYLOAD also contains ONE change object: e.g., 'optionCreated',
-//   'optionUpdated', 'optionDeleted', 'optionValueCreated', etc., depending on the action.
+// Unsaved options and optionValues have numeric ids, you can use this to detect whether one object
+// has been saved to the database.
 const ProductOptions = component(({ options, onChange }) => {
   const { t } = useTranslation('productOptions')
 
@@ -202,47 +219,75 @@ const ProductOptions = component(({ options, onChange }) => {
     })
   }
 
-  const getChangedId = (changedOption) => {
-    const { id, creationId } = changedOption
-    if (id) {
-      return id
-    }
-    return creationId
-  }
-
-  const findOptionIndex = (id) => {
+  const findOptionIndex = (optionId) => {
     for (let i = 0, len = options.length; i < len; i++) {
       const option = options[i]
-      if (option.id === id || option.creationId === id) {
+      if (option.id === optionId) {
         return i
       }
     }
   }
 
-  const handleOptionUpdate = (optionChanged) => {
-    const id = getChangedId(optionChanged)
+  const findOptionValueIndex = (optionValues, optionValueId) => {
+    for (let i = 0, len = optionValues.length; i < len; i++) {
+      const optionValue = optionValues[i]
+      if (optionValue.id === optionValueId) {
+        return i
+      }
+    }
+  }
+
+  const handleOptionUpdate = (optionUpdated) => {
+    const { id } = optionUpdated
     const index = findOptionIndex(id)
     const newOptions = [...options]
-    newOptions[index] = optionChanged
+    newOptions[index] = optionUpdated
     return onChange({
       options: newOptions,
-      optionChanged
+      optionUpdated
     })
   }
 
   const handleOptionDelete = (optionDeleted) => {
-    return onChange({ options, optionDeleted })
+    const { id } = optionDeleted
+    const index = findOptionIndex(id)
+    // remove the option at the given index
+    const newOptions = [
+      ...options.slice(0, index),
+      ...options.slice(index + 1)
+    ]
+
+    return onChange({
+      options: newOptions,
+      optionDeleted
+    })
   }
 
-  const handleOptionValueCreate = () => {
-
+  const handleOptionValueCreate = (valueCreated) => {
   }
 
-  const handleOptionValueUpdate = () => {
+  const handleOptionValueUpdate = (optionValueUpdated) => {
+    const { id, optionId } = optionValueUpdated
+    const optionIndex = findOptionIndex(optionId)
+    const option = options[optionIndex]
+    const { values } = option
+    const optionValueIndex = findOptionValueIndex(values, id)
 
+    const newValues = [...values]
+    newValues[optionValueIndex] = optionValueUpdated
+
+    const newOption = { ...option, values: newValues }
+
+    const newOptions = [...options]
+    newOptions[optionIndex] = newOption
+
+    return onChange({
+      options: newOptions,
+      optionValueUpdated
+    })
   }
 
-  const handleOptionValueDelete = () => {
+  const handleOptionValueDelete = (valueDeleted) => {
 
   }
 
@@ -261,6 +306,9 @@ const ProductOptions = component(({ options, onChange }) => {
             option={option}
             onOptionUpdate={handleOptionUpdate}
             onOptionDelete={handleOptionDelete}
+            onOptionValueCreate={handleOptionValueCreate}
+            onOptionValueUpdate={handleOptionValueUpdate}
+            onOptionValueDelete={handleOptionValueDelete}
           />
         </li>
       )

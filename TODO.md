@@ -8,13 +8,13 @@
 - [x] Add/edit currencies
 - [x] Add/edit languages
 - [x] Products
+- [x] Variants
 - [x] Prices
 - [x] Product categories
 - [x] Metadata
 
 ## Currently working on
 
-- [ ] Variants
 - [ ] Regions
 - [ ] Inventory items
 

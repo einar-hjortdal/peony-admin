@@ -1,25 +1,93 @@
-import { component, detectIsUndefined, useState } from '@dark-engine/core'
+import { component, detectIsFunction, detectIsUndefined, useState } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import { useStore } from '../../../data'
 import PrimaryButton from '../../buttons/PrimaryButton'
 import Text from '../../input/Text'
-import ProductOptionValueEdit from './ProductOptionValueEdit'
 import { getTranslation } from '../../../utils'
+
+// TODO handle other translations
+// TODO add delete translation
+const ProductOptionValue = component(({ optionValue, onChange }) => {
+  const { t } = useTranslation('productOptionEdit.value')
+  const { data: storeData } = useStore()
+  const [optionValueData, setOptionValueData] = useState(optionValue)
+
+  const handleInput = (e) => {
+    const { value } = e.target
+    const { localeId } = e.target.dataset
+
+    setOptionValueData(prevState => {
+      const { translations } = prevState
+      const newTranslations = [...translations]
+      const translation = getTranslation(translations, localeId)
+      const newTranslation = { localeId, name: value }
+
+      if (detectIsUndefined(translation)) {
+        newTranslations.push(newTranslation)
+      } else {
+        newTranslations[translation.index] = newTranslation
+      }
+
+      return { ...prevState, translations: newTranslations }
+    })
+  }
+
+  const handleBlur = () => {
+    onChange(optionValueData)
+  }
+
+  if (storeData) {
+    const { defaultLocaleId } = storeData.store
+    const { translations } = optionValueData
+    const defaultTranslation = getTranslation(translations, defaultLocaleId).translation
+    // if isDefault no delete button
+    return (
+      <Text
+        value={defaultTranslation.name}
+        data-locale-id={defaultLocaleId}
+        placeholder={t('placeholder')}
+        onInput={handleInput}
+        onBlur={handleBlur}
+      >{t('values')}
+      </Text>
+    )
+  }
+})
+
+// TODO allow adding multiple values
+const ProductOptionValues = component(({ option, onChange }) => {
+  const { values } = option
+
+  const valueInputs = []
+  for (let i = 0, len = values.length; i < len; i++) {
+    const value = values[i]
+
+    valueInputs.push(<ProductOptionValue optionValue={value} onChange={onChange} />)
+  }
+
+  return valueInputs
+})
 
 const Container = styled.div`
   border: 1px solid ${p => p.theme.neutral30};
   border-radius: .3125rem;
 `
 
-// TODO add more values
-const ProductOptionEdit = component(({ option, onOptionUpdate, onOptionDelete }) => {
+const ProductOptionEdit = component(({
+  option,
+  onOptionUpdate,
+  onOptionDelete,
+  onOptionValueCreate,
+  onOptionValueUpdate,
+  onOptionValueDelete
+}) => {
   const { t } = useTranslation('productOptionEdit')
   const { data: storeData } = useStore()
   const [optionData, setOptionData] = useState(option)
 
-  const handleInput = (e) => {
+  const handleOptionInput = (e) => {
     const { value } = e.target
     const { localeId } = e.target.dataset
 
@@ -40,13 +108,29 @@ const ProductOptionEdit = component(({ option, onOptionUpdate, onOptionDelete })
     })
   }
 
-  const handleOptionValueChange = (newOptionValue, index) => {
+  const getOptionValueIndex = (id) => {
     const { values } = option
+    for (let i = 0, len = values.length; i < len; i++) {
+      const value = values[i]
+      if (value.id === id) {
+        return i
+      }
+    }
+  }
+
+  const handleOptionValueChange = (newOptionValue) => {
+    const { id } = newOptionValue
+    const { values } = option
+    const index = getOptionValueIndex(id)
     const newOptionValues = [...values]
     newOptionValues[index] = newOptionValue
     setOptionData(prevState => {
       return { ...prevState, values: newOptionValues }
     })
+
+    if (detectIsFunction(onOptionValueUpdate)) { // undefined when creating new option
+      onOptionValueUpdate(newOptionValue)
+    }
   }
 
   const isEmptyString = (s) => {
@@ -103,7 +187,12 @@ const ProductOptionEdit = component(({ option, onOptionUpdate, onOptionDelete })
       }
     }
 
+    // TODO split save logic so that changes are done individually
+    // Splitting save logic allows to maintain atomicity
+    // use onBlur for now, eventually group all related translation inputs of the same optionValue to the same event.
+    // TODO what event is suitable?
     onOptionUpdate(optionData)
+    // onOptionValueUpdate()
   }
 
   const handleDelete = () => {
@@ -111,28 +200,10 @@ const ProductOptionEdit = component(({ option, onOptionUpdate, onOptionDelete })
   }
 
   if (storeData) {
-    const { translations, values } = optionData
+    const { translations } = optionData
     const { defaultLocaleId } = storeData.store
 
     const defaultOptionTranslation = getTranslation(translations, defaultLocaleId).translation
-
-    const valueInputs = []
-    for (let i = 0, len = values.length; i < len; i++) {
-      const value = values[i]
-
-      // attach optionValue index to handler
-      const handleOptionValueChangeWithIndex = (newOptionValue) => {
-        handleOptionValueChange(newOptionValue, i)
-      }
-
-      valueInputs.push(
-        <ProductOptionValueEdit
-          key={i}
-          optionValue={value}
-          onInput={handleOptionValueChangeWithIndex}
-        />
-      )
-    }
 
     return (
       <Container>
@@ -140,11 +211,11 @@ const ProductOptionEdit = component(({ option, onOptionUpdate, onOptionDelete })
           value={defaultOptionTranslation.title}
           data-locale-id={defaultLocaleId}
           placeholder={t('placeholder')}
-          onInput={handleInput}
+          onInput={handleOptionInput}
         >{t('name')}
         </Text>
 
-        {valueInputs}
+        <ProductOptionValues option={optionData} onChange={handleOptionValueChange} />
 
         <PrimaryButton type='button' onClick={handleSave}>save</PrimaryButton>
         <PrimaryButton type='button' onClick={handleDelete}>delete</PrimaryButton>
