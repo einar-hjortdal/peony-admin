@@ -42,6 +42,7 @@
 ## Low priority
 
 - [ ] Acceptable design
+- [ ] Acceptable user experience
 - [ ] Suspense
 - [ ] Dark theme
 - [ ] Responsiveness

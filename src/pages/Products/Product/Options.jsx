@@ -33,33 +33,30 @@ const Options = component(() => {
       optionValueDeleted
     } = data
     if (optionCreated) {
-      // TODO
-      console.log(optionCreated)
+      optionCreate(optionCreated)
     }
 
     if (optionUpdated) {
-      // TODO
-      console.log(optionUpdated)
+      optionUpdate(optionUpdated.id, optionUpdated)
     }
 
     if (optionDeleted) {
-      // TODO
-      console.log(optionDeleted)
+      optionDelete(optionDeleted.id)
     }
 
     if (optionValueCreated) {
-      // TODO
-      console.log(optionValueCreated)
+      const { optionId } = optionValueCreated
+      optionValueCreate(optionId, optionValueCreated)
     }
 
     if (optionValueUpdated) {
-      // TODO
-      console.log(optionValueUpdated)
+      const { id, optionId } = optionValueUpdated
+      optionValueUpdate(optionId, id, optionValueUpdated)
     }
 
     if (optionValueDeleted) {
-      // TODO
-      console.log(optionValueDeleted)
+      const { id, optionId } = optionDeleted
+      optionValueDelete(optionId, id)
     }
   }
 

@@ -8,6 +8,7 @@ import ProductOptionEdit from './ProductOptionEdit'
 import CardDefault from '../../cards/CardDefault'
 import CardHeader from '../../cards/CardHeader'
 import PrimaryButton from '../../buttons/PrimaryButton'
+import { getCreationId } from './utils'
 
 const OptionTitle = styled.span`
   font-weight: 700;
@@ -134,8 +135,8 @@ const AddOption = component(({ onAdd, slot }) => {
     if (storeData) {
       const { defaultLocaleId } = storeData.store
       // generate ids to identify changes to created options and values
-      const optionId = Date.now() + Math.floor(Math.random() * 10000)
-      const valueId = Date.now() + Math.floor(Math.random() * 10000)
+      const optionId = getCreationId()
+      const valueId = getCreationId()
       return {
         id: optionId,
         translations: [{ localeId: defaultLocaleId, title: '' }],
@@ -158,13 +159,13 @@ const AddOption = component(({ onAdd, slot }) => {
   }, [storeData])
 
   const handleOpen = () => {
-    setIsOpen(!isOpen)
+    setIsOpen(true)
   }
 
   const handleCancel = () => {
+    setIsOpen(false)
     const initialData = getInitialData()
     setOptionData(initialData)
-    setIsOpen(false)
   }
 
   const handleSave = (newOptionData) => {
@@ -263,7 +264,21 @@ const ProductOptions = component(({ options, onChange }) => {
     })
   }
 
-  const handleOptionValueCreate = (valueCreated) => {
+  const handleOptionValueCreate = (optionValueCreated) => {
+    const { optionId } = optionValueCreated
+    const optionIndex = findOptionIndex(optionId)
+    const option = options[optionIndex]
+    const { values } = option
+
+    const newValues = [...values, optionValueCreated]
+    const newOption = { ...option, values: newValues }
+    const newOptions = [...options]
+    newOptions[optionIndex] = newOption
+
+    return onChange({
+      options: newOptions,
+      optionValueCreated
+    })
   }
 
   const handleOptionValueUpdate = (optionValueUpdated) => {
@@ -287,8 +302,27 @@ const ProductOptions = component(({ options, onChange }) => {
     })
   }
 
-  const handleOptionValueDelete = (valueDeleted) => {
+  const handleOptionValueDelete = (optionValueDeleted) => {
+    const { id, optionId } = optionValueDeleted
+    const optionIndex = findOptionIndex(optionId)
+    const option = options[optionIndex]
+    const { values } = option
+    const optionValueIndex = findOptionValueIndex(values, id)
 
+    const newValues = [
+      ...values.slice(0, optionValueIndex),
+      ...values.slice(optionValueIndex + 1)
+    ]
+
+    const newOption = { ...option, values: newValues }
+
+    const newOptions = [...options]
+    newOptions[optionIndex] = newOption
+
+    return onChange({
+      options: newOptions,
+      optionValueDeleted
+    })
   }
 
   let buttonText = t('addFromSome')
