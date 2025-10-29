@@ -56,6 +56,10 @@ const Product = component(() => {
     updateProduct({ status: newStatus })
   }
 
+  const handleImagesChange = (newImages) => {
+    updateProduct({ images: newImages })
+  }
+
   // TODO check for database changes when adding prices
   if (productData) {
     const {
@@ -64,7 +68,8 @@ const Product = component(() => {
       description,
       handle,
       discountable,
-      status
+      status,
+      images
     } = productData.product
 
     return (
@@ -124,7 +129,7 @@ const Product = component(() => {
           {/* TODO display translations without clogging */}
 
           <Translations />
-          <Images />
+          <Images images={images} onChange={handleImagesChange} />
           <Options />
           <Variants />
           <Metadata />

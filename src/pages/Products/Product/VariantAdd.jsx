@@ -7,7 +7,7 @@ import {
 } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import { useVariantCreateMutation } from '../../../data'
+import { useProductVariantCreateMutation } from '../../../data'
 import PrimaryButton from '../../../components/buttons/PrimaryButton'
 import MetadataInputs from '../../../components/input/Metadata'
 import ModalDefault from '../../../components/modals/ModalDefault'
@@ -25,7 +25,7 @@ const VariantAdd = component(({ productId }) => {
     data: createVariantData,
     isFetching: createVariantIsFetching,
     error: createVariantError
-  }] = useVariantCreateMutation(productId)
+  }] = useProductVariantCreateMutation(productId)
 
   const modalRef = useRef(null)
 

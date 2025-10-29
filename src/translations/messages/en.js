@@ -174,6 +174,7 @@ export default freeze({
   'products.new.general.title': 'General',
   'products.new.media': 'media',
   'products.new.organize': 'organize',
+  'products.new.metadata.title': 'Metadata',
   'products.new.save': 'save',
   'products.new.title': 'new product',
   'products.new.translations': 'translations',

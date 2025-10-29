@@ -1,9 +1,5 @@
-import {
-  component,
-  detectIsNull,
-  useEffect,
-  useState
-} from '@dark-engine/core'
+import { component, useEffect, useState } from '@dark-engine/core'
+import { useHistory } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 import { detectIsEmptyString } from '@wareme/utils'
 
@@ -22,9 +18,22 @@ import Status from '../../../components/products/Status'
 import RowRight from '../../../components/rows/RowRight'
 import PrimaryButton from '../../../components/buttons/PrimaryButton'
 import ProductOptions from '../../../components/products/ProductOptions'
+import MetadataInputs from '../../../components/input/Metadata'
+import Images from '../../../components/products/Images'
 
-const ProductNew = component(({ modalRef }) => {
+const Metadata = component(({ metadata, onChange }) => {
+  const { t } = useTranslation('products.new.metadata')
+  return (
+    <CardDefault>
+      <CardHeader title={t('title')} />
+      <MetadataInputs metadata={metadata} onChange={onChange} />
+    </CardDefault>
+  )
+})
+
+const ProductNew = component(() => {
   const { t } = useTranslation('products.new')
+  const history = useHistory()
 
   const [productData, setProductData] = useState({ discountable: true })
 
@@ -62,9 +71,22 @@ const ProductNew = component(({ modalRef }) => {
     })
   }
 
+  const handleImagesChange = (newImages) => {
+    setProductData((prevState) => {
+      return { ...prevState, images: newImages }
+    })
+  }
+  console.log(productData)
+
   const handleOptionsChange = (data) => {
     setProductData((prevState) => {
       return { ...prevState, options: data.options }
+    })
+  }
+
+  const handleMetadataChange = (newMetadata) => {
+    setProductData((prevstate) => {
+      return { ...prevstate, metadata: newMetadata }
     })
   }
 
@@ -88,23 +110,16 @@ const ProductNew = component(({ modalRef }) => {
     createProduct(data)
   }
 
-  const handleCloseModal = () => {
-    if (detectIsNull(modalRef.current)) {
-      return
-    }
-
-    setProductData({ discountable: true })
-    modalRef.current.close()
-  }
-
   useEffect(() => {
+    // on success navigate to products
     if (createProductData) {
-      handleCloseModal()
+      console.log('navigating')
+      history.push('/products')
     }
   }, [createProductData])
 
   if (createProductError) {
-    return null // TODO handle error
+    // TODO handle error
   }
 
   return (
@@ -137,9 +152,9 @@ const ProductNew = component(({ modalRef }) => {
           onChange={handleTranslationsChange}
         />
 
-        {/* TODO images */}
-
+        <Images images={productData.images} onChange={handleImagesChange} />
         <ProductOptions options={productData.options} onChange={handleOptionsChange} />
+        <Metadata metadata={productData.metadata} onChange={handleMetadataChange} />
       </ColumnLarge>
 
       <ColumnSmall>

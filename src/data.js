@@ -3,8 +3,7 @@ import {
   detectIsEmpty,
   useMemo,
   detectIsUndefined,
-  detectIsObject,
-  detectIsArray
+  detectIsObject
 } from '@dark-engine/core'
 import { useApi, useQuery, useMutation } from '@dark-engine/data'
 
@@ -340,7 +339,7 @@ export const useProductOptionValueDeleteMutation = (productId) => {
   )
 }
 
-export const useVariantCreateMutation = (productId) => {
+export const useProductVariantCreateMutation = (productId) => {
   const api = useApi()
   return useMutation(
     dataKeys.productVariantCreate,
@@ -498,129 +497,28 @@ export const useUpdateCurrencyMutation = () => {
   )
 }
 
-// TODO change workflow: to add images during product creation, uploading and upading product must be separate
-export const useUploadProductImageMutation = (productId) => {
+// this mutation returns data
+export const useUploadOneMutation = () => {
   const api = useApi()
-
-  const { data: productData } = useProductById(productId)
-
-  const [
-    updateProduct,
-    { isFetching: updateProductIsFetching, error: updateProductError }
-  ] = useProductUpdateMutation(productId)
-
-  const [
-    uploadImage,
-    { isFetching: uploadImageIsFetching, error: uploadImageError }
-  ] = useMutation(
+  return useMutation(
     dataKeys.uploadsUploadOne,
-    (file) => api.uploadsUploadOne(file),
-    {
-      onSuccess: ({ cache, data }) => {
-        const images = productData.product.images
-        const url = data.upload.url
-
-        const newImages = [{ url }]
-        if (detectIsArray(images)) {
-          for (let i = 0, len = images.length; i < len; i++) {
-            const image = images[i]
-            const imageUrl = image.url
-            const imageTranslations = image.translations
-            if (detectIsArray(imageTranslations)) {
-              const translations = []
-              for (const translation of imageTranslations) {
-                translations.push({
-                  localeId: translation.localeId,
-                  alt: translation.alt
-                })
-              }
-              newImages.push({ url: imageUrl, translations })
-            } else {
-              newImages.push({ url: imageUrl })
-            }
-          }
-        }
-
-        updateProduct({ images: newImages })
-        cache.invalidate(dataKeys.productGetById, { id: productId })
-      }
-    }
+    (file) => api.uploadsUploadOne(file)
   )
-
-  return {
-    uploadProductImage: uploadImage,
-    isFetching: updateProductIsFetching || uploadImageIsFetching,
-    error: updateProductError || uploadImageError
-  }
 }
 
-export const useUploadProductImagesMutation = (productId) => {
+// this mutation returns data
+export const useUploadManyMutation = () => {
   const api = useApi()
-  const [
-    updateProduct,
-    { isFetching: updateProductIsFetching, error: updateProductError }
-  ] = useProductUpdateMutation(productId)
-
-  const [
-    uploadImages,
-    { isFetching: uploadImagesIsFetching, error: uploadImagesError }
-  ] = useMutation(
-    dataKeys.uploadsUpload,
-    (data, params) => api.uploadsUpload(data, params),
-    {
-      onSuccess: ({ cache, data }) => {
-        const images = []
-        for (let i = 0, len = data.uploads.length; i < len; i++) {
-          images.push(data.uploads(i).url)
-        }
-        updateProduct({ images })
-        cache.invalidate(dataKeys.productGetById, { id: productId })
-      },
-      onError: () => {
-        // TODO delete files that may have been uploaded if needed
-      }
-    }
+  return useMutation(
+    dataKeys.uploadsUploadMany,
+    (data, params) => api.uploadsUpload(data, params)
   )
-
-  return {
-    uploadProductImages: uploadImages,
-    isFetching: updateProductIsFetching || uploadImagesIsFetching,
-    error: updateProductError || uploadImagesError
-  }
 }
 
-export const useDeleteProductImageMutation = (productId) => {
+export const useUploadDeleteMutation = () => {
   const api = useApi()
-  const { data: productData } = useProductById(productId)
-
-  const [
-    updateProduct,
-    { isFetching: updateProductIsFetching, error: updateProductError }
-  ] = useProductUpdateMutation(productId)
-
-  const [
-    deleteImage,
-    { isFetching: deleteImageIsFetching, error: deleteImageError }
-  ] = useMutation(dataKeys.uploadsDelete, (id) => api.uploadsDelete(id), {
-    onSuccess: ({ cache, data }) => {
-      const { id } = data
-      const images = []
-      for (let i = 0, len = productData.images.length; i < len; i++) {
-        const { id: currentImageId, url: currentImageUrl } =
-          productData.images[i]
-        if (currentImageId === id) {
-          continue
-        }
-        images.push(currentImageUrl)
-      }
-      updateProduct({ images })
-      cache.invalidate(dataKeys.productGetById, { id: productId })
-    }
-  })
-
-  return {
-    deleteProductImage: deleteImage,
-    isFetching: updateProductIsFetching || deleteImageIsFetching,
-    error: updateProductError || deleteImageError
-  }
+  return useMutation(
+    dataKeys.uploadsDelete,
+    (id) => api.uploadsDelete(id)
+  )
 }

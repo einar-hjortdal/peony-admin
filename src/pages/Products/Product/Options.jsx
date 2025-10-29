@@ -12,6 +12,7 @@ import {
   useProductOptionValueUpdateMutation
 } from '../../../data'
 
+// TODO make ProductOptions represent server state on every change, not internal state.
 const Options = component(() => {
   const params = useParams()
   const productId = params.get('id')
@@ -55,7 +56,7 @@ const Options = component(() => {
     }
 
     if (optionValueDeleted) {
-      const { id, optionId } = optionDeleted
+      const { id, optionId } = optionValueDeleted
       optionValueDelete(optionId, id)
     }
   }

@@ -3,13 +3,13 @@ import {
   detectIsUndefined,
   useState,
   useRef,
-  detectIsNull
+  detectIsNull,
+  useEffect
 } from '@dark-engine/core'
 
-import { useProductById, useUploadProductImageMutation } from '../../data'
+import { useUploadOneMutation } from '../../data'
 import { useTranslation } from '@wareme/translations'
 import PrimaryButton from '../buttons/PrimaryButton'
-import { useParams } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
 import ModalDefault from '../modals/ModalDefault'
 import ModalHeader from '../modals/ModalHeader'
@@ -37,40 +37,27 @@ const ImagePreview = component(({ ...props }) => {
   )
 })
 
-// TODO allow changing order and deletion
-// TODO allow changing alt and alt translations
-const ExistingImages = component(({ images }) => {
-  if (detectIsUndefined(images)) {
-    return null
-  }
-
-  const res = []
-  for (let i = 0, len = images.length; i < len; i++) {
-    const image = images[i]
-    res.push(
-      <ImagePreview src={image.url} alt={image.alt} />
-    )
-  }
-
-  return (
-    <div>
-      {res}
-    </div>
-  )
-})
-
-// TODO split add images from edit images
-const AddImageButton = component(({ productId }) => {
+const AddImage = component(({ onUpload }) => {
   const { t } = useTranslation('product.addImage')
-  const { data } = useProductById(productId)
   const modalRef = useRef(null)
   const inputRef = useRef(null)
   const [selectedFile, setSelectedFile] = useState(null)
-  const {
-    uploadProductImage,
-    isFetching: uploadProductImagesIsFetching,
-    error: uploadProductImagesError
-  } = useUploadProductImageMutation(productId)
+  const [
+    upload,
+    {
+      data: uploadData,
+      isFetching: uploadIsFetching,
+      error: uploadError
+    }
+  ] = useUploadOneMutation()
+
+  useEffect(() => {
+    if (uploadData) {
+      const { url } = uploadData.upload
+      const newImage = { url }
+      onUpload(newImage)
+    }
+  }, [uploadData])
 
   // Prevent file chooser from opening twice
   const handleLabelClick = (e) => {
@@ -103,92 +90,89 @@ const AddImageButton = component(({ productId }) => {
   }
 
   const isSubmitDisabled = () => {
-    return uploadProductImagesIsFetching || detectIsNull(selectedFile)
+    return uploadIsFetching || detectIsNull(selectedFile)
   }
 
   const handleSubmit = async () => {
-    await uploadProductImage(selectedFile)
+    await upload(selectedFile)
     // TODO display error
-    if (detectIsNull(uploadProductImagesError)) {
+    if (detectIsNull(uploadError)) {
       handleCloseModal()
     }
   }
 
-  if (data) {
-    const { images } = data.product
-    return (
-      <div>
-        <PrimaryButton type='button' onClick={handleOpenModal}>
-          {t('add')}
-        </PrimaryButton>
-        <ModalDefault ref={modalRef}>
-          <ModalHeader title={t('title')} handleClose={handleCloseModal} />
+  return (
+    <div>
+      <PrimaryButton type='button' onClick={handleOpenModal}>
+        {t('add')}
+      </PrimaryButton>
+      <ModalDefault ref={modalRef}>
+        <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
-          <ModalBody>
-            <div>
-              <label onClick={handleLabelClick}>
-                select image
-                <input
-                  ref={inputRef}
-                  type='file'
-                  onChange={handleFileChange}
-                />
-              </label>
-              <PrimaryButton
-                type='button'
-                onClick={handleSubmit}
-                disabled={isSubmitDisabled()}
-              >upload
-              </PrimaryButton>
-            </div>
+        <ModalBody>
+          <div>
+            <label onClick={handleLabelClick}>
+              select image
+              <input
+                ref={inputRef}
+                type='file'
+                onChange={handleFileChange}
+              />
+            </label>
+            <PrimaryButton
+              type='button'
+              onClick={handleSubmit}
+              disabled={isSubmitDisabled()}
+            >upload
+            </PrimaryButton>
+          </div>
 
-            <ExistingImages images={images} />
-          </ModalBody>
-        </ModalDefault>
-      </div>
-    )
-  }
+        </ModalBody>
+      </ModalDefault>
+    </div>
+  )
 })
 
-const Preview = component(({ productId }) => {
-  const { data: productData } = useProductById(productId)
+// TODO allow drag and drop to change imageRank
+// TODO click to change alt translations
+const Preview = component(({ images }) => {
   const { t } = useTranslation('product.images.preview')
 
-  if (productData) {
-    const { product } = productData
-    const { images } = product
-    if (detectIsUndefined(images)) {
-      return t('noImages')
-    }
-
-    const previews = []
-    for (let i = 0, len = images.length; i < len; i++) {
-      const image = images[i]
-      previews.push(<Preview src={image.url} alt={image.alt} />)
-    }
-
-    return (
-      <div>
-        {previews}
-        {/* TODO mark thumbnail image */}
-      </div>
-    )
+  if (detectIsUndefined(images)) {
+    return t('noImages')
   }
+
+  const previews = []
+  for (let i = 0, len = images.length; i < len; i++) {
+    const image = images[i]
+    previews.push(<ImagePreview src={image.url} alt={image.alt} />)
+  }
+
+  return (
+    <div>
+      {previews}
+      {/* TODO mark thumbnail image */}
+    </div>
+  )
 })
 
-const Images = component(() => {
+const Images = component(({ images, onChange }) => {
   const { t } = useTranslation('product.images')
-  const params = useParams()
-  const productId = params.get('id')
+
+  const handleUpload = (newImage) => {
+    if (images) {
+      return onChange([...images, newImage])
+    }
+    return onChange([newImage])
+  }
 
   return (
     <CardDefault>
       <CardHeader title={t('title')}>
-        <AddImageButton productId={productId} />
+        <AddImage images={images} onUpload={handleUpload} />
       </CardHeader>
-      <Preview productId={productId} />
+      <Preview images={images} onChange={onChange} />
     </CardDefault>
-
   )
 })
 
