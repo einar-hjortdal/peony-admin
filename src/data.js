@@ -123,7 +123,7 @@ export const useProductById = (productId) => {
     () => api.productGetById(productId),
     {
       variables: { productId },
-      extractId: (x) => x.id
+      extractId: (x) => x.productId
     }
   )
 
