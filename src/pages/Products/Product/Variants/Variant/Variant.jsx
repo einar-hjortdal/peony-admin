@@ -1,36 +1,30 @@
-import {
-  component,
-  detectIsNull,
-  useEffect,
-  useRef,
-  useState
-} from '@dark-engine/core'
+import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
 import { useProductVariantById, useProductVariantUpdateMutation } from '../../../../../data'
-import MetadataInputs from '../../../../../components/input/Metadata'
 import CardDefault from '../../../../../components/cards/CardDefault'
 import CardHeader from '../../../../../components/cards/CardHeader'
-import VariantInputs from '../../VariantInputs'
 import SetTitle from '../../../../../components/SetTitle'
+import Identification from '../../../../../components/products/Variants/Identification'
+import MetadataCard from '../../../../../components/MetadataCard'
+import ColumnSmall from '../../../../../components/columns/ColumnSmall'
+import ColumnLarge from '../../../../../components/columns/ColumnLarge'
 
-// TODO rework options: use select element.
-// If no change, do not submit change (server will reject changes because variant already exists with
-// the given option values)
-// Detect when changes are reverted in order to not submit array of option value ids with same values
-// as the original.
-// TODO edit individual variant in own variant page instead of modal?
-// TODO submit individual edits instead of all edits at once?
-// TODO no form element, only controlled components.
+// TODO card for images
+// TODO card for optionValueIds
+// TODO card for material, weight, length, height, width (partial inventoryItem, properties)
+// TODO card for requires_shipping, manage_inventory, allow_backorder (partial inventoryItem, inventory management)
+// TODO cards for sku, origin_country, hs_code, mid_code (partial inventoryItem, TODO name)
+
+// moneyAmounts managed elsewhere
+// inventoryLevel managed elsewhere
 const Variant = component(() => {
   const params = useParams()
   const productId = params.get('productId')
   const variantId = params.get('variantId')
 
   const { data: variantData } = useProductVariantById(productId, variantId)
-
-  const { t } = useTranslation('variant')
 
   const [
     updateVariant,
@@ -40,35 +34,34 @@ const Variant = component(() => {
     }
   ] = useProductVariantUpdateMutation(productId, variantId)
 
+  const { t } = useTranslation('variant')
+
+  const handleIdentificationChange = (data) => {
+    // TODO make modal and encapsulate logic
+  }
+
+  const handleMetadataChange = (newMetadata) => {
+    updateVariant({ metadata: newMetadata })
+  }
+
   if (variantData) {
     const { variant } = variantData
     return (
       <>
         <SetTitle title={variant.title} />
-        {t('title')}
 
-        <CardDefault>
-          <CardHeader title={t('general')} />
-          <VariantInputs
-            productId={productId}
-            variantData={variant}
-            setVariantData={console.log}
-          />
-        </CardDefault>
+        <ColumnLarge>
+          <CardDefault>
+            <CardHeader title={t('general')} />
+            <Identification variantData={variant} onChange={handleIdentificationChange} />
+          </CardDefault>
 
-        <CardDefault>
-          <CardHeader title={t('metadata')} />
-          <MetadataInputs metadata={variant.metadata} onChange={console.log} />
-        </CardDefault>
+          <MetadataCard metadata={variant.metadata} onChange={handleMetadataChange} />
+        </ColumnLarge>
 
-        <div>
-          <button
-            type='button'
-            onClick={console.log}
-            disabled={updateVariantIsFetching}
-          >{t('save')}
-          </button>
-        </div>
+        <ColumnSmall>
+          {/* TODO */}
+        </ColumnSmall>
       </>
     )
   }

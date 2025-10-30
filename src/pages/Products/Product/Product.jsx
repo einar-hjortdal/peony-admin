@@ -15,12 +15,12 @@ import CardHeader from '../../../components/cards/CardHeader'
 import ButtonMore from '../../../components/buttons/ButtonMore'
 import Organize from './Organize/Organize'
 import SalesChannels from './SalesChannels'
-import Metadata from './Metadata'
 import Variants from './Variants'
 import EditGeneral from './EditGeneral'
 import Translations from './Translations'
 import Options from './Options'
 import Status from '../../../components/products/Status'
+import MetadataCard from '../../../components/MetadataCard'
 
 const Delete = component(({ productId, slot }) => {
   const [deleteProduct] = useProductDeleteMutation(productId)
@@ -60,6 +60,10 @@ const Product = component(() => {
     updateProduct({ images: newImages })
   }
 
+  const handleMetadataChange = (newMetadata) => {
+    updateProduct({ metadata: newMetadata })
+  }
+
   // TODO check for database changes when adding prices
   if (productData) {
     const {
@@ -69,7 +73,8 @@ const Product = component(() => {
       handle,
       discountable,
       status,
-      images
+      images,
+      metadata
     } = productData.product
 
     return (
@@ -132,7 +137,7 @@ const Product = component(() => {
           <Images images={images} onChange={handleImagesChange} />
           <Options />
           <Variants />
-          <Metadata />
+          <MetadataCard metadata={metadata} onChange={handleMetadataChange} />
         </ColumnLarge>
 
         <ColumnSmall>

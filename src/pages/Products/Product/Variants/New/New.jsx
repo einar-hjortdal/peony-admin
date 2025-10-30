@@ -14,8 +14,8 @@ import PrimaryButton from '../../../../../components/buttons/PrimaryButton'
 import MetadataInputs from '../../../../../components/input/Metadata'
 import CardDefault from '../../../../../components/cards/CardDefault'
 import CardHeader from '../../../../../components/cards/CardHeader'
-import VariantInputs from '../../VariantInputs'
 import SetTitle from '../../../../../components/SetTitle'
+import Identification from '../../../../../components/products/Variants/Identification'
 
 const New = component(() => {
   const { t } = useTranslation('product.variants.new')
@@ -55,11 +55,7 @@ const New = component(() => {
       <SetTitle title={t('title')} />
       {t('add')}
 
-      <VariantInputs
-        productId={productId}
-        variantData={variantData}
-        setVariantData={setVariantData}
-      />
+      <Identification />
 
       <CardDefault>
         <CardHeader title={t('metadata')} />
