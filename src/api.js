@@ -42,12 +42,14 @@ export const dataKeys = {
   productCategoryGetById: 'productCategoryGetById',
   productCategoryUpdate: 'productCategoryUpdate',
   productCategoryDelete: 'productCategoryDelete',
+  productOptionGet: 'productOptionGet',
   productOptionCreate: 'productOptionCreate',
   productOptionUpdate: 'productOptionUpdate',
   productOptionDelete: 'productOptionDelete',
   productOptionValueCreate: 'productOptionValueCreate',
   productOptionValueUpdate: 'productOptionValueUpdate',
   productOptionValueDelete: 'productOptionValueDelete',
+  productVariantGetById: 'productVariantGetById',
   productVariantCreate: 'productVariantCreate',
   productVariantUpdate: 'productVariantUpdate',
   productVariantDelete: 'productVariantDelete',
@@ -204,6 +206,16 @@ export const api = {
     return checkResponse(response)
   },
 
+  productOptionGet: async (productId) => {
+    const response = await fetch(
+      getRequestUrl(`products/${productId}/options`),
+      {
+        credentials: 'include'
+      }
+    )
+    return checkResponse(response)
+  },
+
   productOptionCreate: async (productId, data) => {
     const response = await fetch(
       getRequestUrl(`products/${productId}/options`),
@@ -270,6 +282,16 @@ export const api = {
       getRequestUrl(`products/${productId}/options/${optionId}/values/${valueId}`),
       {
         method: 'DELETE',
+        credentials: 'include'
+      }
+    )
+    return checkResponse(response)
+  },
+
+  productVariantGetById: async (productId, variantId) => {
+    const response = await fetch(
+      getRequestUrl(`products/${productId}/variants/${variantId}`),
+      {
         credentials: 'include'
       }
     )

@@ -175,7 +175,7 @@ const Translation = component(({ localeId, title, subtitle, description }) => {
 
 const Translations = component(() => {
   const params = useParams()
-  const productId = params.get('id')
+  const productId = params.get('productId')
   const { t } = useTranslation('product.translations')
   const [updateProduct] = useProductUpdateMutation(productId)
   const { data: productData } = useProductById(productId)

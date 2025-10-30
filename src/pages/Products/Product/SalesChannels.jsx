@@ -57,7 +57,7 @@ const SalesChannelAvailability = component(({ productSalesChannels }) => {
 const SalesChannels = component(() => {
   const { t } = useTranslation('product.salesChannels')
   const params = useParams()
-  const productId = params.get('id')
+  const productId = params.get('productId')
   const {
     data: productData,
     isFetching: productIsFetching,

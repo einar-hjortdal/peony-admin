@@ -15,7 +15,7 @@ import {
 // TODO make ProductOptions represent server state on every change, not internal state.
 const Options = component(() => {
   const params = useParams()
-  const productId = params.get('id')
+  const productId = params.get('productId')
   const { data: productData } = useProductById(productId)
   const [optionCreate] = useProductOptionCreateMutation(productId)
   const [optionUpdate] = useProductOptionUpdateMutation(productId)

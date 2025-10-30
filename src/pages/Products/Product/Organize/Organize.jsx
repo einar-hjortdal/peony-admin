@@ -27,7 +27,7 @@ const OrganizeListItem = component(({ title, slot }) => {
 const Organize = component(() => {
   const { t } = useTranslation('product.organize')
   const params = useParams()
-  const productId = params.get('id')
+  const productId = params.get('productId')
 
   return (
     <CardDefault>

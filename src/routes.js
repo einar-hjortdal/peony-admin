@@ -33,12 +33,40 @@ export const routes = [
             component: lazy(() => import('./pages/Products/New'))
           },
           {
-            path: ':id',
-            component: lazy(() => import('./pages/Products/Product'))
-          },
-          {
             path: 'categories',
             component: lazy(() => import('./pages/Categories'))
+          },
+          {
+            path: ':productId',
+            component: NoLayout,
+            children: [
+              {
+                path: '',
+                component: lazy(() => import('./pages/Products/Product'))
+              },
+              {
+                path: 'variants',
+                component: NoLayout,
+                children: [
+                  {
+                    path: '',
+                    redirectTo: 'prices' // TODO maybe redirect to inventory overview?
+                  },
+                  {
+                    path: 'new',
+                    component: lazy(() => import('./pages/Products/Product/Variants/New'))
+                  },
+                  {
+                    path: 'prices',
+                    component: NoLayout // TODO
+                  },
+                  {
+                    path: ':variantId',
+                    component: lazy(() => import('./pages/Products/Product/Variants/Variant'))
+                  }
+                ]
+              }
+            ]
           }
         ]
       },

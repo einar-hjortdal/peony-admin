@@ -18,8 +18,7 @@ import {
   useStore,
   useProductById,
   // useUpdateProductMutation,
-  useRegions,
-  useUpdateVariantsMutation
+  useRegions
 } from '../../../data'
 import { formatLine } from '../../../utils'
 import ButtonMore from '../../../components/buttons/ButtonMore'
@@ -30,6 +29,8 @@ import ModalHeader from '../../../components/modals/ModalHeader'
 // quantity-based prices pricing needs a less "convenient" layout.
 // such layout should offered as an alternative to the more simple layout (most people likely won't
 // need it).
+
+// TODO handle prices individually: save each change onBlur or with save button on each row.
 
 const TableHeaderName = styled.span`
   display: inline-block;
@@ -79,7 +80,6 @@ const TableHead = component(({ currencyColumns, regionColumns }) => {
   )
 })
 
-// https://github.com/atellmer/dark/issues/108
 const TableCell = component(({ decimalDigits, value, handler }) => {
   const getDecimals = () => {
     if (detectIsUndefined(decimalDigits)) {
@@ -128,6 +128,7 @@ const TableBody = ({ variants, moneyAmounts, currencyColumns, regionColumns, han
     return null
   }
 
+  // TODO max 1 loop variable: split to separate utility function or component
   const rows = []
   for (let i = 0, len = variants.length; i < len; i++) {
     const variant = variants[i]
@@ -198,11 +199,6 @@ const EditPrices = component(({ productId }) => {
   const { data: storeData } = useStore()
   const { data: regionsData } = useRegions()
 
-  const [
-    updateVariants,
-    { isFetching: updateVariantsIsFetching }
-  ] = useUpdateVariantsMutation(productId)
-
   const [currencyColumns, setCurrencyColumns] = useState([])
   const [regionColumns, setRegionColumns] = useState([])
   useEffect(() => {
@@ -238,6 +234,7 @@ const EditPrices = component(({ productId }) => {
       return m
     }
 
+    // TODO max 1 loop variable: split to separate utility function or component
     for (let i = 0, len = variants.length; i < len; i++) {
       const variant = variants[i]
       m[variant.id] = {}
@@ -384,7 +381,8 @@ const EditPrices = component(({ productId }) => {
       variantsMoneyAmounts[variantId] = { moneyAmounts: variantMoneyAmounts }
     }
 
-    await updateVariants(variantsMoneyAmounts)
+    // await updateVariants(variantsMoneyAmounts)
+    console.log(variantsMoneyAmounts)
     return handleCloseModal()
   }
 
@@ -412,13 +410,13 @@ const EditPrices = component(({ productId }) => {
               <button
                 type='button'
                 onClick={handleSave}
-                disabled={productIsFetching || updateVariantsIsFetching}
+                disabled={productIsFetching}
               >save
               </button>
               <button
                 type='button'
                 onClick={handleDiscard}
-                disabled={productIsFetching || updateVariantsIsFetching}
+                disabled={productIsFetching}
               >discard changes
               </button>
             </div>

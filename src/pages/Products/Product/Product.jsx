@@ -48,7 +48,7 @@ const Column = styled.div`
 const Product = component(() => {
   const { t } = useTranslation('product')
   const params = useParams()
-  const productId = params.get('id')
+  const productId = params.get('productId')
   const { data: productData } = useProductById(productId)
   const [updateProduct] = useProductUpdateMutation(productId)
 

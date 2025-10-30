@@ -259,6 +259,18 @@ export const useProductCategories = (params) => {
   )
 }
 
+export const useProductOptions = (productId) => {
+  const api = useApi()
+  return useQuery(
+    dataKeys.productOptionGet,
+    () => api.productOptionGet(productId),
+    {
+      variables: { productId },
+      extractId: (x) => x.productId
+    }
+  )
+}
+
 export const useProductOptionCreateMutation = (productId) => {
   const api = useApi()
   return useMutation(
@@ -339,6 +351,18 @@ export const useProductOptionValueDeleteMutation = (productId) => {
   )
 }
 
+export const useProductVariantById = (productId, variantId) => {
+  const api = useApi()
+  return useQuery(
+    dataKeys.productVariantGetById,
+    () => api.productVariantGetById(productId, variantId),
+    {
+      variables: { productId, variantId },
+      extractId: (x) => x.variantId
+    }
+  )
+}
+
 export const useProductVariantCreateMutation = (productId) => {
   const api = useApi()
   return useMutation(
@@ -352,60 +376,29 @@ export const useProductVariantCreateMutation = (productId) => {
   )
 }
 
-export const useVariantUpdateMutation = (productId) => {
+export const useProductVariantUpdateMutation = (productId, variantId) => {
   const api = useApi()
   return useMutation(
     dataKeys.productVariantUpdate,
-    (variantId, data) => api.productVariantUpdate(productId, variantId, data),
+    (data) => api.productVariantUpdate(productId, variantId, data),
     {
       onSuccess: ({ cache }) => {
         cache.invalidate(dataKeys.productGetById, { id: productId })
+        cache.invalidate(dataKeys.productVariantGetById, { id: variantId })
       }
     }
   )
 }
 
-export const useDeleteVariantMutation = (productId) => {
+export const useProductVariantDeleteMutation = (productId, variantId) => {
   const api = useApi()
   return useMutation(
     dataKeys.productVariantDelete,
-    (variantId) => api.productVariantDelete(productId, variantId),
+    () => api.productVariantDelete(productId, variantId),
     {
       onSuccess: ({ cache }) => {
         cache.invalidate(dataKeys.productGetById, { id: productId })
-      }
-    }
-  )
-}
-
-// expects an object with variant_id keys and ProductVariantRequest values
-export const useUpdateVariantsMutation = (productId) => {
-  const api = useApi()
-  return useMutation(
-    dataKeys.variantUpdate,
-    (variantsMoneyAmounts) => {
-      const promises = []
-      const variantIds = keys(variantsMoneyAmounts)
-      for (let i = 0, len = variantIds.length; i < len; i++) {
-        const variantId = variantIds[i]
-        const productVariantRequest = variantsMoneyAmounts[variantId]
-        promises.push(
-          api.variantUpdate(productId, variantId, productVariantRequest)
-        )
-      }
-      return Promise.all(promises)
-    },
-    {
-      onSuccess: ({ cache }) => {
-        cache.invalidate(dataKeys.productGetById, { id: productId })
-      },
-      onError: ({ cache }) => {
-        // TODO
-        // peony may succeed with one variant update but fail with another.
-        // Invalidating product data helps the user see what was updated and what wasn't.
-        // To prevent partial updates, implement variants updates in the product endpoint.
-        // This way all variant updates would be inside the same transaction.
-        cache.invalidate(dataKeys.productGetById, { id: productId })
+        cache.delete(dataKeys.productVariantGetById, { id: variantId })
       }
     }
   )

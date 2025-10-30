@@ -1,6 +1,6 @@
 import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
-
 import { useTranslation } from '@wareme/translations'
+
 import ModalFull from '../../components/modals/ModalFull'
 import ModalHeader from '../../components/modals/ModalHeader'
 import ModalBody from '../../components/modals/ModalBody'

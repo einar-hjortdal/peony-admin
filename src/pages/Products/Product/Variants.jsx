@@ -1,16 +1,14 @@
 import { component, detectIsArray } from '@dark-engine/core'
-import { useParams } from '@dark-engine/web-router'
+import { Link, useParams } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductById, useDeleteVariantMutation } from '../../../data'
+import { useProductById, useProductVariantUpdateMutation } from '../../../data'
 import { formatLine } from '../../../utils'
 import ButtonMore from '../../../components/buttons/ButtonMore'
 import CardDefault from '../../../components/cards/CardDefault'
 import CardHeader from '../../../components/cards/CardHeader'
 import EditPrices from './EditPrices'
-import VariantEdit from './VariantEdit'
-import VariantAdd from './VariantAdd'
 
 const VariantRowInventory = component(({ manageInventory, inventoryQuantity }) => {
   const { t } = useTranslation('product.variantRowInventory')
@@ -21,7 +19,7 @@ const VariantRowInventory = component(({ manageInventory, inventoryQuantity }) =
 })
 
 const VariantDeleteButton = ({ productId, variantId, slot }) => {
-  const [deleteVariant, { isFetching }] = useDeleteVariantMutation(productId)
+  const [deleteVariant, { isFetching }] = useProductVariantUpdateMutation(productId, variantId)
 
   const handleDelete = () => {
     deleteVariant(variantId)
@@ -48,7 +46,11 @@ const VariantRow = component(({ productId, variant }) => {
       </td>
       <td>
         <ButtonMore>
-          <li><VariantEdit productId={productId} variant={variant} /></li>
+          <li>
+            <Link to={`/products/${productId}/variants/${id}`}>
+              <button type='button'>edit</button>
+            </Link>
+          </li>
           <li><button>manage inventory</button></li>
           <li>
             <VariantDeleteButton
@@ -114,15 +116,20 @@ const VariantsTable = component(({ productId }) => {
 })
 
 // peony should guarantee that a product always has at least one variant.
+// TODO drag and drop rows to set rank.
 const Variants = component(() => {
   const { t } = useTranslation('product.variants')
   const params = useParams()
-  const productId = params.get('id')
+  const productId = params.get('productId')
   return (
     <CardDefault>
       <CardHeader title={t('title')}>
         <ButtonMore type='button'>
-          <li><VariantAdd productId={productId} /></li>
+          <li>
+            <Link to={`/products/${productId}/variants/new`}>
+              <button type='button'>{t('create')}</button>
+            </Link>
+          </li>
           <li><EditPrices productId={productId} /></li>
         </ButtonMore>
       </CardHeader>

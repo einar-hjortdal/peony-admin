@@ -10,7 +10,7 @@ import CardHeader from '../../../components/cards/CardHeader'
 const Metadata = component(() => {
   const { t } = useTranslation('product.metadata')
   const params = useParams()
-  const productId = params.get('id')
+  const productId = params.get('productId')
   const { data: productData } = useProductById(productId)
 
   const [newMetadata, setNewMetadata] = useState({})

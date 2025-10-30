@@ -13,7 +13,7 @@ import Switch from '../../../components/Switch'
 
 const EditGeneral = component(() => {
   const params = useParams()
-  const productId = params.get('id')
+  const productId = params.get('productId')
   const { t } = useTranslation('product.editGeneral')
   const { data: productData } = useProductById(productId)
   const [updateProduct] = useProductUpdateMutation(productId)
