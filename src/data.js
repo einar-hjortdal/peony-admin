@@ -404,6 +404,20 @@ export const useProductVariantDeleteMutation = (productId, variantId) => {
   )
 }
 
+export const useInventoryItemUpdateMutation = (productId, variantId, inventoryItemId) => {
+  const api = useApi()
+  return useMutation(
+    dataKeys.inventoryItemUpdate,
+    (data) => api.inventoryItemUpdate(inventoryItemId, data),
+    {
+      onSuccess: ({ cache }) => {
+        cache.invalidate(dataKeys.productGetById, { id: productId })
+        cache.invalidate(dataKeys.productVariantGetById, { id: variantId })
+      }
+    }
+  )
+}
+
 export const useCountries = (params) => {
   const api = useApi()
   const p = getParams(params)

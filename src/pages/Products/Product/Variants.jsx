@@ -30,14 +30,12 @@ const VariantDeleteButton = ({ productId, variantId, slot }) => {
 
 const VariantRow = component(({ productId, variant }) => {
   const { t } = useTranslation('product.variants.row')
-  const { id, title, ean, upc, inventoryQuantity, inventoryItem } = variant
+  const { id, title, inventoryQuantity, inventoryItem } = variant
   const { manageInventory } = inventoryItem
 
   return (
     <tr>
       <td>{formatLine(title)}</td>
-      <td>{formatLine(ean)}</td>
-      <td>{formatLine(upc)}</td>
       <td>
         <VariantRowInventory
           manageInventory={manageInventory}
@@ -51,7 +49,11 @@ const VariantRow = component(({ productId, variant }) => {
               <button type='button'>edit</button>
             </Link>
           </li>
-          <li><button>manage inventory</button></li>
+
+          <li>
+            <button>manage inventory</button>
+          </li>
+
           <li>
             <VariantDeleteButton
               productId={productId}
@@ -82,6 +84,7 @@ const StyledTh = styled.th`
   text-align: unset;
 `
 
+// TODO show which option values each variant has
 const VariantsTable = component(({ productId }) => {
   const { data: productData } = useProductById(productId)
   const { t } = useTranslation('product.variants.table')
@@ -100,8 +103,6 @@ const VariantsTable = component(({ productId }) => {
       <StyledTable>
         <StyledThead>
           <StyledTh>{t('title')}</StyledTh>
-          <StyledTh>{t('ean')}</StyledTh>
-          <StyledTh>{t('upc')}</StyledTh>
           <StyledTh>{t('inventory')}</StyledTh>
           <StyledTh>{t('actions')}</StyledTh>
         </StyledThead>

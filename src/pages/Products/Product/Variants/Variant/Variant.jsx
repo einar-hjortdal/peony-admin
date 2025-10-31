@@ -10,10 +10,11 @@ import Identification from '../../../../../components/products/Variants/Identifi
 import MetadataCard from '../../../../../components/MetadataCard'
 import ColumnSmall from '../../../../../components/columns/ColumnSmall'
 import ColumnLarge from '../../../../../components/columns/ColumnLarge'
+import OptionValues from '../../../../../components/products/Variants/OptionValues'
+import Properties from '../../../../../components/products/Variants/Properties'
 
 // TODO card for images
 // TODO card for optionValueIds
-// TODO card for material, weight, length, height, width (partial inventoryItem, properties)
 // TODO card for requires_shipping, manage_inventory, allow_backorder (partial inventoryItem, inventory management)
 // TODO cards for sku, origin_country, hs_code, mid_code (partial inventoryItem, TODO name)
 
@@ -29,8 +30,7 @@ const Variant = component(() => {
   const [
     updateVariant,
     {
-      isFetching: updateVariantIsFetching,
-      error: updateVariantError
+      isFetching: updateVariantIsFetching
     }
   ] = useProductVariantUpdateMutation(productId, variantId)
 
@@ -38,6 +38,10 @@ const Variant = component(() => {
 
   const handleIdentificationChange = (data) => {
     // TODO make modal and encapsulate logic
+  }
+
+  const handleOptionValueIdsChange = () => {
+    // TODO updateVariant({ optionValueIds: newOptionValueIds })
   }
 
   const handleMetadataChange = (newMetadata) => {
@@ -56,11 +60,30 @@ const Variant = component(() => {
             <Identification variantData={variant} onChange={handleIdentificationChange} />
           </CardDefault>
 
-          <MetadataCard metadata={variant.metadata} onChange={handleMetadataChange} />
+          {/* <Images /> */}
+
+          <OptionValues
+            productId={productId}
+            variantData={variantData}
+            onChange={handleOptionValueIdsChange}
+          />
+
+          <Properties
+            productId={productId}
+            variantId={variant.id}
+            inventoryItem={variant.inventoryItem}
+          />
+
+          <MetadataCard
+            metadata={variant.metadata}
+            onChange={handleMetadataChange}
+            disabled={updateVariantIsFetching}
+          />
         </ColumnLarge>
 
         <ColumnSmall>
-          {/* TODO */}
+          {/* <InventoryManagement /> */}
+          {/* <InventoryDetails /> */}
         </ColumnSmall>
       </>
     )

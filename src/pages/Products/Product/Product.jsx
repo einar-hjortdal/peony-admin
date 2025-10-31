@@ -50,7 +50,10 @@ const Product = component(() => {
   const params = useParams()
   const productId = params.get('productId')
   const { data: productData } = useProductById(productId)
-  const [updateProduct] = useProductUpdateMutation(productId)
+  const [
+    updateProduct,
+    { isFetching: updateProductIsFetching }
+  ] = useProductUpdateMutation(productId)
 
   const handleStatusChange = (newStatus) => {
     updateProduct({ status: newStatus })
@@ -137,7 +140,12 @@ const Product = component(() => {
           <Images images={images} onChange={handleImagesChange} />
           <Options />
           <Variants />
-          <MetadataCard metadata={metadata} onChange={handleMetadataChange} />
+
+          <MetadataCard
+            metadata={metadata}
+            onChange={handleMetadataChange}
+            disabled={updateProductIsFetching}
+          />
         </ColumnLarge>
 
         <ColumnSmall>

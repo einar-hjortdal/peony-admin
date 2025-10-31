@@ -6,7 +6,7 @@ import PrimaryButton from './buttons/PrimaryButton'
 import CardDefault from './cards/CardDefault'
 import CardHeader from './cards/CardHeader'
 
-const MetadataCard = component(({ metadata, onChange }) => {
+const MetadataCard = component(({ metadata, onChange, disabled }) => {
   const { t } = useTranslation('metadataCard')
   const [newMetadata, setNewMetadata] = useState(metadata)
   useEffect(() => {
@@ -25,7 +25,12 @@ const MetadataCard = component(({ metadata, onChange }) => {
     <CardDefault>
       <CardHeader title={t('title')} />
       <Metadata metadata={newMetadata} onChange={handleChange} />
-      <PrimaryButton type='button' onClick={handleUpdate}>{t('save')}</PrimaryButton>
+      <PrimaryButton
+        type='button'
+        onClick={handleUpdate}
+        disabled={disabled}
+      >{t('save')}
+      </PrimaryButton>
     </CardDefault>
   )
 })

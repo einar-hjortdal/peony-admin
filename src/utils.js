@@ -48,3 +48,6 @@ export const getTranslation = (translations, localeId) => {
     }
   }
 }
+
+export const i32Min = -2147483648
+export const i32Max = 2147483647
