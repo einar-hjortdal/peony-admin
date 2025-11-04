@@ -11,12 +11,12 @@ import MetadataCard from '../../../../../components/MetadataCard'
 import ColumnSmall from '../../../../../components/columns/ColumnSmall'
 import ColumnLarge from '../../../../../components/columns/ColumnLarge'
 import OptionValues from '../../../../../components/products/Variants/OptionValues'
-import Properties from '../../../../../components/products/Variants/Properties'
+import Shipping from '../../../../../components/products/InventoryItems/Shipping'
 
 // TODO card for images
 // TODO card for optionValueIds
-// TODO card for requires_shipping, manage_inventory, allow_backorder (partial inventoryItem, inventory management)
-// TODO cards for sku, origin_country, hs_code, mid_code (partial inventoryItem, TODO name)
+// TODO manage_inventory, allow_backorder (partial inventoryItem, inventory management)
+// TODO cards for sku, mid_code (partial inventoryItem, TODO name)
 
 // moneyAmounts managed elsewhere
 // inventoryLevel managed elsewhere
@@ -68,7 +68,7 @@ const Variant = component(() => {
             onChange={handleOptionValueIdsChange}
           />
 
-          <Properties
+          <Shipping
             productId={productId}
             variantId={variant.id}
             inventoryItem={variant.inventoryItem}
