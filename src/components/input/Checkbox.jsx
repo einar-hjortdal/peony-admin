@@ -13,10 +13,10 @@ const Checkbox = component(({ slot, ...props }) => {
   const id = useId()
 
   return (
-    <>
+    <div>
       <StyledInput id={id} type='checkbox' {...props} />
       <Label for={id}>{slot}</Label>
-    </>
+    </div>
   )
 })
 

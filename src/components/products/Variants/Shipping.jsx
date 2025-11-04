@@ -10,20 +10,23 @@ import I32 from '../../input/I32'
 import Checkbox from '../../input/Checkbox'
 
 const Properties = component(({ inventoryItemData, onInput }) => {
-  const { requiresShipping, material, weight, length, height, width } = inventoryItemData
-  const { t } = useTranslation('inventoryItems.shipping.properties')
+  const {
+    requiresShipping,
+    material,
+    weight,
+    length,
+    height,
+    width,
+    hsCode,
+    midCode
+  } = inventoryItemData
+  const { t } = useTranslation('variants.shipping.properties')
   if (!requiresShipping) {
     return false
   }
 
   return (
     <>
-      {/*
-      TODO if ships internationally -> origin country, hs_code inputs
-      we don't have a boolean to control this, derive it if origin country or hs_code are set
-      or always show in non-annoying way
-      */}
-
       <Text
         maxLength={63}
         name='material'
@@ -37,19 +40,14 @@ const Properties = component(({ inventoryItemData, onInput }) => {
         name='weight'
         onInput={onInput}
         value={weight}
-        placeholder={t('weightPlaceholder')}
       >{t('weight')}
       </I32>
-      {/*
-      TODO add unit, conversion.
-      What unit to use as default? gram?
-      */}
+      {/* TODO add units, conversion. Store on db as gram */}
 
       <I32
         name='length'
         onInput={onInput}
         value={length}
-        placeholder={t('lengthPlaceholder')}
       >{t('length')}
       </I32>
 
@@ -57,7 +55,6 @@ const Properties = component(({ inventoryItemData, onInput }) => {
         name='height'
         onInput={onInput}
         value={height}
-        placeholder={t('heightPlaceholder')}
       >{t('height')}
       </I32>
 
@@ -65,16 +62,33 @@ const Properties = component(({ inventoryItemData, onInput }) => {
         name='width'
         onInput={onInput}
         value={width}
-        placeholder={t('widthPlaceholder')}
       >{t('width')}
       </I32>
+
+      {/* TODO international section */}
+      {/* TODO origin country (fetch countries as options, must do many fetch calls or one on input debounced) */}
+      <Text
+        maxLength={63}
+        name='mid'
+        onInput={onInput}
+        value={hsCode}
+      >{t('hsCode')}
+      </Text>
+
+      <Text
+        maxLength={15}
+        name='mid'
+        onInput={onInput}
+        value={midCode}
+      >{t('midCode')}
+      </Text>
     </>
   )
 })
 
 const Shipping = component(({ productId, variantId, inventoryItem }) => {
   const { id } = inventoryItem
-  const { t } = useTranslation('inventoryItems.shipping')
+  const { t } = useTranslation('variants.shipping')
   const [inventoryItemData, setInventoryItemData] = useState(inventoryItem)
   useEffect(() => {
     setInventoryItemData(inventoryItem)
@@ -103,6 +117,7 @@ const Shipping = component(({ productId, variantId, inventoryItem }) => {
   }
 
   const handleSave = () => {
+    // TODO only subit changes and only submit relevant properties
     updateInventoryItem(inventoryItemData)
   }
 

@@ -11,15 +11,12 @@ import MetadataCard from '../../../../../components/MetadataCard'
 import ColumnSmall from '../../../../../components/columns/ColumnSmall'
 import ColumnLarge from '../../../../../components/columns/ColumnLarge'
 import OptionValues from '../../../../../components/products/Variants/OptionValues'
-import Shipping from '../../../../../components/products/InventoryItems/Shipping'
+import Shipping from '../../../../../components/products/Variants/Shipping'
+import InventoryManagement from '../../../../../components/products/Variants/InventoryManagement'
 
-// TODO card for images
-// TODO card for optionValueIds
-// TODO manage_inventory, allow_backorder (partial inventoryItem, inventory management)
-// TODO cards for sku, mid_code (partial inventoryItem, TODO name)
-
-// moneyAmounts managed elsewhere
-// inventoryLevel managed elsewhere
+// TODO moneyAmounts
+// TODO inventoryLevel
+// TODO bulk moneyAmounts and inventoryLevel editing in their own page
 const Variant = component(() => {
   const params = useParams()
   const productId = params.get('productId')
@@ -60,18 +57,14 @@ const Variant = component(() => {
             <Identification variantData={variant} onChange={handleIdentificationChange} />
           </CardDefault>
 
-          {/* <Images /> */}
+          {/* TODO optionValueIds */}
+
+          {/* TODO <Images /> */}
 
           <OptionValues
             productId={productId}
             variantData={variantData}
             onChange={handleOptionValueIdsChange}
-          />
-
-          <Shipping
-            productId={productId}
-            variantId={variant.id}
-            inventoryItem={variant.inventoryItem}
           />
 
           <MetadataCard
@@ -82,8 +75,17 @@ const Variant = component(() => {
         </ColumnLarge>
 
         <ColumnSmall>
-          {/* <InventoryManagement /> */}
-          {/* <InventoryDetails /> */}
+          <Shipping
+            productId={productId}
+            variantId={variant.id}
+            inventoryItem={variant.inventoryItem}
+          />
+
+          <InventoryManagement
+            productId={productId}
+            variantId={variant.id}
+            inventoryItem={variant.inventoryItem}
+          />
         </ColumnSmall>
       </>
     )
