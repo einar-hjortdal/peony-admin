@@ -23,7 +23,7 @@ const OptionSelect = component((option) => {
 // This component could get the whole product, so that it could immediately check if a variant already
 // exists with the selected option values.
 // This can be handled by the parent component instead, or just by the server on submission.
-const OptionValues = component(({ productId, variantData, onChange }) => {
+const OptionValues = component(({ productId, variantData, onChange, disabled }) => {
   const { data: optionsData } = useProductOptions(productId)
   if (optionsData) {
     const { options } = optionsData
@@ -35,7 +35,7 @@ const OptionValues = component(({ productId, variantData, onChange }) => {
     for (let i = 0, len = options.length; i < len; i++) {
       const option = options[i]
       const { id } = option
-      selectComponents.push(<OptionSelect key={id} productOption={option} />)
+      selectComponents.push(<OptionSelect key={id} productOption={option} disabled={disabled} />)
     }
     return selectComponents
   }

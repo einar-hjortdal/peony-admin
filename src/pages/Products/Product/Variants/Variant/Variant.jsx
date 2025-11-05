@@ -1,13 +1,10 @@
 import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
-import { useTranslation } from '@wareme/translations'
 
 import {
   useProductVariantById,
   useProductVariantUpdateMutation
 } from '../../../../../data'
-import CardDefault from '../../../../../components/cards/CardDefault'
-import CardHeader from '../../../../../components/cards/CardHeader'
 import SetTitle from '../../../../../components/SetTitle'
 import Identification from '../../../../../components/products/Variants/Identification'
 import MetadataCard from '../../../../../components/MetadataCard'
@@ -34,14 +31,12 @@ const Variant = component(() => {
     }
   ] = useProductVariantUpdateMutation(productId, variantId)
 
-  const { t } = useTranslation('variant')
-
-  const handleIdentificationChange = (data) => {
-    // TODO make modal and encapsulate logic
+  const handleIdentificationChange = (newIdentificationData) => {
+    updateVariant(newIdentificationData)
   }
 
-  const handleOptionValueIdsChange = () => {
-    // TODO updateVariant({ optionValueIds: newOptionValueIds })
+  const handleOptionValueIdsChange = (newOptionValueIds) => {
+    updateVariant({ optionValueIds: newOptionValueIds })
   }
 
   const handleMetadataChange = (newMetadata) => {
@@ -59,12 +54,18 @@ const Variant = component(() => {
         <SetTitle title={variant.title} />
 
         <ColumnLarge>
-          <CardDefault>
-            <CardHeader title={t('general')} />
-            <Identification variantData={variant} onChange={handleIdentificationChange} />
-          </CardDefault>
+          <Identification
+            variantData={variantData}
+            onChange={handleIdentificationChange}
+            disabled={updateVariantIsFetching}
+          />
 
-          {/* TODO optionValueIds */}
+          <OptionValues
+            productId={productId}
+            variantData={variantData}
+            onChange={handleOptionValueIdsChange}
+            disabled={updateVariantIsFetching}
+          />
 
           {/* TODO <Images /> */}
 

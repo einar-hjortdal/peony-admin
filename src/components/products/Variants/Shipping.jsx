@@ -68,7 +68,7 @@ const Properties = component(({ inventoryItemData, onInput }) => {
       {/* TODO origin country (fetch countries as options, must do many fetch calls or one on input debounced) */}
       <Text
         maxLength={63}
-        name='mid'
+        name='hsCode'
         onInput={onInput}
         value={hsCode}
       >{t('hsCode')}

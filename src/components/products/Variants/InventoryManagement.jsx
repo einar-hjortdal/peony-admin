@@ -40,6 +40,7 @@ const InventoryManagement = component(({ inventoryItem, onChange, disabled }) =>
       <Text
         maxLength={63}
         name='sku'
+        autoComplete='off'
         onInput={handleInput}
         value={sku}
       >{t('sku')}
