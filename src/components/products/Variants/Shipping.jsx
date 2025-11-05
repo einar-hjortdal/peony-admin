@@ -1,7 +1,6 @@
 import { component, useEffect, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import { useInventoryItemUpdateMutation } from '../../../data'
 import CardDefault from '../../cards/CardDefault'
 import CardHeader from '../../cards/CardHeader'
 import PrimaryButton from '../../buttons/PrimaryButton'
@@ -28,7 +27,7 @@ const Properties = component(({ inventoryItemData, onInput }) => {
   return (
     <>
       <Text
-        maxLength={63}
+        maxLength={191}
         name='material'
         onInput={onInput}
         value={material}
@@ -86,20 +85,33 @@ const Properties = component(({ inventoryItemData, onInput }) => {
   )
 })
 
-const Shipping = component(({ productId, variantId, inventoryItem }) => {
-  const { id } = inventoryItem
+// TODO should be able to be used in variant creation too: can't call mutation here.
+const Shipping = component(({ inventoryItem, onChange, disabled }) => {
   const { t } = useTranslation('variants.shipping')
   const [inventoryItemData, setInventoryItemData] = useState(inventoryItem)
   useEffect(() => {
-    setInventoryItemData(inventoryItem)
-  }, [inventoryItem])
+    const {
+      requiresShipping,
+      material,
+      weight,
+      length,
+      height,
+      width,
+      hsCode,
+      midCode
+    } = inventoryItem
 
-  const [
-    updateInventoryItem,
-    {
-      isFetching: updateInventoryItemIsFethcing
-    }
-  ] = useInventoryItemUpdateMutation(productId, variantId, id)
+    setInventoryItemData({
+      requiresShipping,
+      material,
+      weight,
+      length,
+      height,
+      width,
+      hsCode,
+      midCode
+    })
+  }, [inventoryItem])
 
   const handleInput = (e) => {
     const { name, value, checked, type } = e.target
@@ -117,9 +129,11 @@ const Shipping = component(({ productId, variantId, inventoryItem }) => {
   }
 
   const handleSave = () => {
-    // TODO only subit changes and only submit relevant properties
-    updateInventoryItem(inventoryItemData)
+    // TODO only return changes
+    onChange(inventoryItemData)
   }
+
+  const { requiresShipping } = inventoryItemData
 
   return (
     <CardDefault>
@@ -128,7 +142,7 @@ const Shipping = component(({ productId, variantId, inventoryItem }) => {
       <Checkbox
         name='requiresShipping'
         onChange={handleInput}
-        checked={inventoryItemData.requiresShipping}
+        checked={requiresShipping}
       >{t('requiresShipping')}
       </Checkbox>
 
@@ -138,7 +152,7 @@ const Shipping = component(({ productId, variantId, inventoryItem }) => {
         <PrimaryButton
           type='button'
           onClick={handleSave}
-          disabled={updateInventoryItemIsFethcing}
+          disabled={disabled}
         >{t('save')}
         </PrimaryButton>
       </div>

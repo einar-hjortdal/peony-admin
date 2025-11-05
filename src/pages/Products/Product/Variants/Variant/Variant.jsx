@@ -2,7 +2,10 @@ import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductVariantById, useProductVariantUpdateMutation } from '../../../../../data'
+import {
+  useProductVariantById,
+  useProductVariantUpdateMutation
+} from '../../../../../data'
 import CardDefault from '../../../../../components/cards/CardDefault'
 import CardHeader from '../../../../../components/cards/CardHeader'
 import SetTitle from '../../../../../components/SetTitle'
@@ -45,6 +48,10 @@ const Variant = component(() => {
     updateVariant({ metadata: newMetadata })
   }
 
+  const handleInventoryItemChange = (data) => {
+    updateVariant({ inventoryItem: data })
+  }
+
   if (variantData) {
     const { variant } = variantData
     return (
@@ -76,15 +83,15 @@ const Variant = component(() => {
 
         <ColumnSmall>
           <Shipping
-            productId={productId}
-            variantId={variant.id}
             inventoryItem={variant.inventoryItem}
+            onChange={handleInventoryItemChange}
+            disabled={updateVariantIsFetching}
           />
 
           <InventoryManagement
-            productId={productId}
-            variantId={variant.id}
             inventoryItem={variant.inventoryItem}
+            onChange={handleInventoryItemChange}
+            disabled={updateVariantIsFetching}
           />
         </ColumnSmall>
       </>

@@ -1,27 +1,19 @@
 import { component, useEffect, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import { useInventoryItemUpdateMutation } from '../../../data'
 import CardDefault from '../../cards/CardDefault'
 import CardHeader from '../../cards/CardHeader'
 import Checkbox from '../../input/Checkbox'
 import PrimaryButton from '../../buttons/PrimaryButton'
 import Text from '../../input/Text'
 
-const InventoryManagement = component(({ productId, variantId, inventoryItem }) => {
-  const { id } = inventoryItem
+const InventoryManagement = component(({ inventoryItem, onChange, disabled }) => {
   const { t } = useTranslation('variants.inventoryManagement')
   const [inventoryItemData, setInventoryItemData] = useState(inventoryItem)
   useEffect(() => {
-    setInventoryItemData(inventoryItem)
+    const { sku, manageInventory, allowBackorder } = inventoryItem
+    setInventoryItemData({ sku, manageInventory, allowBackorder })
   }, [inventoryItem])
-
-  const [
-    updateInventoryItem,
-    {
-      isFetching: updateInventoryItemIsFethcing
-    }
-  ] = useInventoryItemUpdateMutation(productId, variantId, id)
 
   const handleInput = (e) => {
     const { name, value, checked, type } = e.target
@@ -35,8 +27,8 @@ const InventoryManagement = component(({ productId, variantId, inventoryItem }) 
   }
 
   const handleSave = () => {
-    // TODO only subit changes and only submit relevant properties
-    updateInventoryItem(inventoryItemData)
+    // TODO only subit changes
+    onChange(inventoryItemData)
   }
 
   const { sku, manageInventory, allowBackorder } = inventoryItemData
@@ -71,7 +63,7 @@ const InventoryManagement = component(({ productId, variantId, inventoryItem }) 
         <PrimaryButton
           type='button'
           onClick={handleSave}
-          disabled={updateInventoryItemIsFethcing}
+          disabled={disabled}
         >{t('save')}
         </PrimaryButton>
       </div>

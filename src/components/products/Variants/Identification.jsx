@@ -3,11 +3,6 @@ import { useTranslation } from '@wareme/translations'
 
 import Text from '../../../components/input/Text'
 
-// allow_backorder    ?bool   @[json: 'allowBackorder']
-// manage_inventory   ?bool   @[json: 'manageInventory']
-// origin_country     ?string @[json: 'originCountry']
-// money_amounts      ?[]MoneyAmountRequest @[json: 'moneyAmounts']
-
 const Identification = component(({ variantData, onChange }) => {
   const { t } = useTranslation('variants.identification')
 
