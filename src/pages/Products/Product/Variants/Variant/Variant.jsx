@@ -48,10 +48,10 @@ const Variant = component(() => {
   }
 
   if (variantData) {
-    const { variant } = variantData
+    const { title, optionValues, inventoryItem, metadata } = variantData.variant
     return (
       <>
-        <SetTitle title={variant.title} />
+        <SetTitle title={title} />
 
         <ColumnLarge>
           <Identification
@@ -62,21 +62,15 @@ const Variant = component(() => {
 
           <OptionValues
             productId={productId}
-            variantData={variantData}
+            optionValues={optionValues}
             onChange={handleOptionValueIdsChange}
             disabled={updateVariantIsFetching}
           />
 
           {/* TODO <Images /> */}
 
-          <OptionValues
-            productId={productId}
-            variantData={variantData}
-            onChange={handleOptionValueIdsChange}
-          />
-
           <MetadataCard
-            metadata={variant.metadata}
+            metadata={metadata}
             onChange={handleMetadataChange}
             disabled={updateVariantIsFetching}
           />
@@ -84,13 +78,13 @@ const Variant = component(() => {
 
         <ColumnSmall>
           <Shipping
-            inventoryItem={variant.inventoryItem}
+            inventoryItem={inventoryItem}
             onChange={handleInventoryItemChange}
             disabled={updateVariantIsFetching}
           />
 
           <InventoryManagement
-            inventoryItem={variant.inventoryItem}
+            inventoryItem={inventoryItem}
             onChange={handleInventoryItemChange}
             disabled={updateVariantIsFetching}
           />

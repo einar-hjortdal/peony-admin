@@ -201,6 +201,7 @@ export default freeze({
   'translationsInputs.title': 'Title',
   'variant.button': 'edit',
   'variant.identification': 'Identification',
+  'variants.optionValues.save': 'Save changes',
   'variants.identification.barcode': 'Barcode',
   'variants.identification.barcodePlaceholder': '3486298',
   'variants.identification.ean': 'EAN',
