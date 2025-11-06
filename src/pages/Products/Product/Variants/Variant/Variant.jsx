@@ -1,10 +1,7 @@
 import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 
-import {
-  useProductVariantById,
-  useProductVariantUpdateMutation
-} from '../../../../../data'
+import { useProductVariantById, useProductVariantUpdateMutation } from '../../../../../data'
 import SetTitle from '../../../../../components/SetTitle'
 import Identification from '../../../../../components/products/Variants/Identification'
 import MetadataCard from '../../../../../components/MetadataCard'
@@ -13,8 +10,8 @@ import ColumnLarge from '../../../../../components/columns/ColumnLarge'
 import OptionValues from '../../../../../components/products/Variants/OptionValues'
 import Shipping from '../../../../../components/products/Variants/Shipping'
 import InventoryManagement from '../../../../../components/products/Variants/InventoryManagement'
+import MoneyAmounts from '../../../../../components/products/Variants/MoneyAmounts'
 
-// TODO moneyAmounts
 // TODO inventoryLevel
 // TODO bulk moneyAmounts and inventoryLevel editing in their own page
 const Variant = component(() => {
@@ -39,6 +36,10 @@ const Variant = component(() => {
     updateVariant({ optionValueIds: newOptionValueIds })
   }
 
+  const handleMoneyAmountsChange = (newMoneyAmounts) => {
+    updateVariant({ moneyAmounts: newMoneyAmounts })
+  }
+
   const handleMetadataChange = (newMetadata) => {
     updateVariant({ metadata: newMetadata })
   }
@@ -48,7 +49,7 @@ const Variant = component(() => {
   }
 
   if (variantData) {
-    const { title, optionValues, inventoryItem, metadata } = variantData.variant
+    const { title, optionValues, inventoryItem, moneyAmounts, metadata } = variantData.variant
     return (
       <>
         <SetTitle title={title} />
@@ -69,6 +70,12 @@ const Variant = component(() => {
 
           {/* TODO <Images /> */}
 
+          <MoneyAmounts
+            moneyAmounts={moneyAmounts}
+            onChange={handleMoneyAmountsChange}
+            disabled={updateVariantIsFetching}
+          />
+
           <MetadataCard
             metadata={metadata}
             onChange={handleMetadataChange}
@@ -88,6 +95,8 @@ const Variant = component(() => {
             onChange={handleInventoryItemChange}
             disabled={updateVariantIsFetching}
           />
+
+          {/* <InventoryLevels /> */}
         </ColumnSmall>
       </>
     )

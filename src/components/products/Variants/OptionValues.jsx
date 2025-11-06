@@ -84,6 +84,7 @@ const OptionValues = component(({ productId, optionValues, onChange, disabled })
   }
 
   if (optionsData) {
+    // do not show component if only one option and value exist
     const { options } = optionsData
     if (options.length === 1 && options[0].values.length === 1) {
       return null
