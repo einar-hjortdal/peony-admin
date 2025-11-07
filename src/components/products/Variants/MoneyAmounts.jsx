@@ -6,6 +6,42 @@ import { useRegions } from '../../../data'
 import CardDefault from '../../cards/CardDefault'
 import CardHeader from '../../cards/CardHeader'
 import PrimaryButton from '../../buttons/PrimaryButton'
+import SecondaryButton from '../../buttons/SecondaryButton'
+
+const MoneyAmountInput = component(
+  ({
+    regionId,
+    regionName,
+    currencyCode,
+    amount,
+    onInput,
+    onDelete,
+    disabled
+  }) => {
+    const { t } = useTranslation('variants.moneyAmounts')
+
+    const handleOnValueChange = (value, name, values) => {
+      return onInput(value, name, values, regionId, currencyCode)
+    }
+
+    const handleDelete = () => {
+      onDelete(regionId)
+    }
+
+    return (
+      <div>
+        <label for={regionId}>{regionName}</label>
+        <CurrencyInput
+          id={regionId}
+          value={amount}
+          onValueChange={handleOnValueChange}
+          disabled={disabled}
+        />
+        <SecondaryButton onClick={handleDelete} disabled={disabled}>{t('delete')}</SecondaryButton>
+      </div>
+    )
+  }
+)
 
 // each region has one currency, therefore we want one price for each region.
 // moneyAmounts can be undefined, each moneyAmount has regionId and currencyCode properties.
@@ -31,8 +67,7 @@ const MoneyAmounts = component(({ moneyAmounts, onChange, disabled }) => {
     })
   }
 
-  const handleDelete = (e) => {
-    const { regionId } = e.target.dataset
+  const handleDelete = (regionId) => {
     return setRegionMoneyAmountsMap((prevState) => {
       const newRegionMoneyAmountsMap = { ...prevState }
       delete newRegionMoneyAmountsMap[regionId]
@@ -54,7 +89,6 @@ const MoneyAmounts = component(({ moneyAmounts, onChange, disabled }) => {
   }
 
   if (regionsData) {
-    // TODO presentation
     const { regions } = regionsData
     const inputs = []
     for (let i = 0, len = regions.length; i < len; i++) {
@@ -67,16 +101,16 @@ const MoneyAmounts = component(({ moneyAmounts, onChange, disabled }) => {
         amount = moneyAmount.amount
       }
 
-      const handleOnValueChange = (value, name, values) => {
-        return handleInput(value, name, values, currencyCode, id)
-      }
-
-      // TODO add delete button, extract to own component
       inputs.push(
-        <CurrencyInput
-          id={id}
-          value={amount}
-          onValueChange={handleOnValueChange}
+        <MoneyAmountInput
+          key={id}
+          regionName={name}
+          regionId={id}
+          currencyCode={currencyCode}
+          amount={amount}
+          includesTax={includesTax}
+          onInput={handleInput}
+          onDelete={handleDelete}
           disabled={disabled}
         />
       )
