@@ -44,8 +44,8 @@ const Variant = component(() => {
     updateVariant({ metadata: newMetadata })
   }
 
-  const handleInventoryItemChange = (data) => {
-    updateVariant({ inventoryItem: data })
+  const handleInventoryItemChange = (newInventoryItemData) => {
+    updateVariant({ inventoryItem: newInventoryItemData })
   }
 
   if (variantData) {
@@ -96,7 +96,6 @@ const Variant = component(() => {
             disabled={updateVariantIsFetching}
           />
 
-          {/* <InventoryLevels /> */}
         </ColumnSmall>
       </>
     )

@@ -53,10 +53,12 @@ const OptionValues = component(({ productId, optionValues, onChange, disabled })
       }
 
       // mark selected
-      for (let i = 0, len = optionValues.length; i < len; i++) {
-        const optionValue = optionValues[i]
-        const { id, optionId } = optionValue
-        newOptionsMap[optionId].selected = id
+      if (optionValues) { // undefined in variant creation
+        for (let i = 0, len = optionValues.length; i < len; i++) {
+          const optionValue = optionValues[i]
+          const { id, optionId } = optionValue
+          newOptionsMap[optionId].selected = id
+        }
       }
 
       setOptionsMap(newOptionsMap)

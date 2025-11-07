@@ -12,11 +12,11 @@
 - [x] Prices
 - [x] Product categories
 - [x] Metadata
+- [x] Inventory items
 
 ## Currently working on
 
 - [ ] Regions
-- [ ] Inventory items
 
 ## Working on soon
 
@@ -42,14 +42,14 @@
 ## Low priority
 
 - [ ] Acceptable design
-- [ ] Acceptable user experience
+- [ ] Acceptable user experience (app behavior and workflow)
 - [ ] Suspense
 - [ ] Dark theme
 - [ ] Responsiveness
 - [ ] Validate inputs
 - [ ] Verify user intent before applying new changes
 - [ ] Verify server state before applying new changes
-- [ ] Refactor
+- [ ] Performance
 
 ## Deployment
 

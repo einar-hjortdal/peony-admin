@@ -1,21 +1,18 @@
-import {
-  component,
-  detectIsNull,
-  detectIsUndefined,
-  useEffect,
-  useRef,
-  useState
-} from '@dark-engine/core'
-import { useParams } from '@dark-engine/web-router'
+import { component, useEffect, useState } from '@dark-engine/core'
+import { useHistory, useParams } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
 import { useProductVariantCreateMutation } from '../../../../../data'
 import PrimaryButton from '../../../../../components/buttons/PrimaryButton'
-import MetadataInputs from '../../../../../components/input/Metadata'
-import CardDefault from '../../../../../components/cards/CardDefault'
-import CardHeader from '../../../../../components/cards/CardHeader'
 import SetTitle from '../../../../../components/SetTitle'
+import ColumnLarge from '../../../../../components/columns/ColumnLarge'
+import ColumnSmall from '../../../../../components/columns/ColumnSmall'
+import MetadataCard from '../../../../../components/MetadataCard'
 import Identification from '../../../../../components/products/Variants/Identification'
+import MoneyAmounts from '../../../../../components/products/Variants/MoneyAmounts'
+import OptionValues from '../../../../../components/products/Variants/OptionValues'
+import Shipping from '../../../../../components/products/Variants/Shipping'
+import InventoryManagement from '../../../../../components/products/Variants/InventoryManagement'
 
 const New = component(() => {
   const { t } = useTranslation('product.variants.new')
@@ -24,43 +21,106 @@ const New = component(() => {
   const [variantData, setVariantData] = useState({})
   const [createVariant, {
     data: createVariantData,
-    isFetching: createVariantIsFetching,
-    error: createVariantError
+    isFetching: createVariantIsFetching
   }] = useProductVariantCreateMutation(productId)
 
+  const history = useHistory()
   useEffect(() => {
     if (createVariantData) {
-      // TODO go back to product page
+      history.push(`/products/${productId}`)
     }
   }, [createVariantData])
 
   const handleCreate = async () => {
     createVariant(variantData)
-    // TODO handle error if error, close if success
+    // TODO handle error if error
+  }
+
+  const handleIdentificationChange = (newIdentificationData) => {
+    setVariantData((prevState) => {
+      return { ...prevState, ...newIdentificationData }
+    })
+  }
+
+  const handleOptionValueIdsChange = (newOptionValueIds) => {
+    setVariantData((prevState) => {
+      return { ...prevState, optionValueIds: newOptionValueIds }
+    })
+  }
+
+  const handleMoneyAmountsChange = (newMoneyAmounts) => {
+    setVariantData((prevState) => {
+      return { ...prevState, moneyAmounts: newMoneyAmounts }
+    })
   }
 
   const handleMetadataUpdate = (newMetadata) => {
     setVariantData((prevState) => {
-      return {
-        ...prevState,
-        metadata: newMetadata
-      }
+      return { ...prevState, metadata: newMetadata }
     })
   }
 
-  const { metadata } = variantData
+  const handleInventoryItemChange = (newInventoryItemData) => {
+    setVariantData((prevState) => {
+      const { inventoryItem } = prevState
+      if (inventoryItem) {
+        const newInventoryItem = { ...inventoryItem, ...newInventoryItemData }
+        return { ...prevState, inventoryItem: newInventoryItem }
+      }
+      return { ...prevState, inventoryItem: newInventoryItemData }
+    })
+  }
+
+  const { optionValues, moneyAmounts, inventoryItem, metadata } = variantData
 
   return (
     <>
       <SetTitle title={t('title')} />
       {t('add')}
 
-      <Identification />
+      <ColumnLarge>
+        <Identification
+          variantData={variantData}
+          onChange={handleIdentificationChange}
+          disabled={createVariantIsFetching}
+        />
 
-      <CardDefault>
-        <CardHeader title={t('metadata')} />
-        <MetadataInputs metadata={metadata} onChange={handleMetadataUpdate} />
-      </CardDefault>
+        <OptionValues
+          productId={productId}
+          optionValues={optionValues}
+          onChange={handleOptionValueIdsChange}
+          disabled={createVariantIsFetching}
+        />
+
+        {/* TODO <Images /> */}
+
+        <MoneyAmounts
+          moneyAmounts={moneyAmounts}
+          onChange={handleMoneyAmountsChange}
+          disabled={createVariantIsFetching}
+        />
+
+        <MetadataCard
+          metadata={metadata}
+          onChange={handleMetadataUpdate}
+          disabled={createVariantIsFetching}
+        />
+      </ColumnLarge>
+
+      <ColumnSmall>
+        <Shipping
+          inventoryItem={inventoryItem}
+          onChange={handleInventoryItemChange}
+          disabled={createVariantIsFetching}
+        />
+
+        <InventoryManagement
+          inventoryItem={inventoryItem}
+          onChange={handleInventoryItemChange}
+          disabled={createVariantIsFetching}
+        />
+
+      </ColumnSmall>
 
       <div>
         <PrimaryButton

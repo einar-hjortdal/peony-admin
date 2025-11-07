@@ -123,7 +123,6 @@ export default freeze({
   'product.variants.create': 'Create new variant',
   'product.variants.new.add': 'Create a variant',
   'product.variants.new.create': 'Create',
-  'product.variants.new.metadata': 'Metadata',
   'product.variants.new.title': 'Create a variant',
   'product.variants.row.delete': 'Delete',
   'product.variants.table.actions': 'Actions',

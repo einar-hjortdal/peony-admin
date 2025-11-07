@@ -53,6 +53,7 @@ export const dataKeys = {
   productVariantCreate: 'productVariantCreate',
   productVariantUpdate: 'productVariantUpdate',
   productVariantDelete: 'productVariantDelete',
+  inventoryLevelUpdate: 'inventoryLevelUpdate',
   countriesGet: 'countriesGet',
   currencyGet: 'currencyGet',
   currencyUpdate: 'currencyUpdate',
@@ -329,6 +330,19 @@ export const api = {
       getRequestUrl(`products/${productId}/variants/${variantId}`),
       {
         method: 'DELETE',
+        credentials: 'include'
+      }
+    )
+    return checkResponse(response)
+  },
+
+  inventoryLevelUpdate: async (inventoryItemId, stockLocationId, data) => {
+    const response = await fetch(
+      getRequestUrl(`inventory-items/${inventoryItemId}/stock-locations/${stockLocationId}`),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
         credentials: 'include'
       }
     )
