@@ -13,6 +13,7 @@ import MoneyAmounts from '../../../../../components/products/Variants/MoneyAmoun
 import OptionValues from '../../../../../components/products/Variants/OptionValues'
 import Shipping from '../../../../../components/products/Variants/Shipping'
 import InventoryManagement from '../../../../../components/products/Variants/InventoryManagement'
+import InventoryLevels from '../../../../../components/products/Variants/InventoryLevels'
 
 const New = component(() => {
   const { t } = useTranslation('product.variants.new')
@@ -71,6 +72,40 @@ const New = component(() => {
     })
   }
 
+  // TODO implement in peony
+  const handleInventoryLevelChange = (inventoryItemId, stockLocationId, stockedQuantity) => {
+    setVariantData((prevState) => {
+      const { inventoryItem } = prevState
+      const newInventoryLevel = { stockLocationId, stockedQuantity }
+      if (!inventoryItem) {
+        const newInventoryLevels = [newInventoryLevel]
+        const newInventoryItem = { inventoryLevels: newInventoryLevels }
+        return { ...prevState, inventoryItem: newInventoryItem }
+      }
+
+      const { inventoryLevels } = inventoryItem
+      if (!inventoryLevels) {
+        const newInventoryLevels = [newInventoryLevel]
+        const newInventoryItem = { ...inventoryItem, inventoryLevels: newInventoryLevels }
+        return { ...prevState, inventoryItem: newInventoryItem }
+      }
+
+      const newInventoryLevels = [...inventoryLevels]
+      for (let i = 0, len = inventoryLevels.length; i < len; i++) {
+        const inventoryLevel = inventoryLevels[i]
+        if (inventoryLevel.stockLocationId === stockLocationId) {
+          newInventoryLevels[i] = newInventoryLevel
+          const newInventoryItem = { ...inventoryItem, inventoryLevels: newInventoryLevels }
+          return { ...prevState, inventoryItem: newInventoryItem }
+        }
+      }
+
+      newInventoryLevels.push(newInventoryLevel)
+      const newInventoryItem = { ...inventoryItem, inventoryLevels: newInventoryLevels }
+      return { ...prevState, inventoryItem: newInventoryItem }
+    })
+  }
+
   const { optionValues, moneyAmounts, inventoryItem, metadata } = variantData
 
   return (
@@ -120,6 +155,11 @@ const New = component(() => {
           disabled={createVariantIsFetching}
         />
 
+        <InventoryLevels
+          inventoryItem={inventoryItem}
+          onChange={handleInventoryLevelChange}
+          disabled={createVariantIsFetching}
+        />
       </ColumnSmall>
 
       <div>

@@ -62,6 +62,7 @@ export const dataKeys = {
   regionGetById: 'regionGetById',
   regionUpdate: 'regionUpdate',
   salesChannelsGet: 'salesChannelsGet',
+  stockLocationsGet: 'stockLocationsGet',
   localesGet: 'localesGet',
   localeGetById: 'localeGetById',
   uploadsUploadOne: 'uploadsUploadOne',
@@ -383,6 +384,16 @@ export const api = {
   salesChannelsGet: async (params) => {
     const response = await fetch(
       getRequestUrl('sales-channels', params),
+      {
+        credentials: 'include'
+      }
+    )
+    return checkResponse(response)
+  },
+
+  stockLocationsGet: async (params) => {
+    const response = await fetch(
+      getRequestUrl('stock-locations', params),
       {
         credentials: 'include'
       }

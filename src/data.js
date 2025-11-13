@@ -475,6 +475,19 @@ export const useSalesChannels = (params) => {
   return { refetch, data, isFetching, error, salesChannelsObject }
 }
 
+export const useStockLocations = (params) => {
+  const api = useApi()
+  const p = getParams(params)
+  return useQuery(
+    dataKeys.stockLocationsGet,
+    () => api.stockLocationsGet(p),
+    {
+      variables: { p },
+      extractId: (x) => x.p
+    }
+  )
+}
+
 export const useLocaleById = (localeId) => {
   const api = useApi()
   return useQuery(dataKeys.localeGetById, () => api.localeGetById(localeId), {

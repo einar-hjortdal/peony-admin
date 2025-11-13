@@ -1,7 +1,7 @@
 import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 
-import { useProductVariantById, useProductVariantUpdateMutation } from '../../../../../data'
+import { useInventoryLevelUpdateMutation, useProductVariantById, useProductVariantUpdateMutation } from '../../../../../data'
 import SetTitle from '../../../../../components/SetTitle'
 import Identification from '../../../../../components/products/Variants/Identification'
 import MetadataCard from '../../../../../components/MetadataCard'
@@ -11,6 +11,7 @@ import OptionValues from '../../../../../components/products/Variants/OptionValu
 import Shipping from '../../../../../components/products/Variants/Shipping'
 import InventoryManagement from '../../../../../components/products/Variants/InventoryManagement'
 import MoneyAmounts from '../../../../../components/products/Variants/MoneyAmounts'
+import InventoryLevels from '../../../../../components/products/Variants/InventoryLevels'
 
 // TODO inventoryLevel
 // TODO bulk moneyAmounts and inventoryLevel editing in their own page
@@ -27,6 +28,17 @@ const Variant = component(() => {
       isFetching: updateVariantIsFetching
     }
   ] = useProductVariantUpdateMutation(productId, variantId)
+
+  const [
+    updateInventoryLevel,
+    {
+      isFethcing: updateInventoryLevelIsFetching
+    }
+  ] = useInventoryLevelUpdateMutation(productId, variantId)
+
+  const handleInventoryLevelChange = (inventoryItemId, stockLocationId, stockedQuantity) => {
+    updateInventoryLevel(inventoryItemId, stockLocationId, { stockedQuantity })
+  }
 
   const handleIdentificationChange = (newIdentificationData) => {
     updateVariant(newIdentificationData)
@@ -50,6 +62,7 @@ const Variant = component(() => {
 
   if (variantData) {
     const { title, optionValues, inventoryItem, moneyAmounts, metadata } = variantData.variant
+
     return (
       <>
         <SetTitle title={title} />
@@ -96,6 +109,11 @@ const Variant = component(() => {
             disabled={updateVariantIsFetching}
           />
 
+          <InventoryLevels
+            inventoryItem={inventoryItem}
+            onChange={handleInventoryLevelChange}
+            disabled={updateInventoryLevelIsFetching}
+          />
         </ColumnSmall>
       </>
     )

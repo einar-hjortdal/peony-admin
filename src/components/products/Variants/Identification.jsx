@@ -7,7 +7,7 @@ import CardHeader from '../../cards/CardHeader'
 import PrimaryButton from '../../buttons/PrimaryButton'
 
 const Identification = component(({ variantData, onChange, disabled }) => {
-  const { t } = useTranslation('variant.identification')
+  const { t } = useTranslation('variants.identification')
   const [identificationData, setIdentificationData] = useState(variantData)
   useEffect(() => {
     const { title, barcode, ean, upc } = variantData
@@ -29,7 +29,7 @@ const Identification = component(({ variantData, onChange, disabled }) => {
   const { title, barcode, ean, upc } = identificationData
   return (
     <CardDefault>
-      <CardHeader title={t('identification')} />
+      <CardHeader title={t('title')} />
 
       <div>
         <Text

@@ -43,6 +43,7 @@
 
 - [ ] Acceptable design
 - [ ] Acceptable user experience (app behavior and workflow)
+- [ ] Error handling
 - [ ] Suspense
 - [ ] Dark theme
 - [ ] Responsiveness
@@ -61,5 +62,3 @@
 - [`@dark-engine/styled` has CSS order issues](https://github.com/atellmer/dark/issues/72)
 
 ## Considerations
-
-- Write more hooks, more specific even though same peony endpoint.
