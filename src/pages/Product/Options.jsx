@@ -1,7 +1,7 @@
 import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 
-import ProductOptions from '../../../components/products/ProductOptions'
+import ProductOptions from '../../components/products/ProductOptions'
 import {
   useProductById,
   useProductOptionCreateMutation,
@@ -10,7 +10,7 @@ import {
   useProductOptionValueCreateMutation,
   useProductOptionValueDeleteMutation,
   useProductOptionValueUpdateMutation
-} from '../../../data'
+} from '../../data'
 
 // TODO make ProductOptions represent server state on every change, not internal state.
 const Options = component(() => {

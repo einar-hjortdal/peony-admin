@@ -30,7 +30,7 @@ export const routes = [
           },
           {
             path: 'new',
-            component: lazy(() => import('./pages/Products/New'))
+            component: lazy(() => import('./pages/NewProduct'))
           },
           {
             path: 'categories',
@@ -42,7 +42,7 @@ export const routes = [
             children: [
               {
                 path: '',
-                component: lazy(() => import('./pages/Products/Product'))
+                component: lazy(() => import('./pages/Product'))
               },
               {
                 path: 'variants',
@@ -54,7 +54,7 @@ export const routes = [
                   },
                   {
                     path: 'new',
-                    component: lazy(() => import('./pages/Products/Product/Variants/New'))
+                    component: lazy(() => import('./pages/NewVariant'))
                   },
                   {
                     path: 'prices',
@@ -62,7 +62,7 @@ export const routes = [
                   },
                   {
                     path: ':variantId',
-                    component: lazy(() => import('./pages/Products/Product/Variants/Variant'))
+                    component: lazy(() => import('./pages/Variant'))
                   }
                 ]
               }

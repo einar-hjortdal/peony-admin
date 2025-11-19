@@ -1,17 +1,17 @@
 import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
 
-import { useInventoryLevelUpdateMutation, useProductVariantById, useProductVariantUpdateMutation } from '../../../../../data'
-import SetTitle from '../../../../../components/SetTitle'
-import Identification from '../../../../../components/products/Variants/Identification'
-import MetadataCard from '../../../../../components/MetadataCard'
-import ColumnSmall from '../../../../../components/columns/ColumnSmall'
-import ColumnLarge from '../../../../../components/columns/ColumnLarge'
-import OptionValues from '../../../../../components/products/Variants/OptionValues'
-import Shipping from '../../../../../components/products/Variants/Shipping'
-import InventoryManagement from '../../../../../components/products/Variants/InventoryManagement'
-import MoneyAmounts from '../../../../../components/products/Variants/MoneyAmounts'
-import InventoryLevels from '../../../../../components/products/Variants/InventoryLevels'
+import { useInventoryLevelUpdateMutation, useProductVariantById, useProductVariantUpdateMutation } from '../../../../data'
+import SetTitle from '../../../../components/SetTitle'
+import Identification from '../../../../components/products/Variants/Identification'
+import MetadataCard from '../../../../components/MetadataCard'
+import ColumnSmall from '../../../../components/columns/ColumnSmall'
+import ColumnLarge from '../../../../components/columns/ColumnLarge'
+import OptionValues from '../../../../components/products/Variants/OptionValues'
+import Shipping from '../../../../components/products/Variants/Shipping'
+import InventoryManagement from '../../../../components/products/Variants/InventoryManagement'
+import MoneyAmounts from '../../../../components/products/Variants/MoneyAmounts'
+import InventoryLevels from '../../../../components/products/Variants/InventoryLevels'
 
 // TODO inventoryLevel
 // TODO bulk moneyAmounts and inventoryLevel editing in their own page

@@ -3,11 +3,11 @@ import { Link, useParams } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductById, useProductVariantUpdateMutation } from '../../../data'
-import { formatLine } from '../../../utils'
-import ButtonMore from '../../../components/buttons/ButtonMore'
-import CardDefault from '../../../components/cards/CardDefault'
-import CardHeader from '../../../components/cards/CardHeader'
+import { useProductById, useProductVariantUpdateMutation } from '../../data'
+import { formatLine } from '../../utils'
+import ButtonMore from '../../components/buttons/ButtonMore'
+import CardDefault from '../../components/cards/CardDefault'
+import CardHeader from '../../components/cards/CardHeader'
 import EditPrices from './EditPrices'
 
 const VariantRowInventory = component(({ manageInventory, inventoryQuantity }) => {
