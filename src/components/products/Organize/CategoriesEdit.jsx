@@ -164,7 +164,7 @@ const CategoriesEdit = component(({ categoryIds, onChange, disabled }) => {
 
   return (
     <>
-      <button type='button' onClick={handleOpenModal}>{t('button')}</button>
+      <button type='button' onClick={handleOpenModal}>{t('editButton')}</button>
       <ModalDefault ref={modalRef}>
         <ModalHeader title={t('title')} handleClose={handleCloseModal} />
         <ModalBody>
@@ -174,7 +174,7 @@ const CategoriesEdit = component(({ categoryIds, onChange, disabled }) => {
 
         <ModalFooter>
           <PrimaryButton categoryIds={newCategoryIds} onClick={handleSave}>
-            {t('save')}
+            {t('saveButton')}
           </PrimaryButton>
         </ModalFooter>
       </ModalDefault>
