@@ -1,4 +1,4 @@
-import { component, detectIsEmpty, detectIsUndefined } from '@dark-engine/core'
+import { component, detectIsUndefined } from '@dark-engine/core'
 import { Link } from '@dark-engine/web-router'
 import { Translate, useTranslation } from '@wareme/translations'
 
@@ -114,7 +114,7 @@ const Inventory = component(({ variants }) => {
   let count = 0
   for (let i = 0, len = variants.length; i < len; i++) {
     const variant = variants[i]
-    const { inventoryQuantity } = variant
+    const { inventoryQuantity } = variant.inventoryItem
     count += inventoryQuantity
   }
 

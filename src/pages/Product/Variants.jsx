@@ -30,8 +30,8 @@ const VariantDeleteButton = ({ productId, variantId, slot }) => {
 
 const VariantRow = component(({ productId, variant }) => {
   const { t } = useTranslation('product.variants.row')
-  const { id, title, inventoryQuantity, inventoryItem } = variant
-  const { manageInventory } = inventoryItem
+  const { id, title, inventoryItem } = variant
+  const { inventoryQuantity, manageInventory } = inventoryItem
 
   return (
     <tr>
