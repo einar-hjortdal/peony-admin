@@ -1,11 +1,10 @@
-import { component, useState } from '@dark-engine/core'
-import { useParams } from '@dark-engine/web-router'
+import { component } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import ButtonMore from '../../../../components/buttons/ButtonMore'
-import CardDefault from '../../../../components/cards/CardDefault'
-import CardHeader from '../../../../components/cards/CardHeader'
+import ButtonMore from '../../buttons/ButtonMore'
+import CardDefault from '../../cards/CardDefault'
+import CardHeader from '../../cards/CardHeader'
 import CategoriesList from './CategoriesList'
 import CategoriesEdit from './CategoriesEdit'
 
@@ -24,10 +23,12 @@ const OrganizeListItem = component(({ title, slot }) => {
   )
 })
 
-const Organize = component(() => {
-  const { t } = useTranslation('product.organize')
-  const params = useParams()
-  const productId = params.get('productId')
+const Organize = component(({ categoryIds, onChange, disabled }) => {
+  const { t } = useTranslation('products.organize')
+
+  const handleCategoryIdsChange = (newCategoryIds) => {
+    onChange({ categoryIds: newCategoryIds })
+  }
 
   return (
     <CardDefault>
@@ -35,7 +36,11 @@ const Organize = component(() => {
         <ButtonMore>
           <li>
             {/* TODO  product type */}
-            <CategoriesEdit productId={productId} />
+            <CategoriesEdit
+              categoryIds={categoryIds}
+              onChange={handleCategoryIdsChange}
+              disabled={disabled}
+            />
             {/* TODO product tags */}
             {/* TODO product collections */}
           </li>
@@ -44,7 +49,7 @@ const Organize = component(() => {
       <ul>
         {/* TODO product type */}
         <OrganizeListItem title={t('categories')}>
-          <CategoriesList productId={productId} />
+          <CategoriesList categoryIds={categoryIds} />
         </OrganizeListItem>
         {/* TODO product tags */}
         {/* TODO product collections */}

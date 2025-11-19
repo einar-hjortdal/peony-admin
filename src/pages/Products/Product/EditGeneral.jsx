@@ -67,7 +67,6 @@ const EditGeneral = component(() => {
     updateProduct(newProductData)
   }
 
-  console.log(newProductData)
   if (productData) {
     const { translations } = productData.product
     const { handle, discountable } = newProductData

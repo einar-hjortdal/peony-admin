@@ -1,5 +1,6 @@
 import { component } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
+import ButtonClose from '../buttons/ButtonClose'
 
 const HeaderLeft = styled.div`
   display: inline-block;
@@ -16,11 +17,7 @@ const Title = styled.span`
 
 const StyledHeader = styled.header`
   display: flow-root;
-  padding-top: 1rem;
-  padding-right: 1rem;
-  padding-bottom: 1rem;
-  padding-left: 1rem;
-  border-bottom: 1px solid ${p => p.theme.neutral30};
+  padding-bottom: 1.5rem;
 `
 
 const ModalHeader = component(({ title, handleClose }) => {
@@ -31,7 +28,7 @@ const ModalHeader = component(({ title, handleClose }) => {
       </HeaderLeft>
 
       <HeaderRight>
-        <button type='button' onClick={handleClose}>x</button>
+        <ButtonClose type='button' onClick={handleClose}>x</ButtonClose>
       </HeaderRight>
     </StyledHeader>
   )

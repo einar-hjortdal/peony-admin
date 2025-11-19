@@ -5,18 +5,19 @@
 - [x] Log in
 - [x] Log out
 - [x] Manage store
-- [x] Add/edit currencies
-- [x] Add/edit languages
+- [x] Multi-currency
+- [x] Multi-language
 - [x] Products
 - [x] Variants
+- [x] Inventory items
 - [x] Prices
 - [x] Product categories
 - [x] Metadata
-- [x] Inventory items
 
 ## Currently working on
 
 - [ ] Regions
+- [ ] SEO
 
 ## Working on soon
 
@@ -29,7 +30,6 @@
 - [ ] Customer
 - [ ] Cart
 - [ ] Orders
-- [ ] Prices: minQuantity, maxQuantity
 - [ ] Price lists
 - [ ] Product types
 - [ ] Product tags

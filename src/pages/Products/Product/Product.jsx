@@ -13,7 +13,7 @@ import Images from '../../../components/products/Images'
 import CardDefault from '../../../components/cards/CardDefault'
 import CardHeader from '../../../components/cards/CardHeader'
 import ButtonMore from '../../../components/buttons/ButtonMore'
-import Organize from './Organize/Organize'
+import Organize from '../../../components/products/Organize/Organize'
 import SalesChannels from './SalesChannels'
 import Variants from './Variants'
 import EditGeneral from './EditGeneral'
@@ -67,6 +67,13 @@ const Product = component(() => {
     updateProduct({ metadata: newMetadata })
   }
 
+  const handleOrganizeChange = (data) => {
+    const { categoryIds } = data
+    if (categoryIds) {
+      return updateProduct({ categoryIds })
+    }
+  }
+
   // TODO check for database changes when adding prices
   if (productData) {
     const {
@@ -76,6 +83,7 @@ const Product = component(() => {
       handle,
       discountable,
       status,
+      categoryIds,
       images,
       metadata
     } = productData.product
@@ -150,10 +158,14 @@ const Product = component(() => {
 
         <ColumnSmall>
           <Status defaultValue={status} onChange={handleStatusChange} />
+
           <SalesChannels />
-          <Organize />
-          {/* TODO tags */}
-          {/* TODO collections */}
+
+          <Organize
+            categoryIds={categoryIds}
+            onChange={handleOrganizeChange}
+            disabled={updateProductIsFetching}
+          />
         </ColumnSmall>
       </>
     )

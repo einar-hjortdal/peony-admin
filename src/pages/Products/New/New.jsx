@@ -20,6 +20,7 @@ import PrimaryButton from '../../../components/buttons/PrimaryButton'
 import ProductOptions from '../../../components/products/ProductOptions'
 import MetadataInputs from '../../../components/input/Metadata'
 import Images from '../../../components/products/Images'
+import Organize from '../../../components/products/Organize'
 
 const Metadata = component(({ metadata, onChange }) => {
   const { t } = useTranslation('products.new.metadata')
@@ -161,7 +162,7 @@ const ProductNew = component(() => {
         <Status defaultValue={productData.status} onChange={handleStatusChange} />
         {/* TODO sales channels */}
         {/* TODO regions */}
-        {/* TODO organize */}
+        <Organize />
       </ColumnSmall>
 
       <RowRight>
