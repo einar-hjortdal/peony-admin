@@ -77,7 +77,6 @@ const ProductNew = component(() => {
       return { ...prevState, images: newImages }
     })
   }
-  console.log(productData)
 
   const handleOptionsChange = (data) => {
     setProductData((prevState) => {
@@ -88,6 +87,13 @@ const ProductNew = component(() => {
   const handleMetadataChange = (newMetadata) => {
     setProductData((prevstate) => {
       return { ...prevstate, metadata: newMetadata }
+    })
+  }
+
+  const handleOrganizeChange = (data) => {
+    const { categoryIds } = data
+    setProductData((prevState) => {
+      return { ...prevState, categoryIds }
     })
   }
 
@@ -114,7 +120,6 @@ const ProductNew = component(() => {
   useEffect(() => {
     // on success navigate to products
     if (createProductData) {
-      console.log('navigating')
       history.push('/products')
     }
   }, [createProductData])
@@ -160,9 +165,15 @@ const ProductNew = component(() => {
 
       <ColumnSmall>
         <Status defaultValue={productData.status} onChange={handleStatusChange} />
+
         {/* TODO sales channels */}
         {/* TODO regions */}
-        <Organize />
+
+        <Organize
+          categoryIds={productData.categoryIds}
+          onChange={handleOrganizeChange}
+          disabled={createProductIsFetching}
+        />
       </ColumnSmall>
 
       <RowRight>

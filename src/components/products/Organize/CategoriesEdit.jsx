@@ -97,6 +97,11 @@ const AddCategory = component(({ categoryIds, onAdd, disabled }) => {
   }
 
   if (productCategoriesData) {
+    const { productCategories } = productCategoriesData
+    if (productCategories.length === 0) {
+      return t('noCategories')
+    }
+
     const options = []
     const productCategoryIds = keys(productCategoriesMap)
     for (let i = 0, len = productCategoryIds.length; i < len; i++) {

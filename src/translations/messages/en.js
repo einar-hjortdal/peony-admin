@@ -75,6 +75,7 @@ export default freeze({
   'products.organize.categories.removeButton': 'Remove',
   'products.organize.categories.saveButton': 'Save changes',
   'products.organize.categories.placeholder': 'Select a category',
+  'products.organize.categories.noCategories': 'No categories exist, create a category first.',
   'product.editableOption.delete': 'delete option',
   'product.editableOption.title': 'title',
   'product.editableOption.translations': 'translations',

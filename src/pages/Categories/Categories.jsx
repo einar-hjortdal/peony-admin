@@ -81,6 +81,7 @@ const Category = component(({ productCategory }) => {
   )
 })
 
+// TODO this is not a modal any more
 // table footer: x out of y results, x of y pages, prev/next page
 // TODO if category is parent, then nest children
 // TODO search button
