@@ -135,14 +135,9 @@ const Product = component(() => {
                   </If>
                 </Column>
               </li>
-
-              {/* <li>
-              {t('type')}
-            </li> */}
             </StyledUl>
 
           </CardDefault>
-          {/* TODO display translations without clogging */}
 
           <Translations />
           <Images images={images} onChange={handleImagesChange} />

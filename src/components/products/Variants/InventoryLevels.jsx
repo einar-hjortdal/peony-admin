@@ -4,6 +4,7 @@ import { useStockLocations } from '../../../data'
 import I32 from '../../input/I32'
 import CardDefault from '../../cards/CardDefault'
 import CardHeader from '../../cards/CardHeader'
+import { useTranslation } from '@wareme/translations'
 
 const InventoryLevelInput = component(
   ({
@@ -16,8 +17,8 @@ const InventoryLevelInput = component(
     disabled
   }) => {
     const handleBlur = (e) => {
-      const { value } = e.target
-      const newStocked = value + reserved
+      const { value } = e.target // value is string, needs conversion
+      const newStocked = Number(value) + reserved
       onChange(inventoryItemId, stockLocationId, newStocked)
     }
 
@@ -30,6 +31,7 @@ const InventoryLevelInput = component(
 )
 
 const InventoryLevels = component(({ inventoryItem, onChange, disabled }) => {
+  const { t } = useTranslation('variants.inventoryLevels')
   const { id, inventoryLevels } = inventoryItem
   const { data: stockLocationsData } = useStockLocations()
 
@@ -55,7 +57,7 @@ const InventoryLevels = component(({ inventoryItem, onChange, disabled }) => {
 
       let stocked = 0
       let reserved = 0
-      const inventoryLevel = inventoryLevelsMap[id]
+      const inventoryLevel = inventoryLevelsMap[stockLocation.id]
       if (inventoryLevel) {
         const { stockedQuantity, reservedQuantity } = inventoryLevel
         stocked = stockedQuantity
@@ -78,10 +80,8 @@ const InventoryLevels = component(({ inventoryItem, onChange, disabled }) => {
 
     return (
       <CardDefault>
-        <CardHeader title='TODO translations' />
-
+        <CardHeader title={t('title')} />
         {inputs}
-
       </CardDefault>
     )
   }

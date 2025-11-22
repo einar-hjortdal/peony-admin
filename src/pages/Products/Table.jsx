@@ -5,7 +5,8 @@ import { Translate, useTranslation } from '@wareme/translations'
 import {
   constants,
   useProductDeleteMutation,
-  useProductUpdateMutation
+  useProductUpdateMutation,
+  useSalesChannels
 } from '../../data'
 import If from '../../components/If'
 import { styled } from '@dark-engine/styled'
@@ -114,7 +115,7 @@ const Inventory = component(({ variants }) => {
   let count = 0
   for (let i = 0, len = variants.length; i < len; i++) {
     const variant = variants[i]
-    const { inventoryQuantity } = variant.inventoryItem
+    const { inventoryQuantity } = variant
     count += inventoryQuantity
   }
 
@@ -129,50 +130,56 @@ const Inventory = component(({ variants }) => {
   )
 })
 
-const Table = component(({ products, defaultLocaleId }) => {
+const Table = component(({ products }) => {
   // TODO get collections
+  const { salesChannelsObject } = useSalesChannels()
   const { t } = useTranslation('products.table')
 
-  const rows = []
-  for (let i = 0, len = products.length; i < len; i++) {
-    const product = products[i]
-    const { id, title, collectionId, salesChannels, variants } = product
-    // TODO match collectionId to collection.translations title
+  if (salesChannelsObject) {
+    const rows = []
+    for (let i = 0, len = products.length; i < len; i++) {
+      const product = products[i]
+      const { id, title, collectionId, salesChannels, variants } = product
+      // TODO match collectionId to collection.translations title
 
-    const sc = []
-    for (let i = 0, len = salesChannels.length; i < len; i++) {
-      const salesChannel = salesChannels[i]
-      sc.push(<StyledSpan key={salesChannel.id}>{salesChannel.name}</StyledSpan>)
+      const sc = []
+      for (let i = 0, len = salesChannels.length; i < len; i++) {
+        const salesChannelId = salesChannels[i]
+        const salesChanel = salesChannelsObject[salesChannelId]
+        const { name } = salesChanel
+
+        sc.push(<StyledSpan key={salesChannelId}>{name}</StyledSpan>)
+      }
+
+      rows.push(
+        <tr key={product.id}>
+          <td><Link to={`/products/${id}`}>{title}</Link></td>
+          <td>-</td>{/* TODO collection */}
+          <td>{product.status}</td>
+          <td>{sc}</td>
+          <td><Inventory variants={variants} /></td>
+          <td><Actions product={product} /></td>
+        </tr>)
     }
 
-    rows.push(
-      <tr key={product.id}>
-        <td><Link to={`/products/${id}`}>{title}</Link></td>
-        <td>-</td>{/* TODO collection */}
-        <td>{product.status}</td>
-        <td>{sc}</td>
-        <td><Inventory variants={variants} /></td>
-        <td><Actions product={product} /></td>
-      </tr>)
+    return (
+      <StyledTable>
+        {/* <Filter /> */}
+        <thead>
+          <tr>
+            <th>{t('name')}</th>
+            <th>{t('collection')}</th>
+            <th>{t('status')}</th>
+            <th>{t('availability')}</th>
+            <th>{t('inventory')}</th>
+            <th>{t('actions')}</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+        {/* <Table.Footer /> */}
+      </StyledTable>
+    )
   }
-
-  return (
-    <StyledTable>
-      {/* <Filter /> */}
-      <thead>
-        <tr>
-          <th>{t('name')}</th>
-          <th>{t('collection')}</th>
-          <th>{t('status')}</th>
-          <th>{t('availability')}</th>
-          <th>{t('inventory')}</th>
-          <th>{t('actions')}</th>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
-      {/* <Table.Footer /> */}
-    </StyledTable>
-  )
 })
 
 export default Table

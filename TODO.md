@@ -21,9 +21,9 @@
 
 ## Working on soon
 
+- [ ] Stock locations
 - [ ] Sales channels
 - [ ] Taxes
-- [ ] Stock locations
 
 ## Work on next
 

@@ -6,62 +6,48 @@ import { useRegions, useStore } from '../../../data'
 import CardDefault from '../../cards/CardDefault'
 import CardHeader from '../../cards/CardHeader'
 import PrimaryButton from '../../buttons/PrimaryButton'
-import SecondaryButton from '../../buttons/SecondaryButton'
 import If from '../../If'
 
-const MoneyAmountInput = component(
-  ({
-    region,
-    currency,
-    amount,
-    onInput,
-    onDelete,
-    disabled
-  }) => {
-    const { t, translator } = useTranslation('variants.moneyAmounts')
+const MoneyAmountInput = component(({ region, currency, amount, onInput, disabled }) => {
+  const { t, translator } = useTranslation('variants.moneyAmounts')
 
-    const { decimalDigits } = currency
-    const { id, name, currencyCode, includesTax } = region
+  const { decimalDigits } = currency
+  const { id, name, currencyCode, includesTax } = region
 
-    const intlConfig = {
-      locale: translator.currentLanguage,
-      currency: currencyCode.trim() // firebirdsql returns additional whitespace for some reason
-    }
-
-    const handleOnValueChange = (value, name, values) => {
-      return onInput(value, name, values, id)
-    }
-
-    const handleDelete = () => {
-      onDelete(id)
-    }
-
-    return (
-      <div>
-        <label for={id}>{name} {currencyCode}
-          <If condition={includesTax}>
-            {t('includesTax')}
-          </If>
-        </label>
-        {/* TODO display currency and if includes tax */}
-        <CurrencyInput
-          id={id}
-          name={id}
-          value={amount}
-          intlConfig={intlConfig}
-          decimalsLimit={decimalDigits}
-          step={1}
-          onValueChange={handleOnValueChange}
-          disabled={disabled}
-        />
-        <SecondaryButton onClick={handleDelete} disabled={disabled}>{t('delete')}</SecondaryButton>
-      </div>
-    )
+  const intlConfig = {
+    locale: translator.currentLanguage,
+    currency: currencyCode.trim() // firebirdsql returns additional whitespace for some reason
   }
+
+  const handleOnValueChange = (value, name, values) => {
+    return onInput(value, name, values, id)
+  }
+
+  return (
+    <div>
+      <label for={id}>{name} {currencyCode}
+        <If condition={includesTax}>
+          {t('includesTax')}
+        </If>
+      </label>
+      {/* TODO display includesTax */}
+      <CurrencyInput
+        id={id}
+        name={id}
+        value={String(amount)}
+        intlConfig={intlConfig}
+        decimalsLimit={decimalDigits}
+        step={1}
+        onValueChange={handleOnValueChange}
+        disabled={disabled}
+      />
+    </div>
+  )
+}
 )
 
 const MoneyAmountsInputs = component(
-  ({ regions, regionMoneyAmountsMap, onInput, onDelete, disabled }) => {
+  ({ regions, regionMoneyAmountsMap, onInput, disabled }) => {
     const { data: storeData } = useStore()
 
     if (storeData) {
@@ -93,7 +79,6 @@ const MoneyAmountsInputs = component(
             currency={currency}
             amount={amount}
             onInput={onInput}
-            onDelete={onDelete}
             disabled={disabled}
           />
         )
@@ -130,14 +115,6 @@ const MoneyAmounts = component(({ moneyAmounts, onChange, disabled }) => {
     })
   }
 
-  const handleDelete = (regionId) => {
-    return setRegionMoneyAmountsMap((prevState) => {
-      const newRegionMoneyAmountsMap = { ...prevState }
-      delete newRegionMoneyAmountsMap[regionId]
-      return newRegionMoneyAmountsMap
-    })
-  }
-
   const handleSave = () => {
     // TODO insert each moneyAmount from original array that has priceListId set
     const newMoneyAmounts = []
@@ -162,7 +139,6 @@ const MoneyAmounts = component(({ moneyAmounts, onChange, disabled }) => {
           regions={regions}
           regionMoneyAmountsMap={regionMoneyAmountsMap}
           onInput={handleInput}
-          onDelete={handleDelete}
           disabled={disabled}
         />
 

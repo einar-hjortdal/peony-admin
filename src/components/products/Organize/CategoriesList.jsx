@@ -7,9 +7,9 @@ const CategoriesListWithData = component(({ categoryIds }) => {
   const productCategoriesMap = useMemo(() => {
     const res = {}
     if (productCategoriesData) {
-      const { productCategories } = productCategoriesData
-      for (let i = 0, len = productCategories.length; i < len; i++) {
-        const productCategory = productCategories[i]
+      const { categories } = productCategoriesData
+      for (let i = 0, len = categories.length; i < len; i++) {
+        const productCategory = categories[i]
         const { id } = productCategory
         res[id] = productCategory
       }
@@ -18,8 +18,8 @@ const CategoriesListWithData = component(({ categoryIds }) => {
   }, [productCategoriesData])
 
   if (productCategoriesData) {
-    const { productCategories } = productCategoriesData
-    if (productCategories.length === 0) {
+    const { categories } = productCategoriesData
+    if (categories.length === 0) {
       return '-'
     }
 

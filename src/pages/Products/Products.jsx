@@ -3,7 +3,7 @@ import { Link } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { constants, useProducts, useStore } from '../../data'
+import { constants, useProducts } from '../../data'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
 import SetTitle from '../../components/SetTitle'
 import CardDefault from '../../components/cards/CardDefault'
@@ -22,7 +22,6 @@ const Products = component(() => {
     order: constants.orderDesc
   })
 
-  const { data: storeData } = useStore()
   const { data: productsData } = useProducts(params)
   // TODO show skeleton while fetching
   // TODO show error message
@@ -30,9 +29,8 @@ const Products = component(() => {
   const { t } = useTranslation('products')
   // keep state to build request query params
   // no sort, just filter (this simplifies a great deal)
-  if (productsData && storeData) {
+  if (productsData) {
     const { products } = productsData
-    const { defaultLocaleId } = storeData.store
 
     return (
       <>
@@ -50,7 +48,7 @@ const Products = component(() => {
 
           <If condition={products.length > 0}>
             {/* TODO change to Table.Title */}
-            <Table products={products} defaultLocaleId={defaultLocaleId} />
+            <Table products={products} />
           </If>
         </CardDefault>
       </>

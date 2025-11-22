@@ -100,10 +100,10 @@ const Categories = component(() => {
   }
 
   if (productCategoriesData) {
-    const { productCategories } = productCategoriesData
+    const { categories } = productCategoriesData
     const rows = []
-    for (let i = 0, len = productCategories.length; i < len; i++) {
-      const productCategory = productCategories[i]
+    for (let i = 0, len = categories.length; i < len; i++) {
+      const productCategory = categories[i]
       rows.push(<Category productCategory={productCategory} />)
     }
 
