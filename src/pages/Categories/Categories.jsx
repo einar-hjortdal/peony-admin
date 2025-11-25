@@ -81,13 +81,15 @@ const Category = component(({ productCategory }) => {
   )
 })
 
-// TODO this is not a modal any more
 // table footer: x out of y results, x of y pages, prev/next page
 // TODO if category is parent, then nest children
 // TODO search button
 const Categories = component(() => {
   const { t } = useTranslation('categories')
-  const fetchAmount = 15
+  // We assume there aren't more than 100 categories.
+  // 1) because who the hell makes that many anyway?
+  // 2) https://github.com/einar-hjortdal/firebird/issues/1
+  const fetchAmount = 100
   const [offset, setOffset] = useState(0)
   const { data: productCategoriesData } = useProductCategories({ offset, fetch: fetchAmount })
 

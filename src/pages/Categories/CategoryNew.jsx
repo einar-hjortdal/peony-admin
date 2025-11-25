@@ -1,7 +1,7 @@
 import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import ModalFull from '../../components/modals/ModalFull'
+import ModalDefault from '../../components/modals/ModalDefault'
 import ModalHeader from '../../components/modals/ModalHeader'
 import ModalBody from '../../components/modals/ModalBody'
 import ModalFooter from '../../components/modals/ModalFooter'
@@ -47,7 +47,7 @@ const NewCategory = component(({ modalRef }) => {
   const { metadata } = requestData
 
   return (
-    <ModalFull ref={modalRef}>
+    <ModalDefault ref={modalRef}>
       <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
       <ModalBody>
@@ -72,7 +72,7 @@ const NewCategory = component(({ modalRef }) => {
           {t('save')}
         </PrimaryButton>
       </ModalFooter>
-    </ModalFull>
+    </ModalDefault>
   )
 })
 

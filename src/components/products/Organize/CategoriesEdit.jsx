@@ -30,9 +30,9 @@ const SelectedCategories = component(({ categoryIds, onRemove }) => {
   const productCategoriesMap = useMemo(() => {
     const res = {}
     if (productCategoriesData) {
-      const { productCategories } = productCategoriesData
-      for (let i = 0, len = productCategories.length; i < len; i++) {
-        const productCategory = productCategories[i]
+      const { categories } = productCategoriesData
+      for (let i = 0, len = categories.length; i < len; i++) {
+        const productCategory = categories[i]
         const { id } = productCategory
         res[id] = productCategory
       }
@@ -68,9 +68,9 @@ const AddCategory = component(({ categoryIds, onAdd, disabled }) => {
   const productCategoriesMap = useMemo(() => {
     const res = {}
     if (productCategoriesData) {
-      const { productCategories } = productCategoriesData
-      for (let i = 0, len = productCategories.length; i < len; i++) {
-        const productCategory = productCategories[i]
+      const { categories } = productCategoriesData
+      for (let i = 0, len = categories.length; i < len; i++) {
+        const productCategory = categories[i]
         const { id } = productCategory
         res[id] = { ...productCategory, selected: false }
       }
@@ -97,8 +97,8 @@ const AddCategory = component(({ categoryIds, onAdd, disabled }) => {
   }
 
   if (productCategoriesData) {
-    const { productCategories } = productCategoriesData
-    if (productCategories.length === 0) {
+    const { categories } = productCategoriesData
+    if (categories.length === 0) {
       return t('noCategories')
     }
 
