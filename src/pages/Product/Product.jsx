@@ -84,6 +84,7 @@ const Product = component(() => {
       discountable,
       status,
       categoryIds,
+      thumbnail,
       images,
       metadata
     } = productData.product
@@ -140,7 +141,12 @@ const Product = component(() => {
           </CardDefault>
 
           <Translations />
-          <Images images={images} onChange={handleImagesChange} />
+          <Images
+            images={images}
+            thumbnail={thumbnail}
+            onImagesChange={handleImagesChange}
+            onThumbnailChange={console.log}
+          />
           <Options />
           <Variants />
 

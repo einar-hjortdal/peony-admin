@@ -4,7 +4,8 @@ import {
   useState,
   useRef,
   detectIsNull,
-  useEffect
+  useEffect,
+  useId
 } from '@dark-engine/core'
 
 import { useUploadOneMutation } from '../../data'
@@ -17,28 +18,9 @@ import ModalBody from '../modals/ModalBody'
 import CardDefault from '../cards/CardDefault'
 import CardHeader from '../cards/CardHeader'
 
-const ImagePreviewWrapper = styled.div`
-  display: inline-block;
-  width: 10rem;
-  height: 14rem;
-`
-
-const StyledImg = styled.img`
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-`
-
-const ImagePreview = component(({ ...props }) => {
-  return (
-    <ImagePreviewWrapper>
-      <StyledImg {...props} />
-    </ImagePreviewWrapper>
-  )
-})
-
 const AddImage = component(({ onUpload }) => {
   const { t } = useTranslation('product.addImage')
+  const id = useId()
   const modalRef = useRef(null)
   const inputRef = useRef(null)
   const [selectedFile, setSelectedFile] = useState(null)
@@ -103,27 +85,25 @@ const AddImage = component(({ onUpload }) => {
 
   return (
     <div>
-      <PrimaryButton type='button' onClick={handleOpenModal}>
-        {t('add')}
-      </PrimaryButton>
+      <PrimaryButton type='button' onClick={handleOpenModal}>{t('add')}</PrimaryButton>
       <ModalDefault ref={modalRef}>
         <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
         <ModalBody>
           <div>
-            <label onClick={handleLabelClick}>
-              select image
-              <input
-                ref={inputRef}
-                type='file'
-                onChange={handleFileChange}
-              />
-            </label>
+            <label for={id} onClick={handleLabelClick}>{t('selectImage')}</label>
+            <input
+              id={id}
+              ref={inputRef}
+              type='file'
+              onChange={handleFileChange}
+            />
+
             <PrimaryButton
               type='button'
               onClick={handleSubmit}
               disabled={isSubmitDisabled()}
-            >upload
+            >{t('upload')}
             </PrimaryButton>
           </div>
 
@@ -133,9 +113,62 @@ const AddImage = component(({ onUpload }) => {
   )
 })
 
+const ImagePreviewWrapper = styled.div`
+  display: inline-block;
+  position: relative;
+  width: 10rem;
+  height: 14rem;
+`
+
+const StyledImg = styled.img`
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+`
+
+// TODO style right, show only when hovering image
+const DeleteButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2rem;
+  height: 2rem;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+`
+
+const ImagePreview = component(({ index, onDelete, ...props }) => {
+  const handleClick = (e) => {
+    e.stopPropagation()
+    onDelete(index)
+  }
+
+  return (
+    <ImagePreviewWrapper>
+      <DeleteButton
+        type='button'
+        aria-label='Remove image'
+        title='Remove image'
+        onClick={handleClick}
+      >
+        {/* Put your trash SVG here */}
+        {/* Example placeholder: */}
+        <svg width='14' height='14' viewBox='0 0 24 24' fill='none' aria-hidden>
+          <path d='M3 6h18' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
+          <path d='M8 6v12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
+          <path d='M10 11v6M14 11v6' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
+        </svg>
+      </DeleteButton>
+      <StyledImg {...props} />
+    </ImagePreviewWrapper>
+  )
+})
+
 // TODO allow drag and drop to change imageRank
 // TODO click to change alt translations
-const Preview = component(({ images }) => {
+const Preview = component(({ images, onOrderChange, onDelete }) => {
   const { t } = useTranslation('product.images.preview')
 
   if (detectIsUndefined(images)) {
@@ -145,25 +178,56 @@ const Preview = component(({ images }) => {
   const previews = []
   for (let i = 0, len = images.length; i < len; i++) {
     const image = images[i]
-    previews.push(<ImagePreview src={image.url} alt={image.alt} />)
+    const { id } = image
+    previews.push(
+      <ImagePreview
+        key={id}
+        onDelete={onDelete}
+        index={i}
+        src={image.url}
+        alt={image.alt}
+      />
+    )
   }
 
   return (
     <div>
       {previews}
-      {/* TODO mark thumbnail image */}
     </div>
   )
 })
 
-const Images = component(({ images, onChange }) => {
+// TODO thumbnail
+// TODO order
+// TODO delete
+const Images = component(({ images, thumbnail, onImagesChange, onThumbnailChange }) => {
   const { t } = useTranslation('product.images')
 
   const handleUpload = (newImage) => {
     if (images) {
-      return onChange([...images, newImage])
+      return onImagesChange([...images, newImage])
     }
-    return onChange([newImage])
+    return onImagesChange([newImage])
+  }
+
+  const handleOrderChange = (newImages) => {
+    onImagesChange(newImages)
+  }
+
+  const handleDelete = (deletedImageIndex) => {
+    const newImages = [
+      ...images.slice(0, deletedImageIndex),
+      ...images.slice(deletedImageIndex + 1)
+    ]
+    onImagesChange(newImages)
+  }
+
+  // TODO rewrite thumbnail database handling: should be a table with a relation between product and image
+  // create table product_thumbnail (product_id, image_id)
+  // handle thumbnail independently so that a thumbnail can hidden from product images if user wishes
+  // then implement handling admin app
+  const handleThumbnailChange = (newThumbnail) => {
+    onImagesChange(newThumbnail)
   }
 
   return (
@@ -171,7 +235,14 @@ const Images = component(({ images, onChange }) => {
       <CardHeader title={t('title')}>
         <AddImage images={images} onUpload={handleUpload} />
       </CardHeader>
-      <Preview images={images} onChange={onChange} />
+
+      {/* TODO thumbnail preview */}
+
+      <Preview
+        images={images}
+        onOrderChange={handleOrderChange}
+        onDelete={handleDelete}
+      />
     </CardDefault>
   )
 })

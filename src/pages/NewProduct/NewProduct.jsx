@@ -157,7 +157,12 @@ const ProductNew = component(() => {
           onChange={handleTranslationsChange}
         />
 
-        <Images images={productData.images} onChange={handleImagesChange} />
+        <Images
+          images={productData.images}
+          thumbnail={productData.thumbnail}
+          onImagesChange={handleImagesChange}
+          onThumbnailChange={console.log}
+        />
         <ProductOptions options={productData.options} onChange={handleOptionsChange} />
         <Metadata metadata={productData.metadata} onChange={handleMetadataChange} />
       </ColumnLarge>

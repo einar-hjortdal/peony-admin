@@ -67,6 +67,8 @@ export default freeze({
   'metadataInputs.newKey': 'new data',
   'orders.title': 'orders',
   'product.addImage.add': 'Add',
+  'product.addImage.selectImage': 'Select the image to upload',
+  'product.addImage.upload': 'Upload',
   'product.addImage.title': 'Add an image',
   'products.organize.categories': 'Categories',
   'products.organize.title': 'Organize',

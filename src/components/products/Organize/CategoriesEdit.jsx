@@ -62,6 +62,7 @@ const SelectedCategories = component(({ categoryIds, onRemove }) => {
 })
 
 // shows a select element with all non-selected categories
+// TODO build hierarchy and show indented children
 const AddCategory = component(({ categoryIds, onAdd, disabled }) => {
   const { t } = useTranslation('products.organize.categories')
   const { data: productCategoriesData } = useProductCategories()
