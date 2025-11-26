@@ -17,6 +17,8 @@ import ModalHeader from '../modals/ModalHeader'
 import ModalBody from '../modals/ModalBody'
 import CardDefault from '../cards/CardDefault'
 import CardHeader from '../cards/CardHeader'
+import HorizontalDots from '../svg/HorizontalDots'
+import If from '../If'
 
 const AddImage = component(({ onUpload }) => {
   const { t } = useTranslation('product.addImage')
@@ -118,16 +120,18 @@ const ImagePreviewWrapper = styled.div`
   position: relative;
   width: 10rem;
   height: 14rem;
+  cursor: grab;
+
+  &:hover button {
+    opacity: 1;
+  }
+
+  &.dragging { 
+    opacity: 0.6; 
+  }
 `
 
-const StyledImg = styled.img`
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-`
-
-// TODO style right, show only when hovering image
-const DeleteButton = styled.button`
+const ActionsButton = styled.button`
   position: absolute;
   top: 0;
   right: 0;
@@ -136,56 +140,146 @@ const DeleteButton = styled.button`
   background: rgba(0,0,0,0.5);
   color: white;
   border-radius: 50%;
+  opacity: 0;
   cursor: pointer;
 `
 
-const ImagePreview = component(({ index, onDelete, ...props }) => {
-  const handleClick = (e) => {
-    e.stopPropagation()
+const StyledUl = styled.ul`
+  position: absolute;
+  border-radius: .3rem;
+  top: 1.5rem;
+  right: 0;
+  white-space: nowrap;
+  background-color: ${p => p.theme.bg};
+  box-shadow: 0 .2rem 1.5rem 0 rgba(0, 0, 0, 0.25);
+  padding-top: .3rem;
+  padding-right: .3rem;
+  padding-bottom: .3rem;
+  padding-left: .3rem;
+  min-width: 8rem;
+
+  & li button {
+    width: 100%;
+    border-radius: .3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    background-color: inherit;
+  }
+
+  & li button:disabled {
+    background-color: ${p => p.theme.neutral20};
+  }
+
+  & li button:hover {
+    color: ${p => p.theme.bg};
+    background-color: ${p => p.theme.active};
+  }
+
+  & li button:hover:disabled {
+    color: inherit;
+    background-color: ${p => p.theme.neutral20};
+    cursor: auto;
+  }
+`
+
+const ImagePreviewButton = component(({ slot }) => {
+  const { t } = useTranslation('buttons.more')
+  const [isOpen, setIsOpen] = useState(false)
+
+  const handleClick = () => {
+    setIsOpen(!isOpen)
+  }
+
+  return (
+    <div>
+      <ActionsButton aria-label={t('label')} type='button' onClick={handleClick}>
+        <HorizontalDots />
+      </ActionsButton>
+
+      <If condition={isOpen}>
+        <StyledUl>
+          {slot}
+        </StyledUl>
+      </If>
+    </div>
+  )
+})
+
+const StyledImg = styled.img`
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+`
+
+const ImagePreview = component(({ index, isThumbnail, onDelete, onThumbnailChange, ...props }) => {
+  const { t } = useTranslation('product.images.preview')
+
+  const handleDelete = () => {
     onDelete(index)
+  }
+
+  const handleThumbnailChange = () => {
+    onThumbnailChange(index)
   }
 
   return (
     <ImagePreviewWrapper>
-      <DeleteButton
-        type='button'
-        aria-label='Remove image'
-        title='Remove image'
-        onClick={handleClick}
-      >
-        {/* Put your trash SVG here */}
-        {/* Example placeholder: */}
-        <svg width='14' height='14' viewBox='0 0 24 24' fill='none' aria-hidden>
-          <path d='M3 6h18' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
-          <path d='M8 6v12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
-          <path d='M10 11v6M14 11v6' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
-        </svg>
-      </DeleteButton>
+      <ImagePreviewButton>
+        <li>
+          <button
+            type='button'
+            onClick={handleDelete}
+          >{t('delete')}
+          </button>
+        </li>
+        <li>
+          <button
+            type='button'
+            onClick={handleThumbnailChange}
+            disabled={isThumbnail}
+          >{t('setThumbnail')}
+          </button>
+        </li>
+      </ImagePreviewButton>
       <StyledImg {...props} />
     </ImagePreviewWrapper>
   )
-})
-
+}
+)
 // TODO allow drag and drop to change imageRank
-// TODO click to change alt translations
-const Preview = component(({ images, onOrderChange, onDelete }) => {
+// Use https://github.com/trycatch-labs/dark/blob/master/examples/spring-draggable-list/index.tsx
+const Preview = component(({ images, thumbnail, onOrderChange, onThumbnailChange, onDelete }) => {
   const { t } = useTranslation('product.images.preview')
 
   if (detectIsUndefined(images)) {
     return t('noImages')
   }
 
+  const isThumbnail = (imageId, index) => {
+    if (thumbnail) {
+      return thumbnail.id === imageId
+    }
+    return index === 0
+  }
+
   const previews = []
   for (let i = 0, len = images.length; i < len; i++) {
     const image = images[i]
-    const { id } = image
+    const { id, url, alt } = image
     previews.push(
       <ImagePreview
         key={id}
-        onDelete={onDelete}
         index={i}
-        src={image.url}
-        alt={image.alt}
+        isThumbnail={isThumbnail(id, i)}
+        onDelete={onDelete}
+        onThumbnailChange={onThumbnailChange}
+        src={url}
+        alt={alt}
       />
     )
   }
@@ -197,9 +291,6 @@ const Preview = component(({ images, onOrderChange, onDelete }) => {
   )
 })
 
-// TODO thumbnail
-// TODO order
-// TODO delete
 const Images = component(({ images, thumbnail, onImagesChange, onThumbnailChange }) => {
   const { t } = useTranslation('product.images')
 
@@ -222,12 +313,8 @@ const Images = component(({ images, thumbnail, onImagesChange, onThumbnailChange
     onImagesChange(newImages)
   }
 
-  // TODO rewrite thumbnail database handling: should be a table with a relation between product and image
-  // create table product_thumbnail (product_id, image_id)
-  // handle thumbnail independently so that a thumbnail can hidden from product images if user wishes
-  // then implement handling admin app
-  const handleThumbnailChange = (newThumbnail) => {
-    onImagesChange(newThumbnail)
+  const handleThumbnailChange = (thumbnailIndex) => {
+    onThumbnailChange(thumbnailIndex)
   }
 
   return (
@@ -236,11 +323,11 @@ const Images = component(({ images, thumbnail, onImagesChange, onThumbnailChange
         <AddImage images={images} onUpload={handleUpload} />
       </CardHeader>
 
-      {/* TODO thumbnail preview */}
-
       <Preview
         images={images}
+        thumbnail={thumbnail}
         onOrderChange={handleOrderChange}
+        onThumbnailChange={handleThumbnailChange}
         onDelete={handleDelete}
       />
     </CardDefault>

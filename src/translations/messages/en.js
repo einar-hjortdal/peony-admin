@@ -69,6 +69,8 @@ export default freeze({
   'product.addImage.add': 'Add',
   'product.addImage.selectImage': 'Select the image to upload',
   'product.addImage.upload': 'Upload',
+  'product.images.preview.delete': 'Delete image',
+  'product.images.preview.setThumbnail': 'Set as thumbnail',
   'product.addImage.title': 'Add an image',
   'products.organize.categories': 'Categories',
   'products.organize.title': 'Organize',

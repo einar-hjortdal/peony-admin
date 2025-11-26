@@ -63,6 +63,10 @@ const Product = component(() => {
     updateProduct({ images: newImages })
   }
 
+  const handleThumbnailChange = (newThumbnailIndex) => {
+    updateProduct({ thumbnail: newThumbnailIndex })
+  }
+
   const handleMetadataChange = (newMetadata) => {
     updateProduct({ metadata: newMetadata })
   }
@@ -145,7 +149,7 @@ const Product = component(() => {
             images={images}
             thumbnail={thumbnail}
             onImagesChange={handleImagesChange}
-            onThumbnailChange={console.log}
+            onThumbnailChange={handleThumbnailChange}
           />
           <Options />
           <Variants />

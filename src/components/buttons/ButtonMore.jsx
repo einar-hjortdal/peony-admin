@@ -3,6 +3,7 @@ import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import If from '../If'
+import HorizontalDots from '../svg/HorizontalDots'
 
 const StyledButton = styled.button`
   border-radius: 0.3125rem;
@@ -50,9 +51,19 @@ const StyledUl = styled.ul`
     background-color: inherit;
   }
 
+  & li button:disabled {
+    background-color: ${p => p.theme.neutral20};
+  }
+
   & li button:hover {
     color: ${p => p.theme.bg};
     background-color: ${p => p.theme.active};
+  }
+
+  & li button:hover:disabled {
+    color: inherit;
+    background-color: ${p => p.theme.neutral20};
+    cursor: auto;
   }
 `
 
@@ -60,18 +71,14 @@ const ButtonMore = component(({ slot }) => {
   const { t } = useTranslation('buttons.more')
   const [isOpen, setIsOpen] = useState(false)
 
-  const toggleMenu = () => {
+  const handleClick = () => {
     setIsOpen(!isOpen)
   }
 
   return (
     <StyledDiv>
-      <StyledButton aria-label={t('label')} type='button' onClick={toggleMenu}>
-        <svg viewBox='0 0 24 8' aria-hidden='true'>
-          <circle cx='4' cy='4' r='3' />
-          <circle cx='12' cy='4' r='3' />
-          <circle cx='20' cy='4' r='3' />
-        </svg>
+      <StyledButton aria-label={t('label')} type='button' onClick={handleClick}>
+        <HorizontalDots />
       </StyledButton>
       <If condition={isOpen}>
         <StyledUl>
