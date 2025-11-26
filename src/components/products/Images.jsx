@@ -131,6 +131,7 @@ const ImagePreviewWrapper = styled.div`
   }
 `
 
+// Style differs from ButtonMore, but isn't used elsewhere.
 const ActionsButton = styled.button`
   position: absolute;
   top: 0;
@@ -291,6 +292,9 @@ const Preview = component(({ images, thumbnail, onOrderChange, onThumbnailChange
   )
 })
 
+// TODO info for users:
+// Every time images are uploaded and/or updated and/or order changes, thumbnail is reset.
+// First upload, update, order images, then set thumbnail.
 const Images = component(({ images, thumbnail, onImagesChange, onThumbnailChange }) => {
   const { t } = useTranslation('product.images')
 

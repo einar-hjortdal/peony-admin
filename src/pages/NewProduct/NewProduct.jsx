@@ -73,7 +73,23 @@ const ProductNew = component(() => {
 
   const handleImagesChange = (newImages) => {
     setProductData((prevState) => {
-      return { ...prevState, images: newImages }
+      if (newImages.length > 0) {
+        return {
+          ...prevState,
+          images: newImages,
+          thumbnail: 0
+        }
+      }
+
+      const newState = { ...prevState, images: newImages }
+      delete newState.thumbnail
+      return newState
+    })
+  }
+
+  const handleThumbnailChange = (newThumbnailIndex) => {
+    setProductData((prevState) => {
+      return { ...prevState, thumbnail: newThumbnailIndex }
     })
   }
 
@@ -161,7 +177,7 @@ const ProductNew = component(() => {
           images={productData.images}
           thumbnail={productData.thumbnail}
           onImagesChange={handleImagesChange}
-          onThumbnailChange={console.log}
+          onThumbnailChange={handleThumbnailChange}
         />
         <ProductOptions options={productData.options} onChange={handleOptionsChange} />
         <Metadata metadata={productData.metadata} onChange={handleMetadataChange} />
