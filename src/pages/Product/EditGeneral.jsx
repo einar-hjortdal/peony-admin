@@ -8,7 +8,7 @@ import TranslationDefaultInputs from '../../components/products/TranslationDefau
 import ModalHeader from '../../components/modals/ModalHeader'
 import ModalFooter from '../../components/modals/ModalFooter'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
-import HandleInput from '../../components/input/Handle'
+import Handle from '../../components/input/Handle'
 import Switch from '../../components/Switch'
 
 const EditGeneral = component(() => {
@@ -77,7 +77,7 @@ const EditGeneral = component(() => {
           <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
           <TranslationDefaultInputs translations={translations} onChange={handleTranslationsChange} />
-          <HandleInput value={handle} onChange={handleHandleChange} />
+          <Handle value={handle} onInput={handleHandleChange} />
           <Switch
             name='discountable'
             checked={discountable}

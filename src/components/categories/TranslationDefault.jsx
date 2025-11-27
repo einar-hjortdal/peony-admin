@@ -4,9 +4,12 @@ import { useTranslation } from '@wareme/translations'
 import { useStore } from '../../data'
 import Text from '../input/Text'
 import Textarea from '../input/Textarea'
+import CardDefault from '../cards/CardDefault'
+import CardHeader from '../cards/CardHeader'
 
-const TranslationDefaultInputs = component(({ translations, onChange }) => {
-  const { t } = useTranslation('translationDefaultInputs')
+// TODO export inputs only, wrapper component in NewCategory and Category
+const TranslationDefault = component(({ translations, onChange }) => {
+  const { t } = useTranslation('categories.translationDefault')
   const { data: storeData } = useStore()
 
   useEffect(() => {
@@ -54,22 +57,16 @@ const TranslationDefaultInputs = component(({ translations, onChange }) => {
   }
 
   if (storeData && translationData) {
-    const { title, subtitle, description } = translationData
+    const { name, description } = translationData
 
     return (
-      <>
+      <CardDefault>
+        <CardHeader title={t('title')} />
         <Text
-          name='title'
+          name='name'
           onInput={handleInput}
-          value={title}
-        >{t('title')}
-        </Text>
-
-        <Text
-          name='subtitle'
-          onInput={handleInput}
-          value={subtitle}
-        >{t('subtitle')}
+          value={name}
+        >{t('name')}
         </Text>
 
         <Textarea
@@ -78,9 +75,9 @@ const TranslationDefaultInputs = component(({ translations, onChange }) => {
           value={description}
         >{t('description')}
         </Textarea>
-      </>
+      </CardDefault>
     )
   }
 })
 
-export default TranslationDefaultInputs
+export default TranslationDefault

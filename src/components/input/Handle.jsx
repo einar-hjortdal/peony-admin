@@ -3,11 +3,11 @@ import { useTranslation } from '@wareme/translations'
 
 import Text from './Text'
 
-const Handle = component(({ value, onChange }) => {
+const Handle = component(({ value, onInput }) => {
   const { t } = useTranslation('handleInput')
 
   const handleInput = (e) => {
-    onChange(e.target.value)
+    onInput(e.target.value)
   }
 
   // TODO formatted placeholder using placeholder prop

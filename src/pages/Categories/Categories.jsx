@@ -1,16 +1,26 @@
-import { component, detectIsArray, detectIsNull, detectIsUndefined, useRef, useState } from '@dark-engine/core'
+import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductCategories, useStore } from '../../data'
+import { useProductCategories, useProductCategoryDeleteMutation } from '../../data'
 import ButtonMore from '../../components/buttons/ButtonMore'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
 import SecondaryButton from '../../components/buttons/SecondaryButton'
-import CategoryNew from './CategoryNew'
-import CategoryEdit from './CategoryEdit'
-import CategoryDelete from './CategoryDelete'
 import CardDefault from '../../components/cards/CardDefault'
 import CardHeader from '../../components/cards/CardHeader'
+import { Link } from '@dark-engine/web-router'
+
+const Delete = component(({ id, slot }) => {
+  const [deleteCategory, { isFetching }] = useProductCategoryDeleteMutation(id)
+
+  const handleDelete = () => {
+    deleteCategory(id)
+  }
+
+  return (
+    <button type='text' onClick={handleDelete} disabled={isFetching}>{slot}</button>
+  )
+})
 
 const StyledTable = styled.table`
   width: 100%;
@@ -58,7 +68,7 @@ const Visibility = component(({ isInternal }) => {
 })
 
 const Category = component(({ productCategory }) => {
-  const { t } = useTranslation('categories.category')
+  const { t } = useTranslation('categories.row')
   const { id, handle, isActive, isInternal, name } = productCategory
 
   return (
@@ -70,10 +80,10 @@ const Category = component(({ productCategory }) => {
       <td>
         <ButtonMore>
           <li>
-            <CategoryEdit productCategory={productCategory} />
+            <Link to={`products/categories/${id}`}>{t('edit')}</Link>
           </li>
           <li>
-            <CategoryDelete id={id} />
+            <Delete id={id}>{t('delete')}</Delete>
           </li>
         </ButtonMore>
       </td>
@@ -89,17 +99,10 @@ const Categories = component(() => {
   // We assume there aren't more than 100 categories.
   // 1) because who the hell makes that many anyway?
   // 2) https://github.com/einar-hjortdal/firebird/issues/1
+  // TODO if there are more fetch more in another request
   const fetchAmount = 100
   const [offset, setOffset] = useState(0)
   const { data: productCategoriesData } = useProductCategories({ offset, fetch: fetchAmount })
-
-  const modalRef = useRef(null)
-  const handleOpenModal = () => {
-    if (detectIsNull(modalRef.current)) {
-      return
-    }
-    modalRef.current.showModal()
-  }
 
   if (productCategoriesData) {
     const { categories } = productCategoriesData
@@ -113,13 +116,9 @@ const Categories = component(() => {
       <CardDefault>
         <CardHeader title={t('title')} subtitle={t('subtitle')}>
           <SecondaryButton>{t('editRanking')}</SecondaryButton>
-          <PrimaryButton
-            type='button'
-            disabled={detectIsNull(modalRef)}
-            onClick={handleOpenModal}
-          >{t('create')}
-          </PrimaryButton>
-          <CategoryNew modalRef={modalRef} />
+          <Link to='/products/categories/new'>
+            <PrimaryButton type='button'>{t('create')}</PrimaryButton>
+          </Link>
         </CardHeader>
         <StyledTable>
           <thead>

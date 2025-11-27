@@ -34,7 +34,21 @@ export const routes = [
           },
           {
             path: 'categories',
-            component: lazy(() => import('./pages/Categories'))
+            component: NoLayout,
+            children: [
+              {
+                path: '',
+                component: lazy(() => import('./pages/Categories'))
+              },
+              {
+                path: 'new',
+                component: lazy(() => import('./pages/NewCategory'))
+              },
+              {
+                path: ':categoryId',
+                component: lazy(() => import('./pages/Category'))
+              }
+            ]
           },
           {
             path: ':productId',

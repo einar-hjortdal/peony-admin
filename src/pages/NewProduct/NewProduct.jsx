@@ -6,7 +6,6 @@ import { detectIsEmptyString } from '@wareme/utils'
 import { useProductCreateMutation } from '../../data'
 import TranslationDefaultInputs from '../../components/products/TranslationDefaultInputs'
 import TranslationsInputs from '../../components/products/TranslationsInputs'
-import Handle from '../../components/input/Handle'
 import CardDefault from '../../components/cards/CardDefault'
 import CardHeader from '../../components/cards/CardHeader'
 import Checkbox from '../../components/input/Checkbox'
@@ -17,16 +16,17 @@ import Status from '../../components/products/Status'
 import RowRight from '../../components/rows/RowRight'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
 import ProductOptions from '../../components/products/ProductOptions'
-import MetadataInputs from '../../components/input/Metadata'
+import Metadata from '../../components/input/Metadata'
 import Images from '../../components/products/Images'
 import Organize from '../../components/products/Organize'
+import SEOCard from '../../components/SEOCard'
 
-const Metadata = component(({ metadata, onChange }) => {
+const MetadataCard = component(({ metadata, onChange }) => {
   const { t } = useTranslation('products.new.metadata')
   return (
     <CardDefault>
       <CardHeader title={t('title')} />
-      <MetadataInputs metadata={metadata} onChange={onChange} />
+      <Metadata metadata={metadata} onChange={onChange} />
     </CardDefault>
   )
 })
@@ -62,12 +62,6 @@ const ProductNew = component(() => {
   const handleStatusChange = (newStatus) => {
     setProductData((prevState) => {
       return { ...prevState, status: newStatus }
-    })
-  }
-
-  const handleHandleChange = (newHandle) => {
-    setProductData((prevState) => {
-      return { ...prevState, handle: newHandle }
     })
   }
 
@@ -107,8 +101,26 @@ const ProductNew = component(() => {
 
   const handleOrganizeChange = (data) => {
     const { categoryIds } = data
+    if (categoryIds) {
+      setProductData((prevState) => {
+        return { ...prevState, categoryIds }
+      })
+    }
+  }
+
+  const handleSEOChange = (data) => {
+    const { handle, seoTranslations } = data
     setProductData((prevState) => {
-      return { ...prevState, categoryIds }
+      const newState = { ...prevState }
+      if (handle) {
+        newState.handle = handle
+      }
+
+      if (seoTranslations) {
+        newState.seoTranslations = seoTranslations
+      }
+
+      return newState
     })
   }
 
@@ -157,8 +169,6 @@ const ProductNew = component(() => {
               onChange={handleTranslationsChange}
             />
 
-            <Handle value={productData.handle} onChange={handleHandleChange} />
-
             <Checkbox
               name='discountable'
               checked={productData.discountable}
@@ -180,7 +190,12 @@ const ProductNew = component(() => {
           onThumbnailChange={handleThumbnailChange}
         />
         <ProductOptions options={productData.options} onChange={handleOptionsChange} />
-        <Metadata metadata={productData.metadata} onChange={handleMetadataChange} />
+        <MetadataCard metadata={productData.metadata} onChange={handleMetadataChange} />
+        <SEOCard
+          handle={productData.handle}
+          seoTranslations={productData.seoTranslations}
+          onChange={handleSEOChange}
+        />
       </ColumnLarge>
 
       <ColumnSmall>

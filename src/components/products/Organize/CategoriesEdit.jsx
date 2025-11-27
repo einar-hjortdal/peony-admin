@@ -1,4 +1,13 @@
-import { component, detectIsArray, detectIsNull, keys, useEffect, useMemo, useRef, useState } from '@dark-engine/core'
+import {
+  component,
+  detectIsArray,
+  detectIsNull,
+  keys,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
 import { useProductCategories } from '../../../data'

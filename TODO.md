@@ -11,13 +11,13 @@
 - [x] Variants
 - [x] Inventory items
 - [x] Prices
-- [x] Product categories
+- [x] Categories
 - [x] Metadata
+- [x] SEO
 
 ## Currently working on
 
 - [ ] Regions
-- [ ] SEO
 
 ## Working on soon
 

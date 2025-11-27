@@ -1,15 +1,17 @@
-import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
+import { component, detectIsNull, useId, useRef, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
+
 import { useProductCategoryUpdateMutation, useProducts, useProductUpdateMutation } from '../../data'
 import ModalFull from '../../components/modals/ModalFull'
 import ModalHeader from '../../components/modals/ModalHeader'
 import ModalBody from '../../components/modals/ModalBody'
 import ModalFooter from '../../components/modals/ModalFooter'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
-import CategoryInputs from './CategoryInputs'
 import MetadataInputs from '../../components/input/Metadata'
 import CardDefault from '../../components/cards/CardDefault'
 import CardHeader from '../../components/cards/CardHeader'
+import Translations from '../../components/categories/Translations'
+import General from '../../components/categories/General'
 
 const CategoryProduct = component(({ product, categoryId }) => {
   const { id: productId } = product
@@ -49,7 +51,7 @@ const CategoryProducts = component(({ categoryId }) => {
   }
 })
 
-const CategoryEdit = component(({ productCategory }) => {
+const Edit = component(({ productCategory }) => {
   const { id, name } = productCategory // TODO set metadata in requestData
   const { t } = useTranslation('categories.categoryEdit')
   const [updateCategory] = useProductCategoryUpdateMutation(id)
@@ -58,7 +60,7 @@ const CategoryEdit = component(({ productCategory }) => {
 
   const modalRef = useRef(null)
 
-  const formId = 'edit-category-form'
+  const formId = useId()
   const formRef = useRef(null)
 
   const handleOpenModal = () => {
@@ -98,10 +100,11 @@ const CategoryEdit = component(({ productCategory }) => {
         <ModalHeader title={name} handleClose={handleCloseModal} />
         <ModalBody>
 
-          <CardDefault>
-            <CardHeader title={t('general')} />
+          <General categoryData onChange={handleUpdate} />
 
-            <CategoryInputs
+          <CardDefault>
+            <CardHeader title={t('translations')} />
+            <Translations
               formId={formId}
               formRef={formRef}
               categoryData={productCategory}
@@ -119,7 +122,7 @@ const CategoryEdit = component(({ productCategory }) => {
         </ModalBody>
 
         <ModalFooter>
-          <PrimaryButton type='submit' form={formId}>
+          <PrimaryButton type='submit'>
             {t('save')}
           </PrimaryButton>
         </ModalFooter>
@@ -128,4 +131,4 @@ const CategoryEdit = component(({ productCategory }) => {
   )
 })
 
-export default CategoryEdit
+export default Edit

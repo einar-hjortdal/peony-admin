@@ -250,8 +250,8 @@ const ImagePreview = component(({ index, isThumbnail, onDelete, onThumbnailChang
       <StyledImg {...props} />
     </ImagePreviewWrapper>
   )
-}
-)
+})
+
 // TODO allow drag and drop to change imageRank
 // Use https://github.com/trycatch-labs/dark/blob/master/examples/spring-draggable-list/index.tsx
 const Preview = component(({ images, thumbnail, onOrderChange, onThumbnailChange, onDelete }) => {
@@ -292,6 +292,8 @@ const Preview = component(({ images, thumbnail, onOrderChange, onThumbnailChange
   )
 })
 
+// TODO on add: allow insert alt text (and translations) before confirming
+// TODO edit button: allow editing alt text (and translations)
 // TODO info for users:
 // Every time images are uploaded and/or updated and/or order changes, thumbnail is reset.
 // First upload, update, order images, then set thumbnail.
