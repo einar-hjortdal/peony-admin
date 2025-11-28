@@ -10,7 +10,7 @@ import PrimaryButton from '../../components/buttons/PrimaryButton'
 import MetadataInputs from '../../components/input/Metadata'
 import CardDefault from '../../components/cards/CardDefault'
 import CardHeader from '../../components/cards/CardHeader'
-import Translations from '../../components/categories/Translations'
+import Translations from '../NewCategory/Translations'
 import General from '../../components/categories/General'
 
 const CategoryProduct = component(({ product, categoryId }) => {

@@ -8,13 +8,13 @@ import SetTitle from '../../components/SetTitle'
 import ColumnLarge from '../../components/columns/ColumnLarge'
 import ColumnSmall from '../../components/columns/ColumnSmall'
 import Status from '../../components/categories/Status'
-import Translations from '../../components/categories/Translations'
+import Translations from './Translations'
 import MetadataCard from '../../components/MetadataCard'
 import SEOCard from '../../components/SEOCard'
-import TranslationDefault from '../../components/categories/TranslationDefault'
+import General from './General'
 
 const NewCategory = component(() => {
-  const { t } = useTranslation('categories.newCategory')
+  const { t } = useTranslation('newCategory')
   const history = useHistory()
 
   const [categoryData, setCategoryData] = useState({
@@ -93,8 +93,8 @@ const NewCategory = component(() => {
       <SetTitle title={t('title')} />
 
       <ColumnLarge>
-        <TranslationDefault translations={translations} onChange={handleTranslationsChange} />
-        <Translations translations={translations} onTranslationsChange={handleTranslationsChange} />
+        <General translations={translations} onTranslationsChange={handleTranslationsChange} />
+        <Translations translations={translations} onChange={handleTranslationsChange} />
         <MetadataCard metadata={metadata} onChange={handleMetadataUpdate} />
         <SEOCard handle={handle} seoTranslations={seoTranslations} onChange={handleSEOChange} />
       </ColumnLarge>

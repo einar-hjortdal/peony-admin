@@ -8,7 +8,6 @@ import TranslationDefaultInputs from '../../components/products/TranslationDefau
 import ModalHeader from '../../components/modals/ModalHeader'
 import ModalFooter from '../../components/modals/ModalFooter'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
-import Handle from '../../components/input/Handle'
 import Switch from '../../components/Switch'
 
 const EditGeneral = component(() => {
@@ -48,12 +47,6 @@ const EditGeneral = component(() => {
     modalRef.current.close()
   }
 
-  const handleHandleChange = (newHandle) => {
-    setNewProductData((prevState) => {
-      return { ...prevState, handle: newHandle }
-    })
-  }
-
   const handleInput = (e) => {
     const { type, name, checked } = e.target
     if (type === 'checkbox') {
@@ -69,7 +62,7 @@ const EditGeneral = component(() => {
 
   if (productData) {
     const { translations } = productData.product
-    const { handle, discountable } = newProductData
+    const { discountable } = newProductData
     return (
       <>
         <button type='button' onClick={handleOpenModal}>{t('edit')}</button>
@@ -77,7 +70,6 @@ const EditGeneral = component(() => {
           <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
           <TranslationDefaultInputs translations={translations} onChange={handleTranslationsChange} />
-          <Handle value={handle} onInput={handleHandleChange} />
           <Switch
             name='discountable'
             checked={discountable}

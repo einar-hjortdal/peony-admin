@@ -2,10 +2,11 @@ import { component } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
 import { useStore } from '../../data'
-import CardDefault from '../cards/CardDefault'
-import CardHeader from '../cards/CardHeader'
+import CardDefault from '../../components/cards/CardDefault'
+import CardHeader from '../../components/cards/CardHeader'
+import TranslationsInputs from '../../components/categories/TranslationsInputs'
 
-const Translations = component(({ onChange }) => {
+const Translations = component(({ translations, onChange }) => {
   const { t } = useTranslation('categories.translations')
   const { data: storeData } = useStore()
 
@@ -18,7 +19,7 @@ const Translations = component(({ onChange }) => {
     return (
       <CardDefault>
         <CardHeader title={t('title')} />
-
+        <TranslationsInputs translations={translations} onChange={onChange} />
       </CardDefault>
     )
   }

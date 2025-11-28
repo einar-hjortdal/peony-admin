@@ -5,7 +5,7 @@ import { useStore } from '../../data'
 
 const TranslationsInputs = component(({ translations, onChange }) => {
   const { data: storeData } = useStore()
-  const { t, translator } = useTranslation('translationsInputs')
+  const { t, translator } = useTranslation('products.translationsInputs')
 
   if (storeData) {
     const { defaultLocaleId, locales } = storeData.store

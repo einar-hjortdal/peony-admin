@@ -1,26 +1,29 @@
 import { component, detectIsUndefined, useMemo } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
+import { useStore } from '../data'
 import CardDefault from './cards/CardDefault'
 import CardHeader from './cards/CardHeader'
 import Handle from './input/Handle'
-import { useStore } from '../data'
-import Textarea from './input/Textarea'
 import Text from './input/Text'
 
 const SEOTranslation = component(({ localeId, seoTranslations, onChange }) => {
   const { t } = useTranslation('seoCard')
 
   const seoTranslationData = useMemo(() => {
+    const newSEOTranslation = { localeId }
     if (detectIsUndefined(seoTranslations)) {
-      return { localeId }
+      return newSEOTranslation
     }
 
     for (let i = 0, len = seoTranslations.length; i < len; i++) {
-      if (seoTranslations[i].localeId === localeId) {
-        return seoTranslations[i]
+      const seoTranslation = seoTranslations[i]
+      if (seoTranslation.localeId === localeId) {
+        return seoTranslation
       }
     }
+
+    return newSEOTranslation
   }, [seoTranslations])
 
   const handleInput = (e) => {
@@ -50,12 +53,12 @@ const SEOTranslation = component(({ localeId, seoTranslations, onChange }) => {
       >{t('seoTitle')}
       </Text>
 
-      <Textarea
+      <Text
         name='description'
         onInput={handleInput}
         value={description}
       >{t('seoDescription')}
-      </Textarea>
+      </Text>
     </>
   )
 })
@@ -77,6 +80,7 @@ const SEOTranslationDefault = component(({ seoTranslations, onChange }) => {
 })
 
 const SEOTranslations = component(({ seoTranslations, onChange }) => {
+  const { translator } = useTranslation()
   const { data: storeData } = useStore()
   if (storeData) {
     const { defaultLocaleId, locales } = storeData.store
@@ -92,10 +96,11 @@ const SEOTranslations = component(({ seoTranslations, onChange }) => {
         continue
       }
 
+      const languageName = translator.formatName(code, { type: 'language' })
+
       res.push(
         <li key={id}>
-          {code}
-          {/* TODO format translation name */}
+          <div>{languageName}</div>
           <SEOTranslation
             seoTranslations={seoTranslations}
             localeId={id}

@@ -50,7 +50,7 @@
 - [ ] Validate inputs
 - [ ] Verify user intent before applying new changes
 - [ ] Verify server state before applying new changes
-- [ ] Performance
+- [ ] Performance optimizations
 
 ## Deployment
 

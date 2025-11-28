@@ -21,6 +21,7 @@ import Translations from './Translations'
 import Options from './Options'
 import Status from '../../components/products/Status'
 import MetadataCard from '../../components/MetadataCard'
+import SEOCard from '../../components/SEOCard'
 
 const Delete = component(({ productId, slot }) => {
   const [deleteProduct] = useProductDeleteMutation(productId)
@@ -71,6 +72,15 @@ const Product = component(() => {
     updateProduct({ metadata: newMetadata })
   }
 
+  // TODO this triggers a request at every input, it should be handled better.
+  const handleSEOChange = (data) => {
+    const { handle, seoTranslations } = data
+    if (handle) {
+      return updateProduct({ handle })
+    }
+    return updateProduct({ seoTranslations })
+  }
+
   const handleOrganizeChange = (data) => {
     const { categoryIds } = data
     if (categoryIds) {
@@ -90,7 +100,8 @@ const Product = component(() => {
       categoryIds,
       thumbnail,
       images,
-      metadata
+      metadata,
+      seoTranslations
     } = productData.product
 
     return (
@@ -153,6 +164,11 @@ const Product = component(() => {
           />
           <Options />
           <Variants />
+          <SEOCard
+            handle={handle}
+            seoTranslations={seoTranslations}
+            onChange={handleSEOChange}
+          />
 
           <MetadataCard
             metadata={metadata}
