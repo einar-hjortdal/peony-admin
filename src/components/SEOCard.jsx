@@ -1,4 +1,4 @@
-import { component, detectIsUndefined, useEffect, useMemo } from '@dark-engine/core'
+import { component, detectIsUndefined, useMemo } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
 import CardDefault from './cards/CardDefault'
@@ -8,91 +8,107 @@ import { useStore } from '../data'
 import Textarea from './input/Textarea'
 import Text from './input/Text'
 
-const SEOTranslations = component(({ seoTranslations, onChange }) => {
-  const { data: storeData } = useStore()
-  if (storeData) {
-    if (storeData) {
-      const { locales } = storeData.store
-      if (locales.length === 1) {
-        return null
+const SEOTranslation = component(({ localeId, seoTranslations, onChange }) => {
+  const { t } = useTranslation('seoCard')
+
+  const seoTranslationData = useMemo(() => {
+    if (detectIsUndefined(seoTranslations)) {
+      return { localeId }
+    }
+
+    for (let i = 0, len = seoTranslations.length; i < len; i++) {
+      if (seoTranslations[i].localeId === localeId) {
+        return seoTranslations[i]
+      }
+    }
+  }, [seoTranslations])
+
+  const handleInput = (e) => {
+    const { name, value } = e.target
+    const newSeoTranslationData = { ...seoTranslationData, [name]: value }
+    const newSeoTranslations = [newSeoTranslationData]
+
+    if (seoTranslations) {
+      for (let i = 0, len = seoTranslations.length; i < len; i++) {
+        if (seoTranslations[i].localeId !== seoTranslationData.localeId) {
+          newSeoTranslations.push(seoTranslations[i])
+        }
       }
     }
 
+    return onChange(newSeoTranslations)
+  }
+
+  const { title, description } = seoTranslationData
+
+  return (
+    <>
+      <Text
+        name='title'
+        onInput={handleInput}
+        value={title}
+      >{t('seoTitle')}
+      </Text>
+
+      <Textarea
+        name='description'
+        onInput={handleInput}
+        value={description}
+      >{t('seoDescription')}
+      </Textarea>
+    </>
+  )
+})
+
+const SEOTranslationDefault = component(({ seoTranslations, onChange }) => {
+  const { data: storeData } = useStore()
+
+  if (storeData) {
+    const { defaultLocaleId } = storeData.store
+
     return (
-      <>
-        {/*  TODO */}
-      </>
+      <SEOTranslation
+        localeId={defaultLocaleId}
+        seoTranslations={seoTranslations}
+        onChange={onChange}
+      />
     )
   }
 })
 
-const SEOTranslationDefault = component(({ seoTranslations, onChange }) => {
-  const { t } = useTranslation('seoCard')
+const SEOTranslations = component(({ seoTranslations, onChange }) => {
   const { data: storeData } = useStore()
-
-  useEffect(() => {
-    if (storeData) {
-      const { defaultLocaleId } = storeData.store
-
-      if (detectIsUndefined(seoTranslations)) {
-        onChange([{ localeId: defaultLocaleId }])
-      }
-    }
-  }, [seoTranslations, storeData])
-
-  const seoTranslationData = useMemo(() => {
-    if (storeData) {
-      const { defaultLocaleId } = storeData.store
-
-      if (detectIsUndefined(seoTranslations)) {
-        return
-      }
-
-      for (let i = 0, len = seoTranslations.length; i < len; i++) {
-        if (seoTranslations[i].localeId === defaultLocaleId) {
-          return seoTranslations[i]
-        }
-      }
-    }
-  }, [seoTranslations, storeData])
-
-  const handleInput = (e) => {
-    const { name, value } = e.target
-    const { localeId } = seoTranslationData
-
-    const newTranslationData = { ...seoTranslationData, [name]: value }
-    const newTranslations = []
-
-    for (let i = 0, len = seoTranslations.length; i < len; i++) {
-      if (seoTranslations[i].localeId === localeId) {
-        newTranslations.push(newTranslationData)
-      } else {
-        newTranslations.push(seoTranslations[i])
-      }
+  if (storeData) {
+    const { defaultLocaleId, locales } = storeData.store
+    if (locales.length === 1) {
+      return null
     }
 
-    onChange(newTranslations)
-  }
+    const res = []
+    for (let i = 0, len = locales.length; i < len; i++) {
+      const locale = locales[i]
+      const { id, code } = locale
+      if (id === defaultLocaleId) {
+        continue
+      }
 
-  if (storeData && seoTranslationData) {
-    const { title, description } = seoTranslationData
+      res.push(
+        <li key={id}>
+          {code}
+          {/* TODO format translation name */}
+          <SEOTranslation
+            seoTranslations={seoTranslations}
+            localeId={id}
+            onChange={onChange}
+          />
+        </li>
+      )
+    }
 
     return (
-      <>
-        <Text
-          name='title'
-          onInput={handleInput}
-          value={title}
-        >{t('seoTitle')}
-        </Text>
-
-        <Textarea
-          name='description'
-          onInput={handleInput}
-          value={description}
-        >{t('seoDescription')}
-        </Textarea>
-      </>
+      <ul>
+        {res}
+      </ul>
     )
   }
 })
