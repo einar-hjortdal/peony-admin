@@ -1,13 +1,38 @@
-import { component } from '@dark-engine/core'
+import { component, detectIsString } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
 import { useStore } from '../../data'
 import TranslationInputGroup from './TranslationInputs'
+import PrimaryButton from '../buttons/PrimaryButton'
 
 // Renders nothing if store.locales.length === 1
 const TranslationsInputs = component(({ translations, onChange }) => {
   const { data: storeData } = useStore()
-  const { translator } = useTranslation('categories.translationsInputs')
+  const { t, translator } = useTranslation('categories.translationsInputs')
+
+  const handleChange = (newTranslations) => {
+    const { defaultLocaleId } = storeData.store
+    const cleanedTranslations = []
+    for (let i = 0, len = newTranslations.length; i < len; i++) {
+      const newTranslation = newTranslations[i]
+      const { localeId, name, description } = newTranslation
+      if (localeId === defaultLocaleId || detectIsString(name) || detectIsString(description)) {
+        cleanedTranslations.push(newTranslation)
+      }
+    }
+    onChange(cleanedTranslations)
+  }
+
+  const handleDelete = (localeId) => {
+    const newTranslations = []
+    for (let i = 0, len = translations.length; i < len; i++) {
+      const translation = translations[i]
+      if (translation.localeId !== localeId) {
+        newTranslations.push(translation)
+      }
+    }
+    onChange(newTranslations)
+  }
 
   if (storeData) {
     const { defaultLocaleId, locales } = storeData.store
@@ -28,11 +53,18 @@ const TranslationsInputs = component(({ translations, onChange }) => {
       res.push(
         <li key={id}>
           <div>{languageName}</div>
-          <TranslationInputGroup
-            localeId={id}
-            translations={translations}
-            onChange={onChange}
-          />
+
+          <div>
+            <TranslationInputGroup
+              localeId={id}
+              translations={translations}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div>
+            <PrimaryButton onClick={handleDelete}>{t('delete')}</PrimaryButton>
+          </div>
         </li>
       )
     }

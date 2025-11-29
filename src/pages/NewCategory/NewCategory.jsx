@@ -88,6 +88,7 @@ const NewCategory = component(() => {
     seoTranslations
   } = categoryData
 
+  console.log(categoryData)
   return (
     <>
       <SetTitle title={t('title')} />
@@ -103,7 +104,7 @@ const NewCategory = component(() => {
         <Status isActive={isActive} isInternal={isInternal} onChange={handleStatusChange} />
       </ColumnSmall>
 
-      <PrimaryButton type='button' onClick={handleClick}>{t('save')}</PrimaryButton>
+      <PrimaryButton type='button' onClick={handleClick}>{t('create')}</PrimaryButton>
     </>
   )
 })

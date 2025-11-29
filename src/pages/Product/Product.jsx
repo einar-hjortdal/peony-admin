@@ -136,11 +136,6 @@ const Product = component(() => {
               </li>
 
               <li>
-                <Column>{t('general.handle')}</Column>
-                <Column>{handle}</Column>
-              </li>
-
-              <li>
                 <Column>{t('general.discountable')}</Column>
                 <Column>
                   <If condition={discountable}>
