@@ -2,7 +2,7 @@ import { component, detectIsBoolean, useEffect, useState } from '@dark-engine/co
 import { useHistory } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductCategoryCreateMutation } from '../../data'
+import { useCategoryCreateMutation } from '../../data'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
 import SetTitle from '../../components/SetTitle'
 import ColumnLarge from '../../components/columns/ColumnLarge'
@@ -22,7 +22,7 @@ const NewCategory = component(() => {
     isInternal: false
   })
 
-  const [createCategory, { data: createCategoryData }] = useProductCategoryCreateMutation()
+  const [createCategory, { data: createCategoryData }] = useCategoryCreateMutation()
 
   const handleClick = () => {
     createCategory(categoryData)

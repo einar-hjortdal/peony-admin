@@ -2,7 +2,7 @@ import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductCategories, useProductCategoryDeleteMutation } from '../../data'
+import { useCategories, useCategoryDeleteMutation } from '../../data'
 import ButtonMore from '../../components/buttons/ButtonMore'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
 import SecondaryButton from '../../components/buttons/SecondaryButton'
@@ -11,7 +11,7 @@ import CardHeader from '../../components/cards/CardHeader'
 import { Link } from '@dark-engine/web-router'
 
 const Delete = component(({ id, slot }) => {
-  const [deleteCategory, { isFetching }] = useProductCategoryDeleteMutation(id)
+  const [deleteCategory, { isFetching }] = useCategoryDeleteMutation(id)
 
   const handleDelete = () => {
     deleteCategory(id)
@@ -102,7 +102,7 @@ const Categories = component(() => {
   // TODO if there are more fetch more in another request
   const fetchAmount = 100
   const [offset, setOffset] = useState(0)
-  const { data: productCategoriesData } = useProductCategories({ offset, fetch: fetchAmount })
+  const { data: productCategoriesData } = useCategories({ offset, fetch: fetchAmount })
 
   if (productCategoriesData) {
     const { categories } = productCategoriesData

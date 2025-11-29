@@ -1,9 +1,9 @@
 import { component, detectIsArray, useMemo } from '@dark-engine/core'
 
-import { useProductCategories } from '../../../data'
+import { useCategories } from '../../../data'
 
 const CategoriesListWithData = component(({ categoryIds }) => {
-  const { data: productCategoriesData } = useProductCategories()
+  const { data: productCategoriesData } = useCategories()
   const productCategoriesMap = useMemo(() => {
     const res = {}
     if (productCategoriesData) {

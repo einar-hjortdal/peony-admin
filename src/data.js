@@ -189,69 +189,69 @@ export const useProductDeleteMutation = (productId) => {
   )
 }
 
-export const useProductCategoryCreateMutation = () => {
+export const useCategoryCreateMutation = () => {
   const api = useApi()
   return useMutation(
-    dataKeys.productCategoryCreate,
-    (data) => api.productCategoryCreate(data),
+    dataKeys.categoryCreate,
+    (data) => api.categoryCreate(data),
     {
       onSuccess: ({ cache }) => {
-        cache.clear(dataKeys.productCategoryGet)
+        cache.clear(dataKeys.categoryGet)
       }
     }
   )
 }
 
-export const useProductCategoryUpdateMutation = (productCategoryId) => {
+export const useCategoryUpdateMutation = (categoryId) => {
   const api = useApi()
   return useMutation(
-    dataKeys.productCategoryUpdate,
-    (data) => api.productCategoryUpdate(productCategoryId, data),
+    dataKeys.categoryUpdate,
+    (data) => api.categoryUpdate(categoryId, data),
     {
       onSuccess: ({ cache }) => {
-        cache.invalidate(dataKeys.productCategoryGetById, {
-          id: productCategoryId
+        cache.invalidate(dataKeys.categoryGetById, {
+          id: categoryId
         })
-        cache.clear(dataKeys.productCategoryGet)
+        cache.clear(dataKeys.categoryGet)
       }
     }
   )
 }
 
-export const useProductCategoryDeleteMutation = (productCategoryId) => {
+export const useCategoryDeleteMutation = (categoryId) => {
   const api = useApi()
   return useMutation(
-    dataKeys.productCategoryDelete,
-    () => api.productCategoryDelete(productCategoryId),
+    dataKeys.categoryDelete,
+    () => api.categoryDelete(categoryId),
     {
       onSuccess: ({ cache }) => {
-        cache.delete(dataKeys.productCategoryGetById, {
-          id: productCategoryId
+        cache.delete(dataKeys.categoryGetById, {
+          id: categoryId
         })
-        cache.clear(dataKeys.productCategoryGet)
+        cache.clear(dataKeys.categoryGet)
       }
     }
   )
 }
 
-export const useProductCategoryById = (productCategoryId) => {
+export const useCategoryById = (categoryId) => {
   const api = useApi()
   return useQuery(
-    dataKeys.productCategoryGetById,
-    () => api.productCategoryGetById(productCategoryId),
+    dataKeys.categoryGetById,
+    () => api.categoryGetById(categoryId),
     {
-      variables: { productCategoryId },
-      extractId: (x) => x.productCategoryId
+      variables: { categoryId },
+      extractId: (x) => x.categoryId
     }
   )
 }
 
-export const useProductCategories = (params) => {
+export const useCategories = (params) => {
   const api = useApi()
   const p = getParams(params)
   return useQuery(
-    dataKeys.productCategoryGet,
-    () => api.productCategoryGet(p),
+    dataKeys.categoryGet,
+    () => api.categoryGet(p),
     {
       variables: { p },
       extractId: (x) => x.p

@@ -10,7 +10,7 @@ import {
 } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductCategories } from '../../../data'
+import { useCategories } from '../../../data'
 import ModalDefault from '../../modals/ModalDefault'
 import ModalBody from '../../modals/ModalBody'
 import ModalFooter from '../../modals/ModalFooter'
@@ -35,7 +35,7 @@ const SelectedCategory = component(({ productCategory, onRemove }) => {
 
 // shows selected categories with a remove button
 const SelectedCategories = component(({ categoryIds, onRemove }) => {
-  const { data: productCategoriesData } = useProductCategories()
+  const { data: productCategoriesData } = useCategories()
   const productCategoriesMap = useMemo(() => {
     const res = {}
     if (productCategoriesData) {

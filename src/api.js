@@ -37,11 +37,11 @@ export const dataKeys = {
   productCreate: 'productCreate',
   productUpdate: 'productUpdate',
   productDelete: 'productDelete',
-  productCategoryCreate: 'productCategoryCreate',
-  productCategoryGet: 'productCategoryGet',
-  productCategoryGetById: 'productCategoryGetById',
-  productCategoryUpdate: 'productCategoryUpdate',
-  productCategoryDelete: 'productCategoryDelete',
+  categoryCreate: 'categoryCreate',
+  categoryGet: 'categoryGet',
+  categoryGetById: 'categoryGetById',
+  categoryUpdate: 'categoryUpdate',
+  categoryDelete: 'categoryDelete',
   productOptionGet: 'productOptionGet',
   productOptionCreate: 'productOptionCreate',
   productOptionUpdate: 'productOptionUpdate',
@@ -155,8 +155,8 @@ export const api = {
     return checkResponse(response)
   },
 
-  productCategoryCreate: async (data) => {
-    const response = await fetch(getRequestUrl('product-categories'), {
+  categoryCreate: async (data) => {
+    const response = await fetch(getRequestUrl('categories'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -165,9 +165,9 @@ export const api = {
     return checkResponse(response)
   },
 
-  productCategoryGetById: async (productCategoryId) => {
+  categoryGetById: async (categoryId) => {
     const response = await fetch(
-      getRequestUrl(`product-categories/${productCategoryId}`),
+      getRequestUrl(`categories/${categoryId}`),
       {
         credentials: 'include'
       }
@@ -175,9 +175,9 @@ export const api = {
     return checkResponse(response)
   },
 
-  productCategoryGet: async (params) => {
+  categoryGet: async (params) => {
     const response = await fetch(
-      getRequestUrl('product-categories', params),
+      getRequestUrl('categories', params),
       {
         credentials: 'include'
       }
@@ -185,9 +185,9 @@ export const api = {
     return checkResponse(response)
   },
 
-  productCategoryUpdate: async (productCategoryId, data) => {
+  categoryUpdate: async (categoryId, data) => {
     const response = await fetch(
-      getRequestUrl(`product-categories/${productCategoryId}`),
+      getRequestUrl(`categories/${categoryId}`),
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -197,9 +197,9 @@ export const api = {
     return checkResponse(response)
   },
 
-  productCategoryDelete: async (productCategoryId) => {
+  categoryDelete: async (categoryId) => {
     const response = await fetch(
-      getRequestUrl(`product-categories/${productCategoryId}`),
+      getRequestUrl(`categories/${categoryId}`),
       {
         method: 'DELETE',
         credentials: 'include'
