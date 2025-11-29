@@ -72,7 +72,11 @@ const NewCategory = component(() => {
       }
 
       if (seoTranslations) {
-        newState.seoTranslations = seoTranslations
+        if (seoTranslations.length > 0) {
+          newState.seoTranslations = seoTranslations
+        } else {
+          delete newState.seoTranslations
+        }
       }
 
       return newState
