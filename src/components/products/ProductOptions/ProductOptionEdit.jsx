@@ -27,6 +27,13 @@ const ProductOptionValue = component(({ optionValue, onChange, onDelete }) => {
   }, [optionValue])
 
   const handleInput = (e) => {
+    const { name, value } = e.target
+    setOptionValueData((prevState) => {
+      return { ...prevState, [name]: value }
+    })
+  }
+
+  const handleTranslationInput = (e) => {
     const { value } = e.target
     const { localeId } = e.target.dataset
 
@@ -55,17 +62,14 @@ const ProductOptionValue = component(({ optionValue, onChange, onDelete }) => {
   }
 
   if (storeData) {
-    const { defaultLocaleId } = storeData.store
-    const { translations } = optionValueData
-    const defaultTranslation = getTranslation(translations, defaultLocaleId).translation
+    const { name } = optionValueData
     // TODO need delete button for each translation, if isDefault no delete button
     // TODO need delete button for whole optionValue, if isLast no delete button
     // TODO should input verification happen here to prevent onBlur of invalid inputs?
     // TODO onBlur is awkward: user has to actively click somewhere for data to be saved.
     return (
       <Text
-        value={defaultTranslation.name}
-        data-locale-id={defaultLocaleId}
+        value={name}
         placeholder={t('placeholder')}
         maxLength={productOptionValueNameLength}
         onInput={handleInput}
@@ -160,7 +164,6 @@ const ProductOptionEdit = component(({
   onOptionValueDelete
 }) => {
   const { t } = useTranslation('productOptionEdit')
-  const { data: storeData } = useStore()
 
   const [optionData, setOptionData] = useState(option)
   useEffect(() => {
@@ -168,23 +171,10 @@ const ProductOptionEdit = component(({
   }, [option])
 
   const handleOptionInput = (e) => {
-    const { value } = e.target
-    const { localeId } = e.target.dataset
+    const { name, value } = e.target
 
-    setOptionData(prevState => {
-      const { translations } = prevState
-      const newTranslations = [...translations]
-      const translation = getTranslation(translations, localeId)
-
-      if (detectIsUndefined(translation)) {
-        newTranslations.push({ localeId, title: value })
-        return { ...prevState, translations: newTranslations }
-      }
-
-      const { index } = translation
-      const newTranslation = { ...newTranslations[index], title: value }
-      newTranslations[index] = newTranslation
-      return { ...prevState, translations: newTranslations }
+    return setOptionData((prevState) => {
+      return { ...prevState, [name]: value }
     })
   }
 
@@ -248,60 +238,14 @@ const ProductOptionEdit = component(({
     }
   }
 
-  const isEmptyString = (s) => {
-    return s.trim().length === 0 || s === ''
-  }
-
   // TODO use onBlur instead of button click. Issue: needs a value to submit.
   // TODO disable inputs and show that saving is happening
   const handleSave = () => {
-    const { defaultLocaleId } = storeData.store
-    const { translations, values } = optionData
-    if (translations.length === 0 || values.length === 0) {
-      console.error(`translations.length: ${translations.length}, values.length :${values.length}`)
+    const { title } = optionData
+
+    if (detectIsUndefined(title) || title.trim().length === 0) {
+      console.error('title is empty')
       return // TODO error
-    }
-
-    let defaultOptionTranslationExists = false
-    for (let i = 0, len = translations.length; i < len; i++) {
-      const { localeId, title } = translations[i]
-
-      if (localeId === defaultLocaleId) {
-        defaultOptionTranslationExists = true
-
-        if (isEmptyString(title)) {
-          console.error('default title is empty')
-          return // TODO error
-        }
-      }
-    }
-
-    if (!defaultOptionTranslationExists) {
-      console.error('default option translation doesn\'t exist')
-      return // TODO error
-    }
-
-    for (let i = 0, len = values.length; i < len; i++) {
-      const { translations } = values[i]
-      let defaultValueTranslationExists = false
-
-      for (let j = 0, jlen = translations.length; j < jlen; j++) {
-        const { localeId, name } = translations[j]
-
-        if (localeId === defaultLocaleId) {
-          defaultValueTranslationExists = true
-
-          if (isEmptyString(name)) {
-            console.error('default name is empty')
-            return // TODO error
-          }
-        }
-      }
-
-      if (!defaultValueTranslationExists) {
-        console.error('default value translation doesn\'t exist')
-        return // TODO error
-      }
     }
 
     onOptionUpdate(optionData)
@@ -311,34 +255,27 @@ const ProductOptionEdit = component(({
     return onOptionDelete(optionData)
   }
 
-  if (storeData) {
-    const { translations } = optionData
-    const { defaultLocaleId } = storeData.store
+  return (
+    <Container>
+      <Text
+        name='name'
+        value={optionData.title}
+        placeholder={t('placeholder')}
+        onInput={handleOptionInput}
+      >{t('name')}
+      </Text>
 
-    const defaultOptionTranslation = getTranslation(translations, defaultLocaleId).translation
+      <ProductOptionValues
+        option={optionData}
+        onCreate={handleOptionValueCreate}
+        onChange={handleOptionValueChange}
+        onDelete={() => null}
+      />
 
-    return (
-      <Container>
-        <Text
-          value={defaultOptionTranslation.title}
-          data-locale-id={defaultLocaleId}
-          placeholder={t('placeholder')}
-          onInput={handleOptionInput}
-        >{t('name')}
-        </Text>
-
-        <ProductOptionValues
-          option={optionData}
-          onCreate={handleOptionValueCreate}
-          onChange={handleOptionValueChange}
-          onDelete={() => null}
-        />
-
-        <PrimaryButton type='button' onClick={handleSave}>save</PrimaryButton>
-        <PrimaryButton type='button' onClick={handleDelete}>delete</PrimaryButton>
-      </Container>
-    )
-  }
+      <PrimaryButton type='button' onClick={handleSave}>save</PrimaryButton>
+      <PrimaryButton type='button' onClick={handleDelete}>delete</PrimaryButton>
+    </Container>
+  )
 })
 
 export default ProductOptionEdit

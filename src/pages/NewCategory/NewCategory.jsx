@@ -51,6 +51,13 @@ const NewCategory = component(() => {
     })
   }
 
+  const handleInput = (event) => {
+    const { name, value } = event.target
+    setCategoryData((prevState) => {
+      return { ...prevState, [name]: value }
+    })
+  }
+
   const handleTranslationsChange = (newTranslations) => {
     setCategoryData((prevState) => {
       return { ...prevState, translations: newTranslations }
@@ -84,6 +91,8 @@ const NewCategory = component(() => {
   }
 
   const {
+    name,
+    description,
     handle,
     isActive,
     isInternal,
@@ -92,13 +101,18 @@ const NewCategory = component(() => {
     seoTranslations
   } = categoryData
 
-  console.log(categoryData)
   return (
     <>
       <SetTitle title={t('title')} />
 
       <ColumnLarge>
-        <General translations={translations} onTranslationsChange={handleTranslationsChange} />
+        <General
+          name={name}
+          desctiption={description}
+          handleInput={handleInput}
+          translations={translations}
+          onTranslationsChange={handleTranslationsChange}
+        />
         <Translations translations={translations} onChange={handleTranslationsChange} />
         <MetadataCard metadata={metadata} onChange={handleMetadataUpdate} />
         <SEOCard handle={handle} seoTranslations={seoTranslations} onChange={handleSEOChange} />

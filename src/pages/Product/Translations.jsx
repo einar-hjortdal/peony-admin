@@ -1,5 +1,6 @@
 import {
   component,
+  detectIsArray,
   detectIsFunction,
   detectIsNull,
   detectIsString,
@@ -221,7 +222,7 @@ const Translations = component(() => {
     return (
       <CardDefault>
         <CardHeader title={t('title')}>
-          <If condition={translations.length === 1}>
+          <If condition={detectIsUndefined(translations)}>
             <TranslationsEdit
               productId={productId}
               title={t('modalTitle')}
@@ -230,7 +231,7 @@ const Translations = component(() => {
             </TranslationsEdit>
           </If>
 
-          <If condition={translations.length > 1}>
+          <If condition={detectIsArray(translations)}>
             <ButtonMore>
               <li>
                 <TranslationsEdit
@@ -246,8 +247,8 @@ const Translations = component(() => {
           </If>
         </CardHeader>
 
-        <If condition={translations.length === 1}>{t('noTranslations')}</If>
-        <If condition={translations.length > 1}>{res}</If>
+        <If condition={detectIsUndefined(translations)}>{t('noTranslations')}</If>
+        <If condition={detectIsArray(translations)}>{res}</If>
       </CardDefault>
     )
   }

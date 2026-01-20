@@ -2,8 +2,6 @@ import { component, detectIsUndefined, useEffect, useState } from '@dark-engine/
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { useStore } from '../../../data'
-import { getTranslation } from '../../../utils'
 import ProductOptionEdit from './ProductOptionEdit'
 import CardDefault from '../../cards/CardDefault'
 import CardHeader from '../../cards/CardHeader'
@@ -16,20 +14,13 @@ const OptionTitle = styled.span`
 
 // TODO preview non-default translations
 const OptionValuesPreview = component(({ values }) => {
-  const { data: storeData } = useStore()
-
-  if (storeData) {
-    const { defaultLocaleId } = storeData.store
-    const valuesPreview = []
-    for (let i = 0, len = values.length; i < len; i++) {
-      const value = values[i]
-      const { translations } = value
-      const translation = getTranslation(translations, defaultLocaleId).translation
-      const name = translation.name
-      valuesPreview.push(<span key={name}>{name}</span>)
-    }
-    return valuesPreview
+  const valuesPreview = []
+  for (let i = 0, len = values.length; i < len; i++) {
+    const value = values[i]
+    const name = { value }
+    valuesPreview.push(<span key={name}>{name}</span>)
   }
+  return valuesPreview
 })
 
 const LeftListItem = styled.div`
@@ -51,7 +42,6 @@ const Option = component(({
   onOptionValueDelete
 }) => {
   const { t } = useTranslation('productOptions')
-  const { data: storeData } = useStore()
   const [isEditing, setIsEditing] = useState(false)
 
   const handleStartEditing = () => {
@@ -72,82 +62,74 @@ const Option = component(({
     handleStopEditing()
   }
 
-  if (storeData) {
-    const { defaultLocaleId } = storeData.store
-    const { values, translations } = option
-    const translation = getTranslation(translations, defaultLocaleId).translation
-    const title = translation.title
+  const { title, values } = option
+  // TODO display translations on hover?
 
-    if (isEditing) {
-      return (
-        <>
-          <LeftListItem>
-            <ProductOptionEdit
-              option={option}
-              onOptionUpdate={handleUpdate}
-              onOptionDelete={handleDelete}
-              onOptionValueCreate={onOptionValueCreate}
-              onOptionValueUpdate={onOptionValueUpdate}
-              onOptionValueDelete={onOptionValueDelete}
-            />
-          </LeftListItem>
-
-          <RightListItem>
-            <PrimaryButton
-              type='button'
-              onClick={handleStopEditing}
-            >{t('cancel')}
-            </PrimaryButton>
-          </RightListItem>
-        </>
-      )
-    }
-
+  if (isEditing) {
     return (
       <>
         <LeftListItem>
-          <OptionTitle>{title}</OptionTitle>
-          <div>
-            <OptionValuesPreview values={values} />
-          </div>
+          <ProductOptionEdit
+            option={option}
+            onOptionUpdate={handleUpdate}
+            onOptionDelete={handleDelete}
+            onOptionValueCreate={onOptionValueCreate}
+            onOptionValueUpdate={onOptionValueUpdate}
+            onOptionValueDelete={onOptionValueDelete}
+          />
         </LeftListItem>
 
         <RightListItem>
           <PrimaryButton
             type='button'
-            onClick={handleStartEditing}
-          >{t('edit')}
+            onClick={handleStopEditing}
+          >{t('cancel')}
           </PrimaryButton>
         </RightListItem>
       </>
     )
   }
+
+  return (
+    <>
+      <LeftListItem>
+        <OptionTitle>{title}</OptionTitle>
+        <div>
+          <OptionValuesPreview values={values} />
+        </div>
+      </LeftListItem>
+
+      <RightListItem>
+        <PrimaryButton
+          type='button'
+          onClick={handleStartEditing}
+        >{t('edit')}
+        </PrimaryButton>
+      </RightListItem>
+    </>
+  )
 })
 
 // TODO preview non-default translations
 // TODO implement change logic (need component with internal state)
 const AddOption = component(({ onAdd, slot }) => {
-  const { data: storeData } = useStore()
   const [isOpen, setIsOpen] = useState(false)
   const [optionData, setOptionData] = useState({})
 
   const getInitialData = () => {
-    if (storeData) {
-      const { defaultLocaleId } = storeData.store
-      // generate ids to identify changes to created options and values
-      const optionId = getCreationId()
-      const valueId = getCreationId()
-      return {
-        id: optionId,
-        translations: [{ localeId: defaultLocaleId, title: '' }],
-        values: [
-          {
-            optionId,
-            id: valueId,
-            translations: [{ localeId: defaultLocaleId, name: '' }]
-          }
-        ]
-      }
+    // generate ids to identify changes to created options and values
+    const optionId = getCreationId()
+    const valueId = getCreationId()
+    return {
+      id: optionId,
+      title: '',
+      values: [
+        {
+          optionId,
+          id: valueId,
+          name: ''
+        }
+      ]
     }
   }
 
@@ -156,7 +138,7 @@ const AddOption = component(({ onAdd, slot }) => {
     if (initialData) {
       setOptionData(initialData)
     }
-  }, [storeData])
+  }, [])
 
   const handleOpen = () => {
     setIsOpen(true)
@@ -173,7 +155,7 @@ const AddOption = component(({ onAdd, slot }) => {
     handleCancel()
   }
 
-  if (storeData && isOpen) {
+  if (isOpen) {
     return (
       <ProductOptionEdit
         option={optionData}

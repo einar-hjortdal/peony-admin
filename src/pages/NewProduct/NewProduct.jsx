@@ -1,10 +1,9 @@
-import { component, useEffect, useState } from '@dark-engine/core'
+import { component, detectIsUndefined, useEffect, useState } from '@dark-engine/core'
 import { useHistory } from '@dark-engine/web-router'
 import { useTranslation } from '@wareme/translations'
 import { detectIsEmptyString } from '@wareme/utils'
 
 import { useProductCreateMutation } from '../../data'
-import TranslationDefaultInputs from '../../components/products/TranslationDefaultInputs'
 import TranslationsInputs from '../../components/products/TranslationsInputs'
 import CardDefault from '../../components/cards/CardDefault'
 import CardHeader from '../../components/cards/CardHeader'
@@ -20,6 +19,8 @@ import Metadata from '../../components/input/Metadata'
 import Images from '../../components/products/Images'
 import Organize from '../../components/products/Organize'
 import SEOCard from '../../components/SEOCard'
+import Textarea from '../../components/input/Textarea'
+import Text from '../../components/input/Text'
 
 const MetadataCard = component(({ metadata, onChange }) => {
   const { t } = useTranslation('products.new.metadata')
@@ -43,8 +44,9 @@ const ProductNew = component(() => {
       return setProductData({ ...productData, [name]: checked })
     }
 
-    if (type === 'text') {
+    if (type === 'text' || type === 'textarea') {
       if (detectIsEmptyString(value)) {
+        // TODO if name === 'title' show error (title is required)
         const { [name]: omitted, ...rest } = productData
         return setProductData(rest)
       }
@@ -109,15 +111,25 @@ const ProductNew = component(() => {
   }
 
   const handleSEOChange = (data) => {
-    const { handle, seoTranslations } = data
+    const { handle, seo } = data
     setProductData((prevState) => {
       const newState = { ...prevState }
-      if (handle) {
+
+      if (!detectIsUndefined(handle)) {
         newState.handle = handle
       }
 
-      if (seoTranslations) {
-        newState.seoTranslations = seoTranslations
+      if (!detectIsUndefined(seo)) {
+        const { title, description, translations } = seo
+        if (
+          detectIsUndefined(title) &&
+          detectIsUndefined(description) &&
+          detectIsUndefined(translations)
+        ) {
+          delete newState.seo
+        } else {
+          newState.seo = seo
+        }
       }
 
       return newState
@@ -133,7 +145,7 @@ const ProductNew = component(() => {
     }
   ] = useProductCreateMutation()
 
-  // TODO validate inputs: require a title in the default language
+  // TODO validate inputs: require a title
   const handleSubmit = (e) => {
     e.preventDefault()
     if (createProductIsFetching) {
@@ -155,6 +167,7 @@ const ProductNew = component(() => {
     // TODO handle error
   }
 
+  console.log(productData)
   return (
     <>
       <SetTitle title={t('title')} />
@@ -163,19 +176,37 @@ const ProductNew = component(() => {
         <CardDefault>
           <CardHeader title={t('general.title')} />
 
-          <fieldset disabled={createProductIsFetching}>
-            <TranslationDefaultInputs
-              translations={productData.translations}
-              onChange={handleTranslationsChange}
-            />
+          <Text
+            name='title'
+            onInput={handleInput}
+            value={productData.title}
+            disabled={createProductIsFetching}
+          >{t('title')}
+          </Text>
 
-            <Checkbox
-              name='discountable'
-              checked={productData.discountable}
-              onChange={handleInput}
-            >{t('general.discountable')}
-            </Checkbox>
-          </fieldset>
+          <Text
+            name='subtitle'
+            onInput={handleInput}
+            value={productData.subtitle}
+            disabled={createProductIsFetching}
+          >{t('subtitle')}
+          </Text>
+
+          <Textarea
+            name='description'
+            onInput={handleInput}
+            value={productData.description}
+            disabled={createProductIsFetching}
+          >{t('description')}
+          </Textarea>
+
+          <Checkbox
+            name='discountable'
+            checked={productData.discountable}
+            onChange={handleInput}
+            disabled={createProductIsFetching}
+          >{t('general.discountable')}
+          </Checkbox>
         </CardDefault>
 
         <TranslationsInputs
@@ -193,16 +224,16 @@ const ProductNew = component(() => {
         <MetadataCard metadata={productData.metadata} onChange={handleMetadataChange} />
         <SEOCard
           handle={productData.handle}
-          seoTranslations={productData.seoTranslations}
+          seo={productData.seo}
           onChange={handleSEOChange}
         />
       </ColumnLarge>
 
       <ColumnSmall>
+        {/* TODO block status public with no prices. To immediately publish a product provide prices */}
         <Status defaultValue={productData.status} onChange={handleStatusChange} />
 
         {/* TODO sales channels */}
-        {/* TODO regions */}
 
         <Organize
           categoryIds={productData.categoryIds}

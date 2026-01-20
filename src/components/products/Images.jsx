@@ -7,11 +7,11 @@ import {
   useEffect,
   useId
 } from '@dark-engine/core'
+import { styled } from '@dark-engine/styled'
+import { useTranslation } from '@wareme/translations'
 
 import { useUploadOneMutation } from '../../data'
-import { useTranslation } from '@wareme/translations'
 import PrimaryButton from '../buttons/PrimaryButton'
-import { styled } from '@dark-engine/styled'
 import ModalDefault from '../modals/ModalDefault'
 import ModalHeader from '../modals/ModalHeader'
 import ModalBody from '../modals/ModalBody'

@@ -14,7 +14,7 @@ const Textarea = component(({ slot, ...props }) => {
   return (
     <>
       <Label for={id}>{slot}</Label>
-      <StyledTextarea id={id} type='text' {...props} />
+      <StyledTextarea id={id} {...props} />
     </>
   )
 })

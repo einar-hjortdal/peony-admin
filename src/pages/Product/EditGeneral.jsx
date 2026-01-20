@@ -4,11 +4,12 @@ import { useTranslation } from '@wareme/translations'
 
 import { useProductById, useProductUpdateMutation } from '../../data'
 import ModalDefault from '../../components/modals/ModalDefault'
-import TranslationDefaultInputs from '../../components/products/TranslationDefaultInputs'
 import ModalHeader from '../../components/modals/ModalHeader'
 import ModalFooter from '../../components/modals/ModalFooter'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
 import Switch from '../../components/Switch'
+import Text from '../../components/input/Text'
+import Textarea from '../../components/input/Textarea'
 
 const EditGeneral = component(() => {
   const params = useParams()
@@ -20,18 +21,12 @@ const EditGeneral = component(() => {
   const [newProductData, setNewProductData] = useState({})
   useEffect(() => {
     if (productData) {
-      const { handle, discountable, translations } = productData.product
-      setNewProductData({ handle, discountable, translations })
+      const { title, subtitle, description, handle, discountable } = productData.product
+      setNewProductData({ title, subtitle, description, handle, discountable })
     }
   }, [productData])
 
   const modalRef = useRef(null)
-
-  const handleTranslationsChange = (newTranslations) => {
-    setNewProductData((prevState) => {
-      return { ...prevState, translations: newTranslations }
-    })
-  }
 
   const handleOpenModal = () => {
     if (detectIsNull(modalRef)) {
@@ -49,6 +44,7 @@ const EditGeneral = component(() => {
 
   const handleInput = (e) => {
     const { type, name, checked } = e.target
+    // TODO if name === 'title' error (required)
     if (type === 'checkbox') {
       return setNewProductData((prevState) => {
         return { ...prevState, [name]: checked }
@@ -61,7 +57,6 @@ const EditGeneral = component(() => {
   }
 
   if (productData) {
-    const { translations } = productData.product
     const { discountable } = newProductData
     return (
       <>
@@ -69,7 +64,27 @@ const EditGeneral = component(() => {
         <ModalDefault ref={modalRef}>
           <ModalHeader title={t('title')} handleClose={handleCloseModal} />
 
-          <TranslationDefaultInputs translations={translations} onChange={handleTranslationsChange} />
+          <Text
+            name='title'
+            onInput={productData}
+            value={newProductData.title}
+          >{t('title')}
+          </Text>
+
+          <Text
+            name='subtitle'
+            onInput={handleInput}
+            value={newProductData.subtitle}
+          >{t('subtitle')}
+          </Text>
+
+          <Textarea
+            name='description'
+            onInput={handleInput}
+            value={newProductData.description}
+          >{t('description')}
+          </Textarea>
+
           <Switch
             name='discountable'
             checked={discountable}

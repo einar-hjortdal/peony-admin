@@ -35,11 +35,11 @@ const SelectedCategory = component(({ productCategory, onRemove }) => {
 
 // shows selected categories with a remove button
 const SelectedCategories = component(({ categoryIds, onRemove }) => {
-  const { data: productCategoriesData } = useCategories()
+  const { data: categoriesData } = useCategories()
   const productCategoriesMap = useMemo(() => {
     const res = {}
-    if (productCategoriesData) {
-      const { categories } = productCategoriesData
+    if (categoriesData) {
+      const { categories } = categoriesData
       for (let i = 0, len = categories.length; i < len; i++) {
         const productCategory = categories[i]
         const { id } = productCategory
@@ -47,9 +47,9 @@ const SelectedCategories = component(({ categoryIds, onRemove }) => {
       }
     }
     return res
-  }, [productCategoriesData])
+  }, [categoriesData])
 
-  if (productCategoriesData) {
+  if (categoriesData) {
     const selectedCategories = []
     if (detectIsArray(categoryIds)) {
       for (let i = 0, len = categoryIds.length; i < len; i++) {
@@ -74,11 +74,11 @@ const SelectedCategories = component(({ categoryIds, onRemove }) => {
 // TODO build hierarchy and show indented children
 const AddCategory = component(({ categoryIds, onAdd, disabled }) => {
   const { t } = useTranslation('products.organize.categories')
-  const { data: productCategoriesData } = useProductCategories()
+  const { data: categoriesData } = useCategories()
   const productCategoriesMap = useMemo(() => {
     const res = {}
-    if (productCategoriesData) {
-      const { categories } = productCategoriesData
+    if (categoriesData) {
+      const { categories } = categoriesData
       for (let i = 0, len = categories.length; i < len; i++) {
         const productCategory = categories[i]
         const { id } = productCategory
@@ -94,7 +94,7 @@ const AddCategory = component(({ categoryIds, onAdd, disabled }) => {
       }
     }
     return res
-  }, [categoryIds, productCategoriesData])
+  }, [categoryIds, categoriesData])
 
   const handleChange = (e) => {
     const { value } = e.target
@@ -106,8 +106,8 @@ const AddCategory = component(({ categoryIds, onAdd, disabled }) => {
     onAdd(value)
   }
 
-  if (productCategoriesData) {
-    const { categories } = productCategoriesData
+  if (categoriesData) {
+    const { categories } = categoriesData
     if (categories.length === 0) {
       return t('noCategories')
     }

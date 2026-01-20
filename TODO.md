@@ -23,20 +23,20 @@
 
 - [ ] Stock locations
 - [ ] Sales channels
-- [ ] Taxes
 
 ## Work on next
 
-- [ ] Customer
 - [ ] Cart
-- [ ] Orders
-- [ ] Price lists
-- [ ] Product types
-- [ ] Product tags
-- [ ] Posts
-- [ ] Post tags
-- [ ] Users
+- [ ] Customer
 - [ ] Notifications
+- [ ] Orders
+- [ ] Post tags
+- [ ] Posts
+- [ ] Price lists
+- [ ] Product tags
+- [ ] Product types
+- [ ] Taxes
+- [ ] Users
 - [ ] Variant images
 
 ## Low priority
