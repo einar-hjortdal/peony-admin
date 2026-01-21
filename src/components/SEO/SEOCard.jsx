@@ -2,11 +2,13 @@ import { component, detectIsString, detectIsUndefined, useMemo } from '@dark-eng
 import { useTranslation } from '@wareme/translations'
 import { detectIsEmptyString } from '@wareme/utils'
 
-import { useStore } from '../data'
-import CardDefault from './cards/CardDefault'
-import CardHeader from './cards/CardHeader'
-import Handle from './input/Handle'
-import Text from './input/Text'
+import { useStore } from '../../data'
+import CardDefault from '../cards/CardDefault'
+import CardHeader from '../cards/CardHeader'
+import Handle from '../input/Handle'
+import Text from '../input/Text'
+import SEOTitle from './SEOTitle'
+import SEODescription from './SEODescription'
 
 const SEOTranslationInputs = component(({ localeId, seo, onChange }) => {
   const { t } = useTranslation('seoCard')
@@ -116,56 +118,6 @@ const SEOTranslations = component(({ seo, onChange }) => {
   }
 })
 
-const SEOTitle = component(({ seo, onInput }) => {
-  const { t } = useTranslation('seoCard')
-  const getSEOTitle = () => {
-    if (detectIsUndefined(seo)) {
-      return
-    }
-
-    const { title } = seo
-    if (detectIsUndefined(title)) {
-      return
-    }
-
-    return title
-  }
-
-  return (
-    <Text
-      name='title'
-      onInput={onInput}
-      value={getSEOTitle()}
-    >{t('seoTitle')}
-    </Text>
-  )
-})
-
-const SEODescription = component(({ seo, onInput }) => {
-  const { t } = useTranslation('seoCard')
-  const getSEODescription = () => {
-    if (detectIsUndefined(seo)) {
-      return
-    }
-
-    const { description } = seo
-    if (detectIsUndefined(description)) {
-      return
-    }
-
-    return description
-  }
-
-  return (
-    <Text
-      name='description'
-      onInput={onInput}
-      value={getSEODescription()}
-    >{t('seoDescription')}
-    </Text>
-  )
-})
-
 const SEOCard = component(({ handle, seo, onChange }) => {
   const { t } = useTranslation('seoCard')
 
@@ -212,8 +164,8 @@ const SEOCard = component(({ handle, seo, onChange }) => {
         value={handle}
       />
 
-      <SEOTitle seo={seo} onInput={handleSEOInput} />
-      <SEODescription seo={seo} onInput={handleSEOInput} />
+      <SEOTitle seo={seo} onInput={handleSEOInput}>{t('seoTitle')}</SEOTitle>
+      <SEODescription seo={seo} onInput={handleSEOInput}>{t('seoDescription')}</SEODescription>
       <SEOTranslations seo={seo} onChange={handleSEOTranslationInput} />
     </CardDefault>
   )

@@ -1,12 +1,13 @@
 import { component } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
-import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { useProductById, useProductDeleteMutation, useProductUpdateMutation } from '../../data'
-import { formatLine } from '../../utils'
+import {
+  useProductById,
+  useProductDeleteMutation,
+  useProductUpdateMutation
+} from '../../data'
 import SetTitle from '../../components/SetTitle'
-import If from '../../components/If'
 import ColumnLarge from '../../components/columns/ColumnLarge'
 import ColumnSmall from '../../components/columns/ColumnSmall'
 import Images from '../../components/products/Images'
@@ -21,7 +22,8 @@ import Translations from './Translations'
 import Options from './Options'
 import Status from '../../components/products/Status'
 import MetadataCard from '../../components/MetadataCard'
-import SEOCard from '../../components/SEOCard'
+import ProductSEO from './ProductSEO'
+import KeyValueListPreview from '../../components/products/KeyValueListPreview'
 
 const Delete = component(({ productId, slot }) => {
   const [deleteProduct] = useProductDeleteMutation(productId)
@@ -33,24 +35,12 @@ const Delete = component(({ productId, slot }) => {
   return <button type='button' onClick={handleDelete}>{slot}</button>
 })
 
-const StyledUl = styled.ul`
-  & li {
-    padding-top: .75rem;
-    padding-bottom: .75rem;
-    border-bottom: 1px solid ${(p) => p.theme.neutral20};
-  }
-`
-
-const Column = styled.div`
-  display: inline-block;
-  width: 50%;
-`
-
 const Product = component(() => {
   const { t } = useTranslation('product')
   const params = useParams()
   const productId = params.get('productId')
   const { data: productData } = useProductById(productId)
+
   const [
     updateProduct,
     { isFetching: updateProductIsFetching }
@@ -72,13 +62,8 @@ const Product = component(() => {
     updateProduct({ metadata: newMetadata })
   }
 
-  // TODO this triggers a request at every input, it should be handled better.
-  const handleSEOChange = (data) => {
-    const { handle, seoTranslations } = data
-    if (handle) {
-      return updateProduct({ handle })
-    }
-    return updateProduct({ seoTranslations })
+  const handleHandleChange = (newHandle) => {
+    updateProduct({ handle: newHandle })
   }
 
   const handleOrganizeChange = (data) => {
@@ -101,8 +86,29 @@ const Product = component(() => {
       thumbnail,
       images,
       metadata,
-      seoTranslations
+      seo
     } = productData.product
+
+    const getDiscountableTranslation = () => {
+      if (discountable) {
+        return t('general.true')
+      }
+      t('general.fsle')
+    }
+
+    const previewKeys = [
+      t('general.title'),
+      t('general.subtitle'),
+      t('general.description'),
+      t('general.discountable')
+    ]
+    const previewValues =
+      [
+        title,
+        subtitle,
+        description,
+        getDiscountableTranslation()
+      ]
 
     return (
       <>
@@ -118,35 +124,7 @@ const Product = component(() => {
               </ButtonMore>
             </CardHeader>
 
-            <StyledUl>
-              <li>
-                <Column>{t('general.title')}</Column>
-                <Column>{formatLine(title)}</Column>
-              </li>
-
-              <li>
-                <Column>{t('general.subtitle')}</Column>
-                <Column>{formatLine(subtitle)}</Column>
-              </li>
-
-              {/* TODO description may be long. Trim if longer than x, display on click? */}
-              <li>
-                <Column>{t('general.description')}</Column>
-                <Column>{formatLine(description)}</Column>
-              </li>
-
-              <li>
-                <Column>{t('general.discountable')}</Column>
-                <Column>
-                  <If condition={discountable}>
-                    {t('general.true')}
-                  </If>
-                  <If condition={!discountable}>
-                    {t('general.false')}
-                  </If>
-                </Column>
-              </li>
-            </StyledUl>
+            <KeyValueListPreview keys={previewKeys} values={previewValues} />
 
           </CardDefault>
 
@@ -159,10 +137,11 @@ const Product = component(() => {
           />
           <Options />
           <Variants />
-          <SEOCard
+          <ProductSEO
+            productId={productId}
             handle={handle}
-            seoTranslations={seoTranslations}
-            onChange={handleSEOChange}
+            onHandleChange={handleHandleChange}
+            seo={seo}
           />
 
           <MetadataCard

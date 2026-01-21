@@ -18,7 +18,7 @@ import ProductOptions from '../../components/products/ProductOptions'
 import Metadata from '../../components/input/Metadata'
 import Images from '../../components/products/Images'
 import Organize from '../../components/products/Organize'
-import SEOCard from '../../components/SEOCard'
+import SEOCard from '../../components/SEO/SEOCard'
 import Textarea from '../../components/input/Textarea'
 import Text from '../../components/input/Text'
 

@@ -10,7 +10,7 @@ import ColumnSmall from '../../components/columns/ColumnSmall'
 import Status from '../../components/categories/Status'
 import Translations from './Translations'
 import MetadataCard from '../../components/MetadataCard'
-import SEOCard from '../../components/SEOCard'
+import SEOCard from '../../components/SEO/SEOCard'
 import General from './General'
 
 const NewCategory = component(() => {

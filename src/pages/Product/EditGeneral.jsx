@@ -62,7 +62,7 @@ const EditGeneral = component(() => {
       <>
         <button type='button' onClick={handleOpenModal}>{t('edit')}</button>
         <ModalDefault ref={modalRef}>
-          <ModalHeader title={t('title')} handleClose={handleCloseModal} />
+          <ModalHeader title={t('modalTitle')} handleClose={handleCloseModal} />
 
           <Text
             name='title'
