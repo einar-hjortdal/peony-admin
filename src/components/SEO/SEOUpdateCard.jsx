@@ -1,9 +1,9 @@
 import { component, detectIsNull, detectIsUndefined, useRef, useState } from '@dark-engine/core'
+import { useTranslation } from '@wareme/translations'
 
 import CardDefault from '../cards/CardDefault'
 import CardHeader from '../cards/CardHeader'
 import Handle from '../input/Handle'
-import { useTranslation } from '@wareme/translations'
 import SEOTitle from './SEOTitle'
 import SEODescription from './SEODescription'
 import KeyValueListPreview from '../products/KeyValueListPreview'
@@ -21,32 +21,33 @@ const SEOEditModal = component(
     handleSave,
     handle,
     seoData,
-    handleInput,
+    handleHandleInput,
+    handleSEOInput,
     handleTranslationInput,
     disabled
   }) => {
-    const { t } = useTranslation('product.seoUpdateCard')
+    const { t } = useTranslation('seoUpdateCard')
     return (
       <ModalDefault ref={modalRef}>
         <ModalHeader title={t('modalTitle')} handleClose={handleClose} />
 
         <Handle
           name='handle'
-          onInput={handleInput}
+          onInput={handleHandleInput}
           value={handle}
           disabled={disabled}
         />
 
         <SEOTitle
           seo={seoData}
-          onInput={handleInput}
+          onInput={handleSEOInput}
           disabled={disabled}
         >{t('seoTitle')}
         </SEOTitle>
 
         <SEODescription
           seo={seoData}
-          onInput={handleInput}
+          onInput={handleSEOInput}
           disabled={disabled}
         >{t('seoDescription')}
         </SEODescription>
@@ -58,9 +59,6 @@ const SEOEditModal = component(
     )
   })
 
-// TODO preview data without input elements
-// TODO button to open modal, modal does the editing, internal state is kept until saved
-// TODO button to delete data
 const SEOUpdateCard = component(
   ({
     handle,
@@ -70,7 +68,7 @@ const SEOUpdateCard = component(
     onSEODelete,
     disabled
   }) => {
-    const { t } = useTranslation('product.seoUpdateCard')
+    const { t } = useTranslation('seoUpdateCard')
 
     const modalRef = useRef(null)
     const handleOpenModal = () => {
@@ -90,17 +88,15 @@ const SEOUpdateCard = component(
     const [seoData, setSeoData] = useState(seo)
     const [handleData, setHandleData] = useState(handle)
 
-    const handleInput = (event) => {
-      const { name, value } = event.target
-      if (name === 'handle') {
-        setHandleData(value)
-      }
+    const handleHandleInput = (newHandle) => {
+      setHandleData(newHandle)
+    }
 
-      if (name === 'title' || name === 'description') {
-        setSeoData((prevState) => {
-          return { ...prevState, [name]: value }
-        })
-      }
+    const handleSEOInput = (event) => {
+      const { name, value } = event.target
+      setSeoData((prevState) => {
+        return { ...prevState, [name]: value }
+      })
     }
 
     const handleTranslationInput = (event) => {
@@ -152,7 +148,7 @@ const SEOUpdateCard = component(
     }
 
     const previewKeys = ['handle', 'title', 'description']
-    const previewValues = [handle, getTitle(), getDescription()]
+    const previewValues = [handleData, getTitle(), getDescription()]
 
     return (
       <CardDefault>
@@ -164,9 +160,10 @@ const SEOUpdateCard = component(
               <SEOEditModal
                 modalRef={modalRef}
                 handleClose={handleCloseModal}
-                handleData={handleData}
+                handle={handleData}
                 seoData={seoData}
-                handleInput={handleInput}
+                handleHandleInput={handleHandleInput}
+                handleSEOInput={handleSEOInput}
                 handleTranslationInput={handleTranslationInput}
                 handleSave={handleSave}
                 disabled={disabled}
