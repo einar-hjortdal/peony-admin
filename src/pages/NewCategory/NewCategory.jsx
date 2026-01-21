@@ -115,7 +115,7 @@ const NewCategory = component(() => {
         />
         <Translations translations={translations} onChange={handleTranslationsChange} />
         <MetadataCard metadata={metadata} onChange={handleMetadataUpdate} />
-        <SEOCard handle={handle} seoTranslations={seoTranslations} onChange={handleSEOChange} />
+        <SEOCard handle={handle} seoTranslations={seoTranslations} onInput={handleSEOChange} />
       </ColumnLarge>
 
       <ColumnSmall>

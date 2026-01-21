@@ -1,135 +1,26 @@
-import { component, detectIsString, detectIsUndefined, useMemo } from '@dark-engine/core'
+import { component, detectIsString, detectIsUndefined } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 import { detectIsEmptyString } from '@wareme/utils'
 
-import { useStore } from '../../data'
 import CardDefault from '../cards/CardDefault'
 import CardHeader from '../cards/CardHeader'
 import Handle from '../input/Handle'
-import Text from '../input/Text'
 import SEOTitle from './SEOTitle'
 import SEODescription from './SEODescription'
+import SEOTranslations from './SEOTranslations'
 
-const SEOTranslationInputs = component(({ localeId, seo, onChange }) => {
-  const { t } = useTranslation('seoCard')
-
-  const seoTranslationData = useMemo(() => {
-    const newSEOTranslation = { localeId }
-    if (detectIsUndefined(seo)) {
-      return newSEOTranslation
-    }
-
-    const { translations } = seo
-    if (detectIsUndefined(translations)) {
-      return newSEOTranslation
-    }
-
-    for (let i = 0, len = translations.length; i < len; i++) {
-      const seoTranslation = translations[i]
-      if (seoTranslation.localeId === localeId) {
-        return seoTranslation
-      }
-    }
-
-    return newSEOTranslation
-  }, [seo])
-
-  const handleInput = (e) => {
-    const { name, value } = e.target
-    const newSeoTranslationData = { ...seoTranslationData }
-    if (detectIsEmptyString(value)) {
-      delete newSeoTranslationData[name]
-    } else {
-      newSeoTranslationData[name] = value
-    }
-    const newSeoTranslations = [newSeoTranslationData]
-
-    if (seo && seo.translations) {
-      const { translations } = seo
-      for (let i = 0, len = translations.length; i < len; i++) {
-        const translation = translations[i]
-        if (translation.localeId !== seoTranslationData.localeId) {
-          newSeoTranslations.push(translation)
-        }
-      }
-    }
-
-    return onChange(newSeoTranslations)
-  }
-
-  const { title, description } = seoTranslationData
-
-  return (
-    <>
-      <Text
-        name='title'
-        onInput={handleInput}
-        value={title}
-      >{t('seoTitle')}
-      </Text>
-
-      <Text
-        name='description'
-        onInput={handleInput}
-        value={description}
-      >{t('seoDescription')}
-      </Text>
-    </>
-  )
-})
-
-const SEOTranslations = component(({ seo, onChange }) => {
-  const { translator } = useTranslation()
-  const { data: storeData } = useStore()
-  if (storeData) {
-    const { defaultLocaleId, locales } = storeData.store
-    if (locales.length === 1) {
-      return null
-    }
-
-    const res = []
-    for (let i = 0, len = locales.length; i < len; i++) {
-      const locale = locales[i]
-      const { id, code } = locale
-      if (id === defaultLocaleId) {
-        continue
-      }
-
-      const languageName = translator.formatName(code, { type: 'language' })
-
-      res.push(
-        <li key={id}>
-          <div>{languageName}</div>
-          <SEOTranslationInputs
-            seo={seo}
-            localeId={id}
-            onChange={onChange}
-          />
-          {/* TODO delete button */}
-        </li>
-      )
-    }
-
-    return (
-      <ul>
-        {res}
-      </ul>
-    )
-  }
-})
-
-const SEOCard = component(({ handle, seo, onChange }) => {
+const SEOCard = component(({ handle, seo, onInput }) => {
   const { t } = useTranslation('seoCard')
 
   const handleHandleInput = (newHandle) => {
-    onChange({ handle: newHandle })
+    onInput({ handle: newHandle })
   }
 
   const handleSEOInput = (event) => {
     const { name, value } = event.target
     if (detectIsUndefined(seo)) {
       const newSeo = { [name]: value }
-      onChange({ seo: newSeo })
+      onInput({ seo: newSeo })
       return
     }
 
@@ -139,7 +30,7 @@ const SEOCard = component(({ handle, seo, onChange }) => {
     } else {
       newSeo[name] = value
     }
-    onChange({ seo: newSeo })
+    onInput({ seo: newSeo })
   }
 
   const handleSEOTranslationInput = (newSEOTranslations) => {
@@ -151,7 +42,7 @@ const SEOCard = component(({ handle, seo, onChange }) => {
         cleanedTranslations.push(seoTranslation)
       }
     }
-    onChange({ seoTranslations: cleanedTranslations })
+    onInput({ seoTranslations: cleanedTranslations })
   }
 
   return (
@@ -166,7 +57,7 @@ const SEOCard = component(({ handle, seo, onChange }) => {
 
       <SEOTitle seo={seo} onInput={handleSEOInput}>{t('seoTitle')}</SEOTitle>
       <SEODescription seo={seo} onInput={handleSEOInput}>{t('seoDescription')}</SEODescription>
-      <SEOTranslations seo={seo} onChange={handleSEOTranslationInput} />
+      <SEOTranslations seo={seo} onInput={handleSEOTranslationInput} />
     </CardDefault>
   )
 })

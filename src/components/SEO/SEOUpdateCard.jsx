@@ -1,4 +1,4 @@
-import { component, detectIsNull, detectIsUndefined, useRef, useState } from '@dark-engine/core'
+import { component, detectIsNull, useRef, useState } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
 import CardDefault from '../cards/CardDefault'
@@ -12,6 +12,7 @@ import ModalDefault from '../modals/ModalDefault'
 import ModalHeader from '../modals/ModalHeader'
 import ModalFooter from '../modals/ModalFooter'
 import PrimaryButton from '../buttons/PrimaryButton'
+import SEOTranslations from './SEOTranslations'
 
 // <SEOTranslations seo={seo} onChange={console.log} />
 const SEOEditModal = component(
@@ -27,6 +28,7 @@ const SEOEditModal = component(
     disabled
   }) => {
     const { t } = useTranslation('seoUpdateCard')
+
     return (
       <ModalDefault ref={modalRef}>
         <ModalHeader title={t('modalTitle')} handleClose={handleClose} />
@@ -51,6 +53,8 @@ const SEOEditModal = component(
           disabled={disabled}
         >{t('seoDescription')}
         </SEODescription>
+
+        <SEOTranslations seo={seoData} onInput={handleTranslationInput} />
 
         <ModalFooter>
           <PrimaryButton type='button' onClick={handleSave}>{t('save')}</PrimaryButton>
@@ -99,30 +103,9 @@ const SEOUpdateCard = component(
       })
     }
 
-    const handleTranslationInput = (event) => {
-      const { name, value, dataset } = event.target
-      const { localeId } = dataset
+    const handleTranslationInput = (newTranslations) => {
       setSeoData((prevState) => {
-        const newSEOData = { ...prevState }
-        const { translations } = newSEOData
-
-        if (detectIsUndefined(translations)) {
-          newSEOData.translations = [{ localeId, [name]: value }]
-          return newSEOData
-        }
-
-        for (let i = 0, len = translations.length; i < len; i++) {
-          const translation = translations[i]
-          if (translation.localeId === localeId) {
-            const newTranslations = [...translations]
-            newTranslations[i] = { ...translation, [name]: value }
-            newSEOData.translations = newTranslations
-            return newSEOData
-          }
-        }
-
-        newSEOData.translations = [...translations, { localeId, [name]: value }]
-        return newSEOData
+        return { ...prevState, translations: newTranslations }
       })
     }
 

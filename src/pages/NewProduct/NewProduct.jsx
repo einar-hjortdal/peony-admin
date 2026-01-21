@@ -225,7 +225,7 @@ const ProductNew = component(() => {
         <SEOCard
           handle={productData.handle}
           seo={productData.seo}
-          onChange={handleSEOChange}
+          onInput={handleSEOChange}
         />
       </ColumnLarge>
 
