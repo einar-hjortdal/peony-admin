@@ -3,7 +3,7 @@ import { component, detectIsUndefined } from '@dark-engine/core'
 import Text from '../input/Text'
 
 // limit 191 characters
-const SEODescription = component(({ seo, onInput, slot }) => {
+const SEODescription = component(({ seo, onInput, disabled, slot }) => {
   const getSEODescription = () => {
     if (detectIsUndefined(seo)) {
       return
@@ -22,6 +22,7 @@ const SEODescription = component(({ seo, onInput, slot }) => {
       name='description'
       onInput={onInput}
       value={getSEODescription()}
+      disabled={disabled}
     >{slot}
     </Text>
   )

@@ -1,4 +1,4 @@
-import { component, detectIsUndefined, useState } from '@dark-engine/core'
+import { component, detectIsNull, detectIsUndefined, useRef, useState } from '@dark-engine/core'
 
 import CardDefault from '../cards/CardDefault'
 import CardHeader from '../cards/CardHeader'
@@ -7,13 +7,62 @@ import { useTranslation } from '@wareme/translations'
 import SEOTitle from './SEOTitle'
 import SEODescription from './SEODescription'
 import KeyValueListPreview from '../products/KeyValueListPreview'
+import ButtonMore from '../buttons/ButtonMore'
+import ModalDefault from '../modals/ModalDefault'
+import ModalHeader from '../modals/ModalHeader'
+import ModalFooter from '../modals/ModalFooter'
+import PrimaryButton from '../buttons/PrimaryButton'
+
+// <SEOTranslations seo={seo} onChange={console.log} />
+const SEOEditModal = component(
+  ({
+    modalRef,
+    handleClose,
+    handleSave,
+    handle,
+    seoData,
+    handleInput,
+    handleTranslationInput,
+    disabled
+  }) => {
+    const { t } = useTranslation('product.seoUpdateCard')
+    return (
+      <ModalDefault ref={modalRef}>
+        <ModalHeader title={t('modalTitle')} handleClose={handleClose} />
+
+        <Handle
+          name='handle'
+          onInput={handleInput}
+          value={handle}
+          disabled={disabled}
+        />
+
+        <SEOTitle
+          seo={seoData}
+          onInput={handleInput}
+          disabled={disabled}
+        >{t('seoTitle')}
+        </SEOTitle>
+
+        <SEODescription
+          seo={seoData}
+          onInput={handleInput}
+          disabled={disabled}
+        >{t('seoDescription')}
+        </SEODescription>
+
+        <ModalFooter>
+          <PrimaryButton type='button' onClick={handleSave}>{t('save')}</PrimaryButton>
+        </ModalFooter>
+      </ModalDefault>
+    )
+  })
 
 // TODO preview data without input elements
 // TODO button to open modal, modal does the editing, internal state is kept until saved
 // TODO button to delete data
 const SEOUpdateCard = component(
   ({
-    productId,
     handle,
     onHandleChange,
     seo,
@@ -22,6 +71,21 @@ const SEOUpdateCard = component(
     disabled
   }) => {
     const { t } = useTranslation('product.seoUpdateCard')
+
+    const modalRef = useRef(null)
+    const handleOpenModal = () => {
+      if (detectIsNull(modalRef)) {
+        return
+      }
+      modalRef.current.showModal()
+    }
+
+    const handleCloseModal = () => {
+      if (detectIsNull(modalRef)) {
+        return
+      }
+      modalRef.current.close()
+    }
 
     const [seoData, setSeoData] = useState(seo)
     const [handleData, setHandleData] = useState(handle)
@@ -39,7 +103,7 @@ const SEOUpdateCard = component(
       }
     }
 
-    const handleSEOTranslationInput = (event) => {
+    const handleTranslationInput = (event) => {
       const { name, value, dataset } = event.target
       const { localeId } = dataset
       setSeoData((prevState) => {
@@ -92,7 +156,28 @@ const SEOUpdateCard = component(
 
     return (
       <CardDefault>
-        <CardHeader title={t('title')} />
+        <CardHeader title={t('title')}>
+          <ButtonMore type='button'>
+
+            <li>
+              <button type='button' onClick={handleOpenModal}>{t('edit')}</button>
+              <SEOEditModal
+                modalRef={modalRef}
+                handleClose={handleCloseModal}
+                handleData={handleData}
+                seoData={seoData}
+                handleInput={handleInput}
+                handleTranslationInput={handleTranslationInput}
+                handleSave={handleSave}
+                disabled={disabled}
+              />
+            </li>
+            <li>
+              {/* TODO tooltip? tell user this deletes title and description, not handle */}
+              <button type='button' onClick={handleDelete}>{t('delete')}</button>
+            </li>
+          </ButtonMore>
+        </CardHeader>
 
         <KeyValueListPreview keys={previewKeys} values={previewValues} />
       </CardDefault>
@@ -100,13 +185,3 @@ const SEOUpdateCard = component(
   })
 
 export default SEOUpdateCard
-
-// <Handle
-//   name='handle'
-//   onInput={handleHandleInput}
-//   value={handle}
-// />
-
-// <SEOTitle seo={seo} onInput={console.log}>{t('seoTitle')}</SEOTitle>
-// <SEODescription seo={seo} onInput={console.log}>{t('seoDescription')}</SEODescription>
-// <SEOTranslations seo={seo} onChange={console.log} />
