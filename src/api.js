@@ -58,13 +58,14 @@ export const dataKeys = {
   inventoryLevelUpdate: 'inventoryLevelUpdate',
   countriesGet: 'countriesGet',
   currencyGet: 'currencyGet',
-  currencyUpdate: 'currencyUpdate',
   regionsGet: 'regionsGet',
+  regionsGetById: 'regionsGetById',
   regionsCreate: 'regionsCreate',
   regionGetById: 'regionGetById',
   regionUpdate: 'regionUpdate',
   salesChannelsGet: 'salesChannelsGet',
   stockLocationsGet: 'stockLocationsGet',
+  stockLocationsGetById: 'stockLocationsGetById',
   localesGet: 'localesGet',
   localeGetById: 'localeGetById',
   uploadsUploadOne: 'uploadsUploadOne',
@@ -407,6 +408,13 @@ export const api = {
     return checkResponse(response)
   },
 
+  regionsGetById: async (regionId) => {
+    const response = await fetch(getRequestUrl(`regions/${regionId}`), {
+      credentials: 'include'
+    })
+    return checkResponse(response)
+  },
+
   salesChannelsGet: async (params) => {
     const response = await fetch(
       getRequestUrl('sales-channels', params),
@@ -420,6 +428,16 @@ export const api = {
   stockLocationsGet: async (params) => {
     const response = await fetch(
       getRequestUrl('stock-locations', params),
+      {
+        credentials: 'include'
+      }
+    )
+    return checkResponse(response)
+  },
+
+  stockLocationsGetById: async (stockLocationId) => {
+    const response = await fetch(
+      getRequestUrl(`stock-locations/${stockLocationId}`),
       {
         credentials: 'include'
       }

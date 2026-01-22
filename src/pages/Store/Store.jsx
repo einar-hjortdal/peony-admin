@@ -4,13 +4,14 @@ import { useTranslation } from '@wareme/translations'
 import SetTitle from '../../components/SetTitle'
 import { useSalesChannels, useStore, useStoreUpdateMutation } from '../../data'
 import Locales from './Locales'
-import Currencies from './Currencies'
 import SalesChannels from './SalesChannels'
 import DefaultLocale from './DefaultLocale'
 import ColumnLarge from '../../components/columns/ColumnLarge'
 import ColumnSmall from '../../components/columns/ColumnSmall'
 import CardDefault from '../../components/cards/CardDefault'
 import CardHeader from '../../components/cards/CardHeader'
+import DefaultRegion from './DefaultRegion'
+import DefaultStockLocation from './DefaultStockLocation'
 
 const Store = component(() => {
   const { t } = useTranslation('store')
@@ -60,7 +61,6 @@ const Store = component(() => {
   if (storeData && salesChannelsData) {
     const {
       defaultLocaleId,
-      defaultCurrencyCode,
       defaultRegionId,
       defaultStockLocationId,
       defaultSalesChannelId
@@ -85,20 +85,16 @@ const Store = component(() => {
               <button type='button' onClick={handleSave} disabled={isDisabled()}>{t('save')}</button>
             </div>
             <div>
-              <span>{t('defaultCurrency')}</span>
-              <span>{defaultCurrencyCode}</span>
-            </div>
-            <div>
               <span>{t('defaultLocale')}</span>
               <span>{defaultLocaleCode}</span>
             </div>
             <div>
-              <span>default region id</span>
-              <span>{defaultRegionId}</span>
+              <span>{t('defaultRegion')}</span>
+              <span><DefaultRegion regionId={defaultRegionId} /></span>
             </div>
             <div>
               <span>{t('defaultStockLocation')}</span>
-              <span>{defaultStockLocationId}</span>
+              <span><DefaultStockLocation stockLocationId={defaultStockLocationId} /></span>
             </div>
             <div>
               <span>{t('defaultSalesChannel')}</span>
@@ -107,7 +103,6 @@ const Store = component(() => {
           </CardDefault>
 
           <Locales />
-          <Currencies />
           <SalesChannels />
         </ColumnLarge>
 

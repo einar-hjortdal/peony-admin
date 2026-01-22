@@ -472,6 +472,14 @@ export const useRegions = (params) => {
   })
 }
 
+export const useRegionById = (regionId) => {
+  const api = useApi()
+  return useQuery(dataKeys.regionsGetById, () => api.regionsGetById(regionId), {
+    variables: { regionId },
+    extractId: (x) => x.regionId
+  })
+}
+
 export const useSalesChannels = (params) => {
   const api = useApi()
   const p = getParams(params)
@@ -514,6 +522,18 @@ export const useStockLocations = (params) => {
   )
 }
 
+export const useStockLocationById = (stockLocationId) => {
+  const api = useApi()
+  return useQuery(
+    dataKeys.stockLocationsGetById,
+    () => api.stockLocationsGetById(stockLocationId),
+    {
+      variables: { stockLocationId },
+      extractId: (x) => x.stockLocationId
+    }
+  )
+}
+
 export const useLocaleById = (localeId) => {
   const api = useApi()
   return useQuery(dataKeys.localeGetById, () => api.localeGetById(localeId), {
@@ -529,19 +549,6 @@ export const useLocales = (params) => {
     variables: { p },
     extractId: (x) => x.p
   })
-}
-
-export const useUpdateCurrencyMutation = () => {
-  const api = useApi()
-  return useMutation(
-    dataKeys.currencyUpdate,
-    (code, data) => api.currencyUpdate(code, data),
-    {
-      onSuccess: ({ cache }) => {
-        cache.invalidate(dataKeys.storeGet)
-      }
-    }
-  )
 }
 
 // this mutation returns data
