@@ -1,7 +1,8 @@
-import { component, detectIsArray, keys } from '@dark-engine/core'
+import { component, detectIsArray, detectIsUndefined, keys } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
 import { useStore } from '../../data'
+import { detectIsEmptyString } from '@wareme/utils'
 
 const TranslationsInputs = component(({ translations, onChange }) => {
   const { data: storeData } = useStore()
@@ -9,6 +10,10 @@ const TranslationsInputs = component(({ translations, onChange }) => {
 
   if (storeData) {
     const { defaultLocaleId, locales } = storeData.store
+    if (locales.length === 1) {
+      return null
+    }
+
     const translationsMap = {}
     for (let i = 0, len = locales.length; i < len; i++) {
       const locale = locales[i]
@@ -27,25 +32,58 @@ const TranslationsInputs = component(({ translations, onChange }) => {
       }
     }
 
-    const handleChange = (e) => {
-      const { name, value } = e.target
-      const { localeId } = e.target.dataset
+    const handleChange = (event) => {
+      const { name, value, dataset } = event.target
+      const { localeId } = dataset
+
+      if (detectIsEmptyString(value)) {
+        if (detectIsUndefined(translations)) {
+          return
+        }
+
+        const newTranslations = [...translations]
+        for (let i = 0, len = newTranslations.length; i < len; i++) {
+          const translation = newTranslations[i]
+          if (translation.localeId === localeId) {
+            const newTranslation = { ...translation }
+            delete newTranslation[name]
+
+            const { title, subtitle, description } = newTranslation
+            if (
+              detectIsUndefined(title) &&
+              detectIsUndefined(subtitle) &&
+              detectIsUndefined(description)
+            ) {
+              newTranslations.splice(i, 1)
+              onChange(newTranslations)
+              return
+            }
+
+            newTranslations[i] = newTranslation
+            onChange(newTranslations)
+            return
+          }
+        }
+      }
+
+      if (detectIsUndefined(translations)) {
+        const newTranslations = [{ localeId, [name]: value }]
+        onChange(newTranslations)
+        return
+      }
+
       const newTranslations = [...translations]
 
-      let found = false
       for (let i = 0, len = newTranslations.length; i < len; i++) {
         const translation = newTranslations[i]
         if (translation.localeId === localeId) {
           newTranslations[i] = { ...translation, [name]: value }
-          found = true
-          break
+          onChange(newTranslations)
+          return
         }
       }
 
-      if (!found) {
-        newTranslations.push({ localeId, [name]: value })
-      }
-
+      newTranslations.push({ localeId, [name]: value })
       onChange(newTranslations)
     }
 

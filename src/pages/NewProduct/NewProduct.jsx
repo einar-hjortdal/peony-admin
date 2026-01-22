@@ -56,7 +56,12 @@ const ProductNew = component(() => {
 
   const handleTranslationsChange = (newTranslations) => {
     setProductData((prevState) => {
-      const newState = { ...prevState, translations: newTranslations }
+      const newState = { ...prevState }
+      if (newTranslations.length === 0) {
+        delete newState.translations
+      } else {
+        newState.translations = newTranslations
+      }
       return newState
     })
   }
