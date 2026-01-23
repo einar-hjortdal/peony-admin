@@ -4,7 +4,6 @@ import { useTranslation } from '@wareme/translations'
 import { detectIsEmptyString } from '@wareme/utils'
 
 import { useProductCreateMutation } from '../../data'
-import TranslationsInputs from '../../components/products/TranslationsInputs'
 import CardDefault from '../../components/cards/CardDefault'
 import CardHeader from '../../components/cards/CardHeader'
 import Checkbox from '../../components/input/Checkbox'
@@ -21,6 +20,7 @@ import Organize from '../../components/products/Organize'
 import SEOCard from '../../components/SEO/SEOCard'
 import Textarea from '../../components/input/Textarea'
 import Text from '../../components/input/Text'
+import Translations from './Translations'
 
 const MetadataCard = component(({ metadata, onChange }) => {
   const { t } = useTranslation('products.new.metadata')
@@ -52,18 +52,6 @@ const ProductNew = component(() => {
       }
       return setProductData({ ...productData, [name]: value })
     }
-  }
-
-  const handleTranslationsChange = (newTranslations) => {
-    setProductData((prevState) => {
-      const newState = { ...prevState }
-      if (newTranslations.length === 0) {
-        delete newState.translations
-      } else {
-        newState.translations = newTranslations
-      }
-      return newState
-    })
   }
 
   const handleStatusChange = (newStatus) => {
@@ -130,17 +118,91 @@ const ProductNew = component(() => {
   const handleSEOInput = (newSeo) => {
     setProductData((prevState) => {
       const newState = { ...prevState }
-      const { title, description, translations } = newSeo
-      if (
-        detectIsUndefined(title) &&
-        detectIsUndefined(description) &&
-        detectIsUndefined(translations)
-      ) {
+      const { title, description } = newSeo
+      if (detectIsUndefined(title) && detectIsUndefined(description)) {
         delete newState.seo
       } else {
         newState.seo = newSeo
       }
+      return newState
+    })
+  }
 
+  const handleGeneralTranslationInput = (newGeneralTranslation) => {
+    setProductData((prevState) => {
+      const newState = { ...prevState }
+      const { translations } = newState
+      if (detectIsUndefined(translations)) {
+        newState.translations = [newGeneralTranslation]
+        return newState
+      }
+
+      for (let i = 0, len = translations.length; i < len; i++) {
+        const translation = translations[i]
+        if (translation.localeId !== newGeneralTranslation.localeId) {
+          continue
+        }
+
+        const { title, subtitle, description } = newGeneralTranslation
+        if (
+          detectIsUndefined(title) &&
+          detectIsUndefined(subtitle) &&
+          detectIsUndefined(description)
+        ) {
+          newState.translations.splice(i, 1)
+
+          if (newState.translations.length === 0) {
+            delete newState.translations
+          }
+        } else {
+          newState.translations[i] = newGeneralTranslation
+        }
+        return newState
+      }
+
+      newState.translations.push(newGeneralTranslation)
+      return newState
+    })
+  }
+
+  const handleSEOTranslationInput = (newSEOTranslation) => {
+    setProductData((prevState) => {
+      const newState = { ...prevState }
+      const { seo } = newState
+      if (detectIsUndefined(seo)) {
+        newState.seo = { translations: [newSEOTranslation] }
+        return newState
+      }
+
+      const { translations } = seo
+      if (detectIsUndefined(translations)) {
+        newState.seo = { translations: [newSEOTranslation] }
+        return newState
+      }
+
+      for (let i = 0, len = translations.length; i < len; i++) {
+        const translation = translations[i]
+        if (translation.localeId !== newSEOTranslation.localeId) {
+          continue
+        }
+
+        const { title, description } = newSEOTranslation
+        if (detectIsUndefined(title) && detectIsUndefined(description)) {
+          newState.seo.translations.splice(i, 1)
+          if (newState.seo.translations.length === 0) {
+            delete newState.seo.translations
+            if (detectIsUndefined(newState.seo.title) &&
+              detectIsUndefined(newState.seo.description)) {
+              delete newState.seo
+            }
+          }
+        } else {
+          newState.seo.translations[i] = newSEOTranslation
+        }
+        return newState
+      }
+
+      newState.seo.translations.push(newSEOTranslation)
       return newState
     })
   }
@@ -190,7 +252,7 @@ const ProductNew = component(() => {
             onInput={handleInput}
             value={productData.title}
             disabled={createProductIsFetching}
-          >{t('title')}
+          >{t('inputTitle')}
           </Text>
 
           <Text
@@ -198,7 +260,7 @@ const ProductNew = component(() => {
             onInput={handleInput}
             value={productData.subtitle}
             disabled={createProductIsFetching}
-          >{t('subtitle')}
+          >{t('inputSubtitle')}
           </Text>
 
           <Textarea
@@ -206,7 +268,7 @@ const ProductNew = component(() => {
             onInput={handleInput}
             value={productData.description}
             disabled={createProductIsFetching}
-          >{t('description')}
+          >{t('inputDescription')}
           </Textarea>
 
           <Checkbox
@@ -218,24 +280,27 @@ const ProductNew = component(() => {
           </Checkbox>
         </CardDefault>
 
-        <TranslationsInputs
-          translations={productData.translations}
-          onChange={handleTranslationsChange}
-        />
-
         <Images
           images={productData.images}
           thumbnail={productData.thumbnail}
           onImagesChange={handleImagesChange}
           onThumbnailChange={handleThumbnailChange}
         />
+
         <ProductOptions options={productData.options} onChange={handleOptionsChange} />
         <MetadataCard metadata={productData.metadata} onChange={handleMetadataChange} />
+
         <SEOCard
           handle={productData.handle}
           seo={productData.seo}
           onHandleInput={handleHandleInput}
           onSEOInput={handleSEOInput}
+        />
+
+        <Translations
+          productData={productData}
+          handleGeneralTranslationInput={handleGeneralTranslationInput}
+          handleSEOTranslationInput={handleSEOTranslationInput}
         />
       </ColumnLarge>
 

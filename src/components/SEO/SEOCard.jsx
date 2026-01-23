@@ -1,4 +1,4 @@
-import { component, detectIsString, detectIsUndefined } from '@dark-engine/core'
+import { component, detectIsUndefined } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 import { detectIsEmptyString } from '@wareme/utils'
 
@@ -7,7 +7,6 @@ import CardHeader from '../cards/CardHeader'
 import Handle from '../input/Handle'
 import SEOTitle from './SEOTitle'
 import SEODescription from './SEODescription'
-import SEOTranslations from './SEOTranslations'
 
 const SEOCard = component(({ handle, seo, onHandleInput, onSEOInput }) => {
   const { t } = useTranslation('seoCard')
@@ -33,25 +32,6 @@ const SEOCard = component(({ handle, seo, onHandleInput, onSEOInput }) => {
     onSEOInput(newSeo)
   }
 
-  const handleSEOTranslationInput = (newSEOTranslations) => {
-    const newSeo = { ...seo }
-    const cleanedTranslations = []
-    for (let i = 0, len = newSEOTranslations.length; i < len; i++) {
-      const seoTranslation = newSEOTranslations[i]
-      const { title, description } = seoTranslation
-      if (detectIsString(title) || detectIsString(description)) {
-        cleanedTranslations.push(seoTranslation)
-      }
-    }
-
-    if (cleanedTranslations.length === 0) {
-      delete newSeo.translations
-    } else {
-      newSeo.translations = cleanedTranslations
-    }
-    onSEOInput(newSeo)
-  }
-
   return (
     <CardDefault>
       <CardHeader title={t('title')} />
@@ -64,7 +44,6 @@ const SEOCard = component(({ handle, seo, onHandleInput, onSEOInput }) => {
 
       <SEOTitle seo={seo} onInput={handleSEOInput}>{t('seoTitle')}</SEOTitle>
       <SEODescription seo={seo} onInput={handleSEOInput}>{t('seoDescription')}</SEODescription>
-      <SEOTranslations seo={seo} onInput={handleSEOTranslationInput} />
     </CardDefault>
   )
 })

@@ -1,12 +1,11 @@
 import { component, detectIsArray, detectIsUndefined, keys } from '@dark-engine/core'
-import { useTranslation } from '@wareme/translations'
 
 import { useStore } from '../../data'
 import { detectIsEmptyString } from '@wareme/utils'
+import TranslationInputs from './TranslationInputs'
 
 const TranslationsInputs = component(({ translations, onChange }) => {
   const { data: storeData } = useStore()
-  const { t, translator } = useTranslation('products.translationsInputs')
 
   if (storeData) {
     const { defaultLocaleId, locales } = storeData.store
@@ -32,7 +31,7 @@ const TranslationsInputs = component(({ translations, onChange }) => {
       }
     }
 
-    const handleChange = (event) => {
+    const handleInput = (event) => {
       const { name, value, dataset } = event.target
       const { localeId } = dataset
 
@@ -97,41 +96,17 @@ const TranslationsInputs = component(({ translations, onChange }) => {
 
       const translation = translationsMap[localeId]
       const { localeCode, title, subtitle, description } = translation
-      const languageName = translator.formatName(localeCode, { type: 'language' })
 
       rows.push(
         <li key={localeCode}>
-          <div>{languageName}</div>
-          <div>
-            {t('title')}:
-            <input
-              type='text'
-              name='title'
-              data-locale-id={localeId}
-              value={title}
-              onInput={handleChange}
-            />
-          </div>
-          <div>
-            {t('subtitle')}:
-            <input
-              type='text'
-              name='subtitle'
-              data-locale-id={localeId}
-              value={subtitle}
-              onInput={handleChange}
-            />
-          </div>
-          <div>
-            {t('description')}:
-            <input
-              type='text'
-              name='description'
-              data-locale-id={localeId}
-              value={description}
-              onInput={handleChange}
-            />
-          </div>
+          <TranslationInputs
+            localeCode={localeCode}
+            localeId={localeId}
+            title={title}
+            subtitle={subtitle}
+            description={description}
+            onInput={handleInput}
+          />
         </li>
       )
     }
