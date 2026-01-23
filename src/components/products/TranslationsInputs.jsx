@@ -14,7 +14,7 @@ const TranslationsInputs = component(({ translations, onChange }) => {
       return null
     }
 
-    const translationsMap = {}
+    const translationsMap = {} // TODO why am I doing this?
     for (let i = 0, len = locales.length; i < len; i++) {
       const locale = locales[i]
       translationsMap[locale.id] = {
@@ -100,7 +100,7 @@ const TranslationsInputs = component(({ translations, onChange }) => {
       const languageName = translator.formatName(localeCode, { type: 'language' })
 
       rows.push(
-        <li>
+        <li key={localeCode}>
           <div>{languageName}</div>
           <div>
             {t('title')}:

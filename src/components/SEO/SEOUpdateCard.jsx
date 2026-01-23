@@ -14,7 +14,6 @@ import ModalFooter from '../modals/ModalFooter'
 import PrimaryButton from '../buttons/PrimaryButton'
 import SEOTranslations from './SEOTranslations'
 
-// <SEOTranslations seo={seo} onChange={console.log} />
 const SEOEditModal = component(
   ({
     modalRef,

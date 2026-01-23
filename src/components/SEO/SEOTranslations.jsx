@@ -29,8 +29,8 @@ const SEOTranslationInputs = component(({ localeId, seo, onInput }) => {
     return newSEOTranslation
   }, [seo])
 
-  const handleInput = (e) => {
-    const { name, value } = e.target
+  const handleInput = (event) => {
+    const { name, value } = event.target
     const newSeoTranslationData = { ...seoTranslationData }
     if (detectIsEmptyString(value)) {
       delete newSeoTranslationData[name]

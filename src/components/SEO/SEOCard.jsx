@@ -9,18 +9,18 @@ import SEOTitle from './SEOTitle'
 import SEODescription from './SEODescription'
 import SEOTranslations from './SEOTranslations'
 
-const SEOCard = component(({ handle, seo, onInput }) => {
+const SEOCard = component(({ handle, seo, onHandleInput, onSEOInput }) => {
   const { t } = useTranslation('seoCard')
 
   const handleHandleInput = (newHandle) => {
-    onInput({ handle: newHandle })
+    onHandleInput(newHandle)
   }
 
   const handleSEOInput = (event) => {
     const { name, value } = event.target
     if (detectIsUndefined(seo)) {
       const newSeo = { [name]: value }
-      onInput({ seo: newSeo })
+      onSEOInput(newSeo)
       return
     }
 
@@ -30,10 +30,11 @@ const SEOCard = component(({ handle, seo, onInput }) => {
     } else {
       newSeo[name] = value
     }
-    onInput({ seo: newSeo })
+    onSEOInput(newSeo)
   }
 
   const handleSEOTranslationInput = (newSEOTranslations) => {
+    const newSeo = { ...seo }
     const cleanedTranslations = []
     for (let i = 0, len = newSEOTranslations.length; i < len; i++) {
       const seoTranslation = newSEOTranslations[i]
@@ -42,7 +43,13 @@ const SEOCard = component(({ handle, seo, onInput }) => {
         cleanedTranslations.push(seoTranslation)
       }
     }
-    onInput({ seoTranslations: cleanedTranslations })
+
+    if (cleanedTranslations.length === 0) {
+      delete newSeo.translations
+    } else {
+      newSeo.translations = cleanedTranslations
+    }
+    onSEOInput(newSeo)
   }
 
   return (

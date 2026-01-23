@@ -115,26 +115,30 @@ const ProductNew = component(() => {
     }
   }
 
-  const handleSEOChange = (data) => {
-    const { handle, seo } = data
+  const handleHandleInput = (newHandle) => {
     setProductData((prevState) => {
       const newState = { ...prevState }
-
-      if (!detectIsUndefined(handle)) {
-        newState.handle = handle
+      if (detectIsEmptyString(newHandle)) {
+        delete newState.handle
+      } else {
+        newState.handle = newHandle
       }
+      return newState
+    })
+  }
 
-      if (!detectIsUndefined(seo)) {
-        const { title, description, translations } = seo
-        if (
-          detectIsUndefined(title) &&
-          detectIsUndefined(description) &&
-          detectIsUndefined(translations)
-        ) {
-          delete newState.seo
-        } else {
-          newState.seo = seo
-        }
+  const handleSEOInput = (newSeo) => {
+    setProductData((prevState) => {
+      const newState = { ...prevState }
+      const { title, description, translations } = newSeo
+      if (
+        detectIsUndefined(title) &&
+        detectIsUndefined(description) &&
+        detectIsUndefined(translations)
+      ) {
+        delete newState.seo
+      } else {
+        newState.seo = newSeo
       }
 
       return newState
@@ -230,7 +234,8 @@ const ProductNew = component(() => {
         <SEOCard
           handle={productData.handle}
           seo={productData.seo}
-          onInput={handleSEOChange}
+          onHandleInput={handleHandleInput}
+          onSEOInput={handleSEOInput}
         />
       </ColumnLarge>
 
