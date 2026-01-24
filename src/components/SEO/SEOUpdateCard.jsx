@@ -12,7 +12,6 @@ import ModalDefault from '../modals/ModalDefault'
 import ModalHeader from '../modals/ModalHeader'
 import ModalFooter from '../modals/ModalFooter'
 import PrimaryButton from '../buttons/PrimaryButton'
-import SEOTranslations from './SEOTranslations'
 
 const SEOEditModal = component(
   ({
@@ -23,7 +22,6 @@ const SEOEditModal = component(
     seoData,
     handleHandleInput,
     handleSEOInput,
-    handleTranslationInput,
     disabled
   }) => {
     const { t } = useTranslation('seoUpdateCard')
@@ -53,8 +51,6 @@ const SEOEditModal = component(
         >{t('seoDescription')}
         </SEODescription>
 
-        <SEOTranslations seo={seoData} onInput={handleTranslationInput} />
-
         <ModalFooter>
           <PrimaryButton type='button' onClick={handleSave}>{t('save')}</PrimaryButton>
         </ModalFooter>
@@ -68,7 +64,6 @@ const SEOUpdateCard = component(
     onHandleChange,
     seo,
     onSEOChange,
-    onSEODelete,
     disabled
   }) => {
     const { t } = useTranslation('seoUpdateCard')
@@ -113,10 +108,6 @@ const SEOUpdateCard = component(
       onSEOChange(seoData)
     }
 
-    const handleDelete = () => {
-      onSEODelete()
-    }
-
     const getTitle = () => {
       if (seo && seo.title) {
         return seo.title
@@ -150,10 +141,6 @@ const SEOUpdateCard = component(
                 handleSave={handleSave}
                 disabled={disabled}
               />
-            </li>
-            <li>
-              {/* TODO tooltip? tell user this deletes title and description, not handle */}
-              <button type='button' onClick={handleDelete}>{t('delete')}</button>
             </li>
           </ButtonMore>
         </CardHeader>

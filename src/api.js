@@ -54,7 +54,6 @@ export const dataKeys = {
   productVariantUpdate: 'productVariantUpdate',
   productVariantDelete: 'productVariantDelete',
   productSEOUpdate: 'productSEOUpdate',
-  productSEODelete: 'productSEODelete',
   inventoryLevelUpdate: 'inventoryLevelUpdate',
   countriesGet: 'countriesGet',
   currencyGet: 'currencyGet',
@@ -347,17 +346,6 @@ export const api = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
-        credentials: 'include'
-      }
-    )
-    return checkResponse(response)
-  },
-
-  productSEODelete: async (productId, seoId) => {
-    const response = await fetch(
-      getRequestUrl(`products/${productId}/seo/${seoId}`),
-      {
-        method: 'DELETE',
         credentials: 'include'
       }
     )

@@ -1,6 +1,5 @@
 import {
   component,
-  detectIsArray,
   detectIsNull,
   detectIsUndefined,
   useMemo,
@@ -17,7 +16,6 @@ import {
   useProductUpdateMutation,
   useStore
 } from '../../data'
-import If from '../../components/If'
 import CardDefault from '../../components/cards/CardDefault'
 import CardHeader from '../../components/cards/CardHeader'
 import ButtonMore from '../../components/buttons/ButtonMore'
@@ -75,7 +73,7 @@ const TranslationsEdit = component(
         res[localeId] = translation
       }
       return res
-    }, [translationsData])
+    }, [translationsData, locales])
 
     const seoTranslationsMap = useMemo(() => {
       const res = {}
@@ -91,7 +89,7 @@ const TranslationsEdit = component(
         res[localeId] = translation
       }
       return res
-    }, [seoTranslationsData])
+    }, [seoTranslationsData, locales])
 
     const modalRef = useRef(null)
 
