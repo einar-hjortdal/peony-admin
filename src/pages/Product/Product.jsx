@@ -128,7 +128,6 @@ const Product = component(() => {
 
           </CardDefault>
 
-          <Translations />
           <Images
             images={images}
             thumbnail={thumbnail}
@@ -149,6 +148,8 @@ const Product = component(() => {
             onChange={handleMetadataChange}
             disabled={updateProductIsFetching}
           />
+
+          <Translations />
         </ColumnLarge>
 
         <ColumnSmall>

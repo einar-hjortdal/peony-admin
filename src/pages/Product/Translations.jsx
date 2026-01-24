@@ -1,11 +1,8 @@
 import {
   component,
   detectIsArray,
-  detectIsFunction,
   detectIsNull,
-  detectIsString,
   detectIsUndefined,
-  useEffect,
   useMemo,
   useRef,
   useState
@@ -14,7 +11,12 @@ import { useParams } from '@dark-engine/web-router'
 import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
-import { useLocaleById, useProductById, useProductUpdateMutation, useStore } from '../../data'
+import {
+  useProductById,
+  useProductSEOUpdateMutation,
+  useProductUpdateMutation,
+  useStore
+} from '../../data'
 import If from '../../components/If'
 import CardDefault from '../../components/cards/CardDefault'
 import CardHeader from '../../components/cards/CardHeader'
@@ -23,232 +25,318 @@ import ModalDefault from '../../components/modals/ModalDefault'
 import ModalHeader from '../../components/modals/ModalHeader'
 import ModalFooter from '../../components/modals/ModalFooter'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
-import TranslationsInputs from '../../components/products/TranslationsInputs'
+import TranslationInputs from '../../components/products/TranslationInputs'
+import SEOTranslationInputs from '../../components/SEO/SEOTranslationInputs'
+import KeyValueListPreview from '../../components/products/KeyValueListPreview'
 
-const TranslationsEdit = component(({ productId, title, renderButton, slot }) => {
-  const [updateProduct] = useProductUpdateMutation(productId)
-  const { data: productData } = useProductById(productId)
-  const { data: storeData } = useStore()
+const TranslationsEdit = component(
+  ({
+    locales,
+    defaultLocaleId,
+    productId,
+    seoId,
+    translations,
+    seoTranslations
+  }) => {
+    const [updateProduct] = useProductUpdateMutation(productId)
+    const [updateProductSEO] = useProductSEOUpdateMutation(productId, seoId)
 
-  const [translationsData, setTranslationsData] = useState([])
-  useEffect(() => {
-    if (productData && storeData) {
-      const { translations } = productData.product
-      const { defaultLocaleId } = storeData.store
-      const newTranslationsData = []
-      for (let i = 0, len = translations.length; i < len; i++) {
-        const translation = translations[i]
-        if (translation.localeId === defaultLocaleId) {
-          continue
-        }
-        newTranslationsData.push(translation)
+    const getInitialTranslations = () => {
+      if (detectIsUndefined(translations)) {
+        return []
       }
-      setTranslationsData(newTranslationsData)
+      return translations
     }
-  }, [productData, storeData])
 
-  const defaultTranslation = useMemo(() => {
-    if (productData && storeData) {
-      const { translations } = productData.product
-      const { defaultLocaleId } = storeData.store
-      for (let i = 0, len = translations.length; i < len; i++) {
-        const translation = translations[i]
-        if (translation.localeId === defaultLocaleId) {
-          return translation
-        }
+    const getInitialSEOTranslations = () => {
+      if (detectIsUndefined(seoTranslations)) {
+        return []
       }
+      return seoTranslations
     }
-  }, [productData, storeData])
 
-  const modalRef = useRef(null)
+    const [translationsData, setTranslationsData] = useState(getInitialTranslations())
 
-  const handleOpenModal = () => {
-    if (detectIsNull(modalRef.current)) {
-      return
+    const [seoTranslationsData, setSEOTranslationsData] = useState(getInitialSEOTranslations())
+
+    const { t, translator } = useTranslation('product.translations')
+
+    const translationsMap = useMemo(() => {
+      const res = {}
+      for (let i = 0, len = locales.length; i < len; i++) {
+        const locale = locales[i]
+        const localeId = locale.id
+        res[localeId] = { localeId }
+      }
+
+      for (let i = 0, len = translationsData.length; i < len; i++) {
+        const translation = translationsData[i]
+        const { localeId } = translation
+        res[localeId] = translation
+      }
+      return res
+    }, [translationsData])
+
+    const seoTranslationsMap = useMemo(() => {
+      const res = {}
+      for (let i = 0, len = locales.length; i < len; i++) {
+        const locale = locales[i]
+        const localeId = locale.id
+        res[localeId] = { localeId }
+      }
+
+      for (let i = 0, len = seoTranslationsData.length; i < len; i++) {
+        const translation = seoTranslationsData[i]
+        const { localeId } = translation
+        res[localeId] = translation
+      }
+      return res
+    }, [seoTranslationsData])
+
+    const modalRef = useRef(null)
+
+    const handleOpenModal = () => {
+      if (detectIsNull(modalRef.current)) {
+        return
+      }
+      return modalRef.current.showModal()
     }
-    return modalRef.current.showModal()
-  }
 
-  const handleCloseModal = () => {
-    return modalRef.current.close()
-  }
+    const handleCloseModal = () => {
+      return modalRef.current.close()
+    }
 
-  const handleChange = (newTranslationsData) => {
-    setTranslationsData(newTranslationsData)
-  }
+    const handleTranslationInput = (newTranslation) => {
+      const { localeId, title, subtitle, description } = newTranslation
+      setTranslationsData((prevState) => {
+        const newState = [...prevState]
+        for (let i = 0, len = newState.length; i < len; i++) {
+          const translation = newState[i]
+          if (translation.localeId !== localeId) {
+            continue
+          }
 
-  const handleSave = () => {
-    const newTranslations = [...translationsData, defaultTranslation]
-    updateProduct({ translations: newTranslations })
-  }
+          if (
+            detectIsUndefined(title) &&
+            detectIsUndefined(subtitle) &&
+            detectIsUndefined(description)
+          ) {
+            newState.splice(i, 1)
+          } else {
+            newState[i] = newTranslation
+          }
+          return newState
+        }
 
-  let Button = 'button'
-  if (detectIsFunction(renderButton)) {
-    Button = renderButton
-  }
+        newState.push(newTranslation)
+        return newState
+      })
+    }
 
-  if (productData && storeData) {
+    const handleSEOTranslationInput = (newSEOTranslation) => {
+      const { localeId, title, description } = newSEOTranslation
+      setSEOTranslationsData((prevState) => {
+        const newState = [...prevState]
+        for (let i = 0, len = newState.length; i < len; i++) {
+          const translation = newState[i]
+          if (translation.localeId !== localeId) {
+            continue
+          }
+
+          if (detectIsUndefined(title) && detectIsUndefined(description)) {
+            newState.splice(i, 1)
+          } else {
+            newState[i] = newSEOTranslation
+          }
+          return newState
+        }
+
+        newState.push(newSEOTranslation)
+        return newState
+      })
+    }
+
+    const handleSave = () => {
+      updateProduct({ translations: translationsData })
+      updateProductSEO({ translations: seoTranslationsData })
+    }
+
+    const translationsInputs = []
+    for (let i = 0, len = locales.length; i < len; i++) {
+      const locale = locales[i]
+      if (locale.id === defaultLocaleId) {
+        continue
+      }
+
+      const languageName = translator.formatName(locale.code, {
+        type: 'language'
+      })
+
+      translationsInputs.push(
+        <li key={locale.id}>
+          <span>{languageName}</span>
+          <TranslationInputs
+            generalTranslation={translationsMap[locale.id]}
+            onInput={handleTranslationInput}
+          />
+          <SEOTranslationInputs
+            seoTranslation={seoTranslationsMap[locale.id]}
+            onInput={handleSEOTranslationInput}
+          />
+        </li>
+      )
+    }
+
     return (
       <>
-        <Button type='button' onClick={handleOpenModal}>{slot}</Button>
+        <PrimaryButton type='button' onClick={handleOpenModal}>
+          {t('edit')}
+        </PrimaryButton>
         <ModalDefault ref={modalRef}>
-          <ModalHeader title={title} handleClose={handleCloseModal} />
-          <TranslationsInputs translations={translationsData} onChange={handleChange} />
+          <ModalHeader title={t('modalTitle')} handleClose={handleCloseModal} />
+
+          <ul>{translationsInputs}</ul>
+
           <ModalFooter>
-            <PrimaryButton type='button' onClick={handleSave}>save</PrimaryButton>
+            <PrimaryButton type='button' onClick={handleSave}>
+              {t('save')}
+            </PrimaryButton>
           </ModalFooter>
         </ModalDefault>
       </>
     )
   }
-})
+)
 
-const Column = styled.div`
-  display: inline-block;
-  width: 50%;
-`
+const TranslationPreview = component(
+  ({ locale, translation, seoTranslation }) => {
+    const { t, translator } = useTranslation('product.translations')
+    const languageName = translator.formatName(locale.code, {
+      type: 'language'
+    })
 
-const TopLeft = styled.div`
-  display: inline-block;
-`
+    const previewKeys = []
+    const previewValues = []
 
-const LanguageName = styled.span`
-  font-size: 120%;
-`
-
-const TopRight = styled.div`
-  float: right;
-`
-
-const StyledLi = styled.li`
-  padding-top: .75rem;
-  padding-bottom: .75rem;
-  border-bottom: 1px solid ${(p) => p.theme.neutral20};
-`
-
-const Translation = component(({ localeId, title, subtitle, description }) => {
-  const { data: localeData } = useLocaleById(localeId)
-  const { t, translator } = useTranslation('product.translation')
-
-  if (localeData) {
-    const { code } = localeData.locale
-    const languageName = translator.formatName(code, { type: 'language' })
-
-    return (
-      <div>
-        <TopLeft>
-          <LanguageName>{languageName}</LanguageName>
-        </TopLeft>
-        <TopRight>
-          {/*
-          <ButtonMore>
-            <li>delete language translations</li>
-          </ButtonMore>
-          */}
-        </TopRight>
-
-        <ul>
-          <If condition={detectIsString(title)}>
-            <StyledLi>
-              <Column>{t('title')}</Column>
-              <Column>{title}</Column>
-            </StyledLi>
-          </If>
-
-          <If condition={detectIsString(subtitle)}>
-            <StyledLi>
-              <Column>{t('subtitle')}</Column>
-              <Column>{subtitle}</Column>
-            </StyledLi>
-          </If>
-
-          <If condition={detectIsString(description)}>
-            <StyledLi>
-              <Column>{t('description')}</Column>
-              <Column>{description}</Column>
-            </StyledLi>
-          </If>
-        </ul>
-      </div>
-    )
-  }
-})
-
-const Translations = component(() => {
-  const params = useParams()
-  const productId = params.get('productId')
-  const { t } = useTranslation('product.translations')
-  const [updateProduct] = useProductUpdateMutation(productId)
-  const { data: productData } = useProductById(productId)
-  const { data: storeData } = useStore()
-
-  if (storeData && productData) {
-    const { translations } = productData.product
-    const { defaultLocaleId, locales } = storeData.store
-
-    // Don't do any more work if store only has one locale
-    if (locales.length === 1) {
-      return null
+    if (!detectIsUndefined(translation)) {
+      previewKeys.push(('title'), t('subtitle'), t('description'))
+      previewValues.push(translation.title, translation.subtitle, translation.description)
     }
 
-    const res = []
-    for (let i = 0, len = translations.length; i < len; i++) {
-      const { localeId, title, subtitle, description } = translations[i]
+    if (!detectIsUndefined(seoTranslation)) {
+      previewKeys.push(t('seoTitle'), t('seoDescription'))
+      previewValues.push(seoTranslation.title, seoTranslation.description)
+    }
 
-      if (localeId === defaultLocaleId) {
+    return (
+      <li>
+        <span>{languageName}</span>
+        <KeyValueListPreview keys={previewKeys} values={previewValues} />
+      </li>
+    )
+  }
+)
+
+const TranslationsPreview = component(
+  ({ translations, seoTranslations, defaultLocaleId, locales }) => {
+    const { t } = useTranslation('product.translations')
+
+    if (detectIsUndefined(translations) && detectIsUndefined(seoTranslations)) {
+      return <span>{t('noTranslations')}</span>
+    }
+
+    const translationsMap = useMemo(() => {
+      const res = {}
+      if (detectIsUndefined(translations)) {
+        return res
+      }
+
+      for (let i = 0, len = translations.length; i < len; i++) {
+        const translation = translations[i]
+        const { localeId } = translation
+        res[localeId] = translation
+      }
+      return res
+    }, [translations])
+
+    const seoTranslationsMap = useMemo(() => {
+      const res = {}
+      if (detectIsUndefined(seoTranslations)) {
+        return res
+      }
+
+      for (let i = 0, len = seoTranslations.length; i < len; i++) {
+        const translation = seoTranslations[i]
+        const { localeId } = translation
+        res[localeId] = translation
+      }
+      return res
+    }, [seoTranslations])
+
+    const res = []
+    for (let i = 0, len = locales.length; i < len; i++) {
+      const locale = locales[i]
+      if (locale.id === defaultLocaleId) {
         continue
       }
 
       res.push(
-        <Translation
-          localeId={localeId}
-          title={title}
-          subtitle={subtitle}
-          description={description}
+        <TranslationPreview
+          key={locale.id}
+          locale={locale}
+          translation={translationsMap[locale.id]}
+          seoTranslation={seoTranslationsMap[locale.id]}
         />
       )
     }
 
-    const handleDeleteAll = () => {
-      for (let i = 0, len = translations.length; i < len; i++) {
-        const translation = translations[i]
-        if (translation.localeId === defaultLocaleId) {
-          updateProduct({ translations: [translation] })
-          break
-        }
-      }
-    }
+    return <ul>{res}</ul>
+  }
+)
+
+// display existing translations if any
+// open modal to edit translations
+const Translations = component(() => {
+  const params = useParams()
+  const productId = params.get('productId')
+  const { t } = useTranslation('product.translations')
+  const { data: productData } = useProductById(productId)
+  const { data: storeData } = useStore()
+
+  const handleDelete = () => { }
+
+  if (storeData && productData) {
+    const { translations, seo } = productData.product
+    const { defaultLocaleId, locales } = storeData.store
 
     return (
       <CardDefault>
         <CardHeader title={t('title')}>
-          <If condition={detectIsUndefined(translations)}>
-            <TranslationsEdit
-              productId={productId}
-              title={t('modalTitle')}
-              renderButton={(props) => <PrimaryButton {...props} />}
-            >{t('add')}
-            </TranslationsEdit>
-          </If>
-
-          <If condition={detectIsArray(translations)}>
-            <ButtonMore>
-              <li>
-                <TranslationsEdit
-                  productId={productId}
-                  title={t('modalTitle')}
-                >{t('edit')}
-                </TranslationsEdit>
-              </li>
-              <li>
-                <button type='button' onClick={handleDeleteAll}>{t('deleteAll')}</button>
-              </li>
-            </ButtonMore>
-          </If>
+          <ButtonMore>
+            <li>
+              <TranslationsEdit
+                locales={locales}
+                defaultLocaleId={defaultLocaleId}
+                productId={productId}
+                seoId={seo.id}
+                translations={translations}
+                seoTranslations={seo.translations}
+              />
+            </li>
+            <li>
+              <button type='button' onClick={handleDelete}>
+                {t('deleteAll')}
+              </button>
+            </li>
+          </ButtonMore>
         </CardHeader>
 
-        <If condition={detectIsUndefined(translations)}>{t('noTranslations')}</If>
-        <If condition={detectIsArray(translations)}>{res}</If>
+        <TranslationsPreview
+          translations={translations}
+          seoTranslations={seo.translations}
+          defaultLocaleId={defaultLocaleId}
+          locales={locales}
+        />
       </CardDefault>
     )
   }
