@@ -12,7 +12,6 @@ import { useTranslation } from '@wareme/translations'
 
 import {
   useProductById,
-  useProductSEOUpdateMutation,
   useProductUpdateMutation,
   useStore
 } from '../../data'
@@ -32,12 +31,10 @@ const TranslationsEdit = component(
     locales,
     defaultLocaleId,
     productId,
-    seoId,
-    translations,
-    seoTranslations
+    seo,
+    translations
   }) => {
     const [updateProduct] = useProductUpdateMutation(productId)
-    const [updateProductSEO] = useProductSEOUpdateMutation(productId, seoId)
 
     const getInitialTranslations = () => {
       if (detectIsUndefined(translations)) {
@@ -47,6 +44,7 @@ const TranslationsEdit = component(
     }
 
     const getInitialSEOTranslations = () => {
+      const { translations: seoTranslations } = seo
       if (detectIsUndefined(seoTranslations)) {
         return []
       }
@@ -154,9 +152,10 @@ const TranslationsEdit = component(
       })
     }
 
+    // TODO only update fields if changed
     const handleSave = () => {
-      updateProduct({ translations: translationsData })
-      updateProductSEO({ translations: seoTranslationsData })
+      const newSeoData = { ...seo, translations: seoTranslationsData }
+      updateProduct({ translations: translationsData, seo: newSeoData })
     }
 
     const translationsInputs = []
@@ -316,9 +315,8 @@ const Translations = component(() => {
                 locales={locales}
                 defaultLocaleId={defaultLocaleId}
                 productId={productId}
-                seoId={seo.id}
+                seo={seo}
                 translations={translations}
-                seoTranslations={seo.translations}
               />
             </li>
             <li>

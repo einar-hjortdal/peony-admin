@@ -404,19 +404,6 @@ export const useProductVariantDeleteMutation = (productId, variantId) => {
   )
 }
 
-export const useProductSEOUpdateMutation = (productId, seoId) => {
-  const api = useApi()
-  return useMutation(
-    dataKeys.productVariantUpdate,
-    (data) => api.productSEOUpdate(productId, seoId, data),
-    {
-      onSuccess: ({ cache }) => {
-        cache.invalidate(dataKeys.productGetById, { id: productId })
-      }
-    }
-  )
-}
-
 export const useInventoryLevelUpdateMutation = (productId, variantId) => {
   const api = useApi()
   return useMutation(

@@ -53,7 +53,6 @@ export const dataKeys = {
   productVariantCreate: 'productVariantCreate',
   productVariantUpdate: 'productVariantUpdate',
   productVariantDelete: 'productVariantDelete',
-  productSEOUpdate: 'productSEOUpdate',
   inventoryLevelUpdate: 'inventoryLevelUpdate',
   countriesGet: 'countriesGet',
   currencyGet: 'currencyGet',

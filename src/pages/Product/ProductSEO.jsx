@@ -1,24 +1,20 @@
 import { component } from '@dark-engine/core'
 
-import { useProductSEOUpdateMutation } from '../../data'
+import { useProductUpdateMutation } from '../../data'
 import SEOUpdateCard from '../../components/SEO/SEOUpdateCard'
 
 const ProductSEO = component(({ productId, handle, onHandleChange, seo }) => {
   const [
-    updateProductSEO,
-    { isFetching: updateProductSEOIsFetching }
-  ] = useProductSEOUpdateMutation(productId, seo.id)
+    updateProduct,
+    { isFetching: updateProductIsFetching }
+  ] = useProductUpdateMutation(productId)
 
   const handleHandleChange = (newHandle) => {
     onHandleChange(newHandle)
   }
 
-  const handleSEOChange = (data) => {
-    updateProductSEO(data)
-  }
-
-  const isDisabled = () => {
-    return updateProductSEOIsFetching
+  const handleSEOChange = (newSEOdata) => {
+    updateProduct({ seo: newSEOdata })
   }
 
   return (
@@ -28,7 +24,7 @@ const ProductSEO = component(({ productId, handle, onHandleChange, seo }) => {
       onHandleChange={handleHandleChange}
       seo={seo}
       onSEOChange={handleSEOChange}
-      disabled={isDisabled()}
+      disabled={updateProductIsFetching}
     />
   )
 })

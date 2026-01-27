@@ -23,6 +23,8 @@
 
 - [ ] Stock locations
 - [ ] Sales channels
+- [ ] Options
+- [ ] Option values
 
 ## Work on next
 
