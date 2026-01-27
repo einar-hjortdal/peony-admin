@@ -11,7 +11,7 @@ import Identification from '../../components/products/Variants/Identification'
 import MetadataCard from '../../components/MetadataCard'
 import ColumnSmall from '../../components/columns/ColumnSmall'
 import ColumnLarge from '../../components/columns/ColumnLarge'
-import OptionValues from '../../components/products/Variants/OptionValues'
+// import OptionValues from '../../components/products/Variants/OptionValues'
 import Shipping from '../../components/products/Variants/Shipping'
 import InventoryManagement from '../../components/products/Variants/InventoryManagement'
 import MoneyAmounts from '../../components/products/Variants/MoneyAmounts'
@@ -78,12 +78,12 @@ const Variant = component(() => {
             disabled={updateVariantIsFetching}
           />
 
-          <OptionValues
+          {/* <OptionValues
             productId={productId}
             optionValues={optionValues}
             onChange={handleOptionValueIdsChange}
             disabled={updateVariantIsFetching}
-          />
+          /> */}
 
           {/* TODO <Images /> */}
 

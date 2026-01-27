@@ -19,7 +19,7 @@ import SalesChannels from './SalesChannels'
 import Variants from './Variants'
 import EditGeneral from './EditGeneral'
 import Translations from './Translations'
-import Options from './Options'
+// import Options from './Options'
 import Status from '../../components/products/Status'
 import MetadataCard from '../../components/MetadataCard'
 import ProductSEO from './ProductSEO'
@@ -134,7 +134,7 @@ const Product = component(() => {
             onImagesChange={handleImagesChange}
             onThumbnailChange={handleThumbnailChange}
           />
-          <Options />
+          {/* <Options /> */}
           <Variants />
           <ProductSEO
             productId={productId}

@@ -10,7 +10,7 @@ import ColumnSmall from '../../components/columns/ColumnSmall'
 import MetadataCard from '../../components/MetadataCard'
 import Identification from '../../components/products/Variants/Identification'
 import MoneyAmounts from '../../components/products/Variants/MoneyAmounts'
-import OptionValues from '../../components/products/Variants/OptionValues'
+// import OptionValues from '../../components/products/Variants/OptionValues'
 import Shipping from '../../components/products/Variants/Shipping'
 import InventoryManagement from '../../components/products/Variants/InventoryManagement'
 import InventoryLevels from '../../components/products/Variants/InventoryLevels'
@@ -120,12 +120,12 @@ const NewVariant = component(() => {
           disabled={createVariantIsFetching}
         />
 
-        <OptionValues
+        {/* <OptionValues
           productId={productId}
           optionValues={optionValues}
           onChange={handleOptionValueIdsChange}
           disabled={createVariantIsFetching}
-        />
+        /> */}
 
         {/* TODO <Images /> */}
 
