@@ -235,10 +235,13 @@ const TranslationPreview = component(
 )
 
 const TranslationsPreview = component(
-  ({ translations, seoTranslations, defaultLocaleId, locales }) => {
+  ({ translations, seo, defaultLocaleId, locales }) => {
     const { t } = useTranslation('product.translations')
 
-    if (detectIsUndefined(translations) && detectIsUndefined(seoTranslations)) {
+    if (
+      detectIsUndefined(translations) &&
+      (detectIsUndefined(seo) || detectIsUndefined(seo.translations))
+    ) {
       return <span>{t('noTranslations')}</span>
     }
 
@@ -258,9 +261,11 @@ const TranslationsPreview = component(
 
     const seoTranslationsMap = useMemo(() => {
       const res = {}
-      if (detectIsUndefined(seoTranslations)) {
+      if (detectIsUndefined(seo) && detectIsUndefined(seo.translations)) {
         return res
       }
+
+      const seoTranslations = seo.translations
 
       for (let i = 0, len = seoTranslations.length; i < len; i++) {
         const translation = seoTranslations[i]
@@ -268,7 +273,7 @@ const TranslationsPreview = component(
         res[localeId] = translation
       }
       return res
-    }, [seoTranslations])
+    }, [seo])
 
     const res = []
     for (let i = 0, len = locales.length; i < len; i++) {
@@ -329,7 +334,7 @@ const Translations = component(() => {
 
         <TranslationsPreview
           translations={translations}
-          seoTranslations={seo.translations}
+          seo={seo}
           defaultLocaleId={defaultLocaleId}
           locales={locales}
         />
