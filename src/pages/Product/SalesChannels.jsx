@@ -54,6 +54,7 @@ const SalesChannelAvailability = component(({ productSalesChannels }) => {
   return null
 })
 
+// Hide if only one sales channel exists?
 const SalesChannels = component(() => {
   const { t } = useTranslation('product.salesChannels')
   const params = useParams()

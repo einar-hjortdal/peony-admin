@@ -44,6 +44,10 @@ const TranslationsEdit = component(
     }
 
     const getInitialSEOTranslations = () => {
+      if (detectIsUndefined(seo)) {
+        return []
+      }
+
       const { translations: seoTranslations } = seo
       if (detectIsUndefined(seoTranslations)) {
         return []
@@ -310,6 +314,10 @@ const Translations = component(() => {
   if (storeData && productData) {
     const { translations, seo } = productData.product
     const { defaultLocaleId, locales } = storeData.store
+
+    if (locales.length === 1) {
+      return null
+    }
 
     return (
       <CardDefault>
