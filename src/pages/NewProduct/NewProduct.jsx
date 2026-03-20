@@ -130,79 +130,57 @@ const ProductNew = component(() => {
 
   const handleGeneralTranslationInput = (newGeneralTranslation) => {
     setProductData((prevState) => {
+      const { localeId, title, subtitle, description } = newGeneralTranslation
       const newState = { ...prevState }
-      const { translations } = newState
-      if (detectIsUndefined(translations)) {
-        newState.translations = [newGeneralTranslation]
-        return newState
-      }
-
-      for (let i = 0, len = translations.length; i < len; i++) {
-        const translation = translations[i]
-        if (translation.localeId !== newGeneralTranslation.localeId) {
-          continue
-        }
-
-        const { title, subtitle, description } = newGeneralTranslation
-        if (
-          detectIsUndefined(title) &&
-          detectIsUndefined(subtitle) &&
-          detectIsUndefined(description)
-        ) {
-          newState.translations.splice(i, 1)
-
-          if (newState.translations.length === 0) {
-            delete newState.translations
-          }
-        } else {
-          newState.translations[i] = newGeneralTranslation
+      if (detectIsUndefined(newState.translations)) {
+        newState.translations = {
+          [localeId]: newGeneralTranslation
         }
         return newState
       }
 
-      newState.translations.push(newGeneralTranslation)
+      if (
+        detectIsUndefined(title) &&
+        detectIsUndefined(subtitle) &&
+        detectIsUndefined(description)
+      ) {
+        delete newState.translations[localeId]
+      } else {
+        newState.translations[localeId] = newGeneralTranslation
+      }
       return newState
     })
   }
 
   const handleSEOTranslationInput = (newSEOTranslation) => {
     setProductData((prevState) => {
+      const { localeId, title, description } = newSEOTranslation
       const newState = { ...prevState }
       const { seo } = newState
       if (detectIsUndefined(seo)) {
-        newState.seo = { translations: [newSEOTranslation] }
+        newState.seo = {
+          translations: {
+            [localeId]: newSEOTranslation
+          }
+        }
         return newState
       }
 
       const { translations } = seo
       if (detectIsUndefined(translations)) {
-        newState.seo = { translations: [newSEOTranslation] }
-        return newState
-      }
-
-      for (let i = 0, len = translations.length; i < len; i++) {
-        const translation = translations[i]
-        if (translation.localeId !== newSEOTranslation.localeId) {
-          continue
-        }
-
-        const { title, description } = newSEOTranslation
-        if (detectIsUndefined(title) && detectIsUndefined(description)) {
-          newState.seo.translations.splice(i, 1)
-          if (newState.seo.translations.length === 0) {
-            delete newState.seo.translations
-            if (detectIsUndefined(newState.seo.title) &&
-              detectIsUndefined(newState.seo.description)) {
-              delete newState.seo
-            }
+        newState.seo = {
+          translations: {
+            [localeId]: newSEOTranslation
           }
-        } else {
-          newState.seo.translations[i] = newSEOTranslation
         }
         return newState
       }
 
-      newState.seo.translations.push(newSEOTranslation)
+      if (detectIsUndefined(title) && detectIsUndefined(description)) {
+        delete newState.seo.translations[localeId]
+      } else {
+        newState.seo.translations[localeId] = newSEOTranslation
+      }
       return newState
     })
   }
@@ -288,6 +266,7 @@ const ProductNew = component(() => {
         />
 
         <ProductOptions options={productData.options} onChange={handleOptionsChange} />
+        {/* variants */}
         <MetadataCard metadata={productData.metadata} onChange={handleMetadataChange} />
 
         <SEOCard

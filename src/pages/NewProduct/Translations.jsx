@@ -1,4 +1,4 @@
-import { component, detectIsArray, detectIsUndefined, useMemo } from '@dark-engine/core'
+import { component, detectIsUndefined, useMemo } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
 import { useStore } from '../../data'
@@ -32,15 +32,16 @@ const LanguageTranslations = component(
     }, [locales, defaultLocaleId])
 
     const getGeneralTranslation = (localeId) => {
-      if (detectIsArray(generalTranslations)) {
-        for (let i = 0, len = generalTranslations.length; i < len; i++) {
-          const translation = generalTranslations[i]
-          if (translation.localeId === localeId) {
-            return translation
-          }
-        }
+      if (detectIsUndefined(generalTranslations)) {
+        return { localeId }
       }
-      return { localeId }
+
+      const generalTranslation = generalTranslations[localeId]
+      if (detectIsUndefined(generalTranslations)) {
+        return { localeId }
+      }
+
+      return generalTranslation
     }
 
     const getSEOTranslation = (localeId) => {
@@ -49,15 +50,16 @@ const LanguageTranslations = component(
       }
 
       const { translations: seoTranslations } = seo
-      if (detectIsArray(seoTranslations)) {
-        for (let i = 0, len = seoTranslations.length; i < len; i++) {
-          const translation = seoTranslations[i]
-          if (translation.localeId === localeId) {
-            return translation
-          }
-        }
+      if (detectIsUndefined(seoTranslations)) {
+        return { localeId }
       }
-      return { localeId }
+
+      const seoTranslation = seoTranslations[localeId]
+      if (detectIsUndefined(seoTranslation)) {
+        return { localeId }
+      }
+
+      return seoTranslation
     }
 
     const inputs = []

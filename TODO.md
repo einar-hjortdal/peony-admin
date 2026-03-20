@@ -7,24 +7,24 @@
 - [x] Manage store
 - [x] Multi-currency
 - [x] Multi-language
-- [x] Products
-- [x] Variants
-- [x] Inventory items
+- [x] Product
+- [x] Variant
+- [x] Inventory item
 - [x] Prices
-- [x] Categories
+- [x] Category
 - [x] Metadata
 - [x] SEO
 
 ## Currently working on
 
-- [ ] Regions
+- [ ] Region
+- [ ] Option
+- [ ] Option value
 
 ## Working on soon
 
-- [ ] Stock locations
-- [ ] Sales channels
-- [ ] Options
-- [ ] Option values
+- [ ] Stock location
+- [ ] Sales channel
 
 ## Work on next
 
@@ -32,14 +32,15 @@
 - [ ] Customer
 - [ ] Notifications
 - [ ] Orders
+- [ ] Blog
+- [ ] Post
+- [ ] Page
 - [ ] Post tags
-- [ ] Posts
 - [ ] Price lists
 - [ ] Product tags
 - [ ] Product types
 - [ ] Taxes
 - [ ] Users
-- [ ] Variant images
 
 ## Low priority
 

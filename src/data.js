@@ -2,7 +2,6 @@ import {
   keys,
   detectIsEmpty,
   useMemo,
-  detectIsUndefined,
   detectIsObject
 } from '@dark-engine/core'
 import { useApi, useQuery, useMutation } from '@dark-engine/data'
@@ -118,7 +117,7 @@ export const useProducts = (params) => {
 
 export const useProductById = (productId) => {
   const api = useApi()
-  const { refetch, data, isFetching, error } = useQuery(
+  return useQuery(
     dataKeys.productGetById,
     () => api.productGetById(productId),
     {
@@ -126,26 +125,6 @@ export const useProductById = (productId) => {
       extractId: (x) => x.productId
     }
   )
-
-  const translationsObject = useMemo(() => {
-    const res = {}
-    if (detectIsEmpty(data)) {
-      return res
-    }
-
-    const { translations } = data.product
-    if (detectIsUndefined(translations)) {
-      return res
-    }
-
-    for (let i = 0, len = translations.length; i < len; i++) {
-      const { localeId } = translations[i]
-      res[localeId] = translations[i]
-    }
-    return res
-  }, [data])
-
-  return { refetch, data, isFetching, error, translationsObject }
 }
 
 export const useProductCreateMutation = () => {

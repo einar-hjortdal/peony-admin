@@ -15,22 +15,21 @@ import { CurrencyInput } from '@wareme/currency-input'
 import { nisha } from '@wareme/utils'
 
 import {
-  useStore,
   useProductById,
   // useUpdateProductMutation,
-  useRegions
+  useRegions,
+  useCurrencies
 } from '../../data'
 import { formatLine } from '../../utils'
 import ButtonMore from '../../components/buttons/ButtonMore'
 import ModalDefault from '../../components/modals/ModalDefault'
 import ModalHeader from '../../components/modals/ModalHeader'
+import PricesInputs from '../../components/products/PricesInputs'
 
-// handles simple pricing: no quantity-based prices.
-// quantity-based prices pricing needs a less "convenient" layout.
-// such layout should offered as an alternative to the more simple layout (most people likely won't
-// need it).
-
-// TODO handle prices individually: save each change onBlur or with save button on each row.
+// TODO set base price for each region.
+// Note: price, original price, unit pricing per variant should be set in the variant editing page
+// TODO update all prices at once using one /products/product_id post request
+// TODO update each price onBlur using /products/product_id/variants/variant_id post request
 
 const TableHeaderName = styled.span`
   display: inline-block;
@@ -188,25 +187,18 @@ const TableBody = ({ variants, moneyAmounts, currencyColumns, regionColumns, han
   )
 }
 
-const EditPrices = component(({ productId }) => {
-  const { t } = useTranslation('product.editPrices')
-  const {
-    data: productData,
-    isFetching: productIsFetching,
-    translationsObject: productTranslationsObject
-  } = useProductById(productId)
-
-  const { data: storeData } = useStore()
-  const { data: regionsData } = useRegions()
+const DeprecatedPricesTable = component(({ product, regions }) => {
+  const { t } = useTranslation('product.prices')
+  const { variants } = product
+  const { data: currenciesData } = useCurrencies()
 
   const [currencyColumns, setCurrencyColumns] = useState([])
   const [regionColumns, setRegionColumns] = useState([])
   useEffect(() => {
-    if (detectIsEmpty(storeData) || detectIsEmpty(regionsData)) {
+    if (detectIsEmpty(regions)) {
       return
     }
 
-    const { currencies } = storeData.store
     const regions = regionsData.regions
 
     const newCurrencyColumns = [...currencies].sort((a, b) => {
@@ -223,7 +215,7 @@ const EditPrices = component(({ productId }) => {
 
     setCurrencyColumns(newCurrencyColumns)
     setRegionColumns(newRegionColumns)
-  }, [storeData, regionsData])
+  }, [regionsData])
 
   // build a map that contains objects with variant id keys
   // each object should have keys of either currencyCode or regionId and the data required for the submission.
@@ -296,22 +288,6 @@ const EditPrices = component(({ productId }) => {
         }
       }))
     }
-  }
-
-  const modalRef = useRef(null)
-  const handleOpenModal = () => {
-    if (detectIsNull(modalRef)) {
-      return
-    }
-    modalRef.current.showModal()
-  }
-
-  const handleCloseModal = () => {
-    if (detectIsNull(modalRef)) {
-      return
-    }
-    setMoneyAmounts(getInitialData())
-    modalRef.current.close()
   }
 
   const handleSave = async () => {
@@ -391,8 +367,48 @@ const EditPrices = component(({ productId }) => {
     setMoneyAmounts(getInitialData())
   }
 
-  if (productData && storeData && regionsData) {
-    const { variants } = productData.product
+  return (
+    <table>
+      <caption>{product.title}</caption>
+      <TableHead currencyColumns={currencyColumns} regionColumns={regionColumns} />
+      <TableBody
+        variants={variants}
+        moneyAmounts={moneyAmounts}
+        currencyColumns={currencyColumns}
+        regionColumns={regionColumns}
+        handleInput={handleInput}
+      />
+    </table>
+  )
+})
+
+const Prices = component(({ productId, onSave }) => {
+  const { t } = useTranslation('product.editPrices')
+  const {
+    data: productData,
+    isFetching: productIsFetching
+  } = useProductById(productId)
+
+  const { data: regionsData } = useRegions()
+
+  const modalRef = useRef(null)
+  const handleOpenModal = () => {
+    if (detectIsNull(modalRef)) {
+      return
+    }
+    modalRef.current.showModal()
+  }
+
+  const handleCloseModal = () => {
+    if (detectIsNull(modalRef)) {
+      return
+    }
+    modalRef.current.close()
+  }
+
+  if (productData && regionsData) {
+    const { product } = productData
+    const { variants } = product
     // TODO remove this (peony must guarantee there is always at least one variant per product)
     if (detectIsUndefined(variants)) {
       return null
@@ -411,13 +427,13 @@ const EditPrices = component(({ productId }) => {
                 type='button'
                 onClick={handleSave}
                 disabled={productIsFetching}
-              >save
+              >{t('save')}
               </button>
               <button
                 type='button'
                 onClick={handleDiscard}
                 disabled={productIsFetching}
-              >discard changes
+              >{t('discard')}
               </button>
             </div>
             <div>
@@ -425,25 +441,13 @@ const EditPrices = component(({ productId }) => {
                 {/* TODO toggle columns */}
                 <li>columns to toggle</li>
               </ButtonMore>
-              <table>
-                <caption>{productTranslationsObject[storeData.store.defaultLocaleId].title}</caption>
-                <TableHead currencyColumns={currencyColumns} regionColumns={regionColumns} />
-                <TableBody
-                  variants={variants}
-                  moneyAmounts={moneyAmounts}
-                  currencyColumns={currencyColumns}
-                  regionColumns={regionColumns}
-                  handleInput={handleInput}
-                />
-              </table>
+              <PricesInputs variants={variants} />
             </div>
           </div>
         </ModalDefault>
       </>
     )
   }
-
-  return null
 })
 
-export default EditPrices
+export default Prices

@@ -8,7 +8,7 @@ import { formatLine } from '../../utils'
 import ButtonMore from '../../components/buttons/ButtonMore'
 import CardDefault from '../../components/cards/CardDefault'
 import CardHeader from '../../components/cards/CardHeader'
-import EditPrices from './EditPrices'
+import Prices from './Prices'
 
 const VariantRowInventory = component(({ manageInventory, inventoryQuantity }) => {
   const { t } = useTranslation('product.variantRowInventory')
@@ -46,12 +46,12 @@ const VariantRow = component(({ productId, variant }) => {
         <ButtonMore>
           <li>
             <Link to={`/products/${productId}/variants/${id}`}>
-              <button type='button'>edit</button>
+              <button type='button'>{t('edit')}</button>
             </Link>
           </li>
 
           <li>
-            <button>manage inventory</button>
+            <button>{t('manageInventory')}</button>
           </li>
 
           <li>
@@ -63,7 +63,6 @@ const VariantRow = component(({ productId, variant }) => {
           </li>
 
         </ButtonMore>
-        {/* TODO dialog */}
       </td>
     </tr>
   )
@@ -116,7 +115,8 @@ const VariantsTable = component(({ productId }) => {
   return null
 })
 
-// peony should guarantee that a product always has at least one variant.
+// peony guarantees that a product always has at least one variant.
+// TODO show different UI if product has only one variant. Not every shop uses variants, those shops shouldn't be concerned with them.
 // TODO drag and drop rows to set rank.
 const Variants = component(() => {
   const { t } = useTranslation('product.variants')
@@ -131,7 +131,7 @@ const Variants = component(() => {
               <button type='button'>{t('create')}</button>
             </Link>
           </li>
-          <li><EditPrices productId={productId} /></li>
+          <li><Prices productId={productId} /></li>
         </ButtonMore>
       </CardHeader>
 

@@ -18,7 +18,8 @@ import MoneyAmounts from '../../components/products/Variants/MoneyAmounts'
 import InventoryLevels from '../../components/products/Variants/InventoryLevels'
 
 // TODO inventoryLevel
-// TODO bulk moneyAmounts and inventoryLevel editing in their own page
+// TODO bulk inventoryLevel editing on its own page (?)
+// TODO price, original price, unit pricing
 const Variant = component(() => {
   const params = useParams()
   const productId = params.get('productId')
