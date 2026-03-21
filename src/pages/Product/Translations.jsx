@@ -2,12 +2,10 @@ import {
   component,
   detectIsNull,
   detectIsUndefined,
-  useMemo,
   useRef,
   useState
 } from '@dark-engine/core'
 import { useParams } from '@dark-engine/web-router'
-import { styled } from '@dark-engine/styled'
 import { useTranslation } from '@wareme/translations'
 
 import {
@@ -38,19 +36,19 @@ const TranslationsEdit = component(
 
     const getInitialTranslations = () => {
       if (detectIsUndefined(translations)) {
-        return []
+        return {}
       }
       return translations
     }
 
     const getInitialSEOTranslations = () => {
       if (detectIsUndefined(seo)) {
-        return []
+        return {}
       }
 
       const { translations: seoTranslations } = seo
       if (detectIsUndefined(seoTranslations)) {
-        return []
+        return {}
       }
       return seoTranslations
     }
@@ -60,38 +58,6 @@ const TranslationsEdit = component(
     const [seoTranslationsData, setSEOTranslationsData] = useState(getInitialSEOTranslations())
 
     const { t, translator } = useTranslation('product.translations')
-
-    const translationsMap = useMemo(() => {
-      const res = {}
-      for (let i = 0, len = locales.length; i < len; i++) {
-        const locale = locales[i]
-        const localeId = locale.id
-        res[localeId] = { localeId }
-      }
-
-      for (let i = 0, len = translationsData.length; i < len; i++) {
-        const translation = translationsData[i]
-        const { localeId } = translation
-        res[localeId] = translation
-      }
-      return res
-    }, [translationsData, locales])
-
-    const seoTranslationsMap = useMemo(() => {
-      const res = {}
-      for (let i = 0, len = locales.length; i < len; i++) {
-        const locale = locales[i]
-        const localeId = locale.id
-        res[localeId] = { localeId }
-      }
-
-      for (let i = 0, len = seoTranslationsData.length; i < len; i++) {
-        const translation = seoTranslationsData[i]
-        const { localeId } = translation
-        res[localeId] = translation
-      }
-      return res
-    }, [seoTranslationsData, locales])
 
     const modalRef = useRef(null)
 
@@ -109,26 +75,16 @@ const TranslationsEdit = component(
     const handleTranslationInput = (newTranslation) => {
       const { localeId, title, subtitle, description } = newTranslation
       setTranslationsData((prevState) => {
-        const newState = [...prevState]
-        for (let i = 0, len = newState.length; i < len; i++) {
-          const translation = newState[i]
-          if (translation.localeId !== localeId) {
-            continue
-          }
-
-          if (
-            detectIsUndefined(title) &&
-            detectIsUndefined(subtitle) &&
-            detectIsUndefined(description)
-          ) {
-            newState.splice(i, 1)
-          } else {
-            newState[i] = newTranslation
-          }
-          return newState
+        const newState = { ...prevState }
+        if (
+          detectIsUndefined(title) &&
+          detectIsUndefined(subtitle) &&
+          detectIsUndefined(description)
+        ) {
+          delete newState[localeId]
+        } else {
+          newState[localeId] = newTranslation
         }
-
-        newState.push(newTranslation)
         return newState
       })
     }
@@ -136,22 +92,12 @@ const TranslationsEdit = component(
     const handleSEOTranslationInput = (newSEOTranslation) => {
       const { localeId, title, description } = newSEOTranslation
       setSEOTranslationsData((prevState) => {
-        const newState = [...prevState]
-        for (let i = 0, len = newState.length; i < len; i++) {
-          const translation = newState[i]
-          if (translation.localeId !== localeId) {
-            continue
-          }
-
-          if (detectIsUndefined(title) && detectIsUndefined(description)) {
-            newState.splice(i, 1)
-          } else {
-            newState[i] = newSEOTranslation
-          }
-          return newState
+        const newState = { ...prevState }
+        if (detectIsUndefined(title) && detectIsUndefined(description)) {
+          delete newState[localeId]
+        } else {
+          newState[localeId] = newSEOTranslation
         }
-
-        newState.push(newSEOTranslation)
         return newState
       })
     }
@@ -177,11 +123,11 @@ const TranslationsEdit = component(
         <li key={locale.id}>
           <span>{languageName}</span>
           <TranslationInputs
-            generalTranslation={translationsMap[locale.id]}
+            generalTranslation={translationsData[locale.id]}
             onInput={handleTranslationInput}
           />
           <SEOTranslationInputs
-            seoTranslation={seoTranslationsMap[locale.id]}
+            seoTranslation={seoTranslationsData[locale.id]}
             onInput={handleSEOTranslationInput}
           />
         </li>
@@ -249,36 +195,6 @@ const TranslationsPreview = component(
       return <span>{t('noTranslations')}</span>
     }
 
-    const translationsMap = useMemo(() => {
-      const res = {}
-      if (detectIsUndefined(translations)) {
-        return res
-      }
-
-      for (let i = 0, len = translations.length; i < len; i++) {
-        const translation = translations[i]
-        const { localeId } = translation
-        res[localeId] = translation
-      }
-      return res
-    }, [translations])
-
-    const seoTranslationsMap = useMemo(() => {
-      const res = {}
-      if (detectIsUndefined(seo) && detectIsUndefined(seo.translations)) {
-        return res
-      }
-
-      const seoTranslations = seo.translations
-
-      for (let i = 0, len = seoTranslations.length; i < len; i++) {
-        const translation = seoTranslations[i]
-        const { localeId } = translation
-        res[localeId] = translation
-      }
-      return res
-    }, [seo])
-
     const res = []
     for (let i = 0, len = locales.length; i < len; i++) {
       const locale = locales[i]
@@ -286,12 +202,17 @@ const TranslationsPreview = component(
         continue
       }
 
+      let seoTranslations = {}
+      if (!detectIsUndefined(seo) && !detectIsUndefined(seo.translations)) {
+        seoTranslations = seo.translations
+      }
+
       res.push(
         <TranslationPreview
           key={locale.id}
           locale={locale}
-          translation={translationsMap[locale.id]}
-          seoTranslation={seoTranslationsMap[locale.id]}
+          translation={translations[locale.id]}
+          seoTranslation={seoTranslations[locale.id]}
         />
       )
     }

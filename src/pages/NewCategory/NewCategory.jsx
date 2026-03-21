@@ -71,19 +71,15 @@ const NewCategory = component(() => {
   }
 
   const handleSEOChange = (data) => {
-    const { handle, seoTranslations } = data
+    const { handle, seo } = data
     setCategoryData((prevState) => {
       const newState = { ...prevState }
       if (handle) {
         newState.handle = handle
       }
 
-      if (seoTranslations) {
-        if (seoTranslations.length > 0) {
-          newState.seoTranslations = seoTranslations
-        } else {
-          delete newState.seoTranslations
-        }
+      if (seo) {
+        newState.seo = seo
       }
 
       return newState
@@ -98,7 +94,7 @@ const NewCategory = component(() => {
     isInternal,
     metadata,
     translations,
-    seoTranslations
+    seo
   } = categoryData
 
   return (
@@ -115,7 +111,7 @@ const NewCategory = component(() => {
         />
         <Translations translations={translations} onChange={handleTranslationsChange} />
         <MetadataCard metadata={metadata} onChange={handleMetadataUpdate} />
-        <SEOCard handle={handle} seoTranslations={seoTranslations} onInput={handleSEOChange} />
+        <SEOCard handle={handle} seo={seo} onInput={handleSEOChange} />
       </ColumnLarge>
 
       <ColumnSmall>

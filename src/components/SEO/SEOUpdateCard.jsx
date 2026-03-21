@@ -97,12 +97,6 @@ const SEOUpdateCard = component(
       })
     }
 
-    const handleTranslationInput = (newTranslations) => {
-      setSeoData((prevState) => {
-        return { ...prevState, translations: newTranslations }
-      })
-    }
-
     const handleSave = () => {
       onHandleChange(handleData)
       onSEOChange(seoData)
@@ -133,12 +127,11 @@ const SEOUpdateCard = component(
               <SEOEditModal
                 modalRef={modalRef}
                 handleClose={handleCloseModal}
+                handleSave={handleSave}
                 handle={handleData}
                 seoData={seoData}
                 handleHandleInput={handleHandleInput}
                 handleSEOInput={handleSEOInput}
-                handleTranslationInput={handleTranslationInput}
-                handleSave={handleSave}
                 disabled={disabled}
               />
             </li>

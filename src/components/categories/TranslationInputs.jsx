@@ -8,19 +8,16 @@ const TranslationInputs = component(({ localeId, translations, onChange }) => {
   const { t } = useTranslation('categories.translationInputs')
 
   const translationData = useMemo(() => {
-    const newTranslation = { localeId }
     if (detectIsUndefined(translations)) {
-      return newTranslation
+      return {}
     }
 
-    for (let i = 0, len = translations.length; i < len; i++) {
-      const translation = translations[i]
-      if (translation.localeId === localeId) {
-        return translation
-      }
+    const translation = translations[localeId]
+    if (detectIsUndefined(translation)) {
+      return {}
     }
 
-    return newTranslation
+    return translation
   }, [translations])
 
   const handleInput = (e) => {
@@ -32,17 +29,11 @@ const TranslationInputs = component(({ localeId, translations, onChange }) => {
       newTranslationData[name] = value
     }
 
-    const newTranslations = [newTranslationData]
-    if (translations) {
-      for (let i = 0, len = translations.length; i < len; i++) {
-        const translation = translations[i]
-        if (translation.localeId !== translationData.localeId) {
-          newTranslations.push(translation)
-        }
-      }
+    if (detectIsUndefined(translations)) {
+      return onChange({ [localeId]: newTranslationData })
     }
 
-    return onChange(newTranslations)
+    return onChange({ ...translations, [localeId]: newTranslationData })
   }
 
   const { name, description } = translationData

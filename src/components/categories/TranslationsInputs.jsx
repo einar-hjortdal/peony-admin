@@ -1,4 +1,4 @@
-import { component, detectIsString } from '@dark-engine/core'
+import { component, detectIsUndefined, keys } from '@dark-engine/core'
 import { useTranslation } from '@wareme/translations'
 
 import { useStore } from '../../data'
@@ -11,26 +11,28 @@ const TranslationsInputs = component(({ translations, onChange }) => {
   const { t, translator } = useTranslation('categories.translationsInputs')
 
   const handleChange = (newTranslations) => {
-    const { defaultLocaleId } = storeData.store
-    const cleanedTranslations = []
-    for (let i = 0, len = newTranslations.length; i < len; i++) {
-      const newTranslation = newTranslations[i]
-      const { localeId, name, description } = newTranslation
-      if (localeId === defaultLocaleId || detectIsString(name) || detectIsString(description)) {
-        cleanedTranslations.push(newTranslation)
+    const localeIds = keys(newTranslations)
+    if (localeIds.length === 0) {
+      return onChange({})
+    }
+
+    // eliminate empty translations
+    const cleanedTranslations = {}
+    for (let i = 0, len = localeIds.length; i < len; i++) {
+      const localeId = localeIds[i]
+      const newTranslation = newTranslations[localeId]
+      const { name, description } = newTranslation
+      if (detectIsUndefined(name) && detectIsUndefined(description)) {
+        continue
       }
+      cleanedTranslations[localeId] = newTranslation
     }
     onChange(cleanedTranslations)
   }
 
   const handleDelete = (localeId) => {
-    const newTranslations = []
-    for (let i = 0, len = translations.length; i < len; i++) {
-      const translation = translations[i]
-      if (translation.localeId !== localeId) {
-        newTranslations.push(translation)
-      }
-    }
+    const newTranslations = { ...translations }
+    delete newTranslations[localeId]
     onChange(newTranslations)
   }
 

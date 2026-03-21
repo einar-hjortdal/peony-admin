@@ -97,7 +97,7 @@ const Category = component(({ productCategory }) => {
 const Categories = component(() => {
   const { t } = useTranslation('categories')
   // We assume there aren't more than 100 categories.
-  // 1) because who the hell makes that many anyway?
+  // 1) because who makes that many anyway?
   // 2) https://github.com/einar-hjortdal/firebird/issues/1
   // TODO if there are more fetch more in another request
   const fetchAmount = 100

@@ -61,6 +61,8 @@ export default freeze({
   'metadataInputs.newKey': 'new data',
   'newCategory.create': 'Create category',
   'newCategory.general.title': 'General',
+  'newCategory.general.name': 'Name',
+  'newCategory.general.description': 'Description',
   'newCategory.title': 'New category',
   'newProduct.translations.general': 'General',
   'newProduct.translations.seo': 'SEO',

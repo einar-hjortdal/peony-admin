@@ -93,7 +93,7 @@ const Product = component(() => {
       if (discountable) {
         return t('general.true')
       }
-      t('general.fsle')
+      t('general.false')
     }
 
     const previewKeys = [
